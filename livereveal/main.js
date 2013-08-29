@@ -82,6 +82,8 @@ function setupDict(){
     if (cell.metadata.slideshow == undefined){
       cell.metadata.slideshow = {};
       cell.metadata.slideshow.slide_type = '-';
+    }
+    if (cell.metadata.internals == undefined){
       cell.metadata.internals = {};
       cell.metadata.internals.slide_type = '-';
     }
@@ -286,11 +288,13 @@ dependencies: [
 
 Reveal.addEventListener( 'ready', function( event ) {
   Unselecter();
+  IPython.notebook.scroll_to_top();
   //console.log("unselecter");
 });
 
 Reveal.addEventListener( 'slidechanged', function( event ) {
   Unselecter();
+  IPython.notebook.scroll_to_top();
   //console.log("slidechange");
 });
 

@@ -1821,10 +1821,10 @@ var Reveal = (function(){
 			case 72: case 37: navigateLeft(); break;
 			// l, right
 			case 76: case 39: navigateRight(); break;
-			// k, up
-			case 75: case 38: navigateUp(); break;
-			// j, down
-			case 74: case 40: navigateDown(); break;
+			// k, up deleted patched by Damian Avila
+			case 75: navigateUp(); break;
+			// j, down deleted patched by Damian Avila
+			case 74: navigateDown(); break;
 			// home
 			case 36: slide( 0 ); break;
 			// end

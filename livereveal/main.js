@@ -43,32 +43,41 @@ IPython.layout_manager.app_height = function() {
   return h-header_height-menubar_height-toolbar_height;  // content height
 }
 
-/*
-function setupArrow(){
-  // We need to overwrite keydown events from IPython for
-  // up and down arrows to not conflict with keydown events from reveal.js
 
-    var key   = IPython.utils.keycodes;
+function setupKeys(hfontsize){
+
+  /* We need to add functions to some IPython keydown events
+  *  to not conflict with keydown events from reveal.js
+  *  and focus the cells properly inside the each slide
+  *  NOTE: I had patched reveal.js (L2330 y L2332) to not trigger
+  *  events with up and down arrows.
+  */
+
+  var key = IPython.utils.keycodes;
 
     $(document).keydown(function (event) {
-        if (event.which === key.UPARROW && !event.shiftKey) {
-          console.log("up");
-//          return false;
+        if (event.which === key.ENTER && event.shiftKey) {
+            // hack to get ptoperly spaced li elements in the slideshow
+            $('.cell').find('li').css('line-height', hfontsize);
+            // hack to prevent select the cell in the next slide after execution
+            var cell = IPython.notebook.get_selected_cell();
+            if (!(cell instanceof IPython.CodeCell)) {
+                IPython.notebook.select_prev();
+            }
+            return false;
         }
-        else if (event.which === key.DOWNARROW && !event.shiftKey) {
-          console.log("down")
-//          return false;
-        }
-//        return true;
     });
 
+  return true;
+
 }
-*/
+
 
 IPython.notebook.get_cell_elements = function () {
 
   /*
-  * Version of get_cell_elements that will see cell divs at any depth in the HTML tree, allowing container divs, etc to be used without breaking notebook machinery.
+  * Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
+  * allowing container divs, etc to be used without breaking notebook machinery.
   * You'll need to make sure the cells are getting detected in the right order, but I think they will
   */
 
@@ -304,7 +313,7 @@ function Remover(container) {
 
   $('div#notebook').removeClass("reveal");
   $('div#notebook').css('font-size', "100%");
-  $('.cell').find('li').css('line-height', "100%");
+  $('.cell').find('li').css('line-height', "20px");
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','1170px');
 
@@ -351,7 +360,7 @@ function revealMode(rtheme, rtransition, rfontsize) {
     Revealer();
     Header(rfontsize);
     Tailer(rtheme, rtransition);
-    //setupArrow();
+    setupKeys(rfontsize);
 
     $('#maintoolbar').addClass('reveal_tagging');
 

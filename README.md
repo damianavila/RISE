@@ -24,7 +24,8 @@ NOTE_4: You have an ipynb presentation as a gist: https://gist.github.com/damian
 NOTE_5: I am touching your ipynb in a "dirty" way... so, for now, make a backup of your ipynb to prevent any damage to it (I tested with no problems for several days, but who knows... it is better to prevent problems).
 
 NOTE_6: I am assuming that you know how to install the extension... if not, probably is better for you to wait a little, but if you want to try it anyway... follow this steps with the appropriate changes: http://nbviewer.ipython.org/urls/raw.github.com/fperez/nb-slideshow-template/master/install-support.ipynb
- 
+
+NOTE_7: Use spacebar to go forward and shift+spacebar to go backward (or the controller in the bottom right corner). Up and Down arrows are reserved to interact with notebook cells.
  
 OK, we will keep in touch.
 

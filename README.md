@@ -27,6 +27,8 @@ NOTE_6: I am assuming that you know how to install the extension... if not, prob
 
 NOTE_7: Use spacebar to go forward and shift+spacebar to go backward (or the controller in the bottom right corner). Up and Down arrows are reserved to interact with notebook cells.
  
+NOTE_8: There are some issues in firefox (if you use it, please report me any issue because I want to support both browsers), so I recommend to use Chromium/Chrome during your talks ;-) 
+
 OK, we will keep in touch.
 
 Damián.

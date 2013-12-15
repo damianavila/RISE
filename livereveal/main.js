@@ -217,7 +217,7 @@ function Revealer(){
 
 function Header(hfontsize){
 
-  $('head').append('<link rel="stylesheet" href="static/custom/livereveal/main.css" id="maincss" />');
+  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/main.css") + ' id="maincss" />');
   //<!--[if lt IE 9]>
   //<script src="//cdn.jsdelivr.net/reveal.js/2.4.0/lib/js/html5shiv.js"></script>
   //<![endif]-->
@@ -235,8 +235,8 @@ function Header(hfontsize){
   //<!-- General and theme style sheets -->
   //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/theme/simple.css" id="theme" />');
   //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/reveal.css" />');
-  $('head').prepend('<link rel="stylesheet" href="static/custom/livereveal/reveal.js/css/theme/simple.css" id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href="static/custom/livereveal/reveal.js/css/ipython_reveal.css" id="revealcss" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/ipython_reveal.css") + ' id="revealcss" />');
   $('.reveal').css('font-size', hfontsize);
   $('.cell').find('li').css('line-height', hfontsize);
 
@@ -291,7 +291,7 @@ transition: Reveal.getQueryHash().transition || ctransition, // default/cube/pag
 dependencies: [
 //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
 //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-{ src: "static/custom/livereveal/reveal.js/plugin/notes/notes.js", async: true, condition: function() { return !!document.body.classList; } }
+{ src: require.toUrl("./custom/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
 ]
 });
 

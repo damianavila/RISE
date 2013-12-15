@@ -14,18 +14,14 @@ requirejs.config({
 $([IPython.events]).on('app_initialized.NotebookApp', function(){
 
      require(['custom/livereveal/main'],function(livereveal){
-    //
-    //       // livereveal.parameters('theme', 'transition', 'fontsize');
-    //       // * theme can be: simple, sky, beige, serif, solarized
-    //       // (you will need aditional css for default, night, moon themes).
-    //       // * transition can be: linear, zoom, fade, none
-    //       // (aditional transitions are cube, page, concave, default).
-    //       // * fontsize is in % units, ie. you can choose 150% or 200%
-    //
-       livereveal.parameters('simple', 'linear', '180%');
-    //
-       console.log('Live reveal extension loaded correctly')
-    //
-     })
+       // livereveal.parameters('theme', 'transition', 'fontsize', static_prefix);
+       //   * theme can be: simple, sky, beige, serif, solarized
+       //   (you will need aditional css for default, night, moon themes).
+       //   * transition can be: linear, zoom, fade, none
+       //   (aditional transitions are cube, page, concave, default).
+       //   * fontsize is in % units, ie. you can choose 140% or 200%
+       livereveal.parameters('simple', 'zoom', '140%');
+       console.log('Live reveal extension loaded correctly');
+     });
 
 });

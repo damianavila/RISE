@@ -9,40 +9,28 @@
 */
 
 IPython.layout_manager.app_height = function() {
-
-  /*
-  * We need to redefined this function because in the IPython codebase
-  * the app_height function does not take into account the 'hmode' class
-  * and the possibility to hide the 'menubar' bar.
-  */
-
-  var win = $(window);
-  var w = win.width();
-  var h = win.height();
-  var header_height;
-  if ($('div#header').hasClass('hmode')) {
-    header_height = 0;
-  }
-  else {
-    header_height = $('div#header').outerHeight(true);
-  }
-  var menubar_height;
-  if ($('div#menubar').hasClass('hmode')) {
-    menubar_height = 0;
-  }
-  else {
-    menubar_height = $('div#menubar').outerHeight(true);
-  }
-  var toolbar_height;
-  if ($('div#maintoolbar').hasClass('hmode')) {
-    toolbar_height = 0;
-  }
-  else {
-    toolbar_height = $('div#maintoolbar').outerHeight(true);
-  }
-  return h-header_height-menubar_height-toolbar_height;  // content height
-}
-
+    /*
+    * We need to redefined this function because in the IPython codebase
+    * the app_height function does not take into account the 'hmode' class
+    * and the possibility to hide the 'menubar' bar.
+    */
+    var win = $(window);
+    var w = win.width();
+    var h = win.height();
+    var header_height;
+    if ($('div#header').hasClass('hmode')) {
+        header_height = 0;
+    } else {
+        header_height = $('div#header').outerHeight(true);
+    }
+    var menubar_height;
+    if ($('div#menubar-container').hasClass('hmode')) {
+        menubar_height = 0;
+    } else {
+        menubar_height = $('div#menubar-container').outerHeight(true);
+    }
+    return h-header_height-menubar_height; // content height
+};
 
 function setupKeys(hfontsize){
 
@@ -350,7 +338,7 @@ function revealMode(rtheme, rtransition, rfontsize) {
 
   if (!tag) {
 
-    $('#menubar').addClass('hmode');
+    $('#menubar-container').addClass('hmode');
     $('#header').addClass('hmode');
 
     setupDict();
@@ -367,7 +355,7 @@ function revealMode(rtheme, rtransition, rfontsize) {
   }
   else{
 
-    $('#menubar').removeClass('hmode');
+    $('#menubar-container').removeClass('hmode');
     $('#header').removeClass('hmode');
 
     Remover('div#notebook-container');
@@ -377,7 +365,6 @@ function revealMode(rtheme, rtransition, rfontsize) {
   }
 
   // And now we find the proper height and do a resize
-  IPython.layout_manager.app_height();
   IPython.layout_manager.do_resize();
 
 }

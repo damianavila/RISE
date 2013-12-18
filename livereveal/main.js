@@ -32,6 +32,28 @@ IPython.layout_manager.app_height = function() {
     return h-header_height-menubar_height; // content height
 };
 
+function buttonExit() {
+    var exit_button = $('<button/>')
+        .attr('id','exit')
+        .addClass('btn')
+        .text('Exit')
+        .css({
+           'position' : 'fixed',
+           'top' : '10px',
+           'left' : '10px'
+        })
+        .click(
+            function(){ 
+                $('#menubar-container').removeClass('hmode');
+                $('#header').removeClass('hmode');
+                Remover('div#notebook-container');
+                $('#exit').css('display', 'none');
+                $('#maintoolbar').removeClass('reveal_tagging');
+            }
+        );
+    $('.reveal').after(exit_button);
+}
+
 function setupKeys(hfontsize){
 
   /* We need to add functions to some IPython keydown events
@@ -349,6 +371,7 @@ function revealMode(rtheme, rtransition, rfontsize) {
     Header(rfontsize);
     Tailer(rtheme, rtransition);
     setupKeys(rfontsize);
+    buttonExit();
 
     $('#maintoolbar').addClass('reveal_tagging');
 
@@ -363,6 +386,8 @@ function revealMode(rtheme, rtransition, rfontsize) {
     $('#maintoolbar').removeClass('reveal_tagging');
 
   }
+
+
 
   // And now we find the proper height and do a resize
   IPython.layout_manager.do_resize();

@@ -36,7 +36,6 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-
 				<section>
 					<h1>Reveal.js</h1>
 					<h3>HTML Presentations Made Easy</h3>
@@ -168,12 +167,14 @@
 					<h2>Themes</h2>
 					<p>
 						Reveal.js comes with a few themes built in: <br>
+						<a href="?#/themes">Default</a> -
 						<a href="?theme=sky#/themes">Sky</a> -
 						<a href="?theme=beige#/themes">Beige</a> -
 						<a href="?theme=simple#/themes">Simple</a> -
 						<a href="?theme=serif#/themes">Serif</a> -
-						<a href="?theme=night#/themes">Night</a> -
-						<a href="?#/themes">Default</a>
+						<a href="?theme=night#/themes">Night</a> <br>
+						<a href="?theme=moon#/themes">Moon</a> -
+						<a href="?theme=solarized#/themes">Solarized</a>
 					</p>
 					<p>
 						<small>
@@ -183,29 +184,12 @@
 				</section>
 
 				<section>
-					<section data-state="alert">
-						<h2>Global State</h2>
-						<p>
-							Set <code>data-state="something"</code> on a slide and <code>"something"</code>
-							will be added as a class to the document element when the slide is open. This lets you
-							apply broader style changes, like switching the background.
-						</p>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-state="blackout">
-						<h2>"blackout"</h2>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-state="soothe">
-						<h2>"soothe"</h2>
-						<a href="#" class="image navigate-next">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="-webkit-transform: rotate(-90deg);">
-						</a>
-					</section>
+					<h2>Global State</h2>
+					<p>
+						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
+						will be added as a class to the document element when the slide is open. This lets you
+						apply broader style changes, like switching the background.
+					</p>
 				</section>
 
 				<section data-state="customevent">
@@ -218,6 +202,40 @@ Reveal.addEventListener( 'customevent', function() {
 	console.log( '"customevent" has fired' );
 } );
 					</code></pre>
+				</section>
+
+				<section>
+					<section data-background="#007777">
+						<h2>Slide Backgrounds</h2>
+						<p>
+							Set <code>data-background="#007777"</code> on a slide to change the full page background to the given color. All CSS color formats are supported.
+						</p>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png">
+						<h2>Image Backgrounds</h2>
+						<pre><code>&lt;section data-background="image.png"&gt;</code></pre>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" data-background-repeat="repeat" data-background-size="100px">
+						<h2>Repeated Image Backgrounds</h2>
+						<pre><code style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
+					</section>
+				</section>
+
+				<section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+					<h2>Background Transitions</h2>
+					<p>
+						Pass reveal.js the <code>backgroundTransition: 'slide'</code> config argument to make backgrounds slide rather than fade.
+					</p>
+				</section>
+
+				<section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
+					<h2>Background Transition Override</h2>
+					<p>
+						You can override background transitions per slide by using <code>data-background-transition="slide"</code>.
+					</p>
 				</section>
 
 				<section>
@@ -243,10 +261,10 @@ function linkify( selector ) {
     for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
       var node = nodes[i];
 
-      if( !node.className ) ) {
+      if( !node.className ) {
         node.className += ' roll';
       }
-    };
+    }
   }
 }
 					</code></pre>
@@ -262,7 +280,7 @@ function linkify( selector ) {
 				</section>
 
 				<section>
-					<section>
+					<section id="fragments">
 						<h2>Fragmented Views</h2>
 						<p>Hit the next arrow...</p>
 						<p class="fragment">... to step through ...</p>
@@ -286,6 +304,8 @@ function linkify( selector ) {
 						<p class="fragment highlight-red">highlight-red</p>
 						<p class="fragment highlight-green">highlight-green</p>
 						<p class="fragment highlight-blue">highlight-blue</p>
+						<p class="fragment current-visible">current-visible</p>
+						<p class="fragment highlight-current-blue">highlight-current-blue</p>
 					</section>
 				</section>
 
@@ -347,6 +367,10 @@ function linkify( selector ) {
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
 				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
@@ -355,8 +379,6 @@ function linkify( selector ) {
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
-					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
 			});
 

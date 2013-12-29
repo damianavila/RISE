@@ -296,6 +296,11 @@ minScale: 1.0, //we need this to codemirror work right
 theme: Reveal.getQueryHash().theme || ctheme, // available themes are in /css/theme
 transition: Reveal.getQueryHash().transition || ctransition, // default/cube/page/concave/zoom/linear/none
 
+//slideNumber:true,
+
+parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
+parallaxBackgroundSize: '2560px 1600px',
+
 // Optional libraries used to extend on reveal.js
 // Notes are working partially... it opens the notebooks, not the slideshows...
 dependencies: [

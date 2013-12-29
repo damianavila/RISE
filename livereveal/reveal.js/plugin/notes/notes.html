@@ -14,6 +14,7 @@
 				font-size: 24px;
 				width: 640px;
 				margin-top: 5px;
+				clear: left;
 			}
 
 			#wrap-current-slide {
@@ -137,12 +138,20 @@
 
 	<body>
 
+		<script>
+			function getNotesURL( controls ) {
+				return window.opener.location.protocol + '//' + window.opener.location.host + window.opener.location.pathname + '?receiver&controls='+ ( controls || 'false' ) +'&progress=false&overview=false' + window.opener.location.hash;
+			}
+			var notesCurrentSlideURL = getNotesURL( true );
+			var notesNextSlideURL = getNotesURL( false );
+		</script>
+
 		<div id="wrap-current-slide" class="slides">
-			<script>document.write( '<iframe width="1280" height="1024" id="current-slide" src="'+ window.opener.location.href +'"></iframe>' );</script>
+			<script>document.write( '<iframe width="1280" height="1024" id="current-slide" src="'+ notesCurrentSlideURL +'"></iframe>' );</script>
 		</div>
 
 		<div id="wrap-next-slide" class="slides">
-			<script>document.write( '<iframe width="640" height="512" id="next-slide" src="'+ window.opener.location.href +'"></iframe>' );</script>
+			<script>document.write( '<iframe width="640" height="512" id="next-slide" src="'+ notesNextSlideURL +'"></iframe>' );</script>
 			<span>UPCOMING:</span>
 		</div>
 
@@ -168,10 +177,12 @@
 
 					var notes = document.getElementById( 'notes' ),
 						currentSlide = document.getElementById( 'current-slide' ),
-						nextSlide = document.getElementById( 'next-slide' );
+						nextSlide = document.getElementById( 'next-slide' ),
+						silenced = false;
 
 					window.addEventListener( 'message', function( event ) {
 						var data = JSON.parse( event.data );
+
 						// No need for updating the notes in case of fragment changes
 						if ( data.notes !== undefined) {
 							if( data.markdown ) {
@@ -182,18 +193,13 @@
 							}
 						}
 
-						// Showing and hiding fragments
-						if( data.fragment === 'next' ) {
-							currentSlide.contentWindow.Reveal.nextFragment();
-						}
-						else if( data.fragment === 'prev' ) {
-							currentSlide.contentWindow.Reveal.prevFragment();
-						}
-						else {
-							// Update the note slides
-							currentSlide.contentWindow.Reveal.slide( data.indexh, data.indexv );
-							nextSlide.contentWindow.Reveal.slide( data.nextindexh, data.nextindexv );
-						}
+						silenced = true;
+
+						// Update the note slides
+						currentSlide.contentWindow.Reveal.slide( data.indexh, data.indexv, data.indexf );
+						nextSlide.contentWindow.Reveal.slide( data.nextindexh, data.nextindexv );
+
+						silenced = false;
 
 					}, false );
 
@@ -212,9 +218,9 @@
 							now = new Date();
 
 						diff = now.getTime() - start.getTime();
-						hours = parseInt( diff / ( 1000 * 60 * 60 ) );
-						minutes = parseInt( ( diff / ( 1000 * 60 ) ) % 60 );
-						seconds = parseInt( ( diff / 1000 ) % 60 );
+						hours = Math.floor( diff / ( 1000 * 60 * 60 ) );
+						minutes = Math.floor( ( diff / ( 1000 * 60 ) ) % 60 );
+						seconds = Math.floor( ( diff / 1000 ) % 60 );
 
 						clockEl.innerHTML = now.toLocaleTimeString();
 						hoursEl.innerHTML = zeroPadInteger( hours );
@@ -225,12 +231,21 @@
 
 					}, 1000 );
 
+					// Broadcasts the state of the notes window to synchronize
+					// the main window
+					function synchronizeMainWindow() {
+
+						if( !silenced ) {
+							var indices = currentSlide.contentWindow.Reveal.getIndices();
+							window.opener.Reveal.slide( indices.h, indices.v, indices.f );
+						}
+
+					}
+
 					// Navigate the main window when the notes slide changes
-					currentSlide.contentWindow.Reveal.addEventListener( 'slidechanged', function( event ) {
-
-						window.opener.Reveal.slide( event.indexh, event.indexv );
-
-					} );
+					currentSlide.contentWindow.Reveal.addEventListener( 'slidechanged', synchronizeMainWindow );
+					currentSlide.contentWindow.Reveal.addEventListener( 'fragmentshown', synchronizeMainWindow );
+					currentSlide.contentWindow.Reveal.addEventListener( 'fragmenthidden', synchronizeMainWindow );
 
 				}
 				else {

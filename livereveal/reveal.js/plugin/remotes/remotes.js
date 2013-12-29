@@ -17,11 +17,11 @@
      * Detects if notes are enable and the current page is opened inside an /iframe
      * this prevents loading Remotes.io several times
      */
-    var remotesAndIsNotes = (function(){
-      return !(window.RevealNotes && self == top);
+    var isNotesAndIframe = (function(){
+        return window.RevealNotes && !(self == top);
     })();
 
-    if(!hasTouch && !remotesAndIsNotes){
+    if(!hasTouch && !isNotesAndIframe){
         head.ready( 'remotes.ne.min.js', function() {
             new Remotes("preview")
                 .on("swipe-left", function(e){ Reveal.right(); })
@@ -34,6 +34,6 @@
             ;
         } );
 
-        head.js('https://raw.github.com/Remotes/Remotes/master/dist/remotes.ne.min.js');
+        head.js('https://hakim-static.s3.amazonaws.com/reveal-js/remotes.ne.min.js');
     }
 })(window);

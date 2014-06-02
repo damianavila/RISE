@@ -9,11 +9,11 @@
 */
 
 IPython.layout_manager.app_height = function() {
-    /*
-    * We need to redefined this function because in the IPython codebase
-    * the app_height function does not take into account the 'hmode' class
-    * and the possibility to hide the 'menubar' bar.
-    */
+    
+    // We need to redefined this function because in the IPython codebase
+    // the app_height function does not take into account the 'hmode' class
+    //and the possibility to hide the 'menubar' bar.
+
     var win = $(window);
     var w = win.width();
     var h = win.height();
@@ -35,12 +35,13 @@ IPython.layout_manager.app_height = function() {
 function buttonExit() {
     var exit_button = $('<button/>')
         .attr('id','exit')
+        .attr('title','Exit')
         .addClass('btn')
-        .text('Exit')
+        .addClass('icon-remove-sign')
         .css({
            'position' : 'fixed',
-           'top' : '10px',
-           'left' : '10px'
+           'top' : '2em',
+           'left' : '2em'
         })
         .click(
             function(){ 
@@ -54,31 +55,19 @@ function buttonExit() {
     $('.reveal').after(exit_button);
 }
 
-function setupKeys(hfontsize){
+function setupKeys(){
 
-  /* We need to add functions to some IPython keydown events
-  *  to not conflict with keydown events from reveal.js
-  *  and focus the cells properly inside the each slide
-  *  NOTE: I had patched reveal.js (L2330 y L2332) to not trigger
-  *  events with up and down arrows.
-  */
+  IPython.keyboard_manager.command_shortcuts.remove_shortcut('shift-enter');
+  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
 
-  var key = IPython.utils.keycodes;
-
-    $(document).keydown(function (event) {
-        if (event.which === key.ENTER && event.shiftKey) {
-            // hack to get ptoperly spaced li elements in the slideshow
-            $('.cell').find('li').css('line-height', hfontsize);
-            // hack to prevent select the cell in the next slide after execution
-            var cell = IPython.notebook.get_selected_cell();
-            if (!(cell instanceof IPython.CodeCell)) {
-                IPython.notebook.select_prev();
-            }
-            return false;
-        }
-    });
-
-  return true;
+  IPython.keyboard_manager.command_shortcuts.add_shortcut('shift-enter', function (event) {
+    IPython.notebook.execute_cell();
+    return false;
+  });
+  IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
+    IPython.notebook.execute_cell();
+    return false;
+  });
 
 }
 
@@ -248,7 +237,7 @@ function Header(hfontsize){
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/ipython_reveal.css") + ' id="revealcss" />');
   $('.reveal').css('font-size', hfontsize);
-  $('.cell').find('li').css('line-height', hfontsize);
+//  $('.cell').find('li').css('line-height', hfontsize);
 
 }
 
@@ -291,15 +280,22 @@ controls: true,
 progress: true,
 history: true,
 minScale: 1.0, //we need this to codemirror work right
-//keyboard: false,
 
 theme: Reveal.getQueryHash().theme || ctheme, // available themes are in /css/theme
 transition: Reveal.getQueryHash().transition || ctransition, // default/cube/page/concave/zoom/linear/none
 
-//slideNumber:true,
+slideNumber:true,
 
 //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
 //parallaxBackgroundSize: '2560px 1600px',
+
+keyboard: {
+27: null, // ESC disabled
+79: null, // o disabled
+87: function() {Reveal.toggleOverview();},
+38: null, // up disabled
+40: null, // down disabled
+},
 
 // Optional libraries used to extend on reveal.js
 // Notes are working partially... it opens the notebooks, not the slideshows...
@@ -327,8 +323,8 @@ Reveal.addEventListener( 'slidechanged', function( event ) {
 function Remover(container) {
 
   $('div#notebook').removeClass("reveal");
-  $('div#notebook').css('font-size', "100%");
-  $('.cell').find('li').css('line-height', "20px");
+  $('div#notebook').css('font-size', "14px");
+//  $('.cell').find('li').css('line-height', "20px");
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','1170px');
 
@@ -338,18 +334,21 @@ function Remover(container) {
 
   $('.progress').remove();
   $('.controls').remove();
+  $('.slide-number').remove();
   $('.state-background').remove();
   $('.pause-overlay').remove();
 
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('fragment');
-    $('.cell:nth('+i+')').css('display','block');
+//    $('.cell:nth('+i+')').css('display','block');
     $(container).append(cells[i].element);
   }
 
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook-container');
+
+  IPython.layout_manager.do_resize();
 
 }
 
@@ -375,7 +374,7 @@ function revealMode(rtheme, rtransition, rfontsize) {
     Revealer();
     Header(rfontsize);
     Tailer(rtheme, rtransition);
-    setupKeys(rfontsize);
+    setupKeys();
     buttonExit();
 
     $('#maintoolbar').addClass('reveal_tagging');
@@ -391,8 +390,6 @@ function revealMode(rtheme, rtransition, rfontsize) {
     $('#maintoolbar').removeClass('reveal_tagging');
 
   }
-
-
 
   // And now we find the proper height and do a resize
   IPython.layout_manager.do_resize();

@@ -59,4 +59,14 @@ opacity: 1.0;
 .toolbar {
 padding: 10px;
 }
+.my-btn-close {
+  position:fixed;
+  top: 0.3em;
+  left: 0.3em;
+  opacity: 0.8;
+  color: darkblue;
+}
+.my-btn-close:hover {
+  color: #0000f1;
+}
 

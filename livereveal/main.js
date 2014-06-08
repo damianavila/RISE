@@ -33,16 +33,11 @@ IPython.layout_manager.app_height = function() {
 };
 
 function buttonExit() {
-    var exit_button = $('<button/>')
+    var exit_button = $('<i/>')
         .attr('id','exit')
-        .attr('title','Exit')
-        .addClass('btn')
-        .addClass('icon-remove-sign')
-        .css({
-           'position' : 'fixed',
-           'top' : '2em',
-           'left' : '2em'
-        })
+        //.attr('title','Exit')
+        .addClass('icon-remove-sign icon-4x')
+        .addClass('my-btn-close')
         .click(
             function(){ 
                 $('#menubar-container').removeClass('hmode');

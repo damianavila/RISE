@@ -112,6 +112,13 @@ function labelCells(){
       cells[i].metadata.internals.slide_type = undefined;
       cells[index].metadata.slide_helper = undefined;
       cells[index].metadata.internals.slide_helper = undefined;
+      cells[i].metadata.internals.frag_number = i;
+      var j=1;
+      while (j < cells.length - i) {
+        cells[i + j].metadata.internals.frag_helper = 'fragment_end';
+        cells[i + j].metadata.internals.frag_number = i;
+        j++;
+      }
     }
     else if (cell.metadata.slideshow.slide_type == 'notes'){
       cells[i].metadata.internals.slide_type = undefined;
@@ -143,12 +150,19 @@ function labelIntraSlides(){
     var cell = cells[i];
     if (cell.metadata.slideshow.slide_type == 'fragment') {
       $('.cell:nth('+i+')').addClass("fragment");
+      $('.cell:nth('+i+')').attr('data-fragment-index', cell.metadata.internals.frag_number);
     }
     else if (cell.metadata.slideshow.slide_type == 'notes') {
       $('.cell:nth('+i+')').css('display','none');
     }
     else if (cell.metadata.slideshow.slide_type == 'skip') {
       $('.cell:nth('+i+')').css('display','none');
+    }
+    else if (cell.metadata.slideshow.slide_type == '-') {
+      if (cell.metadata.internals.frag_helper == 'fragment_end') {
+        $('.cell:nth('+i+')').addClass("fragment");
+        $('.cell:nth('+i+')').attr('data-fragment-index', cell.metadata.internals.frag_number);
+      }
     }
   }
 }

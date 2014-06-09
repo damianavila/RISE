@@ -70,3 +70,29 @@ padding: 10px;
   color: #0000f1;
 }
 
+// Bryan-derived style
+.rendered_html {
+    font-family: "proxima-nova", helvetica;
+}
+
+.rendered_html h1 {
+    color: #015C9C;
+}
+
+.rendered_html h2 {
+    color: #26465D;
+}
+
+.rendered_html h3 {
+    color: #002845;
+}
+
+.rendered_html p.title {
+    font-size: 300%;
+}
+
+.rendered_html p.subtitle { 
+    font-size: 200%;
+}
+
+

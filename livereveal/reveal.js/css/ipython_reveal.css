@@ -504,11 +504,11 @@ body {
 .reveal .slide-number {
 	position: fixed;
 	display: block;
-	right: 3.6em;
-	bottom: 3.9em;
+	right: 3.4em;
+	bottom: 3.6em;
 	opacity: 0.8;
 	z-index: 31;
-	font-size: 0.8em;
+	font-size: 0.6em;
 }
 
 /*********************************************

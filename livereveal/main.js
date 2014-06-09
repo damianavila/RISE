@@ -246,7 +246,8 @@ function Header(hfontsize){
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/ipython_reveal.css") + ' id="revealcss" />');
   $('.reveal').css('font-size', hfontsize);
-//  $('.cell').find('li').css('line-height', hfontsize);
+  $('.reveal blockquote p').css('font-size', '100%');
+  $('.cell').find('li').css('line-height', hfontsize);
 
 }
 
@@ -333,7 +334,8 @@ function Remover(container) {
 
   $('div#notebook').removeClass("reveal");
   $('div#notebook').css('font-size', "14px");
-//  $('.cell').find('li').css('line-height', "20px");
+  $('.cell').find('li').css('line-height', "20px");
+  $('.blockquote p').css('font-size', '16.25px');
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','1170px');
 

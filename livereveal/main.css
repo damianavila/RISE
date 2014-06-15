@@ -1,6 +1,5 @@
 /* Overrides of notebook CSS for static HTML export */
 .reveal {
-font-size: 100%;
 overflow-y: auto;
 overflow-x: hidden;
 }
@@ -14,10 +13,16 @@ box-shadow: 0 0 10px rgba(0, 0, 0, 0);
 }
 .reveal .slides {
 text-align: left;
+font-size: 160%;
 /*width: 1366px !important;*/
 }
 .reveal.fade {
 opacity: 1;
+}
+.reveal .slide-number {
+  right: 3.8em;
+  bottom: 3.9em;
+  font-size: 100%;
 }
 div.code_cell {
 background-color: transparent;
@@ -69,6 +74,12 @@ padding: 10px;
 .my-btn-close:hover {
   color: #0000f1;
 }
+.reveal blockquote p:first-child, .reveal blockquote p:last-child {
+display: inherit;
+}
+.cell li {
+  line-height: 200%;
+}
 
 // Bryan-derived style
 .rendered_html {
@@ -94,5 +105,6 @@ padding: 10px;
 .rendered_html p.subtitle { 
     font-size: 200%;
 }
+
 
 

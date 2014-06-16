@@ -329,9 +329,9 @@ Reveal.addEventListener( 'slidechanged', function( event ) {
 function Remover(container) {
 
   $('div#notebook').removeClass("reveal");
-  $('div#notebook').css('font-size', "14px");
-  $('.cell').find('li').css('line-height', "20px");
-  $('.blockquote p').css('font-size', '16.25px');
+  //$('div#notebook').css('font-size', "14px");
+  //$('.cell').find('li').css('line-height', "20px");
+  //$('.blockquote p').css('font-size', '16.25px');
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','1170px');
 
@@ -348,7 +348,7 @@ function Remover(container) {
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('fragment');
-//    $('.cell:nth('+i+')').css('display','block');
+    //$('.cell:nth('+i+')').css('display','block');
     $(container).append(cells[i].element);
   }
 

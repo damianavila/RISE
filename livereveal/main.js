@@ -8,30 +8,6 @@
 * -----------------------------------------------------------------------------
 */
 
-IPython.layout_manager.app_height = function() {
-    
-    // We need to redefined this function because in the IPython codebase
-    // the app_height function does not take into account the 'hmode' class
-    //and the possibility to hide the 'menubar' bar.
-
-    var win = $(window);
-    var w = win.width();
-    var h = win.height();
-    var header_height;
-    if ($('div#header').hasClass('hmode')) {
-        header_height = 0;
-    } else {
-        header_height = $('div#header').outerHeight(true);
-    }
-    var menubar_height;
-    if ($('div#menubar-container').hasClass('hmode')) {
-        menubar_height = 0;
-    } else {
-        menubar_height = $('div#menubar-container').outerHeight(true);
-    }
-    return h-header_height-menubar_height; // content height
-};
-
 IPython.notebook.get_cell_elements = function () {
 
   /*
@@ -252,8 +228,8 @@ function buttonExit() {
         .addClass('my-btn-close')
         .click(
             function(){ 
-                $('#menubar-container').removeClass('hmode');
-                $('#header').removeClass('hmode');
+                $('#menubar-container').css('display','block');
+                $('#header').css('display','block');
                 Remover('div#notebook-container');
                 $('#exit').css('display', 'none');
                 $('#maintoolbar').removeClass('reveal_tagging');
@@ -371,8 +347,8 @@ function revealMode(rtheme, rtransition) {
 
   if (!tag) {
 
-    $('#menubar-container').addClass('hmode');
-    $('#header').addClass('hmode');
+    $('#menubar-container').css('display','none');
+    $('#header').css('display','none');
 
     setupDict();
     labelCells();
@@ -389,8 +365,8 @@ function revealMode(rtheme, rtransition) {
   }
   else{
 
-    $('#menubar-container').removeClass('hmode');
-    $('#header').removeClass('hmode');
+    $('#menubar-container').css('display','block');
+    $('#header').css('display','block');
 
     Remover('div#notebook-container');
 

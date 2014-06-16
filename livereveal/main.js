@@ -32,41 +32,6 @@ IPython.layout_manager.app_height = function() {
     return h-header_height-menubar_height; // content height
 };
 
-function buttonExit() {
-    var exit_button = $('<i/>')
-        .attr('id','exit')
-        //.attr('title','Exit')
-        .addClass('icon-remove-sign icon-4x')
-        .addClass('my-btn-close')
-        .click(
-            function(){ 
-                $('#menubar-container').removeClass('hmode');
-                $('#header').removeClass('hmode');
-                Remover('div#notebook-container');
-                $('#exit').css('display', 'none');
-                $('#maintoolbar').removeClass('reveal_tagging');
-            }
-        );
-    $('.reveal').after(exit_button);
-}
-
-function setupKeys(){
-
-  IPython.keyboard_manager.command_shortcuts.remove_shortcut('shift-enter');
-  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
-
-  IPython.keyboard_manager.command_shortcuts.add_shortcut('shift-enter', function (event) {
-    IPython.notebook.execute_cell();
-    return false;
-  });
-  IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
-    IPython.notebook.execute_cell();
-    return false;
-  });
-
-}
-
-
 IPython.notebook.get_cell_elements = function () {
 
   /*
@@ -223,9 +188,8 @@ function Revealer(){
 
 }
 
-function Header(hfontsize){
+function Header(){
 
-  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/main.css") + ' id="maincss" />');
   //<!--[if lt IE 9]>
   //<script src="//cdn.jsdelivr.net/reveal.js/2.4.0/lib/js/html5shiv.js"></script>
   //<![endif]-->
@@ -244,10 +208,8 @@ function Header(hfontsize){
   //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/theme/simple.css" id="theme" />');
   //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/reveal.css" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/ipython_reveal.css") + ' id="revealcss" />');
-  $('.reveal').css('font-size', hfontsize);
-  $('.reveal blockquote p').css('font-size', '100%');
-  $('.cell').find('li').css('line-height', hfontsize);
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reset_reveal.css") + ' id="revealcss" />');
+  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/main.css") + ' id="maincss" />');
 
 }
 
@@ -279,6 +241,40 @@ function Unselecter(){
     var cell = cells[i];
     cell.unselect();
   }
+
+}
+
+function buttonExit() {
+    var exit_button = $('<i/>')
+        .attr('id','exit')
+        .attr('title','Exit')
+        .addClass('icon-remove-sign icon-4x')
+        .addClass('my-btn-close')
+        .click(
+            function(){ 
+                $('#menubar-container').removeClass('hmode');
+                $('#header').removeClass('hmode');
+                Remover('div#notebook-container');
+                $('#exit').css('display', 'none');
+                $('#maintoolbar').removeClass('reveal_tagging');
+            }
+        );
+    $('.reveal').after(exit_button);
+}
+
+function setupKeys(){
+
+  IPython.keyboard_manager.command_shortcuts.remove_shortcut('shift-enter');
+  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
+
+  IPython.keyboard_manager.command_shortcuts.add_shortcut('shift-enter', function (event) {
+    IPython.notebook.execute_cell();
+    return false;
+  });
+  IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
+    IPython.notebook.execute_cell();
+    return false;
+  });
 
 }
 
@@ -333,9 +329,9 @@ Reveal.addEventListener( 'slidechanged', function( event ) {
 function Remover(container) {
 
   $('div#notebook').removeClass("reveal");
-  $('div#notebook').css('font-size', "14px");
-  $('.cell').find('li').css('line-height', "20px");
-  $('.blockquote p').css('font-size', '16.25px');
+  //$('div#notebook').css('font-size', "14px");
+  //$('.cell').find('li').css('line-height', "20px");
+  //$('.blockquote p').css('font-size', '16.25px');
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','1170px');
 
@@ -352,7 +348,7 @@ function Remover(container) {
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('fragment');
-//    $('.cell:nth('+i+')').css('display','block');
+    //$('.cell:nth('+i+')').css('display','block');
     $(container).append(cells[i].element);
   }
 
@@ -363,7 +359,7 @@ function Remover(container) {
 
 }
 
-function revealMode(rtheme, rtransition, rfontsize) {
+function revealMode(rtheme, rtransition) {
 
   /*
   * We search for a class tag in the maintoolbar to if Zenmode is "on".
@@ -383,7 +379,7 @@ function revealMode(rtheme, rtransition, rfontsize) {
     labelIntraSlides();
     Slider('slide', 'slide_end', 'div#notebook-container');
     Revealer();
-    Header(rfontsize);
+    Header();
     Tailer(rtheme, rtransition);
     setupKeys();
     buttonExit();
@@ -409,12 +405,12 @@ function revealMode(rtheme, rtransition, rfontsize) {
 
 define(function() {
   return {
-    parameters: function setup(param1, param2, param3) {
+    parameters: function setup(param1, param2) {
       IPython.toolbar.add_buttons_group([
         {
         'label'   : 'Enter/Exit Live Reveal Slideshow',
         'icon'    : 'icon-bar-chart',
-        'callback': function(){revealMode(param1, param2, param3)},
+        'callback': function(){revealMode(param1, param2)},
         'id'      : 'start_livereveal'
         },
       ])

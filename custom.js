@@ -18,9 +18,7 @@ $([IPython.events]).on('app_initialized.NotebookApp', function(){
        //   * theme can be: simple, sky, beige, serif, solarized
        //   (you will need aditional css for default, night, moon themes).
        //   * transition can be: linear, zoom, fade, none
-       //   (aditional transitions are cube, page, concave, default).
-       //   * fontsize is in % units, ie. you can choose 140% or 200%
-       livereveal.parameters('simple', 'zoom', '200%');
+       livereveal.parameters('simple', 'zoom');
        console.log('Live reveal extension loaded correctly');
      });
 

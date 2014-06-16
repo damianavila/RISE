@@ -166,47 +166,9 @@ function Revealer(){
 
 function Header(){
 
-  //<!--[if lt IE 9]>
-  //<script src="//cdn.jsdelivr.net/reveal.js/2.4.0/lib/js/html5shiv.js"></script>
-  //<![endif]-->
-
-  //<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-
-  //<script>
-  //document.write( '<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-  //</script>
-
-  //<!-- For syntax highlighting -->
-  //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/lib/css/zenburn.css" />');
-  ////$('head').prepend('<link rel="stylesheet" href="static/reveal.js/lib/css/zenburn.css" />');
-
-  //<!-- General and theme style sheets -->
-  //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/theme/simple.css" id="theme" />');
-  //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/reveal.css" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reset_reveal.css") + ' id="revealcss" />');
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/main.css") + ' id="maincss" />');
-
-}
-
-function Tailer(ttheme, ttransition){
-
-   /*
-  requirejs.config({
-    shim: {
-      'static/custom/livereveal/reveal_config.js': ['custom/livereveal/reveal.js/js/reveal']
-    }
-  })
-
-  require(['custom/livereveal/reveal.js/lib/js/head.min']);
-  require(['custom/livereveal/reveal.js/js/reveal']);
-  require(['static/custom/livereveal/reveal_config.js']);
-  */
-
-  require(['custom/livereveal/reveal.js/lib/js/head.min',
-           'custom/livereveal/reveal.js/js/reveal'],function(){
-    Config(ttheme, ttransition);
-  });
 
 }
 
@@ -217,6 +179,73 @@ function Unselecter(){
     var cell = cells[i];
     cell.unselect();
   }
+
+}
+
+function Tailer(ttheme, ttransition){
+
+  require(['custom/livereveal/reveal.js/lib/js/head.min',
+           'custom/livereveal/reveal.js/js/reveal'],function(){
+
+    // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    minScale: 1.0, //we need this to codemirror work right
+    
+    theme: Reveal.getQueryHash().theme || ttheme, // available themes are in /css/theme
+    transition: Reveal.getQueryHash().transition || ttransition, // default/cube/page/concave/zoom/linear/none
+    
+    slideNumber:true,
+    
+    //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
+    //parallaxBackgroundSize: '2560px 1600px',
+    
+    keyboard: {
+    27: null, // ESC disabled
+    79: null, // o disabled
+    87: function() {Reveal.toggleOverview();},
+    38: null, // up disabled
+    40: null, // down disabled
+    },
+    
+    // Optional libraries used to extend on reveal.js
+    // Notes are working partially... it opens the notebooks, not the slideshows...
+    dependencies: [
+    //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
+    //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+    { src: require.toUrl("./custom/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
+    ]
+    });
+    
+    Reveal.addEventListener( 'ready', function( event ) {
+      Unselecter();
+      IPython.notebook.scroll_to_top();
+    });
+    
+    Reveal.addEventListener( 'slidechanged', function( event ) {
+      Unselecter();
+      IPython.notebook.scroll_to_top();
+    });
+
+  });
+
+}
+
+function setupKeys(){
+
+  IPython.keyboard_manager.command_shortcuts.remove_shortcut('shift-enter');
+  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
+
+  IPython.keyboard_manager.command_shortcuts.add_shortcut('shift-enter', function (event) {
+    IPython.notebook.execute_cell();
+    return false;
+  });
+  IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
+    IPython.notebook.execute_cell();
+    return false;
+  });
 
 }
 
@@ -238,76 +267,9 @@ function buttonExit() {
     $('.reveal').after(exit_button);
 }
 
-function setupKeys(){
-
-  IPython.keyboard_manager.command_shortcuts.remove_shortcut('shift-enter');
-  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
-
-  IPython.keyboard_manager.command_shortcuts.add_shortcut('shift-enter', function (event) {
-    IPython.notebook.execute_cell();
-    return false;
-  });
-  IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
-    IPython.notebook.execute_cell();
-    return false;
-  });
-
-}
-
-function Config(ctheme, ctransition) {
-
-// Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
-Reveal.initialize({
-controls: true,
-progress: true,
-history: true,
-minScale: 1.0, //we need this to codemirror work right
-
-theme: Reveal.getQueryHash().theme || ctheme, // available themes are in /css/theme
-transition: Reveal.getQueryHash().transition || ctransition, // default/cube/page/concave/zoom/linear/none
-
-slideNumber:true,
-
-//parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
-//parallaxBackgroundSize: '2560px 1600px',
-
-keyboard: {
-27: null, // ESC disabled
-79: null, // o disabled
-87: function() {Reveal.toggleOverview();},
-38: null, // up disabled
-40: null, // down disabled
-},
-
-// Optional libraries used to extend on reveal.js
-// Notes are working partially... it opens the notebooks, not the slideshows...
-dependencies: [
-//{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
-//{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-{ src: require.toUrl("./custom/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
-]
-});
-
-Reveal.addEventListener( 'ready', function( event ) {
-  Unselecter();
-  IPython.notebook.scroll_to_top();
-  //console.log("unselecter");
-});
-
-Reveal.addEventListener( 'slidechanged', function( event ) {
-  Unselecter();
-  IPython.notebook.scroll_to_top();
-  //console.log("slidechange");
-});
-
-}
-
 function Remover(container) {
 
   $('div#notebook').removeClass("reveal");
-  //$('div#notebook').css('font-size', "14px");
-  //$('.cell').find('li').css('line-height', "20px");
-  //$('.blockquote p').css('font-size', '16.25px');
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','1170px');
 

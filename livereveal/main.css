@@ -24,6 +24,9 @@ opacity: 1;
   bottom: 3.9em;
   font-size: 100%;
 }
+.reveal blockquote p:first-child, .reveal blockquote p:last-child {
+display: inherit;
+}
 div.code_cell {
 background-color: transparent;
 }
@@ -73,9 +76,6 @@ padding: 10px;
 }
 .my-btn-close:hover {
   color: #0000f1;
-}
-.reveal blockquote p:first-child, .reveal blockquote p:last-child {
-display: inherit;
 }
 .cell li {
   line-height: 200%;

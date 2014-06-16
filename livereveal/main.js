@@ -208,7 +208,7 @@ function Header(){
   //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/theme/simple.css" id="theme" />');
   //$('head').prepend('<link rel="stylesheet" href="//cdn.jsdelivr.net/reveal.js/2.4.0/css/reveal.css" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/reveal.css") + ' id="revealcss" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reset_reveal.css") + ' id="revealcss" />');
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/main.css") + ' id="maincss" />');
 
 }

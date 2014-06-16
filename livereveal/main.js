@@ -9,13 +9,11 @@
 */
 
 IPython.notebook.get_cell_elements = function () {
-
   /*
   * Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
   * allowing container divs, etc to be used without breaking notebook machinery.
-  * You'll need to make sure the cells are getting detected in the right order, but I think they will
+  * You'll need to make sure the cells are getting detected in the right order.
   */
-
     return this.container.find("div.cell");
 }
 
@@ -109,6 +107,16 @@ function labelIntraSlides(){
 }
 
 function Slider(begin, end, container) {
+  // Hiding header and menu
+  $('#header').css('display','none');
+  $('#menubar-container').css('display','none');
+
+  /*
+   * The crazy rearrangement, I read the following some months ago,
+   * It applies here withou any doubts ;-)
+   * "When I wrote this, only God and I understood what I was doing
+   * Now, God only knows"
+  */ 
   var cells = IPython.notebook.get_cells();
   var counter = 0;
   for(var i=0; i<cells.length; i++){
@@ -153,55 +161,39 @@ function Slider(begin, end, container) {
       counter++;
     }
   }
+
+  // Adding end_space after all the rearrangement
+  $('.end_space').appendTo('div#notebook-container');
 }
 
-function Revealer(){
-
-  $('.end_space').appendTo('div#notebook-container');
-
+function Revealer(ttheme, ttransition){
+  // Bodier
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
-}
-
-function Header(){
-
+  // Header
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reset_reveal.css") + ' id="revealcss" />');
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/main.css") + ' id="maincss" />');
 
-}
-
-function Unselecter(){
-
-  var cells = IPython.notebook.get_cells();
-  for(var i in cells){
-    var cell = cells[i];
-    cell.unselect();
-  }
-
-}
-
-function Tailer(ttheme, ttransition){
-
+  // Tailer
   require(['custom/livereveal/reveal.js/lib/js/head.min',
            'custom/livereveal/reveal.js/js/reveal'],function(){
-
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
     controls: true,
     progress: true,
     history: true,
     minScale: 1.0, //we need this to codemirror work right
-    
+
     theme: Reveal.getQueryHash().theme || ttheme, // available themes are in /css/theme
     transition: Reveal.getQueryHash().transition || ttransition, // default/cube/page/concave/zoom/linear/none
-    
+
     slideNumber:true,
-    
+
     //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
     //parallaxBackgroundSize: '2560px 1600px',
-    
+
     keyboard: {
     27: null, // ESC disabled
     79: null, // o disabled
@@ -209,7 +201,7 @@ function Tailer(ttheme, ttransition){
     38: null, // up disabled
     40: null, // down disabled
     },
-    
+
     // Optional libraries used to extend on reveal.js
     // Notes are working partially... it opens the notebooks, not the slideshows...
     dependencies: [
@@ -218,35 +210,41 @@ function Tailer(ttheme, ttransition){
     { src: require.toUrl("./custom/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
     ]
     });
-    
+
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
       IPython.notebook.scroll_to_top();
     });
-    
+
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
       IPython.notebook.scroll_to_top();
     });
-
   });
+}
 
+function Unselecter(){
+  var cells = IPython.notebook.get_cells();
+  for(var i in cells){
+    var cell = cells[i];
+    cell.unselect();
+  }
 }
 
 function setupKeys(){
-
+  // command mode
   IPython.keyboard_manager.command_shortcuts.remove_shortcut('shift-enter');
-  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
-
   IPython.keyboard_manager.command_shortcuts.add_shortcut('shift-enter', function (event) {
     IPython.notebook.execute_cell();
     return false;
   });
+
+  // edit mode
+  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
   IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
     IPython.notebook.execute_cell();
     return false;
   });
-
 }
 
 function buttonExit() {
@@ -257,17 +255,17 @@ function buttonExit() {
         .addClass('my-btn-close')
         .click(
             function(){ 
-                $('#menubar-container').css('display','block');
-                $('#header').css('display','block');
                 Remover('div#notebook-container');
-                $('#exit').css('display', 'none');
                 $('#maintoolbar').removeClass('reveal_tagging');
+                $('#exit').css('display', 'none');
             }
         );
     $('.reveal').after(exit_button);
 }
 
-function Remover(container) {
+function Remover() {
+  $('#menubar-container').css('display','block');
+  $('#header').css('display','block');
 
   $('div#notebook').removeClass("reveal");
   $('div#notebook-container').removeClass("slides");
@@ -287,58 +285,42 @@ function Remover(container) {
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('fragment');
     //$('.cell:nth('+i+')').css('display','block');
-    $(container).append(cells[i].element);
+    $('div#notebook-container').append(cells[i].element);
   }
 
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook-container');
 
-  IPython.layout_manager.do_resize();
-
+  //IPython.layout_manager.do_resize();
 }
 
 function revealMode(rtheme, rtransition) {
-
   /*
   * We search for a class tag in the maintoolbar to if Zenmode is "on".
   * If not, to enter the Zenmode, we hide "menubar" and "header" bars and
   * we append a customized css stylesheet to get the proper styles.
   */
-
   var tag = $('#maintoolbar').hasClass('reveal_tagging');
 
   if (!tag) {
-
-    $('#menubar-container').css('display','none');
-    $('#header').css('display','none');
-
+    // Preparing the new reveal-compatible structure
     setupDict();
     labelCells();
     labelIntraSlides();
     Slider('slide', 'slide_end', 'div#notebook-container');
-    Revealer();
-    Header();
-    Tailer(rtheme, rtransition);
+    // Adding the reveal stuff
+    Revealer(rtheme, rtransition);
+    // Minor modifications for usability
     setupKeys();
     buttonExit();
-
     $('#maintoolbar').addClass('reveal_tagging');
-
-  }
-  else{
-
-    $('#menubar-container').css('display','block');
-    $('#header').css('display','block');
-
-    Remover('div#notebook-container');
-
+  } else {
+    Remover();
     $('#maintoolbar').removeClass('reveal_tagging');
-
   }
 
   // And now we find the proper height and do a resize
   IPython.layout_manager.do_resize();
-
 }
 
 define(function() {

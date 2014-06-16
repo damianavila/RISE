@@ -1,23 +1,19 @@
-/* Overrides of notebook CSS for static HTML export */
+// Reveal-specific
 .reveal {
-overflow-y: auto;
-overflow-x: hidden;
+  overflow-y: auto;
 }
 .reveal pre {
-font-size: 90%;
-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  font-size: 90%;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .reveal section img {
-border: 0px solid black;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+  border: 0px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
 }
 .reveal .slides {
-text-align: left;
-font-size: 160%;
-/*width: 1366px !important;*/
-}
-.reveal.fade {
-opacity: 1;
+  text-align: left;
+  font-size: 160%;
+  //width: 1366px !important;
 }
 .reveal .slide-number {
   right: 3.8em;
@@ -25,47 +21,32 @@ opacity: 1;
   font-size: 100%;
 }
 .reveal blockquote p:first-child, .reveal blockquote p:last-child {
-display: inherit;
+  display: inherit;
 }
-div.code_cell {
-background-color: transparent;
-}
-div.prompt {
-font-size: 90%;
-}
-div.output_prompt {
-margin-top: 2px;
-}
-div.output_area pre {
-font-size: 90%;
-}
-.rendered_html p {
-text-align: inherit;
-}
-div#notebook {
-overflow-x: hidden;
+.reveal.fade {
+  opacity: 1;
 }
 .progress {
-margin-bottom: 0px;
+  margin-bottom: 0px;
 }
-/* fix for firefox issue in IPython */
+
+// Notebook-specific
+div.prompt {
+  font-size: 90%;
+}
+div.output_prompt {
+  margin-top: 2px;
+}
+div#notebook {
+  overflow-x: hidden;
+}
+// fix for firefox issue in IPython
 .CodeMirror {
-max-width: 960px !important;
-/*or 1240px*/
+  max-width: 960px !important;
+  //or 1240px/
 }
-.hmode {
-display:none !important;
-}
-.navbar-inner {
-opacity: 0.5;
-transition: opacity 0.5s ease-in-out;
--webkit-transition: opacity 0.5s ease-in-out;
-}
-.navbar-inner:hover {
-opacity: 1.0;
-}
-.toolbar {
-padding: 10px;
+.cell li {
+  line-height: 160%;
 }
 .my-btn-close {
   position:fixed;
@@ -76,9 +57,6 @@ padding: 10px;
 }
 .my-btn-close:hover {
   color: #0000f1;
-}
-.cell li {
-  line-height: 200%;
 }
 
 // Bryan-derived style

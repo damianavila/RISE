@@ -17,7 +17,6 @@ NOTE_3: In the custom.js you have the possibility to configure (for more details
 
   * theme
   * transition
-  * font-size
   * back-ground image url (optional)
  
 

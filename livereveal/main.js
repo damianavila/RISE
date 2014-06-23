@@ -368,6 +368,8 @@ Reveal.addEventListener( 'slidechanged', function( event ) {
 });
 
 Reveal.addEventListener( 'keydown', function( event ) {    
+// Written by Arulalan.T <arulalant@gmil.com>
+// Date : 13.02.2014 
     // shift and plus KEYS press together
     if (event.shiftKey && (event.keyCode === 107) ) { 
         // prevent normal plus operator on current cell edit_mode,

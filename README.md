@@ -33,9 +33,10 @@ NOTE_8: Use shift+Plus operator (keys shit+) to go to or jump into next code cel
 
 NOTE_9: Use `#hideme` tag inside code cell as starting line to hide code cell or [In] alone, but it shows its correspoding outputs only. This will work when you click on live slide / presentation mode. This is useful when you load image by using Image. For eg,
 
+<pre>
 #hideme
 from IPython.core.display import Image 
-Image(filename='img/hello-python.png') 
+Image(filename='img/hello-python.png') </pre>
 
 
 The above code cell will show only its output image during the live presentation and it will not show python code.
@@ -46,4 +47,5 @@ NOTE_10: There are some issues in firefox (if you use it, please report me any i
 OK, we will keep in touch.
 
 Damián.
+<br>
 Arulalan.T

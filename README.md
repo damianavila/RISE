@@ -31,7 +31,7 @@ NOTE_7: Use spacebar to go forward and shift+spacebar to go backward (or the con
  
 NOTE_8: Use shift+Plus operator (keys shit+) to go to or jump into next code cell by showing all fragments which are all presented in between two code cells.
 
-NOTE_9: Use `#hideme` tag inside code cell as starting line to hide code cell or [In] alone, but it shows its correspoding outputs only. This will work when you click on live slide / presentation mode. This is useful when you load image by using Image. For eg,
+NOTE_9: Use `#hideme` tag inside code cell as starting line to hide code cell or [In] alone, but it shows its correspoding outputs [Out] only. This will work when you click on live slide / presentation mode. This is useful when you load image by using Image. For eg,
 
 <pre>
 #hideme
@@ -40,6 +40,7 @@ Image(filename='img/hello-python.png') </pre>
 
 
 The above code cell will show only its output image during the live presentation and it will not show python code.
+Once you come out of live presentation mode, then all `#hideme` code will be visible in nbviewer.
 
 
 NOTE_10: There are some issues in firefox (if you use it, please report me any issue because I want to support both browsers), so I recommend to use Chromium/Chrome during your talks ;-) 

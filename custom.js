@@ -24,6 +24,7 @@ $([IPython.events]).on('app_initialized.NotebookApp', function(){
        //livereveal.parameters('sky', 'linear', '140%');
        //livereveal.parameters('beige', 'linear', '140%');
        //livereveal.parameters('serif', 'linear', '140%');
+       // fourth argument takes image url locally/Internet or empty string for no background image.
        livereveal.parameters('serif', 'zoom', '140%', ''); //'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg');
        console.log('Live reveal extension loaded correctly');
      });

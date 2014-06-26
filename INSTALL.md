@@ -49,7 +49,7 @@ $ git clone https://github.com/ipython-contrib/IPython-notebook-extensions.git ~
 Download zip file https://github.com/damianavila/live_reveal Or https://github.com/arulalant/live_reveal/ and extract it or clone it.
 
 <pre>
-$ cp live_reveal/*  ~/.ipython/profile_live/static/custom/
+$ cp -r live_reveal/*  ~/.ipython/profile_live/static/custom/
 </pre>
 
 

@@ -166,7 +166,43 @@ function Slider(begin, end, container) {
   $('.end_space').appendTo('div#notebook-container');
 }
 
-function Revealer(ttheme, ttransition){
+function HideMeCode(){
+// Written by Arulalan.T <arulalant@gmil.com>
+// Date : 13.02.2014
+    var cells = IPython.notebook.get_cells();
+     for(var i in cells){
+        var cell = cells[i];
+        if (cell instanceof IPython.CodeCell) {
+            var input = cell.get_text();
+            if (input.startsWith("#hideme")){
+                // make input display as none. So that we can utilize that place
+                cell.element.find('div.input')[0].style.display='none';
+                // make output_prompt visibility as hidden. so output stays in
+                // same region as other outputs region.
+                cell.element.find('div.output_prompt')[0].style.visibility="hidden";
+            }
+        }
+    }
+}
+
+function ShowMeCode(){
+// Written by Arulalan.T <arulalant@gmil.com>
+// Date : 13.02.2014
+    var cells = IPython.notebook.get_cells();
+     for(var i in cells){
+        var cell = cells[i];
+        if (cell instanceof IPython.CodeCell) {
+            var input = cell.get_text();
+            if (input.startsWith("#hideme")){
+                // back to original
+                cell.element.find('div.output_prompt')[0].style.visibility='inherit';
+                cell.element.find('div.input')[0].style.display='';
+            }
+        }
+    }
+}
+
+function Revealer(ttheme, ttransition, bgimgpath){
   // Bodier
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
@@ -191,7 +227,8 @@ function Revealer(ttheme, ttransition){
 
     slideNumber:true,
 
-    //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
+    parallaxBackgroundImage: Reveal.getQueryHash().parallaxBackgroundImage || bgimgpath, 
+    //'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
     //parallaxBackgroundSize: '2560px 1600px',
 
     keyboard: {
@@ -213,6 +250,7 @@ function Revealer(ttheme, ttransition){
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
+      HideMeCode();
       IPython.notebook.scroll_to_top();
     });
 
@@ -220,6 +258,41 @@ function Revealer(ttheme, ttransition){
       Unselecter();
       IPython.notebook.scroll_to_top();
     });
+    
+    Reveal.addEventListener( 'keydown', function( event ) {
+        // Written by Arulalan.T <arulalant@gmail.com>
+        // Date : 13.02.2014
+        // shift and plus KEYS press together
+        if (event.shiftKey && (event.keyCode === 107) ) {
+            // prevent normal plus operator on current cell edit_mode,
+            // when pressing shift and plus operator
+            event.preventDefault();
+            // make next as visibility in slideshow
+            Reveal.down(); //alert(IPython.notebook.get_selected_index());
+            var latest = -1;
+            // find next CodeCell and go into edit mode if possible, else stay in next cell
+            for (var i = IPython.notebook.get_selected_index()+1; i < IPython.notebook.ncells();i++) {
+               var cell = IPython.notebook.get_cell(i);
+               latest = i;
+                if (cell instanceof IPython.CodeCell) {
+                    IPython.notebook.select(i);
+                    IPython.notebook.edit_mode();
+                    Reveal.updateSlidesVisibility();
+                    break;
+                }
+                // make next as visibility in slideshow
+                Reveal.down();                       
+    }
+
+    // fix this after last code cell in the page, it should be unselect.
+    // so that we can go to next slide by space bar
+    // if ((latest <= IPython.notebook.get_selected_index()) && (latest !== -1)){
+    // IPython.notebook.unselect(latest); alert('i'+i);
+    // }
+
+    }
+    });
+    
   });
 }
 
@@ -258,6 +331,7 @@ function buttonExit() {
                 Remover('div#notebook-container');
                 $('#maintoolbar').removeClass('reveal_tagging');
                 $('#exit').css('display', 'none');
+                ShowMeCode();
             }
         );
     $('.reveal').after(exit_button);
@@ -294,7 +368,7 @@ function Remover() {
   //IPython.layout_manager.do_resize();
 }
 
-function revealMode(rtheme, rtransition) {
+function revealMode(rtheme, rtransition, bgimgpath) {
   /*
   * We search for a class tag in the maintoolbar to if Zenmode is "on".
   * If not, to enter the Zenmode, we hide "menubar" and "header" bars and
@@ -309,7 +383,7 @@ function revealMode(rtheme, rtransition) {
     labelIntraSlides();
     Slider('slide', 'slide_end', 'div#notebook-container');
     // Adding the reveal stuff
-    Revealer(rtheme, rtransition);
+    Revealer(rtheme, rtransition, bgimgpath);
     // Minor modifications for usability
     setupKeys();
     buttonExit();
@@ -325,12 +399,12 @@ function revealMode(rtheme, rtransition) {
 
 define(function() {
   return {
-    parameters: function setup(param1, param2) {
+    parameters: function setup(param1, param2, param3) {
       IPython.toolbar.add_buttons_group([
         {
         'label'   : 'Enter/Exit Live Reveal Slideshow',
         'icon'    : 'icon-bar-chart',
-        'callback': function(){revealMode(param1, param2)},
+        'callback': function(){revealMode(param1, param2, param3)},
         'id'      : 'start_livereveal'
         },
       ])

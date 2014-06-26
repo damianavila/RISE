@@ -17,18 +17,35 @@ NOTE_3: In the custom.js you have the possibility to configure (for more details
 
   * theme
   * transition
-  * font-size
+  * back-ground image url (optional)
  
+
 NOTE_4: You have an ipynb presentation as a gist: https://gist.github.com/damianavila/6345426. You can test the extension with it or use it as a template... or make your own ;-)
 
 NOTE_5: I am touching your ipynb in a "dirty" way... so, for now, make a backup of your ipynb to prevent any damage to it (I tested with no problems for several days, but who knows... it is better to prevent problems).
 
-NOTE_6: I am assuming that you know how to install the extension... if not, probably is better for you to wait a little, but if you want to try it anyway... follow this steps with the appropriate changes: http://nbviewer.ipython.org/urls/raw.github.com/fperez/nb-slideshow-template/master/install-support.ipynb
+NOTE_6: I am assuming that you know how to install the extension... if not, look at the [INSTALL.md] (INSTALL.md) file for detailed steps to install this live_reveal extension / plugin inside your IPython.
 
 NOTE_7: Use spacebar to go forward and shift+spacebar to go backward (or the controller in the bottom right corner). Up and Down arrows are reserved to interact with notebook cells.
  
-NOTE_8: There are some issues in firefox (if you use it, please report me any issue because I want to support both browsers), so I recommend to use Chromium/Chrome during your talks ;-) 
+NOTE_8: Use shift+Plus operator (keys shit+) to go to or jump into next code cell by showing all fragments which are all presented in between two code cells.
+
+NOTE_9: Use `#hideme` tag inside code cell as starting line to hide code cell or [In] alone, but it shows its correspoding outputs [Out] only. This will work when you click on live slide / presentation mode. This is useful when you load image by using Image. For eg,
+
+<pre>
+#hideme
+from IPython.core.display import Image 
+Image(filename='img/hello-python.png') </pre>
+
+
+The above code cell will show only its output image during the live presentation and it will not show python code.
+Once you come out of live presentation mode, then all `#hideme` code will be visible in nbviewer.
+PS : `#hideme` tag works only in firefox browser. For chrome, need to test/work out.
+
+NOTE_10: There are some issues in firefox (if you use it, please report me any issue because I want to support both browsers), so I recommend to use Chromium/Chrome during your talks ;-) 
 
 OK, we will keep in touch.
 
 Damián.
+
+Arulalan.T

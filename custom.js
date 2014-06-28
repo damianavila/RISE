@@ -22,4 +22,6 @@ $([IPython.events]).on('app_initialized.NotebookApp', function(){
        console.log('Live reveal extension loaded correctly');
      });
 
+     //require(['nbextensions/slidemode/main'])
+
 });

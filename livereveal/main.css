@@ -15,22 +15,53 @@
   font-size: 160%;
   //width: 1366px !important;
 }
-.reveal .slide-number {
-  right: 3.8em;
-  bottom: 3.9em;
-  font-size: 100%;
-}
 .reveal blockquote p:first-child, .reveal blockquote p:last-child {
   display: inherit;
 }
 .reveal.fade {
   opacity: 1;
 }
+.reveal .slide-number {
+  right: 3.8em;
+  bottom: 3.9em;
+  font-size: 100%;
+}
+.reveal .controls div.navigate-left,
+.reveal .controls div.navigate-left.enabled {
+  border-right-color: #727272;
+}
+.reveal .controls div.navigate-right,
+.reveal .controls div.navigate-right.enabled {
+  border-left-color: #727272;
+}
+.reveal .controls div.navigate-up,
+.reveal .controls div.navigate-up.enabled {
+  border-bottom-color: #727272;
+}
+.reveal .controls div.navigate-down,
+.reveal .controls div.navigate-down.enabled {
+  border-top-color: #727272;
+}
+.reveal .controls div.navigate-left.enabled:hover {
+  border-right-color: #dfdfdf;
+}
+.reveal .controls div.navigate-right.enabled:hover {
+  border-left-color: #dfdfdf;
+}
+.reveal .controls div.navigate-up.enabled:hover {
+  border-bottom-color: #dfdfdf;
+}
+.reveal .controls div.navigate-down.enabled:hover {
+  border-top-color: #dfdfdf;
+}
 .progress {
   margin-bottom: 0px;
 }
+.reveal .progress span {
+  background: #727272;
+}
 
-// Notebook-specific
+//Notebook-specific
 div.prompt {
   font-size: 90%;
 }
@@ -40,47 +71,96 @@ div.output_prompt {
 div#notebook {
   overflow-x: hidden;
 }
-// fix for firefox issue in IPython
+//fix for firefox issue in IPython
 .CodeMirror {
-  max-width: 960px !important;
-  //or 1240px/
+  max-width: 960px !important; //1240px
 }
 .cell li {
   line-height: 160%;
 }
-.my-btn-close {
-  position:fixed;
-  top: 0.3em;
-  left: 0.3em;
-  opacity: 0.8;
-  color: darkblue;
-}
-.my-btn-close:hover {
-  color: #0000f1;
-}
 
-// Bryan-derived style
-//.rendered_html {
-    //font-family: "proxima-nova", helvetica;
+// My slide theme, to use with my custom.js and custom.css
+//div.text_cell_render, div.output_html {
+  //font-family: "proxima-nova", helvetica;
 //}
-
 //.rendered_html h1 {
-    //color: #015C9C;
+  //color: #fcfcfc;
+  //text-align: center;
+  //font-size: 350%;
 //}
-
 //.rendered_html h2 {
-    //color: #26465D;
+  //color: #fcfcfc;
+  //font-size: 300%;
+  ////text-align: center;
 //}
-
 //.rendered_html h3 {
-    //color: #002845;
+  //color: #fcfcfc;
+  //font-size: 250%;
+  ////text-align: center;
 //}
-
-//.rendered_html p.title {
-    //font-size: 300%;
+//.rendered_html h4 {
+  //color: #fcfcfc;
+  ////text-align: center;
 //}
-
-//.rendered_html p.subtitle { 
-    //font-size: 200%;
+//.rendered_html h5 {
+  //color: #fcfcfc;
+  ////text-align: center;
 //}
-//
+//.rendered_html h6 {
+  //color: #fcfcfc;
+  ////text-align: center;
+//}
+//div.output_subarea {
+  //color: #fcfcfc;
+//}
+//.my-main-tool-bar{
+  //opacity: 0.1;
+//}
+//.reveal .slides {
+  //font-size: 200%;
+//}
+//.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  //font-family: "proxima-nova", helvetica;
+//}
+//.reveal a:not(.image) {
+  //color: #f0dfaf;
+//}
+//.reveal section img {
+  //margin: auto;
+  //background: #292929;
+  //box-shadow: none;
+//}
+//.reveal .slide-number {
+  //right: 5.3em;
+  //bottom: 5.5em;
+  //font-size: 70%;
+  //color: #ffffff;
+//}
+//.reveal .controls div.navigate-left,
+//.reveal .controls div.navigate-left.enabled {
+  //border-right-color: #ffffff;
+//}
+//.reveal .controls div.navigate-right,
+//.reveal .controls div.navigate-right.enabled {
+  //border-left-color: #ffffff;
+//}
+//.reveal .controls div.navigate-up,
+//.reveal .controls div.navigate-up.enabled {
+  //border-bottom-color: #ffffff;
+//}
+//.reveal .controls div.navigate-down,
+//.reveal .controls div.navigate-down.enabled {
+  //border-top-color: #ffffff;
+//}
+//.reveal .controls div.navigate-left.enabled:hover {
+  //border-right-color: #fcfcfc;
+//}
+//.reveal .controls div.navigate-right.enabled:hover {
+  //border-left-color: #fcfcfc;
+//}
+//.reveal .controls div.navigate-up.enabled:hover {
+  //border-bottom-color: #fcfcfc;
+//}
+//.reveal .controls div.navigate-down.enabled:hover {
+  //border-top-color: #fcfcfc;
+//}

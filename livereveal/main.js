@@ -195,11 +195,19 @@ function Revealer(ttheme, ttransition){
     //parallaxBackgroundSize: '2560px 1600px',
 
     keyboard: {
+    13: null, // Enter disabled
     27: null, // ESC disabled
     79: null, // o disabled
-    87: function() {Reveal.toggleOverview();},
-    38: null, // up disabled
-    40: null, // down disabled
+    87: function() {Reveal.toggleOverview();}, // w, toggle overview
+    38: null, // up arrow disabled
+    40: null, // down arrow disabled
+    80: null, // p, up disable
+    78: null, // n, down disable
+    75: null, // k, up disabled
+    74: null, // j, down disabled
+    72: null, // h, left disabled
+    76: null, // l, right disabled
+    66: null, // b, black pause disabled, use period or forward slash 
     },
 
     // Optional libraries used to extend on reveal.js
@@ -249,15 +257,19 @@ function setupKeys(){
 
 function buttonExit() {
     var exit_button = $('<i/>')
-        .attr('id','exit')
-        .attr('title','Exit')
+        .attr('id','exit_b')
+        .attr('title','RISE Exit')
         .addClass('icon-remove-sign icon-4x')
-        .addClass('my-btn-close')
+        .addClass('my-main-tool-bar')
+        .css('position','fixed')
+        .css('top','0.5em')
+        .css('left','0.48em')
+        .css('opacity', '0.6')
         .click(
-            function(){ 
-                Remover('div#notebook-container');
-                $('#maintoolbar').removeClass('reveal_tagging');
-                $('#exit').css('display', 'none');
+            function(){
+                revealMode('simple', 'zoom');
+                $('#exit_b').remove();
+                button_rise();
             }
         );
     $('.reveal').after(exit_button);

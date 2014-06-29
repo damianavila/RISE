@@ -207,7 +207,8 @@ function Revealer(ttheme, ttransition){
     74: null, // j, down disabled
     72: null, // h, left disabled
     76: null, // l, right disabled
-    66: null, // b, black pause disabled, use period or forward slash 
+    66: null, // b, black pause disabled, use period or forward slash
+    // 83: null, // s, notes, but not working because notes is a plugin 
     },
 
     // Optional libraries used to extend on reveal.js
@@ -259,14 +260,16 @@ function KeysMessager() {
   var message = $('<div/>').append(
                   $("<p/></p>").addClass('dialog').html(
                     "<ul>" +
-                      "<li><b>w</b>: Toogle Overview mode.</li>" +
-                      "<li><b>pgup</b>: UP</li>" +
-                      "<li><b>pgdn</b>: DOWN</li>" +
-                      "<li><b>Left arrow</b>: LEFT</li>" +
-                      "<li><b>Right arrow</b>: RIGHT</li>" +
-                      "<li><b>Space bar</b>: NEXT</li>" +
-                      "<li><b>Shift + Space bar</b>: PREVIOUS</li>" +
-                      "<li><b>Black screen</b>: Period or forward slash</li>" +
+                      "<li><b>w</b>: Toogle overview mode.</li>" +
+                      "<li><b>home</b>: First slide</li>" +
+                      "<li><b>end</b>: Last slide</li>" +
+                      "<li><b>space bar</b>: Next</li>" +
+                      "<li><b>shift + space bar</b>: Previous</li>" +
+                      "<li><b>pgup</b>: Up</li>" +
+                      "<li><b>pgdn</b>: Down</li>" +
+                      "<li><b>left arrow</b>: Left</li>" +
+                      "<li><b>right arrow</b>: Right</li>" +
+                      "<li><b>black screen</b>: Period (or forward slash)</li>" +
                     "</ul>" +
                     "<b>NOTE: You have to use this shortcuts in command mode.</b>"
                     )

@@ -207,7 +207,8 @@ function Revealer(ttheme, ttransition){
     74: null, // j, down disabled
     72: null, // h, left disabled
     76: null, // l, right disabled
-    66: null, // b, black pause disabled, use period or forward slash 
+    66: null, // b, black pause disabled, use period or forward slash
+    // 83: null, // s, notes, but not working because notes is a plugin 
     },
 
     // Optional libraries used to extend on reveal.js
@@ -255,6 +256,52 @@ function setupKeys(){
   });
 }
 
+function KeysMessager() {
+  var message = $('<div/>').append(
+                  $("<p/></p>").addClass('dialog').html(
+                    "<ul>" +
+                      "<li><b>w</b>: Toogle overview mode.</li>" +
+                      "<li><b>home</b>: First slide</li>" +
+                      "<li><b>end</b>: Last slide</li>" +
+                      "<li><b>space bar</b>: Next</li>" +
+                      "<li><b>shift + space bar</b>: Previous</li>" +
+                      "<li><b>pgup</b>: Up</li>" +
+                      "<li><b>pgdn</b>: Down</li>" +
+                      "<li><b>left arrow</b>: Left</li>" +
+                      "<li><b>right arrow</b>: Right</li>" +
+                      "<li><b>black screen</b>: Period (or forward slash)</li>" +
+                    "</ul>" +
+                    "<b>NOTE: You have to use this shortcuts in command mode.</b>"
+                    )
+                );
+
+  IPython.dialog.modal({
+    title : "Reveal Shortcuts Help",
+    body : message,
+    buttons : {
+        OK : {class: "btn-danger"}
+    }
+  });
+}
+
+function buttonHelp() {
+    var help_button = $('<i/>')
+        .attr('id','help_b')
+        .attr('title','Reveal Shortcuts Help')
+        .addClass('icon-question icon-4x')
+        .addClass('my-main-tool-bar')
+        .css('position','fixed')
+        .css('bottom','0.5em')
+        .css('left','0.6em')
+        .css('opacity', '0.6')
+        .click(
+            function(){
+                KeysMessager();
+            }
+        );
+    $('.reveal').after(help_button);
+}
+
 function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
@@ -269,6 +316,7 @@ function buttonExit() {
             function(){
                 revealMode('simple', 'zoom');
                 $('#exit_b').remove();
+                $('#help_b').remove();
                 button_rise();
             }
         );
@@ -325,6 +373,7 @@ function revealMode(rtheme, rtransition) {
     // Minor modifications for usability
     setupKeys();
     buttonExit();
+    buttonHelp();
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
     Remover();

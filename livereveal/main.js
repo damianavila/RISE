@@ -255,6 +255,50 @@ function setupKeys(){
   });
 }
 
+function KeysMessager() {
+  var message = $('<div/>').append(
+                  $("<p/></p>").addClass('dialog').html(
+                    "<ul>" +
+                      "<li><b>w</b>: Toogle Overview mode.</li>" +
+                      "<li><b>pgup</b>: UP</li>" +
+                      "<li><b>pgdn</b>: DOWN</li>" +
+                      "<li><b>Left arrow</b>: LEFT</li>" +
+                      "<li><b>Right arrow</b>: RIGHT</li>" +
+                      "<li><b>Space bar</b>: NEXT</li>" +
+                      "<li><b>Shift + Space bar</b>: PREVIOUS</li>" +
+                      "<li><b>Black screen</b>: Period or forward slash</li>" +
+                    "</ul>" +
+                    "<b>NOTE: You have to use this shortcuts in command mode.</b>"
+                    )
+                );
+
+  IPython.dialog.modal({
+    title : "Reveal Shortcuts Help",
+    body : message,
+    buttons : {
+        OK : {class: "btn-danger"}
+    }
+  });
+}
+
+function buttonHelp() {
+    var help_button = $('<i/>')
+        .attr('id','help_b')
+        .attr('title','Reveal Shortcuts Help')
+        .addClass('icon-question icon-4x')
+        .addClass('my-main-tool-bar')
+        .css('position','fixed')
+        .css('bottom','0.5em')
+        .css('left','0.6em')
+        .css('opacity', '0.6')
+        .click(
+            function(){
+                KeysMessager();
+            }
+        );
+    $('.reveal').after(help_button);
+}
+
 function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
@@ -269,6 +313,7 @@ function buttonExit() {
             function(){
                 revealMode('simple', 'zoom');
                 $('#exit_b').remove();
+                $('#help_b').remove();
                 button_rise();
             }
         );
@@ -325,6 +370,7 @@ function revealMode(rtheme, rtransition) {
     // Minor modifications for usability
     setupKeys();
     buttonExit();
+    buttonHelp();
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
     Remover();

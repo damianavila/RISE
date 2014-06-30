@@ -260,7 +260,8 @@ function KeysMessager() {
   var message = $('<div/>').append(
                   $("<p/></p>").addClass('dialog').html(
                     "<ul>" +
-                      "<li><b>w</b>: Toogle overview mode.</li>" +
+                      "<li><b>alt + r</b>: Enter/Exit RISE</li>" +
+                      "<li><b>w</b>: Toogle overview mode</li>" +
                       "<li><b>home</b>: First slide</li>" +
                       "<li><b>end</b>: Last slide</li>" +
                       "<li><b>space bar</b>: Next</li>" +
@@ -315,9 +316,6 @@ function buttonExit() {
         .click(
             function(){
                 revealMode('simple', 'zoom');
-                $('#exit_b').remove();
-                $('#help_b').remove();
-                button_rise();
             }
         );
     $('.reveal').after(exit_button);
@@ -377,6 +375,9 @@ function revealMode(rtheme, rtransition) {
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
     Remover();
+    $('#exit_b').remove();
+    $('#help_b').remove();
+    button_rise();
     $('#maintoolbar').removeClass('reveal_tagging');
   }
 
@@ -394,7 +395,15 @@ define(function() {
         'callback': function(){revealMode(param1, param2)},
         'id'      : 'start_livereveal'
         },
-      ])
+      ]);
+      var document_keydown = function(event) {
+        if (event.which == 82 && event.altKey) {
+          revealMode(param1, param2);
+          return false;
+        };
+        return true;
+      };
+      $(document).keydown(document_keydown);
     }
   }
 });

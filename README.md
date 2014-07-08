@@ -25,6 +25,7 @@ NOTE_4: You have an ipynb presentation as a gist: https://gist.github.com/damian
 NOTE_5: I am touching your ipynb in a "dirty" way... so, for now, make a backup of your ipynb to prevent any damage to it (I tested with no problems for several weeks, but who knows... it is better to prevent problems).
 
 NOTE_6: I am assuming that you know how to install the extension... if not, probably is better for you to wait a little, but if you want to try it anyway... follow this steps with the appropriate changes: http://nbviewer.ipython.org/urls/raw.github.com/fperez/nb-slideshow-template/master/install-support.ipynb
+Those steps will install the extension in a specific-profile way. If you are using the default one, it would be that one... but you can also install in another profile. 
 
 Right now, you can also install this extension as a nbextension. Just throw it in the nbextension folder in your .ipython profile and use the custom.js but pointing to the extension inside the nbextension folder:
 
@@ -33,6 +34,8 @@ Right now, you can also install this extension as a nbextension. Just throw it i
      require(['nbextensions/livereveal/main'],function(livereveal){
     ...
 ```
+
+This last way to install the extension is more "extended" I mean, you have the extension in the nbextension folder and you can link it from different profiles, and not worry about installing the extension in eaxh profile.
 
 NOTE_7: Use spacebar to go forward and shift+spacebar to go backward (or the controller in the bottom right corner). Up and Down arrows are reserved to interact with notebook cells. You can know more about the reveal-specific shortcuts just press teh help button.
  

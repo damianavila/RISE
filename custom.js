@@ -13,7 +13,7 @@ requirejs.config({
 
 $([IPython.events]).on('app_initialized.NotebookApp', function(){
 
-     require(['custom/livereveal/main'],function(livereveal){
+     require(['nbextensions/livereveal/main'],function(livereveal){
        // livereveal.parameters('theme', 'transition', 'fontsize', static_prefix);
        //   * theme can be: simple, sky, beige, serif, solarized
        //   (you will need aditional css for default, night, moon themes).

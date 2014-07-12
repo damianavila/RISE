@@ -172,13 +172,13 @@ function Revealer(ttheme, ttransition){
   $('div#notebook-container').addClass("slides");
 
   // Header
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/reset_reveal.css") + ' id="revealcss" />');
-  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./custom/livereveal/main.css") + ' id="maincss" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./nbextensions/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./nbextensions/livereveal/reset_reveal.css") + ' id="revealcss" />');
+  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./nbextensions/livereveal/main.css") + ' id="maincss" />');
 
   // Tailer
-  require(['custom/livereveal/reveal.js/lib/js/head.min',
-           'custom/livereveal/reveal.js/js/reveal'],function(){
+  require(['nbextensions/livereveal/reveal.js/lib/js/head.min',
+           'nbextensions/livereveal/reveal.js/js/reveal'],function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
     controls: true,
@@ -216,7 +216,7 @@ function Revealer(ttheme, ttransition){
     dependencies: [
     //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
     //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-    { src: require.toUrl("./custom/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
+    { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
     ]
     });
 
@@ -377,7 +377,12 @@ function revealMode(rtheme, rtransition) {
     Remover();
     $('#exit_b').remove();
     $('#help_b').remove();
-    button_rise();
+    try{
+     button_rise();
+    }
+    catch(e){
+     console.log('An error has occurred: ' + e.message)
+    }
     $('#maintoolbar').removeClass('reveal_tagging');
   }
 

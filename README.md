@@ -27,7 +27,7 @@ NOTE_4: You have an `ipynb` presentation as a gist: https://gist.github.com/dami
 
 NOTE_5: I am touching your ipynb in a "dirty" way... so, for now, make sure to have a backup of your ipynb to prevent any damage to it (I tested with no problems for several months, but who knows... it is better to prevent the problem than to pay the cost).
 
-NOTE_6: I am assuming that you know how to install the nbextension... if not, I have included, in the repo, an IPython notebook to do it automatically (you can see it [here]() too).
+NOTE_6: I am assuming that you know how to install the nbextension... if not, I have included, in the repo, an IPython notebook to do it automatically (you can see it [here](http://nbviewer.ipython.org/github/damianavila/live_reveal/blob/master/Install_RJSE.ipynb) too).
 
 A short explanation for a manual installation:
 

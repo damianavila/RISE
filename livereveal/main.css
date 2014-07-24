@@ -61,6 +61,9 @@
 .reveal .progress span {
   background: #727272;
 }
+.skip {
+  display: none !important;
+}
 
 //Notebook-specific
 div.prompt {

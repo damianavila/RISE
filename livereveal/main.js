@@ -95,7 +95,7 @@ function labelIntraSlides(){
       $('.cell:nth('+i+')').css('display','none');
     }
     else if (cell.metadata.slideshow.slide_type == 'skip') {
-      $('.cell:nth('+i+')').css('display','none');
+      $('.cell:nth('+i+')').addClass("skip");
     }
     else if (cell.metadata.slideshow.slide_type == '-') {
       if (cell.metadata.internals.frag_helper == 'fragment_end') {
@@ -342,7 +342,7 @@ function Remover() {
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('fragment');
-    //$('.cell:nth('+i+')').css('display','block');
+    $('.cell:nth('+i+')').removeClass('skip');
     $('div#notebook-container').append(cells[i].element);
   }
 

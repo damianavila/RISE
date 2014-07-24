@@ -5,6 +5,10 @@ a.k.a. Reveal.js - Jupyter/IPython Slideshow Extension.
 
 Project to implement a "LIVE" reveal.js-based version for the Jupyter/IPython notebook.
 
+My talk about RJSE/RISE at SciPy 2014 (click on the image to see it):
+
+[![RJSE/RISE video](http://img.youtube.com/vi/sZBKruEh0jI/0.jpg)](https://www.youtube.com/watch?v=sZBKruEh0jI)
+
 As you now... I love IPython and I like Reveal.js.
 
 Previously, I developed a "converter" for the IPython.nbconvert library to export `ipynb` to a STATIC html slideshow based in Reveal.js library.

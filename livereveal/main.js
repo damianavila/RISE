@@ -17,6 +17,23 @@ IPython.notebook.get_cell_elements = function () {
     return this.container.find("div.cell");
 }
 
+// Compatibility between IPython series.
+var slide_icon
+var exit_icon
+var help_icon
+
+if(IPython.version in {'2.2.0':0,'2.1.0':0,'2.0.0':0}) {
+    slide_icon = 'icon-bar-chart';
+    exit_icon = 'icon-remove-sign icon-4x';
+    help_icon = 'icon-question icon-4x';
+    console.log("IPython version: 2.x");
+} else {
+    slide_icon = 'fa-bar-chart-o';
+    exit_icon = 'fa-times-circle fa-4x fa';
+    help_icon = 'fa-question fa-4x fa';
+    console.log("IPython version: 3.x");
+}
+
 function setupDict(){
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
@@ -289,7 +306,7 @@ function buttonHelp() {
     var help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
-        .addClass('icon-question icon-4x')
+        .addClass(help_icon)
         .addClass('my-main-tool-bar')
         .css('position','fixed')
         .css('bottom','0.5em')
@@ -307,7 +324,7 @@ function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','RISE Exit')
-        .addClass('icon-remove-sign icon-4x')
+        .addClass(exit_icon)
         .addClass('my-main-tool-bar')
         .css('position','fixed')
         .css('top','0.5em')
@@ -396,7 +413,7 @@ define(function() {
       IPython.toolbar.add_buttons_group([
         {
         'label'   : 'Enter/Exit Live Reveal Slideshow',
-        'icon'    : 'icon-bar-chart',
+        'icon'    : slide_icon,
         'callback': function(){revealMode(param1, param2)},
         'id'      : 'start_livereveal'
         },

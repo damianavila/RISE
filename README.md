@@ -1,5 +1,6 @@
 RJSE/RISE 
 =========
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/damianavila/live_reveal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 a.k.a. Reveal.js - Jupyter/IPython Slideshow Extension.
 

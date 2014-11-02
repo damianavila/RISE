@@ -183,7 +183,8 @@ function Slider(begin, end, container) {
   $('.end_space').appendTo('div#notebook-container');
 }
 
-function Revealer(ttheme, ttransition){
+function Revealer(ttheme, ttransition, extra){
+  extra = extra || {};
   // Bodier
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
@@ -197,7 +198,8 @@ function Revealer(ttheme, ttransition){
   require(['nbextensions/livereveal/reveal.js/lib/js/head.min',
            'nbextensions/livereveal/reveal.js/js/reveal'],function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
-    Reveal.initialize({
+        
+    var options = {
     controls: true,
     progress: true,
     history: true,
@@ -228,14 +230,23 @@ function Revealer(ttheme, ttransition){
     // 83: null, // s, notes, but not working because notes is a plugin 
     },
 
+    
     // Optional libraries used to extend on reveal.js
     // Notes are working partially... it opens the notebooks, not the slideshows...
     dependencies: [
-    //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
-    //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-    { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
-    ]
-    });
+            //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
+            //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    }
+    if(typeof(extra.leap)!== 'undefined'){
+        options.dependencies.push({ src: require.toUrl('./nbextensions/livereveal/reveal.js/plugin/leap/leap.js'), async: true })
+        options.leap = extra.leap;
+    }
+    Reveal.initialize(options);
+
+    
+
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
@@ -369,7 +380,7 @@ function Remover() {
   //IPython.layout_manager.do_resize();
 }
 
-function revealMode(rtheme, rtransition) {
+function revealMode(rtheme, rtransition, extra) {
   /*
   * We search for a class tag in the maintoolbar to if Zenmode is "on".
   * If not, to enter the Zenmode, we hide "menubar" and "header" bars and
@@ -384,7 +395,7 @@ function revealMode(rtheme, rtransition) {
     labelIntraSlides();
     Slider('slide', 'slide_end', 'div#notebook-container');
     // Adding the reveal stuff
-    Revealer(rtheme, rtransition);
+    Revealer(rtheme, rtransition, extra);
     // Minor modifications for usability
     setupKeys();
     buttonExit();
@@ -409,12 +420,12 @@ function revealMode(rtheme, rtransition) {
 
 define(function() {
   return {
-    parameters: function setup(param1, param2) {
+    parameters: function setup(param1, param2, extra) {
       IPython.toolbar.add_buttons_group([
         {
         'label'   : 'Enter/Exit Live Reveal Slideshow',
         'icon'    : slide_icon,
-        'callback': function(){revealMode(param1, param2)},
+        'callback': function(){revealMode(param1, param2, extra)},
         'id'      : 'start_livereveal'
         },
       ]);

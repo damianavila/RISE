@@ -22,12 +22,12 @@ var slide_icon
 var exit_icon
 var help_icon
 
-if(IPython.version in {'2.2.0':0,'2.1.0':0,'2.0.0':0}) {
+if(IPython.version.substring(0, 1) === '2') {
     slide_icon = 'icon-bar-chart';
     exit_icon = 'icon-remove-sign icon-4x';
     help_icon = 'icon-question icon-4x';
     console.log("IPython version: 2.x");
-} else {
+} else if (IPython.version.substring(0, 1) === '3') {
     slide_icon = 'fa-bar-chart-o';
     exit_icon = 'fa-times-circle fa-4x fa';
     help_icon = 'fa-question fa-4x fa';

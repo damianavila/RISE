@@ -125,14 +125,14 @@ function labelIntraSlides(){
 
 function Slider(begin, end, container) {
   // Hiding header and the toolbar
-  $('div#header-container').toggle();
+  $('div#header').toggle();
   $('div#maintoolbar').toggle();
   IPython.menubar._size_header();
   //if(event)event.preventDefault();
 
   // switch the panel back color to white (it does not work in css,
   // I do not why, so switching by js)
-  $('div#notebook_panel').css('background-color','#ffffff');
+  $('div#site').css('background-color','#ffffff');
 
   /*
    * The crazy rearrangement, I read the following some months ago,
@@ -191,6 +191,8 @@ function Slider(begin, end, container) {
 
 function Revealer(ttheme, ttransition){
   // Bodier
+  $('div#site').css("height", "100%");  
+  $('div#ipython-main-app').css("position", "static");
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
@@ -249,6 +251,7 @@ function Revealer(ttheme, ttransition){
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
       IPython.notebook.scroll_to_top();
+      Reveal.layout();
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
@@ -336,7 +339,7 @@ function buttonExit() {
         .addClass(exit_icon)
         .addClass('my-main-tool-bar')
         .css('position','fixed')
-        .css('top','1.0em')
+        .css('top','0.5em')
         .css('left','0.48em')
         .css('opacity', '0.6')
         .click(
@@ -348,15 +351,18 @@ function buttonExit() {
 }
 
 function Remover() {
-  $('div#notebook_panel').css('background-color','#ffffff');
-  $('div#header-container').toggle();
+  $('div#site').css("height", "");  
+  $('div#site').css('background-color','');
+  $("div#ipython-main-app").css("position", "");
+  $('div#header').toggle();
   $('div#maintoolbar').toggle();
   IPython.menubar._size_header();
 
   $('div#notebook').removeClass("reveal");
   $('div#notebook-container').removeClass("slides");
-  $('div#notebook-container').css('width','1140px');
-  $('div#notebook-container').css('height','inherit');
+  $('div#notebook-container').css('width','');
+  $('div#notebook-container').css('height','');
+  $('div#notebook-container').css('zoom','');
 
   $('#maincss').remove();
   $('#theme').remove();

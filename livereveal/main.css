@@ -68,6 +68,9 @@
 div#notebook {
   overflow-x: hidden;
 }
+div#notebook.reveal {
+  padding-top: 0px;
+}
 div#notebook-container {
   background-color: transparent;
   -webkit-box-shadow: none;
@@ -99,4 +102,3 @@ div.output_subarea {
 html {
   overflow-y: auto;
 }
-

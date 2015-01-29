@@ -79,6 +79,7 @@ body {
 
 	word-wrap: break-word;
 	line-height: 1;
+	margin-top: 0px !important;
 }
 
 .reveal h1 { font-size: 3.77em; }

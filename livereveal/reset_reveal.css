@@ -79,6 +79,7 @@ body {
 
 	word-wrap: break-word;
 	line-height: 1;
+	margin-top: 0px !important;
 }
 
 .reveal h1 { font-size: 3.77em; }
@@ -392,7 +393,7 @@ body {
 	width: 110px;
 	height: 110px;
 	z-index: 30;
-	right: 10px;
+	right: 0px;
 	bottom: 10px;
 }
 
@@ -516,7 +517,7 @@ body {
  *********************************************/
 
 .reveal {
-	position: relative;
+
 	width: 100%;
 	height: 100%;
 

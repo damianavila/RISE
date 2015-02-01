@@ -2,6 +2,10 @@
 .reveal {
   overflow-y: auto;
 }
+.reveal .slides {
+  text-align: left;
+  font-size: 160%;
+}
 .reveal pre {
   font-size: 90%;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
@@ -11,11 +15,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0);
   transition: none;
 }
-.reveal .slides {
-  text-align: left;
-  font-size: 160%;
-  //width: 1366px !important;
-}
 .reveal blockquote p:first-child, .reveal blockquote p:last-child {
   display: inherit;
 }
@@ -23,7 +22,7 @@
   opacity: 1;
 }
 .reveal .slide-number {
-  right: 3.8em;
+  right: 3.1em;
   bottom: 3.9em;
   font-size: 100%;
 }
@@ -66,19 +65,40 @@
 }
 
 //Notebook-specific
+div#notebook {
+  overflow-x: hidden;
+}
+div#notebook.reveal {
+  padding-top: 0px;
+}
+div#notebook-container {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.cell li {
+  line-height: 160%;
+}
+div.text_cell {
+  font-size: 160%;
+}
+div.text_cell .prompt{
+  display: none;
+}
 div.prompt {
   font-size: 90%;
 }
 div.output_prompt {
   margin-top: 2px;
 }
-div#notebook {
-  overflow-x: hidden;
+div.output_subarea {
+  margin-top: 0.05em;
 }
-//fix for firefox issue in IPython
 .CodeMirror {
+  font-size: 100%;
+  //fix for firefox issue in IPython
   max-width: 960px !important; //1240px
 }
-.cell li {
-  line-height: 160%;
+html {
+  overflow-y: auto;
 }

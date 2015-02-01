@@ -124,9 +124,15 @@ function labelIntraSlides(){
 }
 
 function Slider(begin, end, container) {
-  // Hiding header and menu
-  $('#header').css('display','none');
-  $('#menubar-container').css('display','none');
+  // Hiding header and the toolbar
+  $('div#header').toggle();
+  $('div#maintoolbar').toggle();
+  IPython.menubar._size_header();
+  //if(event)event.preventDefault();
+
+  // switch the panel back color to white (it does not work in css,
+  // I do not why, so switching by js)
+  $('div#site').css('background-color','#ffffff');
 
   /*
    * The crazy rearrangement, I read the following some months ago,
@@ -185,6 +191,8 @@ function Slider(begin, end, container) {
 
 function Revealer(ttheme, ttransition){
   // Bodier
+  $('div#site').css("height", "100%");  
+  $('div#ipython-main-app').css("position", "static");
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
@@ -201,6 +209,9 @@ function Revealer(ttheme, ttransition){
     controls: true,
     progress: true,
     history: true,
+
+    // You can switch widt and height to fix the proyector
+    width: 1140,
     minScale: 1.0, //we need this to codemirror work right
 
     theme: Reveal.getQueryHash().theme || ttheme, // available themes are in /css/theme
@@ -240,6 +251,7 @@ function Revealer(ttheme, ttransition){
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
       IPython.notebook.scroll_to_top();
+      Reveal.layout();
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
@@ -339,12 +351,18 @@ function buttonExit() {
 }
 
 function Remover() {
-  $('#menubar-container').css('display','block');
-  $('#header').css('display','block');
+  $('div#site').css("height", "");  
+  $('div#site').css('background-color','');
+  $("div#ipython-main-app").css("position", "");
+  $('div#header').toggle();
+  $('div#maintoolbar').toggle();
+  IPython.menubar._size_header();
 
   $('div#notebook').removeClass("reveal");
   $('div#notebook-container').removeClass("slides");
-  $('div#notebook-container').css('width','1170px');
+  $('div#notebook-container').css('width','');
+  $('div#notebook-container').css('height','');
+  $('div#notebook-container').css('zoom','');
 
   $('#maincss').remove();
   $('#theme').remove();
@@ -366,7 +384,6 @@ function Remover() {
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook-container');
 
-  //IPython.layout_manager.do_resize();
 }
 
 function revealMode(rtheme, rtransition) {
@@ -403,8 +420,6 @@ function revealMode(rtheme, rtransition) {
     $('#maintoolbar').removeClass('reveal_tagging');
   }
 
-  // And now we find the proper height and do a resize
-  IPython.layout_manager.do_resize();
 }
 
 define(function() {

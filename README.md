@@ -63,6 +63,26 @@ Just throw the extension in the nbextension folder in your `.ipython` profile an
 
 I have added a custom.js in the repo to show you how to do it.
 
+## usage with leap motion. 
+
+Reveal.js support the [leap motion](leapmotion.com). You can use RISE/RISE with
+the leap motion if your local computer have a leap motion installed.  Simply
+pass the [reveal leap plugin
+options](https://github.com/hakimel/reveal.js#leap-motion) as a third parameter
+of your reveal js parameters, for example in custom.js:
+
+```
+livereveal.parameters('simple', 'linear', 
+    {
+    leap: {
+        naturalSwipe   : true,    // Invert swipe gestures
+        pointerOpacity : 0.5,      // Set pointer opacity to 0.5
+        pointerColor   : '#d80000' // Red pointer
+        },
+    }
+);
+```
+
 ## Feedback
 
 If you have any feedback, or find any bugs, please let me know on the mailing list or by opening an issue.

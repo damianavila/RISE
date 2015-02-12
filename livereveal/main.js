@@ -109,7 +109,7 @@ function labelIntraSlides(){
       $('.cell:nth('+i+')').attr('data-fragment-index', cell.metadata.internals.frag_number);
     }
     else if (cell.metadata.slideshow.slide_type == 'notes') {
-      $('.cell:nth('+i+')').css('display','none');
+      $('.cell:nth('+i+')').addClass("reveal-notes");
     }
     else if (cell.metadata.slideshow.slide_type == 'skip') {
       $('.cell:nth('+i+')').addClass("skip");

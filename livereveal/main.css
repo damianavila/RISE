@@ -64,6 +64,10 @@
   display: none !important;
 }
 
+.reveal .reveal-notes {
+  display: none;
+}
+
 //Notebook-specific
 div#notebook {
   overflow-x: hidden;

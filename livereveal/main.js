@@ -93,8 +93,18 @@ function labelCells(){
     }
   }
 
-  cells[0].metadata.slideshow.slide_type = 'slide';
-  cells[0].metadata.internals.slide_type = 'slide';
+  // The first cell that isn't explicitly skipped or notes needs to be the
+  // start of a slide.
+  var slide_type;
+  for (i=0; i < cells.length; i++) {
+      slide_type = cells[i].metadata.slideshow.slide_type;
+      if (slide_type !== 'skip' && slide_type !== 'notes') {
+        cells[i].metadata.slideshow.slide_type = 'slide';
+        cells[i].metadata.internals.slide_type = 'slide';
+        break;
+      }
+  }
+  // The last cell needs to be the end of a slide
   cells[cells.length - 1].metadata.slide_helper = "slide_end";
   cells[cells.length - 1].metadata.internals.slide_helper = "slide_end";
 

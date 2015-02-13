@@ -15,12 +15,12 @@ IPython.notebook.get_cell_elements = function () {
   * You'll need to make sure the cells are getting detected in the right order.
   */
     return this.container.find("div.cell");
-}
+};
 
 // Compatibility between IPython series.
-var slide_icon
-var exit_icon
-var help_icon
+var slide_icon;
+var exit_icon;
+var help_icon;
 
 if(IPython.version.substring(0, 1) === '2') {
     slide_icon = 'icon-bar-chart';
@@ -38,11 +38,11 @@ function setupDict(){
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
     var cell = cells[i];
-    if (cell.metadata.slideshow == undefined){
+    if (cell.metadata.slideshow === undefined){
       cell.metadata.slideshow = {};
       cell.metadata.slideshow.slide_type = '-';
     }
-    if (cell.metadata.internals == undefined){
+    if (cell.metadata.internals === undefined){
       cell.metadata.internals = {};
       cell.metadata.internals.slide_type = '-';
     }
@@ -249,9 +249,9 @@ function Revealer(ttheme, ttransition, extra){
             //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
             { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
         ]
-    }
+    };
     if(typeof(extra.leap)!== 'undefined'){
-        options.dependencies.push({ src: require.toUrl('./nbextensions/livereveal/reveal.js/plugin/leap/leap.js'), async: true })
+        options.dependencies.push({ src: require.toUrl('./nbextensions/livereveal/reveal.js/plugin/leap/leap.js'), async: true });
         options.leap = extra.leap;
     }
     Reveal.initialize(options);
@@ -289,7 +289,7 @@ function setupKeys(){
   });
 
   // edit mode
-  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter')
+  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter');
   IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
     IPython.notebook.execute_cell();
     return false;
@@ -426,7 +426,7 @@ function revealMode(rtheme, rtransition, extra) {
      button_rise();
     }
     catch(e){
-     console.log('An error has occurred: ' + e.message)
+     console.log('An error has occurred: ' + e.message);
     }
     $('#maintoolbar').removeClass('reveal_tagging');
   }
@@ -440,7 +440,7 @@ define(function() {
         {
         'label'   : 'Enter/Exit Live Reveal Slideshow',
         'icon'    : slide_icon,
-        'callback': function(){revealMode(param1, param2, extra)},
+        'callback': function(){ revealMode(param1, param2, extra); },
         'id'      : 'start_livereveal'
         },
       ]);
@@ -448,10 +448,10 @@ define(function() {
         if (event.which == 82 && event.altKey) {
           revealMode(param1, param2);
           return false;
-        };
+        }
         return true;
       };
       $(document).keydown(document_keydown);
     }
-  }
+  };
 });

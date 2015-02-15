@@ -104,9 +104,4 @@ div.output_subarea {
 html {
   overflow-y: auto;
 }
-/* 2.x compat */
-body.notebook_app {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
 

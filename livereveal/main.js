@@ -408,6 +408,8 @@ function Remover() {
   $('.end_space').appendTo('div#notebook-container');
 
   if(IPython.version.substring(0, 1) === '2') {
+    $('body.notebook_app').css("overflow-y", "");
+    $('body.notebook_app').css("overflow-x", "");
     IPython.layout_manager.do_resize();
   }
 
@@ -448,6 +450,8 @@ function revealMode(rtheme, rtransition, extra) {
   }
 
   if(IPython.version.substring(0, 1) === '2') {
+    $('body.notebook_app').css("overflow-y", "auto");
+    $('body.notebook_app').css("overflow-x", "hidden");
     IPython.layout_manager.do_resize();
   }
 

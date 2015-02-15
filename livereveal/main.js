@@ -40,6 +40,7 @@ if(IPython.version.substring(0, 1) === '2') {
 function markupSlides(container) {
     var slide_section = $('<section>').appendTo(container);
     var subslide_section = $('<section>').appendTo(slide_section);
+    var current_fragment = subslide_section;
 
     var cells = IPython.notebook.get_cells();
     var i, cell, slide_type;
@@ -61,9 +62,14 @@ function markupSlides(container) {
                 // Start new slide
                 slide_section = $('<section>').appendTo(container);
                 subslide_section = $('<section>').appendTo(slide_section);
+                current_fragment = subslide_section;
             } else if (slide_type === 'subslide') {
                 // Start new subslide
                 subslide_section = $('<section>').appendTo(slide_section);
+                current_fragment = subslide_section;
+            } else if (slide_type === 'fragment') {
+                current_fragment = $('<div>').addClass('fragment')
+                                    .appendTo(subslide_section);
             }
         } else if (slide_type !== 'notes' && slide_type !== 'skip') {
             // Subsequent cells should be able to start new slides
@@ -78,13 +84,11 @@ function markupSlides(container) {
                 $('<aside>').addClass('notes').append(cell.element)
             );
         } else {
-            subslide_section.append(cell.element);
+            current_fragment.append(cell.element);
         }
         
-        // Set classes on the cell
-        if (slide_type === 'fragment') {
-            cell.element.addClass('fragment');
-        } else if (slide_type === 'skip') {
+        // Hide skipped cells
+        if (slide_type === 'skip') {
             cell.element.addClass('reveal-skip');
         }
     }
@@ -291,7 +295,6 @@ function Remover() {
 
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
-    $('.cell:nth('+i+')').removeClass('fragment');
     $('.cell:nth('+i+')').removeClass('reveal-skip');
     $('div#notebook-container').append(cells[i].element);
   }

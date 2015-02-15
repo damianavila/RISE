@@ -270,13 +270,13 @@ function Revealer(ttheme, ttransition, extra){
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
-      IPython.notebook.scroll_to_top();
+      window.scrollTo(0,0);
       Reveal.layout();
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
-      IPython.notebook.scroll_to_top();
+      window.scrollTo(0,0);
     });
   });
 }

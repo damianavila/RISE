@@ -137,7 +137,9 @@ function Slider(begin, end, container) {
   // Hiding header and the toolbar
   $('div#header').toggle();
   $('div#maintoolbar').toggle();
-  IPython.menubar._size_header();
+  if(IPython.menubar._size_header) {
+		IPython.menubar._size_header();
+  }
   //if(event)event.preventDefault();
 
   // switch the panel back color to white (it does not work in css,
@@ -377,8 +379,9 @@ function Remover() {
   $("div#ipython-main-app").css("position", "");
   $('div#header').toggle();
   $('div#maintoolbar').toggle();
-  IPython.menubar._size_header();
-
+  if(IPython.menubar._size_header) {
+		IPython.menubar._size_header();
+  }
   $('div#notebook').removeClass("reveal");
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','');

@@ -137,10 +137,11 @@ function Slider(begin, end, container) {
   // Hiding header and the toolbar
   $('div#header').toggle();
   $('div#maintoolbar').toggle();
-  if(IPython.menubar._size_header) {
-		IPython.menubar._size_header();
+  if(IPython.version.substring(0, 1) === '3') {
+    IPython.menubar._size_header();
+  } else {
+    $('#menubar-container').css('display','none');
   }
-  //if(event)event.preventDefault();
 
   // switch the panel back color to white (it does not work in css,
   // I do not why, so switching by js)
@@ -253,7 +254,6 @@ function Revealer(ttheme, ttransition, extra){
     // 83: null, // s, notes, but not working because notes is a plugin 
     },
 
-    
     // Optional libraries used to extend on reveal.js
     // Notes are working partially... it opens the notebooks, not the slideshows...
     dependencies: [
@@ -267,9 +267,6 @@ function Revealer(ttheme, ttransition, extra){
         options.leap = extra.leap;
     }
     Reveal.initialize(options);
-
-    
-
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
@@ -379,8 +376,10 @@ function Remover() {
   $("div#ipython-main-app").css("position", "");
   $('div#header').toggle();
   $('div#maintoolbar').toggle();
-  if(IPython.menubar._size_header) {
-		IPython.menubar._size_header();
+  if(IPython.version.substring(0, 1) === '3') {
+    IPython.menubar._size_header();
+  } else {
+    $('#menubar-container').css('display','');
   }
   $('div#notebook').removeClass("reveal");
   $('div#notebook-container').removeClass("slides");
@@ -407,6 +406,10 @@ function Remover() {
 
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook-container');
+
+  if(IPython.version.substring(0, 1) === '2') {
+    IPython.layout_manager.do_resize();
+  }
 
 }
 
@@ -442,6 +445,10 @@ function revealMode(rtheme, rtransition, extra) {
      console.log('An error has occurred: ' + e.message);
     }
     $('#maintoolbar').removeClass('reveal_tagging');
+  }
+
+  if(IPython.version.substring(0, 1) === '2') {
+    IPython.layout_manager.do_resize();
   }
 
 }

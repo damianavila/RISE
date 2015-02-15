@@ -80,6 +80,9 @@ div#notebook-container {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+.notebook_app {
+background-color: #ffffff;
+}
 .cell li {
   line-height: 160%;
 }
@@ -106,3 +109,4 @@ div.output_subarea {
 html {
   overflow-y: auto;
 }
+

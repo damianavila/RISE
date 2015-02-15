@@ -34,177 +34,69 @@ if(IPython.version.substring(0, 1) === '2') {
     console.log("IPython version: 3.x");
 }
 
-function setupDict(){
-  var cells = IPython.notebook.get_cells();
-  for(var i in cells){
-    var cell = cells[i];
-    if (cell.metadata.slideshow === undefined){
-      cell.metadata.slideshow = {};
-      cell.metadata.slideshow.slide_type = '-';
-    }
-    if (cell.metadata.internals === undefined){
-      cell.metadata.internals = {};
-      cell.metadata.internals.slide_type = '-';
-    }
-  }
-}
+/* Use the slideshow metadata to rearrange cell DOM elements into the
+ * structure expected by reveal.js
+ */
+function markupSlides(container) {
+    var slide_section = $('<section>').appendTo(container);
+    var subslide_section = $('<section>').appendTo(slide_section);
 
-function labelCells(){
-  var cells = IPython.notebook.get_cells();
-  for(var i=1; i< cells.length; i++){
-    var cell = cells[i];
-    var index = i - 1;
-    if (cell.metadata.slideshow.slide_type == 'slide') {
-      cells[i].metadata.internals.slide_type = 'slide';
-      cells[index].metadata.slide_helper = 'slide_end';
-      cells[index].metadata.internals.slide_helper = 'slide_end';
-    }
-    else if (cell.metadata.slideshow.slide_type == 'subslide'){
-      cells[i].metadata.internals.slide_type = 'subslide';
-      cells[index].metadata.slide_helper = 'subslide_end';
-      cells[index].metadata.internals.slide_helper = 'subslide_end';
-    }
-    else if (cell.metadata.slideshow.slide_type == 'fragment'){
-      cells[i].metadata.internals.slide_type = undefined;
-      cells[index].metadata.slide_helper = undefined;
-      cells[index].metadata.internals.slide_helper = undefined;
-      cells[i].metadata.internals.frag_number = i;
-      var j=1;
-      while (j < cells.length - i) {
-        cells[i + j].metadata.internals.frag_helper = 'fragment_end';
-        cells[i + j].metadata.internals.frag_number = i;
-        j++;
-      }
-    }
-    else if (cell.metadata.slideshow.slide_type == 'notes'){
-      cells[i].metadata.internals.slide_type = undefined;
-      cells[index].metadata.slide_helper = undefined;
-      cells[index].metadata.internals.slide_helper = undefined;
-    }
-    else if (cell.metadata.slideshow.slide_type == 'skip'){
-      cells[i].metadata.internals.slide_type = undefined;
-      cells[index].metadata.slide_helper = undefined;
-      cells[index].metadata.internals.slide_helper = undefined;
-    }
-    else if (cell.metadata.slideshow.slide_type == '-'){
-      cells[i].metadata.internals.slide_type = undefined;
-      cells[index].metadata.slide_helper = undefined;
-      cells[index].metadata.internals.slide_helper = undefined;
-    }
-  }
-
-  // The first cell that isn't explicitly skipped or notes needs to be the
-  // start of a slide.
-  var slide_type;
-  for (i=0; i < cells.length; i++) {
-      slide_type = cells[i].metadata.slideshow.slide_type;
-      if (slide_type !== 'skip' && slide_type !== 'notes') {
-        cells[i].metadata.slideshow.slide_type = 'slide';
-        cells[i].metadata.internals.slide_type = 'slide';
-        break;
-      }
-  }
-  // The last cell needs to be the end of a slide
-  cells[cells.length - 1].metadata.slide_helper = "slide_end";
-  cells[cells.length - 1].metadata.internals.slide_helper = "slide_end";
-
-}
-
-function labelIntraSlides(){
-  var cells = IPython.notebook.get_cells();
-  for(var i in cells){
-    var cell = cells[i];
-    if (cell.metadata.slideshow.slide_type == 'fragment') {
-      $('.cell:nth('+i+')').addClass("fragment");
-      $('.cell:nth('+i+')').attr('data-fragment-index', cell.metadata.internals.frag_number);
-    }
-    else if (cell.metadata.slideshow.slide_type == 'notes') {
-      $('.cell:nth('+i+')').addClass("reveal-notes");
-    }
-    else if (cell.metadata.slideshow.slide_type == 'skip') {
-      $('.cell:nth('+i+')').addClass("skip");
-    }
-    else if (cell.metadata.slideshow.slide_type == '-') {
-      if (cell.metadata.internals.frag_helper == 'fragment_end') {
-        $('.cell:nth('+i+')').addClass("fragment");
-        $('.cell:nth('+i+')').attr('data-fragment-index', cell.metadata.internals.frag_number);
-      }
-    }
-  }
-}
-
-function Slider(begin, end, container) {
-  // Hiding header and the toolbar
-  $('div#header').toggle();
-  $('div#maintoolbar').toggle();
-  if(IPython.version.substring(0, 1) === '3') {
-    IPython.menubar._size_header();
-  } else {
-    $('#menubar-container').css('display','none');
-  }
-
-  // switch the panel back color to white (it does not work in css,
-  // I do not why, so switching by js)
-  $('div#site').css('background-color','#ffffff');
-
-  /*
-   * The crazy rearrangement, I read the following some months ago,
-   * It applies here withou any doubts ;-)
-   * "When I wrote this, only God and I understood what I was doing
-   * Now, God only knows"
-  */ 
-  var cells = IPython.notebook.get_cells();
-  var counter = 0;
-  for(var i=0; i<cells.length; i++){
-    if (cells[i].metadata.slideshow.slide_type == begin) {
-      var slide = [];
-      $(container).append('<section id="'+begin+'_'+counter+'"></section>');
-      for(var j=0; j<cells.length; j++){
-        if (cells[i].metadata.slide_helper == end) {
-          slide[j] = cells[i];
-          break;
-        }
-        else if (cells[i].metadata.slide_helper != end) {
-          slide[j] = cells[i];
-          i++;
-        }
-      }
-      console.log("slide:"+slide);
-      slide[0].metadata.internals.slide_type = 'subslide';
-      slide[slide.length - 1].metadata.internals.slide_helper = 'subslide_end';
-      var counter2 = 0;
-      for(var x=0; x<slide.length; x++){
-        if (slide[x].metadata.internals.slide_type == 'subslide') {
-          var subslide = [];
-          $("section#"+begin+'_'+counter+"").append('<section id="subslide_'+counter+'_'+counter2+'"></section>');
-          for(var y=0; y<slide.length; y++){
-            if (slide[x].metadata.internals.slide_helper == 'subslide_end') {
-              subslide[y] = slide[x];
-              break;
+    var cells = IPython.notebook.get_cells();
+    var i, cell, slide_type;
+    
+    // Special handling for the first slide: it will work even if the user
+    // doesn't start with a 'Slide' cell. But if the user does explicitly
+    // start with slide/subslide, we don't want a blank first slide. So we
+    // don't create a new slide/subslide until there is visible content on
+    // the first slide.
+    var content_on_slide1 = false;
+    
+    for (i=0; i < cells.length; i++) {
+        cell = cells[i];
+        slide_type = (cell.metadata.slideshow || {}).slide_type;
+        //~ console.log('cell ' + i + ' is: '+ slide_type);
+        
+        if (content_on_slide1) {
+            if (slide_type === 'slide') {
+                // Start new slide
+                slide_section = $('<section>').appendTo(container);
+                subslide_section = $('<section>').appendTo(slide_section);
+            } else if (slide_type === 'subslide') {
+                // Start new subslide
+                subslide_section = $('<section>').appendTo(slide_section);
             }
-            else if (slide[x].metadata.internals.slide_helper != 'subslide_end') {
-              subslide[y] = slide[x];
-              x++;
-            }
-          }
-          console.log("subslide:"+subslide);
-          for(var z=0; z<subslide.length; z++){
-            $("section#subslide_"+counter+'_'+counter2+"").append(subslide[z].element);
-          }
-          counter2++;
+        } else if (slide_type !== 'notes' && slide_type !== 'skip') {
+            // Subsequent cells should be able to start new slides
+            content_on_slide1 = true;
         }
-      }
-      counter++;
+        
+        // Move the cell element into the slide <section>
+        // N.B. jQuery append takes the element out of the DOM where it was
+        if (slide_type === 'notes') {
+            // Notes are wrapped in an <aside> element
+            subslide_section.append(
+                $('<aside>').addClass('notes').append(cell.element)
+            );
+        } else {
+            subslide_section.append(cell.element);
+        }
+        
+        // Set classes on the cell
+        if (slide_type === 'fragment') {
+            cell.element.addClass('fragment');
+        } else if (slide_type === 'skip') {
+            cell.element.addClass('reveal-skip');
+        }
     }
-  }
-
-  // Adding end_space after all the rearrangement
-  $('.end_space').appendTo('div#notebook-container');
+    
+    // Put .end_space back at the end after all the rearrangement
+    $('.end_space').appendTo('div#notebook-container');
 }
 
 function Revealer(ttheme, ttransition, extra){
   extra = extra || {};
-  // Bodier
+  // Prepare the DOM to start the slideshow
+  $('div#header').hide();
   $('div#site').css("height", "100%");  
   $('div#ipython-main-app').css("position", "static");
   $('div#notebook').addClass("reveal");
@@ -374,8 +266,8 @@ function Remover() {
   $('div#site').css("height", "");  
   $('div#site').css('background-color','');
   $("div#ipython-main-app").css("position", "");
-  $('div#header').toggle();
-  $('div#maintoolbar').toggle();
+  $('div#header').show();
+  $('div#maintoolbar').show();
   if(IPython.version.substring(0, 1) === '3') {
     IPython.menubar._size_header();
   } else {
@@ -400,7 +292,7 @@ function Remover() {
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('fragment');
-    $('.cell:nth('+i+')').removeClass('skip');
+    $('.cell:nth('+i+')').removeClass('reveal-skip');
     $('div#notebook-container').append(cells[i].element);
   }
 
@@ -425,10 +317,7 @@ function revealMode(rtheme, rtransition, extra) {
 
   if (!tag) {
     // Preparing the new reveal-compatible structure
-    setupDict();
-    labelCells();
-    labelIntraSlides();
-    Slider('slide', 'slide_end', 'div#notebook-container');
+    markupSlides($('div#notebook-container'));
     // Adding the reveal stuff
     Revealer(rtheme, rtransition, extra);
     // Minor modifications for usability

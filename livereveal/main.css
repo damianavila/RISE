@@ -1,7 +1,4 @@
-// Reveal-specific
-.reveal {
-  overflow-y: auto;
-}
+/* Reveal-specific */
 .reveal .slides {
   text-align: left;
   font-size: 160%;
@@ -63,14 +60,13 @@
 .skip {
   display: none !important;
 }
-
 .reveal .reveal-notes {
   display: none;
 }
 
-//Notebook-specific
+/* Notebook-specific */
 div#notebook {
-  overflow-x: hidden;
+  overflow: hidden;
 }
 div#notebook.reveal {
   padding-top: 0px;
@@ -79,6 +75,9 @@ div#notebook-container {
   background-color: transparent;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+.notebook_app {
+background-color: #ffffff;
 }
 .cell li {
   line-height: 160%;
@@ -100,9 +99,9 @@ div.output_subarea {
 }
 .CodeMirror {
   font-size: 100%;
-  //fix for firefox issue in IPython
-  max-width: 960px !important; //1240px
+  max-width: 960px !important;  /* fix for firefox issue in IPython, 1240px */
 }
 html {
   overflow-y: auto;
 }
+

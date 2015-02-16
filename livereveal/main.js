@@ -183,6 +183,7 @@ function Revealer(ttheme, ttransition, extra){
       Unselecter();
       window.scrollTo(0,0);
       Reveal.layout();
+      $('#start_livereveal').blur();
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {

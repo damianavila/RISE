@@ -38,12 +38,24 @@ if(IPython.version.substring(0, 1) === '2') {
  * structure expected by reveal.js
  */
 function markupSlides(container) {
-    var slide_section = $('<section>').appendTo(container);
-    var subslide_section = $('<section>').appendTo(slide_section);
-    var current_fragment = subslide_section;
+    // Machinery to create slide/subslide <section>s and give them IDs
+    var slide_counter = -1, subslide_counter = -1;
+    var slide_section, subslide_section;
+    function new_slide() {
+        slide_counter++;
+        subslide_counter = -1;
+        return $('<section>').appendTo(container);
+    }
+    function new_subslide() {
+        subslide_counter++;
+        return $('<section>').attr('id', 'slide-'+slide_counter+'-'+subslide_counter)
+                .appendTo(slide_section);
+    }
 
-    var cells = IPython.notebook.get_cells();
-    var i, cell, slide_type;
+    // Containers for the first slide.
+    slide_section = new_slide();
+    subslide_section = new_subslide();
+    var current_fragment = subslide_section;
     
     // Special handling for the first slide: it will work even if the user
     // doesn't start with a 'Slide' cell. But if the user does explicitly
@@ -51,6 +63,9 @@ function markupSlides(container) {
     // don't create a new slide/subslide until there is visible content on
     // the first slide.
     var content_on_slide1 = false;
+    
+    var cells = IPython.notebook.get_cells();
+    var i, cell, slide_type;
     
     for (i=0; i < cells.length; i++) {
         cell = cells[i];
@@ -60,13 +75,13 @@ function markupSlides(container) {
         if (content_on_slide1) {
             if (slide_type === 'slide') {
                 // Start new slide
-                slide_section = $('<section>').appendTo(container);
-                subslide_section = $('<section>').appendTo(slide_section);
-                current_fragment = subslide_section;
+                slide_section = new_slide();
+                // In each subslide, we insert cells directly into the
+                // <section> until we reach a fragment, when we create a div.
+                current_fragment = subslide_section = new_subslide();
             } else if (slide_type === 'subslide') {
                 // Start new subslide
-                subslide_section = $('<section>').appendTo(slide_section);
-                current_fragment = subslide_section;
+                current_fragment = subslide_section = new_subslide();
             } else if (slide_type === 'fragment') {
                 current_fragment = $('<div>').addClass('fragment')
                                     .appendTo(subslide_section);

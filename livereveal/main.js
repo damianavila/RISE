@@ -17,23 +17,6 @@ IPython.notebook.get_cell_elements = function () {
     return this.container.find("div.cell");
 };
 
-// Compatibility between IPython series.
-var slide_icon;
-var exit_icon;
-var help_icon;
-
-if(IPython.version.substring(0, 1) === '2') {
-    slide_icon = 'icon-bar-chart';
-    exit_icon = 'icon-remove-sign icon-4x';
-    help_icon = 'icon-question icon-4x';
-    console.log("IPython version: 2.x");
-} else if (IPython.version.substring(0, 1) === '3') {
-    slide_icon = 'fa-bar-chart-o';
-    exit_icon = 'fa-times-circle fa-4x fa';
-    help_icon = 'fa-question fa-4x fa';
-    console.log("IPython version: 3.x");
-}
-
 /* Use the slideshow metadata to rearrange cell DOM elements into the
  * structure expected by reveal.js
  */
@@ -250,7 +233,7 @@ function buttonHelp() {
     var help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
-        .addClass(help_icon)
+        .addClass('fa-question fa-4x fa')
         .addClass('my-main-tool-bar')
         .css('position','fixed')
         .css('bottom','0.5em')
@@ -268,7 +251,7 @@ function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','RISE Exit')
-        .addClass(exit_icon)
+        .addClass('fa-times-circle fa-4x fa')
         .addClass('my-main-tool-bar')
         .css('position','fixed')
         .css('top','0.5em')
@@ -288,11 +271,8 @@ function Remover() {
   $("div#ipython-main-app").css("position", "");
   $('div#header').show();
   $('div#maintoolbar').show();
-  if(IPython.version.substring(0, 1) === '3') {
-    IPython.menubar._size_header();
-  } else {
-    $('#menubar-container').css('display','');
-  }
+  IPython.menubar._size_header();
+
   $('div#notebook').removeClass("reveal");
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','');
@@ -317,13 +297,6 @@ function Remover() {
 
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook-container');
-
-  if(IPython.version.substring(0, 1) === '2') {
-    $('body.notebook_app').css("overflow-y", "");
-    $('body.notebook_app').css("overflow-x", "");
-    IPython.layout_manager.do_resize();
-  }
-
 }
 
 function revealMode(rtheme, rtransition, extra) {
@@ -356,13 +329,6 @@ function revealMode(rtheme, rtransition, extra) {
     }
     $('#maintoolbar').removeClass('reveal_tagging');
   }
-
-  if(IPython.version.substring(0, 1) === '2') {
-    $('body.notebook_app').css("overflow-y", "auto");
-    $('body.notebook_app').css("overflow-x", "hidden");
-    IPython.layout_manager.do_resize();
-  }
-
 }
 
 define(function() {
@@ -371,7 +337,7 @@ define(function() {
       IPython.toolbar.add_buttons_group([
         {
         'label'   : 'Enter/Exit Live Reveal Slideshow',
-        'icon'    : slide_icon,
+        'icon'    : 'fa-bar-chart-o',
         'callback': function(){ revealMode(param1, param2, extra); },
         'id'      : 'start_livereveal'
         },

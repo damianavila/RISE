@@ -8,6 +8,19 @@
 * -----------------------------------------------------------------------------
 */
 
+define(['jquery',
+        'base/js/utils',
+        'services/config',
+], function($, utils, configmod) {
+
+var config_section = new configmod.ConfigSection('livereveal',
+                            {base_url: utils.get_body_data("baseUrl")});
+config_section.load();
+var config = new configmod.ConfigWithDefaults(config_section, {
+    theme: 'simple',
+    transition: 'linear'
+});
+
 IPython.notebook.get_cell_elements = function () {
   /*
   * Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
@@ -95,8 +108,7 @@ function markupSlides(container) {
     $('.end_space').appendTo('div#notebook-container');
 }
 
-function Revealer(ttheme, ttransition, extra){
-  extra = extra || {};
+function Revealer() {
   // Prepare the DOM to start the slideshow
   $('div#header').hide();
   $('div#site').css("height", "100%");  
@@ -123,8 +135,10 @@ function Revealer(ttheme, ttransition, extra){
     width: 1140,
     minScale: 1.0, //we need this to codemirror work right
 
-    theme: Reveal.getQueryHash().theme || ttheme, // available themes are in /css/theme
-    transition: Reveal.getQueryHash().transition || ttransition, // default/cube/page/concave/zoom/linear/none
+    // available themes are in /css/theme
+    theme: Reveal.getQueryHash().theme || config.get_sync('theme'),
+    // default/cube/page/concave/zoom/linear/none
+    transition: Reveal.getQueryHash().transition || config.get_sync('transition'),
 
     slideNumber:true,
 
@@ -156,10 +170,14 @@ function Revealer(ttheme, ttransition, extra){
             { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
         ]
     };
-    if(typeof(extra.leap)!== 'undefined'){
+    
+    // Set up the Leap Motion integration if configured
+    var leap = config.get_sync('leap_motion');
+    if (leap !== undefined) {
         options.dependencies.push({ src: require.toUrl('./nbextensions/livereveal/reveal.js/plugin/leap/leap.js'), async: true });
-        options.leap = extra.leap;
+        options.leap = leap;
     }
+
     Reveal.initialize(options);
 
     Reveal.addEventListener( 'ready', function( event ) {
@@ -299,7 +317,7 @@ function Remover() {
   $('.end_space').appendTo('div#notebook-container');
 }
 
-function revealMode(rtheme, rtransition, extra) {
+function revealMode() {
   /*
   * We search for a class tag in the maintoolbar to if Zenmode is "on".
   * If not, to enter the Zenmode, we hide "menubar" and "header" bars and
@@ -311,7 +329,7 @@ function revealMode(rtheme, rtransition, extra) {
     // Preparing the new reveal-compatible structure
     markupSlides($('div#notebook-container'));
     // Adding the reveal stuff
-    Revealer(rtheme, rtransition, extra);
+    Revealer();
     // Minor modifications for usability
     setupKeys();
     buttonExit();
@@ -331,20 +349,19 @@ function revealMode(rtheme, rtransition, extra) {
   }
 }
 
-define(function() {
   return {
-    parameters: function setup(param1, param2, extra) {
+    load_ipython_extension: function setup() {
       IPython.toolbar.add_buttons_group([
         {
         'label'   : 'Enter/Exit Live Reveal Slideshow',
         'icon'    : 'fa-bar-chart-o',
-        'callback': function(){ revealMode(param1, param2, extra); },
+        'callback': function(){ revealMode(); },
         'id'      : 'start_livereveal'
         },
       ]);
       var document_keydown = function(event) {
         if (event.which == 82 && event.altKey) {
-          revealMode(param1, param2);
+          revealMode();
           return false;
         }
         return true;

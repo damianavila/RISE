@@ -70,23 +70,31 @@ if you insist about doing it manually, just copy the extension (the
 directory and then, throw the `custom.js` I have added to the repo inside
 `your_profile/static/custom` directory.
 
-## Usage with leap motion.
+## Usage with Leap Motion
 
-**Reveal.js** support the [leap motion](leapmotion.com). You can use RISE with
-the leap motion if your local computer have a leap motion installed. Simply
-pass the [reveal leap plugin options](https://github.com/hakimel/reveal.js#leap-motion)
-as a third parameter of your reveal js parameters, for example in `custom.js`:
+**Reveal.js** supports the [Leap Motion](leapmotion.com) controller.
+To control RISE slideshows with the Leap, put the
+[reveal leap plugin options](https://github.com/hakimel/reveal.js#leap-motion)
+in your config by running this Python code:
 
-```javascript
-livereveal.parameters('simple', 'linear', 
-    {
-    leap: {
-        naturalSwipe   : true,    // Invert swipe gestures
-        pointerOpacity : 0.5,      // Set pointer opacity to 0.5
-        pointerColor   : '#d80000' // Red pointer
-        },
+```python
+from IPython.html.services.config import ConfigManager
+cm = ConfigManager()
+cm.update('livereveal', {
+    'leap_motion': {
+        'naturalSwipe'  : True,     # Invert swipe gestures
+        'pointerOpacity': 0.5,      # Set pointer opacity to 0.5
+        'pointerColor'  : '#d80000',# Red pointer
     }
-);
+})
+```
+
+To disable it:
+
+```python
+from IPython.html.services.config import ConfigManager
+cm = ConfigManager()
+cm.update('livereveal', {'leap_motion': None})
 ```
 
 ## Feedback

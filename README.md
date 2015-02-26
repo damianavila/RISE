@@ -2,6 +2,8 @@
 
 **Reveal.js - Jupyter/IPython Slideshow Extension**, also known as *live_reveal*
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/damianavila/RISE)
+
 ## Installation
 
 To install this nbextension, simply run ``python setup.py install`` from the

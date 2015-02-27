@@ -84,7 +84,20 @@ cm.update('notebook', {"load_extensions": {"livereveal/main": False}})
 
 ## Configure your own options
 
-TODO
+You can configure the `theme` and the `transition` of your slides just running
+this python code:
+
+```python
+from IPython.html.services.config import ConfigManager
+
+cm = ConfigManager()
+cm.update('livereveal', {
+              'theme': 'serif',
+              'transition': 'zoom',
+})
+```
+
+and now your slides will get the `serif` theme and the `zoom` transition.
 
 ## Usage with Leap Motion
 

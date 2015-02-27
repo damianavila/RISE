@@ -18,7 +18,8 @@ var config_section = new configmod.ConfigSection('livereveal',
 config_section.load();
 var config = new configmod.ConfigWithDefaults(config_section, {
     theme: 'simple',
-    transition: 'linear'
+    transition: 'linear',
+    start_slideshow_at: 'beginning',
 });
 
 IPython.notebook.get_cell_elements = function () {
@@ -52,6 +53,9 @@ function markupSlides(container) {
     slide_section = new_slide();
     subslide_section = new_subslide();
     var current_fragment = subslide_section;
+    
+    var selected_cell_idx = IPython.notebook.get_selected_index();
+    var selected_cell_slide = [0, 0];
     
     // Special handling for the first slide: it will work even if the user
     // doesn't start with a 'Slide' cell. But if the user does explicitly
@@ -87,6 +91,11 @@ function markupSlides(container) {
             content_on_slide1 = true;
         }
         
+        // Record that this slide contains the selected cell
+        if (i === selected_cell_idx) {
+            selected_cell_slide = [slide_counter, subslide_counter];
+        }
+        
         // Move the cell element into the slide <section>
         // N.B. jQuery append takes the element out of the DOM where it was
         if (slide_type === 'notes') {
@@ -106,7 +115,21 @@ function markupSlides(container) {
     
     // Put .end_space back at the end after all the rearrangement
     $('.end_space').appendTo('div#notebook-container');
+    return selected_cell_slide;
 }
+
+// Set the #slide-x-y part of the URL to control where the slideshow will start
+function setStartingSlide(selected) {
+    var start_slideshow = config.get_sync('start_slideshow_at');
+    if (start_slideshow === 'selected') {
+        // Start from the selected cell
+        window.location.hash = "/slide-"+selected[0]+"-"+selected[1];
+    } else {
+        // Start from the beginning
+        window.location.hash = "/slide-0-0";
+    }
+}
+        
 
 function Revealer() {
   // Prepare the DOM to start the slideshow
@@ -327,7 +350,9 @@ function revealMode() {
 
   if (!tag) {
     // Preparing the new reveal-compatible structure
-    markupSlides($('div#notebook-container'));
+    var selected_slide = markupSlides($('div#notebook-container'));
+    // Set the hash part of the URL
+    setStartingSlide(selected_slide);
     // Adding the reveal stuff
     Revealer();
     // Minor modifications for usability

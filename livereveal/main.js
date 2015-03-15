@@ -118,7 +118,12 @@ function markupSlides(container) {
     return selected_cell_slide;
 }
 
-// Set the #slide-x-y part of the URL to control where the slideshow will start
+/* Set the #slide-x-y part of the URL to control where the slideshow will start.
+ * N.B. We do this instead of using Reveal.slide() after reveal initialises,
+ * because that leaves one slide clearly visible on screen for a moment before
+ * changing to the one we want. By changing the URL before setting up reveal,
+ * the slideshow really starts on the desired slide.
+ */
 function setStartingSlide(selected) {
     var start_slideshow = config.get_sync('start_slideshow_at');
     if (start_slideshow === 'selected') {

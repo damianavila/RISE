@@ -79,6 +79,9 @@ div#notebook-container {
 .notebook_app {
 background-color: #ffffff;
 }
+.ctb_global_show div.ctb_hideshow.ctb_show {
+  display: none;
+}
 .cell li {
   line-height: 160%;
 }

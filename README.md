@@ -84,8 +84,8 @@ cm.update('notebook', {"load_extensions": {"livereveal/main": False}})
 
 ## Configure your own options
 
-You can configure the `theme` and the `transition` of your slides just running
-this python code:
+You can configure the `theme` and the `transition` of your slides, and where
+slideshows start from, by running this python code:
 
 ```python
 from IPython.html.services.config import ConfigManager
@@ -94,10 +94,13 @@ cm = ConfigManager()
 cm.update('livereveal', {
               'theme': 'serif',
               'transition': 'zoom',
+              'start_slideshow_at': 'selected',
 })
 ```
 
-and now your slides will get the `serif` theme and the `zoom` transition.
+With these options, your slides will get the `serif` theme and the
+`zoom` transition, and slideshows will start from the selected cell (instead
+of from the beginning, which is the default).
 
 ## Usage with Leap Motion
 

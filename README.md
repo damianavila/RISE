@@ -71,14 +71,16 @@ it:
 
 ```python
 from IPython.html.services.config import ConfigManager
-cm = ConfigManager()
+from IPython.utils.path import locate_profile
+cm = ConfigManager(profile_dir=locate_profile(get_ipython().profile))
 cm.update('notebook', {"load_extensions": {"livereveal/main": True}})
 ```
 or this python code to disable it:
 
 ```python
 from IPython.html.services.config import ConfigManager
-cm = ConfigManager()
+from IPython.utils.path import locate_profile
+cm = ConfigManager(profile_dir=locate_profile(get_ipython().profile))
 cm.update('notebook', {"load_extensions": {"livereveal/main": False}})
 ```
 
@@ -89,8 +91,8 @@ slideshows start from, by running this python code:
 
 ```python
 from IPython.html.services.config import ConfigManager
-
-cm = ConfigManager()
+from IPython.utils.path import locate_profile
+cm = ConfigManager(profile_dir=locate_profile(get_ipython().profile))
 cm.update('livereveal', {
               'theme': 'serif',
               'transition': 'zoom',
@@ -111,7 +113,8 @@ in your config by running this Python code:
 
 ```python
 from IPython.html.services.config import ConfigManager
-cm = ConfigManager()
+from IPython.utils.path import locate_profile
+cm = ConfigManager(profile_dir=locate_profile(get_ipython().profile))
 cm.update('livereveal', {
     'leap_motion': {
         'naturalSwipe'  : True,     # Invert swipe gestures
@@ -125,7 +128,8 @@ To disable it:
 
 ```python
 from IPython.html.services.config import ConfigManager
-cm = ConfigManager()
+from IPython.utils.path import locate_profile
+cm = ConfigManager(profile_dir=locate_profile(get_ipython().profile))
 cm.update('livereveal', {'leap_motion': None})
 ```
 

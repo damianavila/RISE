@@ -82,6 +82,14 @@ background-color: #ffffff;
 .ctb_global_show div.ctb_hideshow.ctb_show {
   display: none;
 }
+div.widget-area .form-control,
+div.widget-area .dropdown-menu,
+div.widget-area .btn {
+  font-size: inherit;
+}
+div.widget-area ul.dropdown-menu {
+  margin: 0px; /* cancel the settings from reveal */
+}
 .cell li {
   line-height: 160%;
 }

@@ -176,18 +176,18 @@ function Revealer() {
     keyboard: {
     13: null, // Enter disabled
     27: null, // ESC disabled
-    79: null, // o disabled
-    87: function() {Reveal.toggleOverview();}, // w, toggle overview
     38: null, // up arrow disabled
     40: null, // down arrow disabled
-    80: null, // p, up disable
-    78: null, // n, down disable
-    75: null, // k, up disabled
-    74: null, // j, down disabled
-    72: null, // h, left disabled
-    76: null, // l, right disabled
     66: null, // b, black pause disabled, use period or forward slash
+    72: null, // h, left disabled
+    74: null, // j, down disabled
+    75: null, // k, up disabled
+    76: null, // l, right disabled
+    78: null, // n, down disable
+    79: null, // o disabled
+    80: null, // p, up disable
     // 83: null, // s, notes, but not working because notes is a plugin
+    87: function() {Reveal.toggleOverview();}, // w, toggle overview
     },
 
     // Optional libraries used to extend on reveal.js

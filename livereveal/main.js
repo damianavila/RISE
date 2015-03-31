@@ -251,18 +251,18 @@ function KeysMessager() {
   var message = $('<div/>').append(
                   $("<p/></p>").addClass('dialog').html(
                     "<ul>" +
-                      "<li><b>alt + r</b>: Enter/Exit RISE</li>" +
-                      "<li><b>w</b>: Toggle overview mode</li>" +
-                      "<li><b>comma</b>: Toggle help and exit buttons</li>" +
-                      "<li><b>home</b>: First slide</li>" +
-                      "<li><b>end</b>: Last slide</li>" +
-                      "<li><b>space bar</b>: Next</li>" +
-                      "<li><b>shift + space bar</b>: Previous</li>" +
-                      "<li><b>pgup</b>: Up</li>" +
-                      "<li><b>pgdn</b>: Down</li>" +
-                      "<li><b>left arrow</b>: Left</li>" +
-                      "<li><b>right arrow</b>: Right</li>" +
-                      "<li><b>black screen</b>: Period (or forward slash)</li>" +
+                      "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
+                      "<li><kbd>w</kbd>: Toggle overview mode</li>" +
+                      "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
+                      "<li><kbd>Home</kbd>: First slide</li>" +
+                      "<li><kbd>End</kbd>: Last slide</li>" +
+                      "<li><kbd>space</kbd>: Next</li>" +
+                      "<li><kbd>Shift</kbd>+<kbd>space</kbd>: Previous</li>" +
+                      "<li><kbd>PgUp</kbd>: Up</li>" +
+                      "<li><kbd>PgDn</kbd>: Down</li>" +
+                      "<li><kbd>left</kbd>: Left</li>" +
+                      "<li><kbd>right</kbd>: Right</li>" +
+                      "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
                     "</ul>" +
                     "<b>NOTE: You have to use these shortcuts in command mode.</b>"
                     )

@@ -159,9 +159,9 @@ function Revealer() {
     progress: true,
     history: true,
 
-    // You can switch widt and height to fix the proyector
+    // You can switch width and height to fix the projector
     width: 1140,
-    minScale: 1.0, //we need this to codemirror work right
+    minScale: 1.0, //we need this for codemirror to work right
 
     // available themes are in /css/theme
     theme: Reveal.getQueryHash().theme || config.get_sync('theme'),
@@ -251,7 +251,7 @@ function KeysMessager() {
                   $("<p/></p>").addClass('dialog').html(
                     "<ul>" +
                       "<li><b>alt + r</b>: Enter/Exit RISE</li>" +
-                      "<li><b>w</b>: Toogle overview mode</li>" +
+                      "<li><b>w</b>: Toggle overview mode</li>" +
                       "<li><b>home</b>: First slide</li>" +
                       "<li><b>end</b>: Last slide</li>" +
                       "<li><b>space bar</b>: Next</li>" +
@@ -262,7 +262,7 @@ function KeysMessager() {
                       "<li><b>right arrow</b>: Right</li>" +
                       "<li><b>black screen</b>: Period (or forward slash)</li>" +
                     "</ul>" +
-                    "<b>NOTE: You have to use this shortcuts in command mode.</b>"
+                    "<b>NOTE: You have to use these shortcuts in command mode.</b>"
                     )
                 );
 

@@ -188,6 +188,7 @@ function Revealer() {
     80: null, // p, up disable
     // 83: null, // s, notes, but not working because notes is a plugin
     87: function() {Reveal.toggleOverview();}, // w, toggle overview
+    188: function() {$('#help_b,#exit_b').fadeToggle();},
     },
 
     // Optional libraries used to extend on reveal.js
@@ -252,6 +253,7 @@ function KeysMessager() {
                     "<ul>" +
                       "<li><b>alt + r</b>: Enter/Exit RISE</li>" +
                       "<li><b>w</b>: Toggle overview mode</li>" +
+                      "<li><b>comma</b>: Toggle help and exit buttons</li>" +
                       "<li><b>home</b>: First slide</li>" +
                       "<li><b>end</b>: Last slide</li>" +
                       "<li><b>space bar</b>: Next</li>" +

@@ -53,25 +53,25 @@ function markupSlides(container) {
     slide_section = new_slide();
     subslide_section = new_subslide();
     var current_fragment = subslide_section;
-    
+
     var selected_cell_idx = IPython.notebook.get_selected_index();
     var selected_cell_slide = [0, 0];
-    
+
     // Special handling for the first slide: it will work even if the user
     // doesn't start with a 'Slide' cell. But if the user does explicitly
     // start with slide/subslide, we don't want a blank first slide. So we
     // don't create a new slide/subslide until there is visible content on
     // the first slide.
     var content_on_slide1 = false;
-    
+
     var cells = IPython.notebook.get_cells();
     var i, cell, slide_type;
-    
+
     for (i=0; i < cells.length; i++) {
         cell = cells[i];
         slide_type = (cell.metadata.slideshow || {}).slide_type;
         //~ console.log('cell ' + i + ' is: '+ slide_type);
-        
+
         if (content_on_slide1) {
             if (slide_type === 'slide') {
                 // Start new slide
@@ -90,12 +90,12 @@ function markupSlides(container) {
             // Subsequent cells should be able to start new slides
             content_on_slide1 = true;
         }
-        
+
         // Record that this slide contains the selected cell
         if (i === selected_cell_idx) {
             selected_cell_slide = [slide_counter, subslide_counter];
         }
-        
+
         // Move the cell element into the slide <section>
         // N.B. jQuery append takes the element out of the DOM where it was
         if (slide_type === 'notes') {
@@ -106,13 +106,13 @@ function markupSlides(container) {
         } else {
             current_fragment.append(cell.element);
         }
-        
+
         // Hide skipped cells
         if (slide_type === 'skip') {
             cell.element.addClass('reveal-skip');
         }
     }
-    
+
     // Put .end_space back at the end after all the rearrangement
     $('.end_space').appendTo('div#notebook-container');
     return selected_cell_slide;
@@ -134,12 +134,12 @@ function setStartingSlide(selected) {
         window.location.hash = "/slide-0-0";
     }
 }
-        
+
 
 function Revealer() {
   // Prepare the DOM to start the slideshow
   $('div#header').hide();
-  $('div#site').css("height", "100%");  
+  $('div#site').css("height", "100%");
   $('div#ipython-main-app').css("position", "static");
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
@@ -153,7 +153,7 @@ function Revealer() {
   require(['nbextensions/livereveal/reveal.js/lib/js/head.min',
            'nbextensions/livereveal/reveal.js/js/reveal'],function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
-        
+
     var options = {
     controls: true,
     progress: true,
@@ -187,7 +187,7 @@ function Revealer() {
     72: null, // h, left disabled
     76: null, // l, right disabled
     66: null, // b, black pause disabled, use period or forward slash
-    // 83: null, // s, notes, but not working because notes is a plugin 
+    // 83: null, // s, notes, but not working because notes is a plugin
     },
 
     // Optional libraries used to extend on reveal.js
@@ -198,7 +198,7 @@ function Revealer() {
             { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
         ]
     };
-    
+
     // Set up the Leap Motion integration if configured
     var leap = config.get_sync('leap_motion');
     if (leap !== undefined) {
@@ -312,7 +312,7 @@ function buttonExit() {
 }
 
 function Remover() {
-  $('div#site').css("height", "");  
+  $('div#site').css("height", "");
   $('div#site').css('background-color','');
   $("div#ipython-main-app").css("position", "");
   $('div#header').show();

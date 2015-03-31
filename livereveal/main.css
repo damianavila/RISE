@@ -82,6 +82,9 @@ background-color: #ffffff;
 .ctb_global_show div.ctb_hideshow.ctb_show {
   display: none;
 }
+.ctb_global_show .ctb_show ~ div.text_cell_render {
+  border-style: none;
+}
 div.widget-area .form-control,
 div.widget-area .dropdown-menu,
 div.widget-area .btn {

@@ -314,6 +314,7 @@ function buttonExit() {
 }
 
 function Remover() {
+  Reveal.removeEventListeners();
   $('div#site').css("height", "");
   $('div#site').css('background-color','');
   $("div#ipython-main-app").css("position", "");

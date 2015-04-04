@@ -1,4 +1,4 @@
-/*
+/* -*- coding: utf-8 -*-
 * ----------------------------------------------------------------------------
 * Copyright (c) 2013 - Damián Avila
 *
@@ -53,25 +53,25 @@ function markupSlides(container) {
     slide_section = new_slide();
     subslide_section = new_subslide();
     var current_fragment = subslide_section;
-    
+
     var selected_cell_idx = IPython.notebook.get_selected_index();
     var selected_cell_slide = [0, 0];
-    
+
     // Special handling for the first slide: it will work even if the user
     // doesn't start with a 'Slide' cell. But if the user does explicitly
     // start with slide/subslide, we don't want a blank first slide. So we
     // don't create a new slide/subslide until there is visible content on
     // the first slide.
     var content_on_slide1 = false;
-    
+
     var cells = IPython.notebook.get_cells();
     var i, cell, slide_type;
-    
+
     for (i=0; i < cells.length; i++) {
         cell = cells[i];
         slide_type = (cell.metadata.slideshow || {}).slide_type;
         //~ console.log('cell ' + i + ' is: '+ slide_type);
-        
+
         if (content_on_slide1) {
             if (slide_type === 'slide') {
                 // Start new slide
@@ -90,12 +90,12 @@ function markupSlides(container) {
             // Subsequent cells should be able to start new slides
             content_on_slide1 = true;
         }
-        
+
         // Record that this slide contains the selected cell
         if (i === selected_cell_idx) {
             selected_cell_slide = [slide_counter, subslide_counter];
         }
-        
+
         // Move the cell element into the slide <section>
         // N.B. jQuery append takes the element out of the DOM where it was
         if (slide_type === 'notes') {
@@ -106,13 +106,13 @@ function markupSlides(container) {
         } else {
             current_fragment.append(cell.element);
         }
-        
+
         // Hide skipped cells
         if (slide_type === 'skip') {
             cell.element.addClass('reveal-skip');
         }
     }
-    
+
     // Put .end_space back at the end after all the rearrangement
     $('.end_space').appendTo('div#notebook-container');
     return selected_cell_slide;
@@ -134,12 +134,12 @@ function setStartingSlide(selected) {
         window.location.hash = "/slide-0-0";
     }
 }
-        
+
 
 function Revealer() {
   // Prepare the DOM to start the slideshow
   $('div#header').hide();
-  $('div#site').css("height", "100%");  
+  $('div#site').css("height", "100%");
   $('div#ipython-main-app').css("position", "static");
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
@@ -153,15 +153,15 @@ function Revealer() {
   require(['nbextensions/livereveal/reveal.js/lib/js/head.min',
            'nbextensions/livereveal/reveal.js/js/reveal'],function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
-        
+
     var options = {
     controls: true,
     progress: true,
     history: true,
 
-    // You can switch widt and height to fix the proyector
+    // You can switch width and height to fix the projector
     width: 1140,
-    minScale: 1.0, //we need this to codemirror work right
+    minScale: 1.0, //we need this for codemirror to work right
 
     // available themes are in /css/theme
     theme: Reveal.getQueryHash().theme || config.get_sync('theme'),
@@ -176,18 +176,19 @@ function Revealer() {
     keyboard: {
     13: null, // Enter disabled
     27: null, // ESC disabled
-    79: null, // o disabled
-    87: function() {Reveal.toggleOverview();}, // w, toggle overview
     38: null, // up arrow disabled
     40: null, // down arrow disabled
-    80: null, // p, up disable
-    78: null, // n, down disable
-    75: null, // k, up disabled
-    74: null, // j, down disabled
-    72: null, // h, left disabled
-    76: null, // l, right disabled
     66: null, // b, black pause disabled, use period or forward slash
-    // 83: null, // s, notes, but not working because notes is a plugin 
+    72: null, // h, left disabled
+    74: null, // j, down disabled
+    75: null, // k, up disabled
+    76: null, // l, right disabled
+    78: null, // n, down disable
+    79: null, // o disabled
+    80: null, // p, up disable
+    // 83: null, // s, notes, but not working because notes is a plugin
+    87: function() {Reveal.toggleOverview();}, // w, toggle overview
+    188: function() {$('#help_b,#exit_b').fadeToggle();},
     },
 
     // Optional libraries used to extend on reveal.js
@@ -198,7 +199,7 @@ function Revealer() {
             { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
         ]
     };
-    
+
     // Set up the Leap Motion integration if configured
     var leap = config.get_sync('leap_motion');
     if (leap !== undefined) {
@@ -250,19 +251,20 @@ function KeysMessager() {
   var message = $('<div/>').append(
                   $("<p/></p>").addClass('dialog').html(
                     "<ul>" +
-                      "<li><b>alt + r</b>: Enter/Exit RISE</li>" +
-                      "<li><b>w</b>: Toogle overview mode</li>" +
-                      "<li><b>home</b>: First slide</li>" +
-                      "<li><b>end</b>: Last slide</li>" +
-                      "<li><b>space bar</b>: Next</li>" +
-                      "<li><b>shift + space bar</b>: Previous</li>" +
-                      "<li><b>pgup</b>: Up</li>" +
-                      "<li><b>pgdn</b>: Down</li>" +
-                      "<li><b>left arrow</b>: Left</li>" +
-                      "<li><b>right arrow</b>: Right</li>" +
-                      "<li><b>black screen</b>: Period (or forward slash)</li>" +
+                      "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
+                      "<li><kbd>w</kbd>: Toggle overview mode</li>" +
+                      "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
+                      "<li><kbd>Home</kbd>: First slide</li>" +
+                      "<li><kbd>End</kbd>: Last slide</li>" +
+                      "<li><kbd>space</kbd>: Next</li>" +
+                      "<li><kbd>Shift</kbd>+<kbd>space</kbd>: Previous</li>" +
+                      "<li><kbd>PgUp</kbd>: Up</li>" +
+                      "<li><kbd>PgDn</kbd>: Down</li>" +
+                      "<li><kbd>left</kbd>: Left</li>" +
+                      "<li><kbd>right</kbd>: Right</li>" +
+                      "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
                     "</ul>" +
-                    "<b>NOTE: You have to use this shortcuts in command mode.</b>"
+                    "<b>NOTE: You have to use these shortcuts in command mode.</b>"
                     )
                 );
 
@@ -312,7 +314,7 @@ function buttonExit() {
 }
 
 function Remover() {
-  $('div#site').css("height", "");  
+  $('div#site').css("height", "");
   $('div#site').css('background-color','');
   $("div#ipython-main-app").css("position", "");
   $('div#header').show();

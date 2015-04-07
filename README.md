@@ -7,7 +7,7 @@
 ## Installation
 
 To install this nbextension, simply run ``python setup.py install`` from the
-*live_reveal* repository.
+*RISE* repository.
 
 You also have some interesting optional arguments, such as:
 
@@ -55,12 +55,34 @@ or use it as a template... or make your own presentaion ;-)
 but I am touching your `ipynb` in a *complex* way... so, make sure you have a
 backup of your `ipynb` to prevent any possible loss.
 
-5: You can know more about the reveal-specific shortcuts just pressing the help
-button at the bottom left of your slideshow.
- 
-6: There are some issues in **Firefox** (if you use it, please report me any issue
+5: There are some issues in **Firefox** (if you use it, please report me any issue
 because I want to support both browsers), so I recommend to use **Chromium/Chrome**
 during your talks).
+
+## Usage
+
+In the notebook toolbar, a new button ("Enter/Exit Live Reveal Slideshow")
+will be available.
+
+The notebook toolbar also contains a "Cell Toolbar" dropdown menu that gives
+you access to metadata for each cell. If you select the Slideshow preset, you
+will see in the right corner of each cell a little box where you can select
+the cell type (similar as for the static reveal slides with nbconvert).
+
+Some notes:
+
+1: Use spacebar to go forward and shift+spacebar to go backward (or the
+controller in the bottom right corner). Up and down arrows are reserved to
+interact with notebook cells and cannot be used to navigate the slides.
+
+2: You can know more about the reveal-specific shortcuts just pressing the help
+button at the bottom left of your slideshow.
+
+3: In contrast to the traditional IPython/Jupyter notebook, the Shift-Enter
+shortcut does not select the next cell, but will only run the cell (similar
+to Ctrl-Enter). This is intentional to not switch slides by running a cell.
+A current shortcoming, however, is that this adapted behaviour is not reset
+after leaving the live slideshow mode.
 
 ## Manual installation
 

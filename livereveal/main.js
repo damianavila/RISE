@@ -21,7 +21,8 @@ var config = new configmod.ConfigWithDefaults(config_section, {
     progress: true,
     history: true,
     width: 1140,
-    minScale: 1.0,
+    height: 855, // 4:3 ratio
+    minScale: 1.0, //we need this for codemirror to work right
     theme: 'simple',
     transition: 'linear',
     slideNumber: true,
@@ -167,7 +168,8 @@ function Revealer() {
 
     // You can switch width and height to fix the projector
     width: config.get_sync('width'),
-    minScale: config.get_sync('minScale'), //we need this for codemirror to work right
+    height: config.get_sync('height'),
+    minScale: config.get_sync('minScale'), //we need this for codemirror to work right)
 
     // available themes are in /css/theme
     theme: Reveal.getQueryHash().theme || config.get_sync('theme'),

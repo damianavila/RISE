@@ -127,7 +127,10 @@ With these options, your slides will get the `serif` theme and the
 of from the beginning, which is the default).
 
 There are also options for `controls`, `progress`, `history`, `width`,
-`minScale` and `slideNumber`
+`height`, `minScale` and `slideNumber`.
+
+**Note**: The use of the `minScale` option (values other then `1.0`) can cause
+problems with codemirror.
 
 ## Usage with Leap Motion
 

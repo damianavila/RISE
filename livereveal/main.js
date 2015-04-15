@@ -17,8 +17,14 @@ var config_section = new configmod.ConfigSection('livereveal',
                             {base_url: utils.get_body_data("baseUrl")});
 config_section.load();
 var config = new configmod.ConfigWithDefaults(config_section, {
+    controls: true,
+    progress: true,
+    history: true,
+    width: 1140,
+    minScale: 1.0,
     theme: 'simple',
     transition: 'linear',
+    slideNumber: true,
     start_slideshow_at: 'beginning',
 });
 
@@ -155,20 +161,20 @@ function Revealer() {
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
 
     var options = {
-    controls: true,
-    progress: true,
-    history: true,
+    controls: config.get_sync('controls'),
+    progress: config.get_sync('progress'),
+    history: config.get_sync('history'),
 
     // You can switch width and height to fix the projector
-    width: 1140,
-    minScale: 1.0, //we need this for codemirror to work right
+    width: config.get_sync('width'),
+    minScale: config.get_sync('minScale'), //we need this for codemirror to work right
 
     // available themes are in /css/theme
     theme: Reveal.getQueryHash().theme || config.get_sync('theme'),
     // default/cube/page/concave/zoom/linear/none
     transition: Reveal.getQueryHash().transition || config.get_sync('transition'),
 
-    slideNumber:true,
+    slideNumber: config.get_sync('slideNumber'),
 
     //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
     //parallaxBackgroundSize: '2560px 1600px',

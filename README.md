@@ -126,6 +126,9 @@ With these options, your slides will get the `serif` theme and the
 `zoom` transition, and slideshows will start from the selected cell (instead
 of from the beginning, which is the default).
 
+There are also options for `controls`, `progress`, `history`, `width`,
+`minScale` and `slideNumber`
+
 ## Usage with Leap Motion
 
 **Reveal.js** supports the [Leap Motion](leapmotion.com) controller.

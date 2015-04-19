@@ -20,8 +20,8 @@ var config = new configmod.ConfigWithDefaults(config_section, {
     controls: true,
     progress: true,
     history: true,
-    width: 1024,
-    height: 768,
+    width: 1140,
+    height: 855, // 4:3 ratio
     minScale: 1.0, //we need this for codemirror to work right
     theme: 'simple',
     transition: 'linear',

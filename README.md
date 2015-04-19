@@ -126,6 +126,25 @@ With these options, your slides will get the `serif` theme and the
 `zoom` transition, and slideshows will start from the selected cell (instead
 of from the beginning, which is the default).
 
+You can use a similar piece of python code to change the `width` and
+`height` of your slides:
+
+```python
+from IPython.html.services.config import ConfigManager
+from IPython.utils.path import locate_profile
+cm = ConfigManager(profile_dir=locate_profile(get_ipython().profile))
+cm.update('livereveal', {
+              'width': 1024,
+              'height': 768,
+})
+```
+
+There are also options for `controls`, `progress`, `history`, `minScale` and
+`slideNumber`.
+
+**Note**: The use of the `minScale` option (values other then `1.0`) can cause
+problems with codemirror.
+
 ## Usage with Leap Motion
 
 **Reveal.js** supports the [Leap Motion](leapmotion.com) controller.

@@ -73,16 +73,17 @@ Some notes:
 
 1: Use spacebar to go forward and shift+spacebar to go backward (or the
 controller in the bottom right corner). Up and down arrows are reserved to
-interact with notebook cells and cannot be used to navigate the slides.
+interact with notebook cells and cannot be used to navigate the slides, instead
+you can use pgup and pgdown
 
 2: You can know more about the reveal-specific shortcuts just pressing the help
 button at the bottom left of your slideshow.
 
 3: In contrast to the traditional IPython/Jupyter notebook, the Shift-Enter
 shortcut does not select the next cell, but will only run the cell (similar
-to Ctrl-Enter). This is intentional to not switch slides by running a cell.
-A current shortcoming, however, is that this adapted behaviour is not reset
-after leaving the live slideshow mode.
+to Ctrl-Enter). This is intentional to not switch slides by running a cell
+and because some problem when you inject new cells on the fly.
+When you exit the presentation mode, the behaviour comes back to normal.
 
 ## Manual installation
 

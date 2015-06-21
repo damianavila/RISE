@@ -322,6 +322,7 @@ function buttonExit() {
 }
 
 function Remover() {
+  Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
   $('div#site').css("height", "");
   $('div#site').css('background-color','');

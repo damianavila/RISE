@@ -378,12 +378,6 @@ function revealMode() {
     setupKeys("notebook_mode");
     $('#exit_b').remove();
     $('#help_b').remove();
-    try{
-     button_rise();
-    }
-    catch(e){
-     console.log('An error has occurred: ' + e.message);
-    }
     $('#maintoolbar').removeClass('reveal_tagging');
   }
 }

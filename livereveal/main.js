@@ -15,7 +15,9 @@ define(['jquery',
 
 var config_section = new configmod.ConfigSection('livereveal',
                             {base_url: utils.get_body_data("baseUrl")});
+
 config_section.load();
+
 var config = new configmod.ConfigWithDefaults(config_section, {
     controls: true,
     progress: true,
@@ -239,20 +241,14 @@ function Unselecter(){
   }
 }
 
-function setupKeys(){
-  // command mode
-  IPython.keyboard_manager.command_shortcuts.remove_shortcut('shift-enter');
-  IPython.keyboard_manager.command_shortcuts.add_shortcut('shift-enter', function (event) {
-    IPython.notebook.execute_cell();
-    return false;
-  });
-
-  // edit mode
-  IPython.keyboard_manager.edit_shortcuts.remove_shortcut('shift-enter');
-  IPython.keyboard_manager.edit_shortcuts.add_shortcut('shift-enter', function (event) {
-    IPython.notebook.execute_cell();
-    return false;
-  });
+function setupKeys(mode){
+  if (mode === 'reveal_mode') {
+    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "ipython.execute-in-place")
+    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "ipython.execute-in-place")
+  } else if (mode === 'notebook_mode') {
+    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "ipython.run-select-next")
+    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "ipython.run-select-next")
+  }
 }
 
 function KeysMessager() {
@@ -373,12 +369,13 @@ function revealMode() {
     // Adding the reveal stuff
     Revealer();
     // Minor modifications for usability
-    setupKeys();
+    setupKeys("reveal_mode");
     buttonExit();
     buttonHelp();
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
     Remover();
+    setupKeys("notebook_mode");
     $('#exit_b').remove();
     $('#help_b').remove();
     try{

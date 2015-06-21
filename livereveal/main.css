@@ -7,6 +7,7 @@
   font-size: 90%;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 .reveal section img {
   border: 0px solid black;

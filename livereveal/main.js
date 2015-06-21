@@ -241,6 +241,21 @@ function Unselecter(){
   }
 }
 
+function fixCellHeight(){
+  // Let's start with all the cell unselected, the unselect the current selected one
+  var scell = IPython.notebook.get_selected_cell()
+  scell.unselect()
+  // This select/unselect code cell triggers the "correct" heigth in the codemirror instance
+  var cells = IPython.notebook.get_cells();
+  for(var i in cells){
+    var cell = cells[i];
+    if (cell.cell_type === "code") {
+      cell.select()
+      cell.unselect();
+    }
+  }
+}
+
 function setupKeys(mode){
   if (mode === 'reveal_mode') {
     IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "ipython.execute-in-place")
@@ -355,9 +370,8 @@ function Remover() {
 
 function revealMode() {
   /*
-  * We search for a class tag in the maintoolbar to if Zenmode is "on".
-  * If not, to enter the Zenmode, we hide "menubar" and "header" bars and
-  * we append a customized css stylesheet to get the proper styles.
+  * We search for a class tag in the maintoolbar to check if reveal mode is "on".
+  * If the tag exits, we exit. Otherwise, we enter the reveal mode.
   */
   var tag = $('#maintoolbar').hasClass('reveal_tagging');
 
@@ -379,6 +393,8 @@ function revealMode() {
     $('#exit_b').remove();
     $('#help_b').remove();
     $('#maintoolbar').removeClass('reveal_tagging');
+    // Workaround... should be a better solution. Need to investigate codemirror
+    fixCellHeight();
   }
 }
 

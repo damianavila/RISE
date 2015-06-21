@@ -6,6 +6,7 @@
 .reveal pre {
   font-size: 90%;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow-y: hidden;
 }
 .reveal section img {
   border: 0px solid black;
@@ -101,6 +102,9 @@ div.text_cell {
 }
 div.text_cell .prompt{
   display: none;
+}
+div.text_cell.rendered .rendered_html {
+  overflow-y: hidden;
 }
 div.prompt {
   font-size: 90%;

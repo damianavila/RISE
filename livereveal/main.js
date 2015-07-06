@@ -8,10 +8,11 @@
 * -----------------------------------------------------------------------------
 */
 
-define(['jquery',
+define(['require',
+        'jquery',
         'base/js/utils',
         'services/config',
-], function($, utils, configmod) {
+], function(require, $, utils, configmod) {
 
 var config_section = new configmod.ConfigSection('livereveal',
                             {base_url: utils.get_body_data("baseUrl")});

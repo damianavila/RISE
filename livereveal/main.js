@@ -8,7 +8,8 @@
 * -----------------------------------------------------------------------------
 */
 
-define(['require',
+define([
+        'require',
         'jquery',
         'base/js/utils',
         'services/config',
@@ -155,13 +156,13 @@ function Revealer() {
   $('div#notebook-container').addClass("slides");
 
   // Header
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./nbextensions/livereveal/reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./nbextensions/livereveal/reset_reveal.css") + ' id="revealcss" />');
-  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./nbextensions/livereveal/main.css") + ' id="maincss" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/theme/simple.css") + ' id="theme" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reset_reveal.css") + ' id="revealcss" />');
+  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
   // Tailer
-  require(['nbextensions/livereveal/reveal.js/lib/js/head.min',
-           'nbextensions/livereveal/reveal.js/js/reveal'],function(){
+  require(['./reveal.js/lib/js/head.min.js',
+           './reveal.js/js/reveal.js'],function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
 
     var options = {
@@ -207,14 +208,14 @@ function Revealer() {
     dependencies: [
             //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
             //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-            { src: require.toUrl("./nbextensions/livereveal/reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
+            { src: require.toUrl("./reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
         ]
     };
 
     // Set up the Leap Motion integration if configured
     var leap = config.get_sync('leap_motion');
     if (leap !== undefined) {
-        options.dependencies.push({ src: require.toUrl('./nbextensions/livereveal/reveal.js/plugin/leap/leap.js'), async: true });
+        options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
         options.leap = leap;
     }
 

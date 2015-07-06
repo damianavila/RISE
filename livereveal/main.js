@@ -400,24 +400,26 @@ function revealMode() {
   }
 }
 
-  return {
-    load_ipython_extension: function setup() {
-      IPython.toolbar.add_buttons_group([
-        {
-        'label'   : 'Enter/Exit Live Reveal Slideshow',
-        'icon'    : 'fa-bar-chart-o',
-        'callback': function(){ revealMode(); },
-        'id'      : 'start_livereveal'
-        },
-      ]);
-      var document_keydown = function(event) {
-        if (event.which == 82 && event.altKey) {
-          revealMode();
-          return false;
-        }
-        return true;
-      };
-      $(document).keydown(document_keydown);
+function setup() {
+  IPython.toolbar.add_buttons_group([
+    {
+    'label'   : 'Enter/Exit Live Reveal Slideshow',
+    'icon'    : 'fa-bar-chart-o',
+    'callback': function(){ revealMode(); },
+    'id'      : 'start_livereveal'
+    },
+  ]);
+  var document_keydown = function(event) {
+    if (event.which == 82 && event.altKey) {
+      revealMode();
+      return false;
     }
+    return true;
   };
+  $(document).keydown(document_keydown);
+}
+
+setup.load_ipython_extension = setup;
+
+return setup;
 });

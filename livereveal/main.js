@@ -162,7 +162,7 @@ function Revealer() {
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',
-           './reveal.js/js/reveal.js'],function(){
+           './reveal.js/js/reveal.js'].map(require.toUrl),function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
 
     var options = {

@@ -3,7 +3,7 @@
 
 .transition-all {
   transition-property: all;
-  transition-duration: 0.3s;
+  transition-duration: 0.2s;
   transition-timing-function: ease;
 }
 
@@ -89,11 +89,20 @@
     .transition-all;
     background-color: transparent;
     box-shadow: none;
+    width: 100%;
   }
 
   .ctb_global_show {
     .ctb_hideshow.ctb_show { display: none; }
     .ctb_show ~ .text_cell_render { border-style: none; }
+  }
+
+  .celltoolbar {
+    height: inherit;
+    select, .btn {
+      height: inherit;
+      font-size: inherit;
+    }
   }
 
   .widget-area {
@@ -102,12 +111,10 @@
   }
 
   .cell li {
-    .transition-all;
     line-height: 160%;
   }
 
   .text_cell {
-    .transition-all;
     font-size: 160%;
 
     .prompt { display: none; }
@@ -172,4 +179,12 @@
   .transition-all;
   opacity: 1;
   top: 0px;
+}
+
+#notebook-container {
+  .transition-all;
+}
+
+#notebook {
+  .transition-all;
 }

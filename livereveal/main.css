@@ -1,8 +1,8 @@
 .transition-all {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
 }
@@ -10,8 +10,8 @@
   background-color: #fff;
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   /* Reveal-specific */
@@ -23,8 +23,8 @@
 .rise-enabled .reveal.fade {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   opacity: 1;
@@ -32,8 +32,8 @@
 .rise-enabled .reveal pre {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   font-size: 90%;
@@ -43,8 +43,8 @@
 .rise-enabled .reveal section img {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   border: 0px solid black;
@@ -59,8 +59,8 @@
 .rise-enabled .reveal .slides {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   text-align: left;
@@ -69,8 +69,8 @@
 .rise-enabled .reveal .slide-number {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   right: 3.1em;
@@ -128,18 +128,27 @@
 .rise-enabled #notebook-container {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   background-color: transparent;
   box-shadow: none;
+  width: 100%;
 }
 .rise-enabled .ctb_global_show .ctb_hideshow.ctb_show {
   display: none;
 }
 .rise-enabled .ctb_global_show .ctb_show ~ .text_cell_render {
   border-style: none;
+}
+.rise-enabled .celltoolbar {
+  height: inherit;
+}
+.rise-enabled .celltoolbar select,
+.rise-enabled .celltoolbar .btn {
+  height: inherit;
+  font-size: inherit;
 }
 .rise-enabled .widget-area .form-control,
 .rise-enabled .widget-area .dropdown-menu,
@@ -151,21 +160,9 @@
   /* cancel the settings from reveal */
 }
 .rise-enabled .cell li {
-  -webkit-transition-property: all;
-          transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-timing-function: ease;
-          transition-timing-function: ease;
   line-height: 160%;
 }
 .rise-enabled .text_cell {
-  -webkit-transition-property: all;
-          transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-timing-function: ease;
-          transition-timing-function: ease;
   font-size: 160%;
 }
 .rise-enabled .text_cell .prompt {
@@ -177,8 +174,8 @@
 .rise-enabled .prompt {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   font-size: 90%;
@@ -186,8 +183,8 @@
 .rise-enabled .output_prompt {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   margin-top: 2px;
@@ -195,8 +192,8 @@
 .rise-enabled .output_subarea {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   margin-top: 0.05em;
@@ -204,8 +201,8 @@
 .rise-enabled .CodeMirror {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   font-size: 100%;
@@ -235,8 +232,8 @@
 .rise-enabled #header {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   top: -200px;
@@ -245,8 +242,8 @@
 .rise-enabled #site {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   height: 100%;
@@ -257,10 +254,26 @@
 #header {
   -webkit-transition-property: all;
           transition-property: all;
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
   -webkit-transition-timing-function: ease;
           transition-timing-function: ease;
   opacity: 1;
   top: 0px;
+}
+#notebook-container {
+  -webkit-transition-property: all;
+          transition-property: all;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
+  -webkit-transition-timing-function: ease;
+          transition-timing-function: ease;
+}
+#notebook {
+  -webkit-transition-property: all;
+          transition-property: all;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
+  -webkit-transition-timing-function: ease;
+          transition-timing-function: ease;
 }

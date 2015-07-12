@@ -338,8 +338,6 @@ function Remover() {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
   $('body').removeClass("rise-enabled");
-  $('div#site').css("height", "");
-  //$('div#maintoolbar').show();
   IPython.menubar._size_header();
 
   $('div#notebook').removeClass("reveal");
@@ -365,6 +363,7 @@ function Remover() {
 
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook');
+  IPython.page.show_site();
 }
 
 function revealMode() {

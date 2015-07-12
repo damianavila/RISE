@@ -148,17 +148,17 @@ function setStartingSlide(selected) {
 
 
 function Revealer() {
+  $('body').addClass("rise-enabled");
   // Prepare the DOM to start the slideshow
-  $('div#header').hide();
-  $('div#site').css("height", "100%");
-  $('div#ipython-main-app').css("position", "static");
+  //$('div#header').hide();
+  //$('div#site').css("height", "100%");
+  //$('div#ipython-main-app').css("position", "static");
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
   // Header
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/theme/simple.css") + ' id="theme" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reset_reveal.css") + ' id="revealcss" />');
-  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',
@@ -337,11 +337,9 @@ function buttonExit() {
 function Remover() {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
+  $('body').removeClass("rise-enabled");
   $('div#site').css("height", "");
-  $('div#site').css('background-color','');
-  $("div#ipython-main-app").css("position", "");
-  $('div#header').show();
-  $('div#maintoolbar').show();
+  //$('div#maintoolbar').show();
   IPython.menubar._size_header();
 
   $('div#notebook').removeClass("reveal");
@@ -350,7 +348,6 @@ function Remover() {
   $('div#notebook-container').css('height','');
   $('div#notebook-container').css('zoom','');
 
-  $('#maincss').remove();
   $('#theme').remove();
   $('#revealcss').remove();
 
@@ -367,7 +364,7 @@ function Remover() {
   }
 
   $('div#notebook-container').children('section').remove();
-  $('.end_space').appendTo('div#notebook-container');
+  $('.end_space').appendTo('div#notebook');
 }
 
 function revealMode() {
@@ -401,6 +398,8 @@ function revealMode() {
 }
 
 function setup() {
+  $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
+
   IPython.toolbar.add_buttons_group([
     {
     'label'   : 'Enter/Exit Live Reveal Slideshow',

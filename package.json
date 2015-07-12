@@ -1,0 +1,18 @@
+{
+  "name": "fulminologist",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less livereveal/main.css",
+    "watch-less": "./node_modules/.bin/watch 'npm run less' src/less"
+  },
+  "author": "",
+  "license": "BSD",
+  "devDependencies": {
+    "less": "~2.5.0",
+    "watch": "~0.16.0",
+    "less-plugin-autoprefix": "~1.4.2",
+    "less-plugin-clean-css": "~1.5.0"
+  }
+}

@@ -9,6 +9,9 @@
 To install this nbextension, simply run ``python setup.py install`` from the
 *RISE* repository.
 
+The setup script will respect your `JUPYTER_CONFIG_DIR` environment variable to
+enable the extension.
+
 ## RISE talk
 
 My talk about **RISE** at *SciPy 2014* (click on the image to see it):

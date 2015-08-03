@@ -136,10 +136,10 @@
   box-shadow: none;
   width: 100%;
 }
-.rise-enabled .ctb_global_show .ctb_hideshow.ctb_show {
+.rise-enabled.ctb_global_show .ctb_hideshow.ctb_show {
   display: none;
 }
-.rise-enabled .ctb_global_show .ctb_show ~ .text_cell_render {
+.rise-enabled.ctb_global_show .ctb_show ~ .text_cell_render {
   border-style: none;
 }
 .rise-enabled .celltoolbar {

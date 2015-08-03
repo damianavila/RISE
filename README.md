@@ -176,11 +176,16 @@ cm.update('livereveal', {'leap_motion': None})
 ```
 
 ## Development
-To build the CSS assets, you'll need `npm` (and `node`) installed.
+To build the CSS assets, you'll need to install `npm` (and `node`).
 
 ```bash
 npm install
 npm run build
+```
+
+To have per-save automatic building of CSS, use:
+```bash
+npm run watch-less
 ```
 
 ## Feedback

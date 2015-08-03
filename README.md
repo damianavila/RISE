@@ -40,11 +40,14 @@ inside the notebook itself (but in a "slidy" way).
 ## Versions
 
 1- **RISE** master branch will be following the **Jupyter** codebase.
+
 2- There is also "released" tagged [branches](https://github.com/damianavila/RISE/releases)
 compatible with previous IPython versions:
+
     *  1.x tag compatible with **IPython** 1.x series
     *  2.x tag compatible with **IPython** 2.x series
     *  3.x tag compatible with **IPython** 3.x series
+
 3- With **Jupyter** landing we will provide a conda and pip-instalable packages too
 
 **NOTE**: We will only mantain the latest released version.

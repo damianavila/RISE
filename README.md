@@ -175,6 +175,14 @@ cm = ConfigManager(profile_dir=locate_profile(get_ipython().profile))
 cm.update('livereveal', {'leap_motion': None})
 ```
 
+## Development
+To build the CSS assets, you'll need `npm` (and `node`) installed.
+
+```bash
+npm install
+npm run build
+```
+
 ## Feedback
 
 If you have any feedback, or find any bugs, please let me know just opening

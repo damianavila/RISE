@@ -1,0 +1,146 @@
+/* Reveal-specific */
+.reveal .slides {
+  text-align: left;
+  font-size: 160%;
+}
+.reveal pre {
+  font-size: 90%;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.reveal section img {
+  border: 0px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+  transition: none;
+}
+.reveal blockquote p:first-child, .reveal blockquote p:last-child {
+  display: inherit;
+}
+.reveal.fade {
+  opacity: 1;
+}
+.reveal .slide-number {
+  right: 3.1em;
+  bottom: 3.9em;
+  font-size: 100%;
+}
+.reveal .controls div.navigate-left,
+.reveal .controls div.navigate-left.enabled {
+  border-right-color: #727272;
+}
+.reveal .controls div.navigate-right,
+.reveal .controls div.navigate-right.enabled {
+  border-left-color: #727272;
+}
+.reveal .controls div.navigate-up,
+.reveal .controls div.navigate-up.enabled {
+  border-bottom-color: #727272;
+}
+.reveal .controls div.navigate-down,
+.reveal .controls div.navigate-down.enabled {
+  border-top-color: #727272;
+}
+.reveal .controls div.navigate-left.enabled:hover {
+  border-right-color: #dfdfdf;
+}
+.reveal .controls div.navigate-right.enabled:hover {
+  border-left-color: #dfdfdf;
+}
+.reveal .controls div.navigate-up.enabled:hover {
+  border-bottom-color: #dfdfdf;
+}
+.reveal .controls div.navigate-down.enabled:hover {
+  border-top-color: #dfdfdf;
+}
+.progress {
+  margin-bottom: 0px;
+}
+.reveal .progress span {
+  background: #727272;
+}
+.reveal .reveal-skip {
+  display: none;
+}
+.reveal .reveal-notes {
+  display: none;
+}
+
+/* Notebook-specific */
+div#notebook {
+  overflow: hidden;
+}
+div#notebook.reveal {
+  padding-top: 0px;
+}
+div#notebook-container {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.notebook_app {
+background-color: #ffffff;
+}
+.ctb_global_show div.ctb_hideshow.ctb_show {
+  display: none;
+}
+.ctb_global_show .ctb_show ~ div.text_cell_render {
+  border-style: none;
+}
+div.widget-area .form-control,
+div.widget-area .dropdown-menu,
+div.widget-area .btn {
+  font-size: inherit;
+}
+div.widget-area ul.dropdown-menu {
+  margin: 0px; /* cancel the settings from reveal */
+}
+.cell li {
+  line-height: 160%;
+}
+div.text_cell {
+  font-size: 160%;
+}
+div.text_cell .prompt{
+  display: none;
+}
+div.text_cell.rendered .rendered_html {
+  overflow-y: hidden;
+}
+div.prompt {
+  font-size: 90%;
+}
+div.output_prompt {
+  margin-top: 2px;
+}
+div.output_subarea {
+  margin-top: 0.05em;
+}
+.CodeMirror {
+  font-size: 100%;
+  max-width: 960px !important;  /* fix for firefox issue in IPython, 1240px */
+}
+a.anchor-link {
+  display: none;
+}
+html {
+  overflow-y: auto;
+}
+kbd {
+  padding: .1em .6em;
+  border: 1px solid #ccc;
+  font-size: 11px;
+  background-color: #f7f7f7;
+  color: #333;
+  -moz-box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 .1em;
+  text-shadow: 0 1px 0 #fff;
+  line-height: 1.4;
+  white-space: nowrap;
+}

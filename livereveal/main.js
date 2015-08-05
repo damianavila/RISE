@@ -33,11 +33,14 @@ var config = new configmod.ConfigWithDefaults(config_section, {
     start_slideshow_at: 'beginning',
 });
 
-IPython.notebook.get_cell_elements = function () {
+Object.getPrototypeOf(IPython.notebook).get_cell_elements = function () {
   /*
   * Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
   * allowing container divs, etc to be used without breaking notebook machinery.
   * You'll need to make sure the cells are getting detected in the right order.
+  * NOTE: We use the Object prototype to workaround a firefox issue, check the following
+  * link to know more about the discussion leading to this use:
+  * https://github.com/damianavila/RISE/issues/117#issuecomment-127331816
   */
     return this.container.find("div.cell");
 };

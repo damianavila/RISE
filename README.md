@@ -9,12 +9,6 @@
 To install this nbextension, simply run ``python setup.py install`` from the
 *RISE* repository.
 
-You can also install it in development mode adding ``--develop`` (as a symlink to the source):
-
-```bash
-  python setup.py install --develop
-```
-
 ## RISE talk
 
 My talk about **RISE** at *SciPy 2014* (click on the image to see it):
@@ -163,6 +157,13 @@ cm.update('livereveal', {'leap_motion': None})
 ```
 
 ## Development
+
+You can install RISE in development mode adding ``--develop`` (as a symlink to the source):
+
+```bash
+  python setup.py install --develop
+```
+
 To build the CSS assets, you'll need to install `npm` (and `node`).
 
 ```bash

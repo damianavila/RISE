@@ -31,6 +31,7 @@ var config = new configmod.ConfigWithDefaults(config_section, {
     transition: 'linear',
     slideNumber: true,
     start_slideshow_at: 'beginning',
+    scroll: false,
 });
 
 Object.getPrototypeOf(IPython.notebook).get_cell_elements = function () {
@@ -156,6 +157,12 @@ function Revealer() {
   //$('div#header').hide();
   //$('div#site').css("height", "100%");
   //$('div#ipython-main-app').css("position", "static");
+  // Set up the scrolling feature
+  var scroll = config.get_sync('scroll');
+  if (scroll === true) {
+    $('body').css("overflow-y", "auto");
+    $('body').css("overflow-x", "hidden");
+  }
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
@@ -341,6 +348,13 @@ function Remover() {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
   $('body').removeClass("rise-enabled");
+
+  var scroll = config.get_sync('scroll');
+  if (scroll === true) {
+    $('body').css("overflow-y", "");
+    $('body').css("overflow-x", "");
+  }
+
   IPython.menubar._size_header();
 
   $('div#notebook').removeClass("reveal");

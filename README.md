@@ -78,6 +78,9 @@ shortcut does not select the next cell, but will only run the cell (same as
 and because some problem arises when you inject new cells on the fly.
 When you exit the presentation mode, the behaviour comes back to normal.
 
+4- Darkish themes have css conflict with the notebook css, so it need customization
+to make them work.
+
 ## Manual installation
 
 We encourage you to use the setup.py-based installation (see above), but if you

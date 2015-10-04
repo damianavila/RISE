@@ -358,6 +358,8 @@ function Remover() {
   IPython.menubar._size_header();
 
   $('div#notebook').removeClass("reveal");
+  // woekaround to fix fade class conflicting between notebook and reveal css...
+  if ($('div#notebook').hasClass('fade')) { $('div#notebook').removeClass("fade"); };
   $('div#notebook-container').removeClass("slides");
   $('div#notebook-container').css('width','');
   $('div#notebook-container').css('height','');

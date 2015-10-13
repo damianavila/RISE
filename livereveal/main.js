@@ -32,12 +32,11 @@ var default_config = {
     scroll: false,
 };
 
-if(Jupyter.notebook.metadata.livereveal != undefined){
-    default_config = $.extend(true, default_config, Jupyter.notebook.metadata.livereveal);
-} else {
-    config_section.load();
-}
+config_section.load();
 
+if(IPython.notebook.metadata.livereveal !== undefined){
+    default_config = $.extend(true, default_config, IPython.notebook.metadata.livereveal);
+}
 var config = new configmod.ConfigWithDefaults(config_section, default_config);
 
 Object.getPrototypeOf(IPython.notebook).get_cell_elements = function () {

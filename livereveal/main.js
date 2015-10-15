@@ -18,9 +18,7 @@ define([
 var config_section = new configmod.ConfigSection('livereveal',
                             {base_url: utils.get_body_data("baseUrl")});
 
-config_section.load();
-
-var config = new configmod.ConfigWithDefaults(config_section, {
+var default_config = {
     controls: true,
     progress: true,
     history: true,
@@ -32,7 +30,14 @@ var config = new configmod.ConfigWithDefaults(config_section, {
     slideNumber: true,
     start_slideshow_at: 'beginning',
     scroll: false,
-});
+};
+
+config_section.load();
+
+if(IPython.notebook.metadata.livereveal !== undefined){
+    default_config = $.extend(true, default_config, IPython.notebook.metadata.livereveal);
+}
+var config = new configmod.ConfigWithDefaults(config_section, default_config);
 
 Object.getPrototypeOf(IPython.notebook).get_cell_elements = function () {
   /*

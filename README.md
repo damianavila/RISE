@@ -138,6 +138,19 @@ There are also options for `controls`, `progress`, `history`, `minScale` and
 **Note**: The use of the `minScale` option (values other then `1.0`) can cause
 problems with codemirror.
 
+### Alternative configuration method
+You can put reveal.js configuration in your notebook metadata (Edit->Edit Notebook Metadata) like this:
+```
+{
+    "livereveal": {
+        "theme": "serif",
+        "transition": "zoom",
+        ...
+    },
+    "kernelspec": {...}
+}
+```
+
 ## Usage with Leap Motion
 
 **Reveal.js** supports the [Leap Motion](leapmotion.com) controller.

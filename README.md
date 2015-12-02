@@ -153,7 +153,7 @@ You can put reveal.js configuration in your notebook metadata (Edit->Edit Notebo
 
 ## Usage with Leap Motion
 
-**Reveal.js** supports the [Leap Motion](leapmotion.com) controller.
+**Reveal.js** supports the [Leap Motion](https://www.leapmotion.com) controller.
 To control RISE slideshows with the Leap, put the
 [reveal leap plugin options](https://github.com/hakimel/reveal.js#leap-motion)
 in your config by running this Python code:

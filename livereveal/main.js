@@ -273,7 +273,23 @@ function fixCellHeight(){
   }
 }
 
+
 function setupKeys(mode){
+  var versions = IPython.version.split(".").map(Number);
+  if(versions < [4, 1]){
+    setupKeysLegacy(mode);
+    return;
+  }
+  if (mode === 'reveal_mode') {
+    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+  } else if (mode === 'notebook_mode') {
+    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
+    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
+  }
+}
+
+function setupKeysLegacy(mode){
   if (mode === 'reveal_mode') {
     IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "ipython.execute-in-place")
     IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "ipython.execute-in-place")

@@ -67,7 +67,7 @@ Some notes:
 1- Use ``spacebar`` to go forward and ``shift+spacebar`` to go backward (or the
 controller in the bottom right corner). ``Up`` and ``down`` arrows are reserved to
 interact with notebook cells and cannot be used to navigate the slides, instead
-you can use ``pgup` and ``pgdown``.
+you can use ``pgup`` and ``pgdown``.
 
 2- You can know more about the reveal-specific shortcuts just pressing the help
 button at the bottom left of your slideshow.

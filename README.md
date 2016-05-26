@@ -50,7 +50,7 @@ compatible with previous IPython versions:
 
 3- With **Jupyter** landing we will provide a conda and pip-instalable packages too
 
-**NOTE**: We will only mantain the latest released version.
+**NOTE**: We will only maintain the latest released version.
 
 ## Usage
 

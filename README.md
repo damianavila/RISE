@@ -27,7 +27,7 @@ Coming soon...
 
 ## About
 
-As you now... we love **Jupyter/IPython** and we like **Reveal.js** too.
+As you know... we love **Jupyter/IPython** and we like **Reveal.js** too.
 
 Previously, we developed a "converter" for the `nbconvert` library to
 export a `ipynb` to a *STATIC* html slideshow based in **Reveal.js** library.

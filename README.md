@@ -27,7 +27,7 @@ Coming soon...
 
 ## About
 
-As you now... we love **Jupyter/IPython** and we like **Reveal.js** too.
+As you know... we love **Jupyter/IPython** and we like **Reveal.js** too.
 
 Previously, we developed a "converter" for the `nbconvert` library to
 export a `ipynb` to a *STATIC* html slideshow based in **Reveal.js** library.
@@ -50,7 +50,7 @@ compatible with previous IPython versions:
 
 3- With **Jupyter** landing we will provide a conda and pip-instalable packages too
 
-**NOTE**: We will only mantain the latest released version.
+**NOTE**: We will only maintain the latest released version.
 
 ## Usage
 
@@ -67,7 +67,7 @@ Some notes:
 1- Use ``spacebar`` to go forward and ``shift+spacebar`` to go backward (or the
 controller in the bottom right corner). ``Up`` and ``down`` arrows are reserved to
 interact with notebook cells and cannot be used to navigate the slides, instead
-you can use ``pgup` and ``pgdown``.
+you can use ``pgup`` and ``pgdown``.
 
 2- You can know more about the reveal-specific shortcuts just pressing the help
 button at the bottom left of your slideshow.

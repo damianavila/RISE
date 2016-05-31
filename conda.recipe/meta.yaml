@@ -1,0 +1,23 @@
+package:
+  name: rise
+  version: 0.3.0
+
+build:
+    number: 1
+
+source:
+  git_url: https://github.com/ijstokes/RISE.git
+  git_tag: master
+
+requirements:
+  build:
+    - python
+    - jupyter
+    - notebook
+  run:
+    - python
+    - jupyter
+    - notebook
+
+about:
+  home: https://github.com/damianavila/RISE

@@ -11,9 +11,10 @@
 define([
         'require',
         'jquery',
+        'underscore',
         'base/js/utils',
         'services/config',
-], function(require, $, utils, configmod) {
+], function(require, $, _, utils, configmod) {
 
 function configSlides() {
   /*
@@ -480,6 +481,23 @@ function setup() {
   };
   $(document).keydown(document_keydown);
 }
+
+function mutationHandler(mutationRecords) {
+  mutationRecords.forEach(function(mutation) {
+    if (mutation.addedNodes && mutation.addedNodes.length) {
+      Reveal.sync();
+    }
+  });
+}
+
+var $output = $(".output");
+var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+var outputObserver = new MutationObserver(mutationHandler);
+var observerConfig = { childList: true, characterData: false, attributes: false, subtree: false };
+
+$output.each(function () {
+  outputObserver.observe(this, observerConfig);
+});
 
 setup.load_ipython_extension = setup;
 

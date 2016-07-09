@@ -174,6 +174,12 @@ function Revealer() {
   // Header
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/theme/simple.css") + ' id="theme" />');
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reset_reveal.css") + ' id="revealcss" />');
+  if (window.location.pathname.endsWith('.ipynb'))
+  {
+    // Attempt to load CSS with the same path as the .ipynb but with .css extension instead
+	var cssfile = window.location.pathname.replace(/\.ipynb$/,'.css');
+	$('head').append('<link rel="stylesheet" href=' + cssfile + ' id="notebook-custom-css" />');
+  }
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',

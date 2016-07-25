@@ -27,11 +27,14 @@ here = os.path.abspath(os.path.dirname(__file__))
 pkg_root = pjoin(here, name)
 
 packages = []
-for d, _, _ in os.walk(pjoin(here, name)):
-    if os.path.exists(pjoin(d, '__init__.py')):
-        packages.append(d[len(here)+1:].replace(os.path.sep, '.'))
+for d, _, _ in os.walk(pkg_root):
+    if os.path.exists(pjoin(d, "__init__.py")):
+        packages.append(d[len(here)+1:].replace(os.path.sep, "."))
 
-package_data = {name: [pjoin('static', '*')]}
+paths = []
+for (path, directories, filenames) in os.walk(pjoin(pkg_root, "static")):
+    for filename in filenames:
+        paths.append(os.path.relpath(pjoin(path, filename), pkg_root))
 
 version_ns = {}
 with open(pjoin(here, name, '_version.py')) as f:
@@ -44,7 +47,7 @@ setup_args = dict(
     name=name,
     version=version_ns['__version__'],
     packages=packages,
-    package_data=package_data,
+    package_data={name: paths},
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
     author="Damián Avila",

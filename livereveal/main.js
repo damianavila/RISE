@@ -15,29 +15,50 @@ define([
         'services/config',
 ], function(require, $, utils, configmod) {
 
-var config_section = new configmod.ConfigSection('livereveal',
-                            {base_url: utils.get_body_data("baseUrl")});
+function configSlides() {
+  /*
+  * Add customized config on top of the default options using the notebook metadata
+  * or the config system
+  */
+  var default_config = {
+      controls: true,
+      progress: true,
+      history: true,
+      width: 1140,
+      height: 855, // 4:3 ratio
+      minScale: 1.0, //we need this for codemirror to work right
+      theme: 'simple',
+      transition: 'linear',
+      slideNumber: true,
+      start_slideshow_at: 'beginning',
+      scroll: false,
+  };
 
-var default_config = {
-    controls: true,
-    progress: true,
-    history: true,
-    width: 1140,
-    height: 855, // 4:3 ratio
-    minScale: 1.0, //we need this for codemirror to work right
-    theme: 'simple',
-    transition: 'linear',
-    slideNumber: true,
-    start_slideshow_at: 'beginning',
-    scroll: false,
-};
+  var config_section = new configmod.ConfigSection('livereveal',
+                              {base_url: utils.get_body_data("baseUrl")});
+  config_section.load();
 
-config_section.load();
+  // dummy empty config section to load the metadata + default as a ConfigWithDefaults object
+  var _config_section = new configmod.ConfigSection('_livereveal',
+                              {base_url: utils.get_body_data("baseUrl")});
+  _config_section.load();
 
-if(IPython.notebook.metadata.livereveal !== undefined){
-    default_config = $.extend(true, default_config, IPython.notebook.metadata.livereveal);
+  var final_config;
+
+  var rise_meta = IPython.notebook.metadata.livereveal;
+
+  if(rise_meta !== undefined && Object.keys(rise_meta).length > 0){
+      final_config = $.extend(true, default_config, rise_meta);
+      final_config = new configmod.ConfigWithDefaults(_config_section, final_config);
+      console.log("RISE metadata detected. Using ONLY RISE metadata on top of the default config. Custom config disabled.")
+  } else {
+      final_config = new configmod.ConfigWithDefaults(config_section, default_config);
+      console.log("No (or empty) RISE metadata. Using ONLY custom config (if exist) on top of the default config.")
+  }
+
+  return final_config
+
 }
-var config = new configmod.ConfigWithDefaults(config_section, default_config);
 
 Object.getPrototypeOf(IPython.notebook).get_cell_elements = function () {
   /*
@@ -144,7 +165,7 @@ function markupSlides(container) {
  * changing to the one we want. By changing the URL before setting up reveal,
  * the slideshow really starts on the desired slide.
  */
-function setStartingSlide(selected) {
+function setStartingSlide(selected, config) {
     var start_slideshow = config.get_sync('start_slideshow_at');
     if (start_slideshow === 'selected') {
         // Start from the selected cell
@@ -156,7 +177,7 @@ function setStartingSlide(selected) {
 }
 
 
-function Revealer() {
+function Revealer(config) {
   $('body').addClass("rise-enabled");
   // Prepare the DOM to start the slideshow
   //$('div#header').hide();
@@ -179,6 +200,8 @@ function Revealer() {
   require(['./reveal.js/lib/js/head.min.js',
            './reveal.js/js/reveal.js'].map(require.toUrl),function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
+
+    Reveal.initialize();
 
     var options = {
     controls: config.get_sync('controls'),
@@ -234,7 +257,7 @@ function Revealer() {
         options.leap = leap;
     }
 
-    Reveal.initialize(options);
+    Reveal.configure(options);
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
@@ -365,7 +388,7 @@ function buttonExit() {
     $('.reveal').after(exit_button);
 }
 
-function Remover() {
+function Remover(config) {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
   $('body').removeClass("rise-enabled");
@@ -412,21 +435,22 @@ function revealMode() {
   * If the tag exits, we exit. Otherwise, we enter the reveal mode.
   */
   var tag = $('#maintoolbar').hasClass('reveal_tagging');
+  var config = configSlides()
 
   if (!tag) {
     // Preparing the new reveal-compatible structure
     var selected_slide = markupSlides($('div#notebook-container'));
     // Set the hash part of the URL
-    setStartingSlide(selected_slide);
+    setStartingSlide(selected_slide, config);
     // Adding the reveal stuff
-    Revealer();
+    Revealer(config);
     // Minor modifications for usability
     setupKeys("reveal_mode");
     buttonExit();
     buttonHelp();
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
-    Remover();
+    Remover(config);
     setupKeys("notebook_mode");
     $('#exit_b').remove();
     $('#help_b').remove();

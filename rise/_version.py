@@ -1,2 +1,2 @@
-version_info = (4, 0, 0)
-__version__ = '.'.join(map(str, version_info))
+__version__ = "4.0.0b1"
+version_info = tuple(__version__.split("."))

@@ -28,7 +28,7 @@ jupyter-nbextension install rise --py --sys-prefix
 and enable the nbextension:
 
 ```
-jupyter-nbextension" enable rise --py --sys-prefix
+jupyter-nbextension enable rise --py --sys-prefix
 ```
 
 3 - The old way (are sure sure you want to go this path?):

@@ -221,7 +221,7 @@ Note for developers: the --symlink argument allow you to modify the JavaScript c
 This feature is probably not available in Win. So you will need to "re-install" the nbextension
 to actually see any changes you made.
 
-To build the CSS assets, you'll need to install `npm` (and `node`).
+To build the CSS assets, you'll need to install `npm` and `node` (quick tip: `conda install nodejs`) and then:
 
 ```bash
 npm install
@@ -231,6 +231,64 @@ npm run build
 To have per-save automatic building of CSS, use:
 ```bash
 npm run watch-less
+```
+
+## Pre-Release check
+
+1 - Clean your local repo copy:
+
+```
+git clean -fdx
+```
+
+2 - Build the CSS and check there is not any diff
+
+```
+npm run build
+```
+
+3 - Check for updated version numbers at `rise/_version.py` and `conda.recipe/meta.yaml`
+
+## Release
+
+4 - Tag the repo with:
+
+```
+git tag -a release_tag -m "Release msg"
+git push origin release_tag
+```
+
+5 - Build sdist and wheels packages:
+
+```
+python setup.py sdist --formats=zip,gztar
+python setup.py bdist_wheel
+```
+
+6 - Build the conda packages
+
+```
+conda build conda.recipe --python=3.5 --python=3.4 --python=2.7
+```
+
+and (use `-f` option to force building of the win packages):
+
+```
+conda convert /path/to/conda-bld/linux-64/rise-4.0.0b1-py35_0.tar.bz2 -p all -o conda_dist -f
+conda convert /path/to/conda-bld/linux-64/rise-4.0.0b1-py34_0.tar.bz2 -p all -o conda_dist -f
+conda convert /path/to/conda-bld/linux-64/rise-4.0.0b1-py27_0.tar.bz2 -p all -o conda_dist -f
+```
+
+7 - Upload sdist and wheels to PyPI
+
+```
+twine upload dist/*
+```
+
+8 - Upload conda packages to anaconda.org/damianavila82 (5 platforms x 3 pythons):
+
+```
+anaconda upload -u damianavila82 conda_dist/<platform>/<package_name>
 ```
 
 ## Changelog

@@ -11,7 +11,7 @@
     "watch": "~0.16.0"
   },
   "license": "BSD-3-Clause",
-  "main": "rise/main.js",
+  "main": "rise/static/main.js",
   "name": "rise",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "npm run less",
-    "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less rise/main.css",
+    "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less rise/static/main.css",
     "watch-less": "./node_modules/.bin/watch 'npm run less' src/less"
   },
   "version": "0.4.0"

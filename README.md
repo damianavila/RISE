@@ -45,7 +45,7 @@ jupyter-nbextension install rise --py --sys-prefix
 and
 
 ```
-jupyter-nbextension" enable rise --py --sys-prefix
+jupyter-nbextension enable rise --py --sys-prefix
 ```
 
 Conclusion: If you use conda, life will be easy ;-)

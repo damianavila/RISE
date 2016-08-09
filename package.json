@@ -3,15 +3,15 @@
     "name": "Damián Avila",
     "url": "https://github.com/damianavila"
   },
-  "description": "Edit and Present Revealjs slides in the Jupyter Notebook",
+  "description": "Edit and Present Revealjs-based LIVE slides in the Jupyter Notebook",
   "devDependencies": {
     "less": "~2.5.0",
     "less-plugin-autoprefix": "~1.4.2",
     "less-plugin-clean-css": "~1.5.0",
     "watch": "~0.16.0"
   },
-  "license": "BSD",
-  "main": "livereveal/main.js",
+  "license": "BSD-3-Clause",
+  "main": "rise/main.js",
   "name": "rise",
   "repository": {
     "type": "git",
@@ -19,8 +19,8 @@
   },
   "scripts": {
     "build": "npm run less",
-    "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less livereveal/main.css",
+    "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less rise/main.css",
     "watch-less": "./node_modules/.bin/watch 'npm run less' src/less"
   },
-  "version": "0.3.0"
+  "version": "0.4.0"
 }

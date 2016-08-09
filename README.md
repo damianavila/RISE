@@ -267,17 +267,43 @@ python setup.py bdist_wheel
 
 6 - Build the conda packages
 
-```
-conda build conda.recipe --python=3.5 --python=3.4 --python=2.7
-```
-
-and (use `-f` option to force building of the win packages):
+For linux and osx packages:
 
 ```
-conda convert /path/to/conda-bld/linux-64/rise-4.0.0b1-py35_0.tar.bz2 -p all -o conda_dist -f
-conda convert /path/to/conda-bld/linux-64/rise-4.0.0b1-py34_0.tar.bz2 -p all -o conda_dist -f
-conda convert /path/to/conda-bld/linux-64/rise-4.0.0b1-py27_0.tar.bz2 -p all -o conda_dist -f
+RISE_RELEASE=1 conda build conda.recipe --python=3.5 --python=3.4 --python=2.7
 ```
+
+and
+
+```
+conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py35_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
+conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py34_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
+conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py27_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
+```
+
+For Win packages you need to build in a Win VM (shared folders will make you things easier):
+
+```
+set RISE_RELEASE=1
+conda build conda.recipe --python=3.5
+#remove builder\Miniconda3\pkgs\.trash
+conda build conda.recipe --python=3.4
+#remove builder\Miniconda3\pkgs\.trash
+conda build conda.recipe --python=2.7
+#remove builder\Miniconda3\pkgs\.trash
+```
+
+and convert them in the same Win VM:
+
+```
+conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py35_0.tar.bz2 -p win-32
+conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py34_0.tar.bz2 -p win-32
+conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py27_0.tar.bz2 -p win-32
+```
+
+Finally copy all the built packages into the conda_dist folder.
+
+**Note**: You can increment the build number with the `RISE_BUILD_NUMBER` environment variable
 
 7 - Upload sdist and wheels to PyPI
 

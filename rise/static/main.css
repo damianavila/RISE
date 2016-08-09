@@ -221,7 +221,7 @@
   font-size: 11px;
   background-color: #f7f7f7;
   color: #333;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 2px #ffffff inset;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
   border-radius: 3px;
   display: inline-block;
   margin: 0 .1em;

@@ -176,6 +176,35 @@ function setStartingSlide(selected, config) {
     }
 }
 
+/* Setup a MutationObserver to call Reveal.sync when an output is generated.
+ * This fixes issue #188: https://github.com/damianavila/RISE/issues/188 
+ */
+var outputObserver = null;
+function setupOutputObserver() {
+  function mutationHandler(mutationRecords) {
+    mutationRecords.forEach(function(mutation) {
+      if (mutation.addedNodes && mutation.addedNodes.length) {
+        Reveal.sync();
+      }
+    });
+  }
+
+  var $output = $(".output");
+  var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  outputObserver = new MutationObserver(mutationHandler);
+  
+  var observerConfig = { childList: true, characterData: false, attributes: false, subtree: false };
+  $output.each(function () {
+    outputObserver.observe(this, observerConfig);
+  });
+}
+
+function disconnectOutputObserver() {
+  if (outputObserver !== null) {
+    outputObserver.disconnect();
+  }
+}
+
 
 function Revealer(config) {
   $('body').addClass("rise-enabled");
@@ -270,6 +299,8 @@ function Revealer(config) {
       Unselecter();
       window.scrollTo(0,0);
     });
+
+    setupOutputObserver();
   });
 }
 
@@ -427,6 +458,8 @@ function Remover(config) {
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook');
   IPython.page.show_site();
+
+  disconnectOutputObserver();
 }
 
 function revealMode() {

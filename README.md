@@ -162,6 +162,7 @@ Or to enable a right scroll bar for your content exceeding the slide vertical he
 cm.update('livereveal', {
               'scroll': True,
 })
+```
 
 There are also options for `controls`, `progress`, `history`, `minScale` and
 `slideNumber`.

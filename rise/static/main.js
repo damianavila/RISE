@@ -32,6 +32,10 @@ function configSlides() {
       slideNumber: true,
       start_slideshow_at: 'beginning',
       scroll: false,
+      headerLeft: '',
+      headerRight: '',
+      footerLeft: '',
+      footerRight: '',
   };
 
   var config_section = new configmod.ConfigSection('livereveal',
@@ -301,6 +305,54 @@ function Revealer(config) {
     });
 
     setupOutputObserver();
+
+    // Header and footer
+    var headerFooter = $('<div/>').attr('id', 'livereveal-header');
+      
+    var headerLeft = config.get_sync('headerLeft');
+    if (headerLeft !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-header-left')
+            .css('position','absolute')
+            .css('top', '0%')
+            .css('left', '0%')
+            .html(headerLeft));
+    }
+
+    var headerRight = config.get_sync('headerRight');
+    if (headerRight !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-header-right')
+            .css('position','absolute')
+            .css('top', '0%')
+            .css('right', '0%')
+            .html(headerRight));
+    }
+
+    var footerLeft = config.get_sync('footerLeft');
+    if (footerLeft !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-footer-left')
+            .css('position','absolute')
+            .css('bottom', '0%')
+            .css('left', '0%')
+            .html(footerLeft));
+    }
+
+    var footerRight = config.get_sync('footerRight');
+    if (footerRight !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-footer-right')
+            .css('position','absolute')
+            .css('bottom', '0%')
+            .css('right', '0%')
+            .html(footerRight));
+    }
+
+    if (headerFooter.html() !== "") {
+        $('#notebook_panel').append(headerFooter);
+    }
+
   });
 }
 
@@ -448,6 +500,8 @@ function Remover(config) {
   $('.slide-number').remove();
   $('.state-background').remove();
   $('.pause-overlay').remove();
+
+  $('#livereveal-header').remove();
 
   var cells = IPython.notebook.get_cells();
   for(var i in cells){

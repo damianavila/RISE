@@ -230,8 +230,6 @@ function Revealer(config) {
            './reveal.js/js/reveal.js'].map(require.toUrl),function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
 
-    Reveal.initialize();
-
     var options = {
     controls: config.get_sync('controls'),
     progress: config.get_sync('progress'),
@@ -286,7 +284,7 @@ function Revealer(config) {
         options.leap = leap;
     }
 
-    Reveal.configure(options);
+    Reveal.initialize(options);
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();

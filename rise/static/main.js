@@ -36,6 +36,8 @@ function configSlides() {
       headerRight: '',
       footerLeft: '',
       footerRight: '',
+      replaceByTitle: '',
+      titleSelector: 'h1',
   };
 
   var config_section = new configmod.ConfigSection('livereveal',
@@ -353,6 +355,16 @@ function Revealer(config) {
         $('#notebook_panel').append(headerFooter);
     }
 
+    var replaceByTitle = config.get_sync('replaceByTitle');
+    var titleSelector = config.get_sync('titleSelector');
+    if (replaceByTitle !== "" && titleSelector !== "") {
+        Reveal.addEventListener( 'slidechanged', function( event ) {
+            var heading = $(event.currentSlide).find(titleSelector).first();
+            $(replaceByTitle).html(heading.html());
+        });
+    }
+
+
   });
 }
 
@@ -522,7 +534,7 @@ function revealMode() {
   * If the tag exits, we exit. Otherwise, we enter the reveal mode.
   */
   var tag = $('#maintoolbar').hasClass('reveal_tagging');
-  var config = configSlides()
+  var config = configSlides();
 
   if (!tag) {
     // Preparing the new reveal-compatible structure

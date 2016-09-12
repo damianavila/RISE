@@ -177,7 +177,7 @@ function setStartingSlide(selected, config) {
 }
 
 /* Setup a MutationObserver to call Reveal.sync when an output is generated.
- * This fixes issue #188: https://github.com/damianavila/RISE/issues/188 
+ * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
  */
 var outputObserver = null;
 function setupOutputObserver() {
@@ -192,7 +192,7 @@ function setupOutputObserver() {
   var $output = $(".output");
   var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
   outputObserver = new MutationObserver(mutationHandler);
-  
+
   var observerConfig = { childList: true, characterData: false, attributes: false, subtree: false };
   $output.each(function () {
     outputObserver.observe(this, observerConfig);
@@ -222,8 +222,7 @@ function Revealer(config) {
   $('div#notebook-container').addClass("slides");
 
   // Header
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reset_reveal.css") + ' id="revealcss" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reset_reveal.css") + ' class="revealcss" />');
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',
@@ -440,8 +439,7 @@ function Remover(config) {
   $('div#notebook-container').css('height','');
   $('div#notebook-container').css('zoom','');
 
-  $('#theme').remove();
-  $('#revealcss').remove();
+  $('.revealcss').remove();
 
   $('.progress').remove();
   $('.controls').remove();

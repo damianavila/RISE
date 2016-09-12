@@ -66,17 +66,6 @@
   text-align: left;
   font-size: 160%;
 }
-.rise-enabled .reveal .slide-number {
-  -webkit-transition-property: all;
-          transition-property: all;
-  -webkit-transition-duration: 0.2s;
-          transition-duration: 0.2s;
-  -webkit-transition-timing-function: ease;
-          transition-timing-function: ease;
-  right: 3.1em;
-  bottom: 3.9em;
-  font-size: 100%;
-}
 .rise-enabled .reveal .controls .navigate-left,
 .rise-enabled .reveal .controls .navigate-left.enabled {
   border-right-color: #727272;

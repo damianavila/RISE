@@ -393,6 +393,7 @@ function buttonHelp() {
         .css('bottom','0.5em')
         .css('left','0.6em')
         .css('opacity', '0.6')
+        .css('z-index', '30')
         .click(
             function(){
                 KeysMessager();
@@ -411,6 +412,7 @@ function buttonExit() {
         .css('top','0.5em')
         .css('left','0.48em')
         .css('opacity', '0.6')
+        .css('z-index', '30')
         .click(
             function(){
                 revealMode('simple', 'zoom');

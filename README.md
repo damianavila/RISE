@@ -122,6 +122,9 @@ When you exit the presentation mode, the behavior comes back to normal.
 4- Darkish themes have css conflict with the notebook css, so it need customization
 to make them work (not provided by default).
 
+5- Markdown Images get left aligned by default. Enclose the image like 
+``<center>![noimg](path/to/image.png)</center>`` to center it.
+
 ## Configure your own options
 
 You can configure the `theme`, the `transition`, and from where the slideshow starts with:

@@ -462,6 +462,54 @@ function Remover(config) {
   disconnectOutputObserver();
 }
 
+// just before exiting reveal mode, we run this function
+// whose job is to find the notebook index
+// for the first cell in the current (sub)slide
+// this allows to restore the notebook at the correct location,
+// i.e. with that cell being selected
+//
+// we use the current URL that ends up in 'slide-n-m'
+// to find out about the slide and subslide 
+function reveal_cell_index(notebook) {
+  // last part of the current URL holds slide and subslide numbers
+  var href = window.location.href;
+  var chunks = href.split('-');
+  var len = chunks.length;
+  var slide = Number(chunks[len-2]);
+  var subslide = Number(chunks[len-1]);
+
+  // just scan all cells until we find one at that address
+  // except that we need to start at -1 0r 0 depending on
+  // whether the first slide has a slide tag or not
+  var is_slide = function(cell) {
+    return cell.metadata.slideshow
+	&& cell.metadata.slideshow.slide_type == 'slide';
+  }
+  var is_subslide = function(cell) {
+    return cell.metadata.slideshow
+	&& cell.metadata.slideshow.slide_type == 'subslide';
+  }
+  var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
+  var subslide_counter = 0;
+  var result = null;
+	
+  notebook.get_cells().forEach(function (cell, index) {
+    if (result) 
+      // keep it short: skip if we found already
+      return;
+    if (is_slide(cell)) {
+      slide_counter += 1;
+      subslide_counter = 0;
+    } else if (is_subslide(cell)) {
+      subslide_counter += 1;
+    }
+    if ((slide_counter == slide) && (subslide_counter == subslide)) {
+	result = index;
+    }
+  })
+    return result;
+}
+	
 function revealMode() {
   /*
   * We search for a class tag in the maintoolbar to check if reveal mode is "on".
@@ -483,6 +531,7 @@ function revealMode() {
     buttonHelp();
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
+    var current_cell_index = reveal_cell_index(IPython.notebook);
     Remover(config);
     setupKeys("notebook_mode");
     $('#exit_b').remove();
@@ -490,6 +539,9 @@ function revealMode() {
     $('#maintoolbar').removeClass('reveal_tagging');
     // Workaround... should be a better solution. Need to investigate codemirror
     fixCellHeight();
+    // select and focus on current cell
+    IPython.notebook.select(current_cell_index);
+    IPython.notebook.get_selected_cell().ensure_focused();
   }
 }
 

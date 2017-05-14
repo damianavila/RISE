@@ -169,8 +169,6 @@
   transition-duration: 0.2s;
   transition-timing-function: ease;
   font-size: 100%;
-  max-width: 960px !important;
-  /* fix for firefox issue in IPython, 1240px */
 }
 .rise-enabled a.anchor-link {
   display: none;

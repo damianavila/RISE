@@ -329,27 +329,19 @@ function fixCellHeight(){
 
 
 function setupKeys(mode){
-  var versions = IPython.version.split(".").map(Number);
-  if(versions < [4, 1]){
-    setupKeysLegacy(mode);
-    return;
-  }
+  // Lets setup some specific keys for the reveal_mode
   if (mode === 'reveal_mode') {
+    // Prevent next cell after execution because it does not play well with the slides assembly
     IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
     IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    // Save the f keyboard event for the Reveal fullscreen action
+    IPython.keyboard_manager.command_shortcuts.remove_shortcut("f");
+    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
   } else if (mode === 'notebook_mode') {
     IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
     IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
-  }
-}
-
-function setupKeysLegacy(mode){
-  if (mode === 'reveal_mode') {
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "ipython.execute-in-place")
-    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "ipython.execute-in-place")
-  } else if (mode === 'notebook_mode') {
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "ipython.run-select-next")
-    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "ipython.run-select-next")
+    IPython.keyboard_manager.command_shortcuts.remove_shortcut("shift-f");
+    IPython.keyboard_manager.command_shortcuts.set_shortcut("f", "jupyter-notebook:find-and-replace");
   }
 }
 
@@ -359,6 +351,7 @@ function KeysMessager() {
                     "<ul>" +
                       "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
                       "<li><kbd>w</kbd>: Toggle overview mode</li>" +
+                      "<li><kbd>f</kbd>: Fullscreen mode (exit with <kbd>Esc</kbd>)</li>" +
                       "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
                       "<li><kbd>Home</kbd>: First slide</li>" +
                       "<li><kbd>End</kbd>: Last slide</li>" +

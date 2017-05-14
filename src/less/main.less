@@ -188,3 +188,11 @@
 #notebook {
   .transition-all;
 }
+/* Ensures that the main background color matches the theme in fullscreen mode
+See https://github.com/hakimel/reveal.js/commit/5e763bc67d140d1a41056c2e63f0fbe80c5d03ab*/
+html:-webkit-full-screen-ancestor {
+	background-color: inherit;
+}
+html:-moz-full-screen-ancestor {
+	background-color: inherit;
+}

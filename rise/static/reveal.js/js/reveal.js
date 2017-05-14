@@ -1363,10 +1363,13 @@ var Reveal = (function(){
 	 */
 	function enterFullscreen() {
 
-		var element = document.body;
+    // Upstream fix at https://github.com/hakimel/reveal.js/commit/a12a17b2d7053fad006ae9914309e8fb56c44329
+		//var element = document.body;
+		var element = document.documentElement;
 
 		// Check which implementation is available
-		var requestMethod = element.requestFullScreen ||
+		//var requestMethod = element.requestFullScreen ||
+		var requestMethod = element.requestFullscreen ||
 							element.webkitRequestFullscreen ||
 							element.webkitRequestFullScreen ||
 							element.mozRequestFullScreen ||

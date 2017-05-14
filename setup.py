@@ -76,7 +76,7 @@ if 'develop' in sys.argv or any(bdist in sys.argv for bdist in ['bdist_wheel', '
 setuptools_args = {}
 
 install_requires = setuptools_args['install_requires'] = [
-    'notebook>=4.2',
+    'notebook>=5.0.0',
 ]
 
 if 'setuptools' in sys.modules:

@@ -165,13 +165,11 @@
 .rise-enabled .text_cell {
   font-size: 160%;
 }
-.rise-enabled .text_cell .prompt {
-  display: none;
-}
 .rise-enabled .text_cell.rendered .rendered_html {
   overflow-y: hidden;
 }
 .rise-enabled .prompt {
+  display: none;
   -webkit-transition-property: all;
           transition-property: all;
   -webkit-transition-duration: 0.2s;

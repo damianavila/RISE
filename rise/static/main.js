@@ -181,7 +181,6 @@ var scroll_status = false;
 /* Set scroll property*/
 function setScroll(config) {
   var scroll = config.get_sync('scroll');
-  console.log("set", scroll);
   if (scroll === true) {
     $('body').css("overflow-y", "auto");
     $('body').css("overflow-x", "hidden");
@@ -191,7 +190,6 @@ function setScroll(config) {
 
 /* Remove scroll property*/
 function removeScroll(scroll_status) {
-  console.log("remove", scroll_status);
   if (scroll_status === true) {
     $('body').css("overflow-y", "");
     $('body').css("overflow-x", "");

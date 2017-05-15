@@ -176,6 +176,29 @@ function setStartingSlide(selected, config) {
     }
 }
 
+
+var scroll_status = false;
+/* Set scroll property*/
+function setScroll(config) {
+  var scroll = config.get_sync('scroll');
+  console.log("set", scroll);
+  if (scroll === true) {
+    $('body').css("overflow-y", "auto");
+    $('body').css("overflow-x", "hidden");
+    scroll_status = true;
+  }
+}
+
+/* Remove scroll property*/
+function removeScroll(scroll_status) {
+  console.log("remove", scroll_status);
+  if (scroll_status === true) {
+    $('body').css("overflow-y", "");
+    $('body').css("overflow-x", "");
+    scroll_status = false;
+  }
+}
+
 /* Setup a MutationObserver to call Reveal.sync when an output is generated.
  * This fixes issue #188: https://github.com/damianavila/RISE/issues/188 
  */
@@ -206,18 +229,12 @@ function disconnectOutputObserver() {
 }
 
 
-function Revealer(config) {
+function Revealer(config, selected_slide) {
   $('body').addClass("rise-enabled");
   // Prepare the DOM to start the slideshow
   //$('div#header').hide();
   //$('div#site').css("height", "100%");
   //$('div#ipython-main-app').css("position", "static");
-  // Set up the scrolling feature
-  var scroll = config.get_sync('scroll');
-  if (scroll === true) {
-    $('body').css("overflow-y", "auto");
-    $('body').css("overflow-x", "hidden");
-  }
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
@@ -300,7 +317,14 @@ function Revealer(config) {
       window.scrollTo(0,0);
     });
 
+    // Set the output observer
     setupOutputObserver();
+
+    // Set the hash part of the URL
+    setStartingSlide(selected_slide, config);
+
+    // Set the scroll property
+    setScroll(config);
   });
 }
 
@@ -419,16 +443,12 @@ function buttonExit() {
     $('.reveal').after(exit_button);
 }
 
-function Remover(config) {
+function Remover(scroll_status) {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
   $('body').removeClass("rise-enabled");
 
-  var scroll = config.get_sync('scroll');
-  if (scroll === true) {
-    $('body').css("overflow-y", "");
-    $('body').css("overflow-x", "");
-  }
+  removeScroll(scroll_status);
 
   IPython.menubar._size_header();
 
@@ -521,10 +541,8 @@ function revealMode() {
   if (!tag) {
     // Preparing the new reveal-compatible structure
     var selected_slide = markupSlides($('div#notebook-container'));
-    // Set the hash part of the URL
-    setStartingSlide(selected_slide, config);
     // Adding the reveal stuff
-    Revealer(config);
+    Revealer(config, selected_slide);
     // Minor modifications for usability
     setupKeys("reveal_mode");
     buttonExit();
@@ -532,7 +550,7 @@ function revealMode() {
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
     var current_cell_index = reveal_cell_index(IPython.notebook);
-    Remover(config);
+    Remover(scroll_status);
     setupKeys("notebook_mode");
     $('#exit_b').remove();
     $('#help_b').remove();

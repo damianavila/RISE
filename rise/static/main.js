@@ -166,14 +166,19 @@ function markupSlides(container) {
  * the slideshow really starts on the desired slide.
  */
 function setStartingSlide(selected, config) {
-    var start_slideshow = config.get_sync('start_slideshow_at');
-    if (start_slideshow === 'selected') {
-        // Start from the selected cell
-        window.location.hash = "/slide-"+selected[0]+"-"+selected[1];
-    } else {
-        // Start from the beginning
-        window.location.hash = "/slide-0-0";
-    }
+
+    var start_slideshow_promise = config.get('start_slideshow_at');
+    // We need the value after the promise resolution
+    start_slideshow_promise.then(function(start_slideshow){
+      if (start_slideshow === 'selected') {
+          // Start from the selected cell
+          window.location.hash = "/slide-"+selected[0]+"-"+selected[1];
+      } else {
+          // Start from the beginning
+          window.location.hash = "/slide-0-0";
+      }
+    });
+
 }
 
 /* Setup a MutationObserver to call Reveal.sync when an output is generated.
@@ -213,11 +218,15 @@ function Revealer(config) {
   //$('div#site').css("height", "100%");
   //$('div#ipython-main-app').css("position", "static");
   // Set up the scrolling feature
-  var scroll = config.get_sync('scroll');
-  if (scroll === true) {
-    $('body').css("overflow-y", "auto");
-    $('body').css("overflow-x", "hidden");
-  }
+  // We need to wait for the config resolution, let use the promise... then ;-)
+  var scroll_promise = config.get('scroll');
+  scroll_promise.then(function(scroll){
+    if (scroll === true) {
+      $('body').css("overflow-y", "auto");
+      $('body').css("overflow-x", "hidden");
+    }
+  });
+
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
@@ -233,6 +242,8 @@ function Revealer(config) {
     Reveal.initialize();
 
     var options = {
+    // All this config option load correctly just because of require-indeced delay,
+    // it would be better to catch them from the config.get promise.
     controls: config.get_sync('controls'),
     progress: config.get_sync('progress'),
     history: config.get_sync('history'),

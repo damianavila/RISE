@@ -1,6 +1,6 @@
 package:
   name: rise
-  version: "4.0.0b1"
+  version: "5.0.0.dev"
 
 source:
   path: ../
@@ -15,15 +15,15 @@ build:
 requirements:
   build:
     - python
-    - notebook >=4.2.0
+    - notebook >=5.0.0
   run:
     - python
-    - notebook >=4.2.0
+    - notebook >=5.0.0
 
 test:
   requires:
     - python
-    - notebook >=4.2.0
+    - notebook >=5.0.0
 
 about:
   home: https://github.com/damianavila/RISE

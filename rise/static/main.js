@@ -15,6 +15,12 @@ define([
         'services/config',
 ], function(require, $, utils, configmod) {
 
+// A fix for https://github.com/jupyter/notebook/pull/1709
+configmod.ConfigWithDefaults.prototype.get_sync = function(key) {
+    var data = this._class_data();
+    return key in data ? data[key] : this.defaults[key];
+}
+
 function configSlides() {
   /*
   * Add customized config on top of the default options using the notebook metadata

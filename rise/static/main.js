@@ -182,7 +182,7 @@ function setStartingSlide(selected, config) {
 }
 
 /* Setup a MutationObserver to call Reveal.sync when an output is generated.
- * This fixes issue #188: https://github.com/damianavila/RISE/issues/188 
+ * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
  */
 var outputObserver = null;
 function setupOutputObserver() {
@@ -197,7 +197,7 @@ function setupOutputObserver() {
   var $output = $(".output");
   var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
   outputObserver = new MutationObserver(mutationHandler);
-  
+
   var observerConfig = { childList: true, characterData: false, attributes: false, subtree: false };
   $output.each(function () {
     outputObserver.observe(this, observerConfig);
@@ -239,8 +239,6 @@ function Revealer(config) {
            './reveal.js/js/reveal.js'].map(require.toUrl),function(){
     // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
 
-    Reveal.initialize();
-
     var options = {
     // All this config option load correctly just because of require-indeced delay,
     // it would be better to catch them from the config.get promise.
@@ -268,12 +266,11 @@ function Revealer(config) {
     27: null, // ESC disabled
     38: null, // up arrow disabled
     40: null, // down arrow disabled
-    66: null, // b, black pause disabled, use period or forward slash
+    67: function() { RevealChalkboard.toggleNotesCanvas() }, // toggle notes canvas when 'c' is pressed
     72: null, // h, left disabled
     74: null, // j, down disabled
     75: null, // k, up disabled
     76: null, // l, right disabled
-    78: null, // n, down disable
     79: null, // o disabled
     80: null, // p, up disable
     // 83: null, // s, notes, but not working because notes is a plugin
@@ -281,12 +278,27 @@ function Revealer(config) {
     188: function() {$('#help_b,#exit_b').fadeToggle();},
     },
 
+    // Current issues:
+    // * chalkboard (shared between slides) doesn't work;
+    // * ``transition`` needs to be adjusted manually to match slide
+    //   transition speed;
+    // * chalkboard state does NOT persist between RISE sessions, although
+    //   the chalkboard plugin allows exporting it.
+    chalkboard: {
+        theme: "whiteboard",
+        transition: 1000,
+        toggleChalkboardButton: false,
+        readOnly: false
+    },
+
     // Optional libraries used to extend on reveal.js
     // Notes are working partially... it opens the notebooks, not the slideshows...
     dependencies: [
-            //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
-            //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-            { src: require.toUrl("./reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } }
+        //{ src: "static/custom/livereveal/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
+        //{ src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: require.toUrl("./reveal.js/plugin/notes/notes.js"), async: true, condition: function() { return !!document.body.classList; } },
+        { src: require.toUrl("./reveal.js/plugin/chalkboard/chalkboard.js"),
+          async: true }
         ]
     };
 
@@ -297,7 +309,10 @@ function Revealer(config) {
         options.leap = leap;
     }
 
-    Reveal.configure(options);
+    Reveal.isAutoSliding = function() { return false; };
+    Reveal.initialize(options);
+
+    window.RevealChalkboard && window.RevealChalkboard.setup();
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
@@ -364,6 +379,7 @@ function KeysMessager() {
                       "<li><kbd>w</kbd>: Toggle overview mode</li>" +
                       "<li><kbd>f</kbd>: Fullscreen mode (exit with <kbd>Esc</kbd>)</li>" +
                       "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
+                      "<li><kbd>c</kbd>: Toggle chaklboard</li>" +
                       "<li><kbd>Home</kbd>: First slide</li>" +
                       "<li><kbd>End</kbd>: Last slide</li>" +
                       "<li><kbd>space</kbd>: Next</li>" +
@@ -391,17 +407,9 @@ function buttonHelp() {
     var help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
-        .addClass('fa-question fa-4x fa')
+        .addClass('fa-question fa-2x fa')
         .addClass('my-main-tool-bar')
-        .css('position','fixed')
-        .css('bottom','0.5em')
-        .css('left','0.6em')
-        .css('opacity', '0.6')
-        .click(
-            function(){
-                KeysMessager();
-            }
-        );
+        .click(function() { KeysMessager(); });
     $('.reveal').after(help_button);
 }
 
@@ -409,23 +417,21 @@ function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','RISE Exit')
-        .addClass('fa-times-circle fa-4x fa')
+        .addClass('fa-times-circle fa-2x fa')
         .addClass('my-main-tool-bar')
-        .css('position','fixed')
-        .css('top','0.5em')
-        .css('left','0.48em')
-        .css('opacity', '0.6')
-        .click(
-            function(){
-                revealMode('simple', 'zoom');
-            }
-        );
+        .click(function() {
+            revealMode('simple', 'zoom');
+        });
     $('.reveal').after(exit_button);
 }
 
 function Remover(config) {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
+
+  RevealChalkboard.clear();
+  $("#notescanvas, #chalkboard, #toggle-notes, #toggle-chalkboard").remove();
+
   $('body').removeClass("rise-enabled");
 
   var scroll = config.get_sync('scroll');
@@ -538,8 +544,7 @@ function revealMode() {
     var current_cell_index = reveal_cell_index(IPython.notebook);
     Remover(config);
     setupKeys("notebook_mode");
-    $('#exit_b').remove();
-    $('#help_b').remove();
+    $('#exit_b, #help_b').remove();
     $('#maintoolbar').removeClass('reveal_tagging');
     // Workaround... should be a better solution. Need to investigate codemirror
     fixCellHeight();

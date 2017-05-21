@@ -224,7 +224,7 @@ npm install
 2. Copy reveal into the static folder
 
 ```bash
-npm build-reveal
+npm run build-reveal
 ```
 
 3. Build the CSS assets

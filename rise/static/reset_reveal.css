@@ -318,7 +318,8 @@ body {
 .reveal pre {
 	display: block;
 	position: relative;
-	width: 90%;
+  /* Fix the cutoff in code extended cells*/
+	/*width: 90%;*/
 	margin: 15px auto;
 
 	text-align: left;
@@ -1866,5 +1867,3 @@ body {
 .zoomed .reveal .roll span:after {
 	visibility: hidden;
 }
-
-

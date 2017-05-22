@@ -24,8 +24,9 @@ function configSlides() {
       controls: true,
       progress: true,
       history: true,
-      width: 1140,
-      height: 855, // 4:3 ratio
+      width: "100%",
+      height: "100%",
+      margin: 0.1,
       minScale: 1.0, //we need this for codemirror to work right
       theme: 'simple',
       transition: 'linear',
@@ -251,6 +252,7 @@ function Revealer(config) {
     // You can switch width and height to fix the projector
     width: config.get_sync('width'),
     height: config.get_sync('height'),
+    margin: config.get_sync('margin'),
     minScale: config.get_sync('minScale'), //we need this for codemirror to work right)
 
     // available themes are in /css/theme

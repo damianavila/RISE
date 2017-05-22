@@ -215,7 +215,7 @@ function disconnectOutputObserver() {
 function Revealer(config) {
   $('body').addClass("rise-enabled");
   // Prepare the DOM to start the slideshow
-  //$('div#header').hide();
+  $('div#header').hide();
   //$('div#site').css("height", "100%");
   //$('div#ipython-main-app').css("position", "static");
   // Set up the scrolling feature
@@ -431,6 +431,7 @@ function Remover(config) {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
   $('body').removeClass("rise-enabled");
+  $('div#header').show();
 
   var scroll = config.get_sync('scroll');
   if (scroll === true) {
@@ -438,7 +439,7 @@ function Remover(config) {
     $('body').css("overflow-x", "");
   }
 
-  IPython.menubar._size_header();
+  //IPython.menubar._size_header();
 
   $('div#notebook').removeClass("reveal");
   // woekaround to fix fade class conflicting between notebook and reveal css...
@@ -465,7 +466,7 @@ function Remover(config) {
 
   $('div#notebook-container').children('section').remove();
   $('.end_space').appendTo('div#notebook');
-  IPython.page.show_site();
+  //IPython.page.show_site();
 
   disconnectOutputObserver();
 }

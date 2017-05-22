@@ -232,7 +232,7 @@ function Revealer(config) {
 
   // Header
   $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reset_reveal.css") + ' id="revealcss" />');
+  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/reveal.css") + ' id="revealcss" />');
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',

@@ -221,10 +221,11 @@ First, you'll need to install `npm` (and `node`, `conda install nodejs` is a goo
 npm install
 ```
 
-2. Copy reveal into the static folder
+2. Copy reveal into the static folder and avoid reveal.js RESET styling
 
 ```bash
 npm run build-reveal
+npm run reset-reveal
 ```
 
 To remove reveal.js from the static folder you can use `npm run clean-reveal`.

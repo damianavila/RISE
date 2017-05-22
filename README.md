@@ -227,6 +227,8 @@ npm install
 npm run build-reveal
 ```
 
+To remove reveal.js from the static folder you can use `npm run clean-reveal`.
+
 3. Build the CSS assets
 
 ```bash

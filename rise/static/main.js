@@ -173,10 +173,12 @@ function setStartingSlide(selected, config) {
     start_slideshow_promise.then(function(start_slideshow){
       if (start_slideshow === 'selected') {
           // Start from the selected cell
-          window.location.hash = "/slide-"+selected[0]+"-"+selected[1];
+          //window.location.hash = "/slide-"+selected[0]+"-"+selected[1];
+          Reveal.slide(selected[0], selected[1]);
       } else {
           // Start from the beginning
-          window.location.hash = "/slide-0-0";
+          //window.location.hash = "/slide-0-0";
+          Reveal.slide(0, 0);
       }
     });
 
@@ -212,7 +214,7 @@ function disconnectOutputObserver() {
 }
 
 
-function Revealer(config) {
+function Revealer(selected_slide, config) {
   $('body').addClass("rise-enabled");
   // Prepare the DOM to start the slideshow
   $('div#header').hide();
@@ -300,6 +302,9 @@ function Revealer(config) {
     }
 
     Reveal.configure(options);
+
+    // Set the starting slide
+    setStartingSlide(selected_slide, config);
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
@@ -469,6 +474,12 @@ function Remover(config) {
   //IPython.page.show_site();
 
   disconnectOutputObserver();
+
+  function removeHash () {
+    history.pushState("", document.title, window.location.pathname
+                                                       + window.location.search);
+  }
+  removeHash();
 }
 
 // just before exiting reveal mode, we run this function
@@ -530,10 +541,8 @@ function revealMode() {
   if (!tag) {
     // Preparing the new reveal-compatible structure
     var selected_slide = markupSlides($('div#notebook-container'));
-    // Set the hash part of the URL
-    setStartingSlide(selected_slide, config);
     // Adding the reveal stuff
-    Revealer(config);
+    Revealer(selected_slide, config);
     // Minor modifications for usability
     setupKeys("reveal_mode");
     buttonExit();

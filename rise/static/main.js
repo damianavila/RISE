@@ -222,13 +222,14 @@ function Revealer(selected_slide, config) {
   //$('div#ipython-main-app').css("position", "static");
   // Set up the scrolling feature
   // We need to wait for the config resolution, let use the promise... then ;-)
-  var scroll_promise = config.get('scroll');
-  scroll_promise.then(function(scroll){
-    if (scroll === true) {
-      $('body').css("overflow-y", "auto");
-      $('body').css("overflow-x", "hidden");
-    }
-  });
+  //var scroll_promise = config.get('scroll');
+  //scroll_promise.then(function(scroll){
+    //if (scroll === true) {
+      //$('body').css("overflow-y", "auto");
+      //$('body').css("overflow-x", "hidden");
+
+    //}
+  //});
 
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
@@ -319,6 +320,21 @@ function Revealer(selected_slide, config) {
     });
 
     setupOutputObserver();
+
+    // scroll on demand
+    var scroll_promise = config.get('scroll');
+    scroll_promise.then(function(scroll){
+      if (scroll === true) {
+        var h = $('.reveal').height() * 0.95;
+        var hpx = "" + h + "px";
+        $('.slides section').find('section')
+          .filter(function() {
+            console.log($(this).height() > h);
+            return $(this).height() > h;
+          })
+          .css('height', hpx).css('overflow-y', 'scroll');
+      }
+    });
   });
 }
 
@@ -438,11 +454,11 @@ function Remover(config) {
   $('body').removeClass("rise-enabled");
   $('div#header').show();
 
-  var scroll = config.get_sync('scroll');
-  if (scroll === true) {
-    $('body').css("overflow-y", "");
-    $('body').css("overflow-x", "");
-  }
+  //var scroll = config.get_sync('scroll');
+  //if (scroll === true) {
+  //  $('body').css("overflow-y", "");
+  //  $('body').css("overflow-x", "");
+  //}
 
   //IPython.menubar._size_header();
 

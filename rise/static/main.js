@@ -156,7 +156,7 @@ function markupSlides(container) {
     }
 
     // Put .end_space back at the end after all the rearrangement
-    $('.end_space').appendTo('div#notebook-container');
+    //$('.end_space').appendTo('div#notebook-container');
     return selected_cell_slide;
 }
 
@@ -218,6 +218,7 @@ function Revealer(selected_slide, config) {
   $('body').addClass("rise-enabled");
   // Prepare the DOM to start the slideshow
   $('div#header').hide();
+  $('.end_space').hide();
   //$('div#site').css("height", "100%");
   //$('div#ipython-main-app').css("position", "static");
   // Set up the scrolling feature
@@ -473,11 +474,23 @@ function Remover(config) {
   $('#theme').remove();
   $('#revealcss').remove();
 
-  $('.progress').remove();
-  $('.controls').remove();
-  $('.slide-number').remove();
-  $('.state-background').remove();
-  $('.pause-overlay').remove();
+  //$('.backgrounds').remove();
+  //$('.progress').remove();
+  //$('.controls').remove();
+  //$('.slide-number').remove();
+  //$('.speaker-notes').remove();
+  //$('.state-background').remove();
+  //$('.pause-overlay').remove();
+  //$('div#aria-status-div').remove();
+
+  $('.backgrounds').hide();
+  $('.progress').hide();
+  $('.controls').hide();
+  $('.slide-number').hide();
+  $('.speaker-notes').hide();
+  //$('.state-background').remove();
+  $('.pause-overlay').hide();
+  $('div#aria-status-div').hide();
 
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
@@ -486,8 +499,9 @@ function Remover(config) {
   }
 
   $('div#notebook-container').children('section').remove();
-  $('.end_space').appendTo('div#notebook');
+  //$('.end_space').appendTo('div#notebook');
   //IPython.page.show_site();
+  $('.end_space').show();
 
   disconnectOutputObserver();
 

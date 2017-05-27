@@ -182,6 +182,26 @@ function setStartingSlide(selected, config) {
 
 }
 
+/* Setup the scrolling per slide if the config option is activated
+*/
+function setScrollingSlide(config) {
+
+  var scroll_promise = config.get('scroll');
+  scroll_promise.then(function(scroll){
+    if (scroll === true) {
+      var h = $('.reveal').height() * 0.95;
+      var hpx = "" + h + "px";
+      $('.slides section').find('section')
+        .filter(function() {
+          console.log($(this).height() > h);
+          return $(this).height() > h;
+        })
+        .css('height', hpx).css('overflow-y', 'scroll');
+    }
+  });
+
+}
+
 /* Setup a MutationObserver to call Reveal.sync when an output is generated.
  * This fixes issue #188: https://github.com/damianavila/RISE/issues/188 
  */
@@ -292,9 +312,6 @@ function Revealer(selected_slide, config) {
 
     Reveal.configure(options);
 
-    // Set the starting slide
-    setStartingSlide(selected_slide, config);
-
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
       window.scrollTo(0,0);
@@ -307,22 +324,15 @@ function Revealer(selected_slide, config) {
       window.scrollTo(0,0);
     });
 
+    // Sync when an output is generated.
     setupOutputObserver();
 
-    // scroll on demand
-    var scroll_promise = config.get('scroll');
-    scroll_promise.then(function(scroll){
-      if (scroll === true) {
-        var h = $('.reveal').height() * 0.95;
-        var hpx = "" + h + "px";
-        $('.slides section').find('section')
-          .filter(function() {
-            console.log($(this).height() > h);
-            return $(this).height() > h;
-          })
-          .css('height', hpx).css('overflow-y', 'scroll');
-      }
-    });
+    // Setup the starting slide
+    setStartingSlide(selected_slide, config);
+
+    // Setup the scrolling slides
+    setScrollingSlide(config);
+
   });
 }
 
@@ -436,6 +446,11 @@ function buttonExit() {
     $('.reveal').after(exit_button);
 }
 
+function removeHash() {
+  history.pushState("", document.title, window.location.pathname
+                                                     + window.location.search);
+}
+
 function Remover(config) {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
@@ -471,11 +486,6 @@ function Remover(config) {
   $('.end_space').show();
 
   disconnectOutputObserver();
-
-  function removeHash () {
-    history.pushState("", document.title, window.location.pathname
-                                                       + window.location.search);
-  }
   removeHash();
 }
 

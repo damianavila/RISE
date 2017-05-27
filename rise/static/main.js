@@ -313,14 +313,14 @@ function Revealer(selected_slide, config) {
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
-      window.scrollTo(0,0);
-      Reveal.layout();
-      $('#start_livereveal').blur();
+      //window.scrollTo(0,0);
+      //Reveal.layout();
+      //$('#start_livereveal').blur();
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
-      window.scrollTo(0,0);
+      //window.scrollTo(0,0);
     });
 
     // Sync when an output is generated.
@@ -563,7 +563,8 @@ function revealMode() {
     fixCellHeight();
     // select and focus on current cell
     Jupyter.notebook.select(current_cell_index);
-    Jupyter.notebook.get_selected_cell().ensure_focused();
+    // Need to delay the action a little bit so it actually focus the selected slide
+    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 1000);
   }
 }
 

@@ -193,7 +193,6 @@ function setScrollingSlide(config) {
       var hpx = "" + h + "px";
       $('.slides section').find('section')
         .filter(function() {
-          console.log($(this).height() > h);
           return $(this).height() > h;
         })
         .css('height', hpx).css('overflow-y', 'scroll');

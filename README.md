@@ -95,6 +95,8 @@ compatible with previous IPython versions:
 
 ## Usage
 
+A Very quick video showing how to use RISE lives here: https://youtu.be/reHkoLZcIOM
+
 In the notebook toolbar, a new button ("Enter/Exit Live Reveal Slideshow")
 will be available.
 

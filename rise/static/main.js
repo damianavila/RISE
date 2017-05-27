@@ -244,16 +244,16 @@ function Revealer(selected_slide, config) {
   $('div#notebook-container').addClass("slides");
 
   // Header
-  // Available themes are in /css/theme
+  // Available themes are in static/css/theme
   var theme_promise = config.get('theme');
   theme_promise.then(function(theme){
-    console.log(theme);
     $('head')
     .prepend('<link rel="stylesheet" href='
     + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
     + ' id="theme" />');
   });
 
+  // Add reveal css
   $('head')
   .prepend('<link rel="stylesheet" href='
   + require.toUrl("./reveal.js/css/reveal.css")

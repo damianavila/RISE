@@ -244,8 +244,20 @@ function Revealer(selected_slide, config) {
   $('div#notebook-container').addClass("slides");
 
   // Header
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/reveal.css") + ' id="revealcss" />');
+  // Available themes are in /css/theme
+  var theme_promise = config.get('theme');
+  theme_promise.then(function(theme){
+    console.log(theme);
+    $('head')
+    .prepend('<link rel="stylesheet" href='
+    + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
+    + ' id="theme" />');
+  });
+
+  $('head')
+  .prepend('<link rel="stylesheet" href='
+  + require.toUrl("./reveal.js/css/reveal.css")
+  + ' id="revealcss" />');
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',
@@ -267,10 +279,8 @@ function Revealer(selected_slide, config) {
     margin: config.get_sync('margin'),
     minScale: config.get_sync('minScale'), //we need this for codemirror to work right)
 
-    // available themes are in /css/theme
-    theme: Reveal.getQueryHash().theme || config.get_sync('theme'),
     // default/cube/page/concave/zoom/linear/none
-    transition: Reveal.getQueryHash().transition || config.get_sync('transition'),
+    transition: config.get_sync('transition'),
 
     slideNumber: config.get_sync('slideNumber'),
 

@@ -195,7 +195,9 @@ function setScrollingSlide(config) {
         .filter(function() {
           return $(this).height() > h;
         })
-        .css('height', hpx).css('overflow-y', 'scroll');
+        .css('height', hpx)
+        .css('overflow-y', 'scroll')
+        .css('margin-top', '20px');
     }
   });
 

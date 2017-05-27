@@ -4,16 +4,17 @@
 *
 * Distributed under the terms of the Modified BSD License.
 *
-* An IPython notebook extension to support *Live* Reveal.js-based slideshows.
+* A Jupyter notebook extension to support *Live* Reveal.js-based slideshows.
 * -----------------------------------------------------------------------------
 */
 
 define([
         'require',
         'jquery',
+        'base/js/namespace',
         'base/js/utils',
         'services/config',
-], function(require, $, utils, configmod) {
+], function(require, $, Jupyter, utils, configmod) {
 
 function configSlides() {
   /*
@@ -46,7 +47,7 @@ function configSlides() {
 
   var final_config;
 
-  var rise_meta = IPython.notebook.metadata.livereveal;
+  var rise_meta = Jupyter.notebook.metadata.livereveal;
 
   if(rise_meta !== undefined && Object.keys(rise_meta).length > 0){
       final_config = $.extend(true, default_config, rise_meta);
@@ -61,7 +62,7 @@ function configSlides() {
 
 }
 
-Object.getPrototypeOf(IPython.notebook).get_cell_elements = function () {
+Object.getPrototypeOf(Jupyter.notebook).get_cell_elements = function () {
   /*
   * Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
   * allowing container divs, etc to be used without breaking notebook machinery.
@@ -96,7 +97,7 @@ function markupSlides(container) {
     subslide_section = new_subslide();
     var current_fragment = subslide_section;
 
-    var selected_cell_idx = IPython.notebook.get_selected_index();
+    var selected_cell_idx = Jupyter.notebook.get_selected_index();
     var selected_cell_slide = [0, 0];
 
     // Special handling for the first slide: it will work even if the user
@@ -106,7 +107,7 @@ function markupSlides(container) {
     // the first slide.
     var content_on_slide1 = false;
 
-    var cells = IPython.notebook.get_cells();
+    var cells = Jupyter.notebook.get_cells();
     var i, cell, slide_type;
 
     for (i=0; i < cells.length; i++) {
@@ -340,7 +341,7 @@ function Revealer(selected_slide, config) {
 }
 
 function Unselecter(){
-  var cells = IPython.notebook.get_cells();
+  var cells = Jupyter.notebook.get_cells();
   for(var i in cells){
     var cell = cells[i];
     cell.unselect();
@@ -349,10 +350,10 @@ function Unselecter(){
 
 function fixCellHeight(){
   // Let's start with all the cell unselected, the unselect the current selected one
-  var scell = IPython.notebook.get_selected_cell()
+  var scell = Jupyter.notebook.get_selected_cell()
   scell.unselect()
   // This select/unselect code cell triggers the "correct" heigth in the codemirror instance
-  var cells = IPython.notebook.get_cells();
+  var cells = Jupyter.notebook.get_cells();
   for(var i in cells){
     var cell = cells[i];
     if (cell.cell_type === "code") {
@@ -367,16 +368,16 @@ function setupKeys(mode){
   // Lets setup some specific keys for the reveal_mode
   if (mode === 'reveal_mode') {
     // Prevent next cell after execution because it does not play well with the slides assembly
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
-    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
     // Save the f keyboard event for the Reveal fullscreen action
-    IPython.keyboard_manager.command_shortcuts.remove_shortcut("f");
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
+    Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
   } else if (mode === 'notebook_mode') {
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
-    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
-    IPython.keyboard_manager.command_shortcuts.remove_shortcut("shift-f");
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("f", "jupyter-notebook:find-and-replace");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
+    Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
+    Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("shift-f");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("f", "jupyter-notebook:find-and-replace");
   }
 }
 
@@ -402,7 +403,7 @@ function KeysMessager() {
                     )
                 );
 
-  IPython.dialog.modal({
+  Jupyter.dialog.modal({
     title : "Reveal Shortcuts Help",
     body : message,
     buttons : {
@@ -492,7 +493,7 @@ function Remover(config) {
   $('.pause-overlay').hide();
   $('div#aria-status-div').hide();
 
-  var cells = IPython.notebook.get_cells();
+  var cells = Jupyter.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('reveal-skip');
     $('div#notebook-container').append(cells[i].element);
@@ -579,7 +580,7 @@ function revealMode() {
     buttonHelp();
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
-    var current_cell_index = reveal_cell_index(IPython.notebook);
+    var current_cell_index = reveal_cell_index(Jupyter.notebook);
     Remover(config);
     setupKeys("notebook_mode");
     $('#exit_b').remove();
@@ -588,15 +589,15 @@ function revealMode() {
     // Workaround... should be a better solution. Need to investigate codemirror
     fixCellHeight();
     // select and focus on current cell
-    IPython.notebook.select(current_cell_index);
-    IPython.notebook.get_selected_cell().ensure_focused();
+    Jupyter.notebook.select(current_cell_index);
+    Jupyter.notebook.get_selected_cell().ensure_focused();
   }
 }
 
 function setup() {
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
-  IPython.toolbar.add_buttons_group([
+  Jupyter.toolbar.add_buttons_group([
     {
     'label'   : 'Enter/Exit Live Reveal Slideshow',
     'icon'    : 'fa-bar-chart-o',

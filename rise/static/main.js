@@ -1,6 +1,6 @@
 /* -*- coding: utf-8 -*-
 * ----------------------------------------------------------------------------
-* Copyright (c) 2013 - Damián Avila
+* Copyright (c) 2013-2017 Damián Avila and contributors.
 *
 * Distributed under the terms of the Modified BSD License.
 *
@@ -16,11 +16,12 @@ define([
         'services/config',
 ], function(require, $, Jupyter, utils, configmod) {
 
+/*
+* Add customized config on top of the default options using the notebook metadata
+* or the config-derived values
+*/
 function configSlides() {
-  /*
-  * Add customized config on top of the default options using the notebook metadata
-  * or the config system
-  */
+
   var default_config = {
       controls: true,
       progress: true,
@@ -62,15 +63,15 @@ function configSlides() {
 
 }
 
+/*
+* Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
+* allowing container divs, etc to be used without breaking notebook machinery.
+* You'll need to make sure the cells are getting detected in the right order.
+* NOTE: We use the Object prototype to workaround a firefox issue, check the following
+* link to know more about the discussion leading to this use:
+* https://github.com/damianavila/RISE/issues/117#issuecomment-127331816
+*/
 Object.getPrototypeOf(Jupyter.notebook).get_cell_elements = function () {
-  /*
-  * Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
-  * allowing container divs, etc to be used without breaking notebook machinery.
-  * You'll need to make sure the cells are getting detected in the right order.
-  * NOTE: We use the Object prototype to workaround a firefox issue, check the following
-  * link to know more about the discussion leading to this use:
-  * https://github.com/damianavila/RISE/issues/117#issuecomment-127331816
-  */
     return this.container.find("div.cell");
 };
 
@@ -156,8 +157,6 @@ function markupSlides(container) {
         }
     }
 
-    // Put .end_space back at the end after all the rearrangement
-    //$('.end_space').appendTo('div#notebook-container');
     return selected_cell_slide;
 }
 
@@ -174,11 +173,9 @@ function setStartingSlide(selected, config) {
     start_slideshow_promise.then(function(start_slideshow){
       if (start_slideshow === 'selected') {
           // Start from the selected cell
-          //window.location.hash = "/slide-"+selected[0]+"-"+selected[1];
           Reveal.slide(selected[0], selected[1]);
       } else {
           // Start from the beginning
-          //window.location.hash = "/slide-0-0";
           Reveal.slide(0, 0);
       }
     });
@@ -220,19 +217,8 @@ function Revealer(selected_slide, config) {
   // Prepare the DOM to start the slideshow
   $('div#header').hide();
   $('.end_space').hide();
-  //$('div#site').css("height", "100%");
-  //$('div#ipython-main-app').css("position", "static");
-  // Set up the scrolling feature
-  // We need to wait for the config resolution, let use the promise... then ;-)
-  //var scroll_promise = config.get('scroll');
-  //scroll_promise.then(function(scroll){
-    //if (scroll === true) {
-      //$('body').css("overflow-y", "auto");
-      //$('body').css("overflow-x", "hidden");
 
-    //}
-  //});
-
+  // Add the main reveal.js classes
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
@@ -456,14 +442,6 @@ function Remover(config) {
   $('body').removeClass("rise-enabled");
   $('div#header').show();
 
-  //var scroll = config.get_sync('scroll');
-  //if (scroll === true) {
-  //  $('body').css("overflow-y", "");
-  //  $('body').css("overflow-x", "");
-  //}
-
-  //IPython.menubar._size_header();
-
   $('div#notebook').removeClass("reveal");
   // woekaround to fix fade class conflicting between notebook and reveal css...
   if ($('div#notebook').hasClass('fade')) { $('div#notebook').removeClass("fade"); };
@@ -475,21 +453,11 @@ function Remover(config) {
   $('#theme').remove();
   $('#revealcss').remove();
 
-  //$('.backgrounds').remove();
-  //$('.progress').remove();
-  //$('.controls').remove();
-  //$('.slide-number').remove();
-  //$('.speaker-notes').remove();
-  //$('.state-background').remove();
-  //$('.pause-overlay').remove();
-  //$('div#aria-status-div').remove();
-
   $('.backgrounds').hide();
   $('.progress').hide();
   $('.controls').hide();
   $('.slide-number').hide();
   $('.speaker-notes').hide();
-  //$('.state-background').remove();
   $('.pause-overlay').hide();
   $('div#aria-status-div').hide();
 
@@ -500,8 +468,6 @@ function Remover(config) {
   }
 
   $('div#notebook-container').children('section').remove();
-  //$('.end_space').appendTo('div#notebook');
-  //IPython.page.show_site();
   $('.end_space').show();
 
   disconnectOutputObserver();
@@ -513,14 +479,14 @@ function Remover(config) {
   removeHash();
 }
 
-// just before exiting reveal mode, we run this function
-// whose job is to find the notebook index
-// for the first cell in the current (sub)slide
-// this allows to restore the notebook at the correct location,
-// i.e. with that cell being selected
-//
-// we use the current URL that ends up in 'slide-n-m'
-// to find out about the slide and subslide 
+/* Just before exiting reveal mode, we run this function
+ * whose job is to find the notebook index
+ * for the first cell in the current (sub)slide
+ * this allows to restore the notebook at the correct location,
+ * i.e. with that cell being selected
+
+ * we use the current URL that ends up in 'slide-n-m'
+ * to find out about the slide and subslide */
 function reveal_cell_index(notebook) {
   // last part of the current URL holds slide and subslide numbers
   var href = window.location.href;
@@ -562,10 +528,8 @@ function reveal_cell_index(notebook) {
 }
 	
 function revealMode() {
-  /*
-  * We search for a class tag in the maintoolbar to check if reveal mode is "on".
-  * If the tag exits, we exit. Otherwise, we enter the reveal mode.
-  */
+  // We search for a class tag in the maintoolbar to check if reveal mode is "on".
+  // If the tag exits, we exit. Otherwise, we enter the reveal mode.
   var tag = $('#maintoolbar').hasClass('reveal_tagging');
   var config = configSlides()
 

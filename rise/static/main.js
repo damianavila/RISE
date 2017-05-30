@@ -32,6 +32,12 @@ function configSlides() {
       slideNumber: true,
       start_slideshow_at: 'beginning',
       scroll: false,
+      headerLeft: '',
+      headerRight: '',
+      footerLeft: '',
+      footerRight: '',
+      replaceByTitle: '',
+      titleSelector: 'h1',
   };
 
   var config_section = new configmod.ConfigSection('livereveal',
@@ -312,6 +318,64 @@ function Revealer(config) {
     });
 
     setupOutputObserver();
+
+    // Header and footer
+    var headerFooter = $('<div/>').attr('id', 'livereveal-header');
+      
+    var headerLeft = config.get_sync('headerLeft');
+    if (headerLeft !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-header-left')
+            .css('position','absolute')
+            .css('top', '0%')
+            .css('left', '0%')
+            .html(headerLeft));
+    }
+
+    var headerRight = config.get_sync('headerRight');
+    if (headerRight !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-header-right')
+            .css('position','absolute')
+            .css('top', '0%')
+            .css('right', '0%')
+            .html(headerRight));
+    }
+
+    var footerLeft = config.get_sync('footerLeft');
+    if (footerLeft !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-footer-left')
+            .css('position','absolute')
+            .css('bottom', '0%')
+            .css('left', '0%')
+            .html(footerLeft));
+    }
+
+    var footerRight = config.get_sync('footerRight');
+    if (footerRight !== "") {
+        headerFooter.append($('<div/>')
+            .attr('id','livereveal-footer-right')
+            .css('position','absolute')
+            .css('bottom', '0%')
+            .css('right', '0%')
+            .html(footerRight));
+    }
+
+    if (headerFooter.html() !== "") {
+        $('#notebook_panel').append(headerFooter);
+    }
+
+    var replaceByTitle = config.get_sync('replaceByTitle');
+    var titleSelector = config.get_sync('titleSelector');
+    if (replaceByTitle !== "" && titleSelector !== "") {
+        Reveal.addEventListener( 'slidechanged', function( event ) {
+            var heading = $(event.currentSlide).find(titleSelector).first();
+            $(replaceByTitle).html(heading.html());
+        });
+    }
+
+
   });
 }
 
@@ -455,6 +519,8 @@ function Remover(config) {
   $('.state-background').remove();
   $('.pause-overlay').remove();
 
+  $('#livereveal-header').remove();
+
   var cells = IPython.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('reveal-skip');
@@ -522,7 +588,7 @@ function revealMode() {
   * If the tag exits, we exit. Otherwise, we enter the reveal mode.
   */
   var tag = $('#maintoolbar').hasClass('reveal_tagging');
-  var config = configSlides()
+  var config = configSlides();
 
   if (!tag) {
     // Preparing the new reveal-compatible structure

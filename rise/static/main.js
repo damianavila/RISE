@@ -294,6 +294,7 @@ function Revealer(selected_slide, config) {
     38: null, // up arrow disabled
     40: null, // down arrow disabled
     66: null, // b, black pause disabled, use period or forward slash
+    70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unrealiable
     72: null, // h, left disabled
     74: null, // j, down disabled
     75: null, // k, up disabled
@@ -391,7 +392,6 @@ function KeysMessager() {
                     "<ul>" +
                       "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
                       "<li><kbd>w</kbd>: Toggle overview mode</li>" +
-                      "<li><kbd>f</kbd>: Fullscreen mode (exit with <kbd>Esc</kbd>)</li>" +
                       "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
                       "<li><kbd>Home</kbd>: First slide</li>" +
                       "<li><kbd>End</kbd>: Last slide</li>" +
@@ -452,6 +452,28 @@ function buttonExit() {
             }
         );
     $('.reveal').after(exit_button);
+}
+
+function fullscreenHelp() {
+  var message = $('<div/>').append(
+                  $("<p/></p>").addClass('dialog').html(
+                    "<b>Entering Fullscreen mode from inside RISE is disabled.</b>" +
+                    "<br>" +
+                    "<b>Exit RISE, make you browser Fullscreen and re-enter RISE</b>" +
+                    "<br>" +
+                    "That will help Reveal.js to perform the correct transformations " +
+                    "at the time to interact with code cells."
+                    )
+                );
+
+  Jupyter.dialog.modal({
+    title : "Fullscreen Help",
+    body : message,
+    buttons : {
+        OK : {class: "btn-danger"}
+    }
+  });
+
 }
 
 function removeHash() {

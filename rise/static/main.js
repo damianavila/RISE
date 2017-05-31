@@ -182,7 +182,8 @@ function setStartingSlide(selected, config) {
 
 }
 
-/* Setup the scrolling per slide if the config option is activated
+/* Setup the scrolling in the current slide if the config option is activated
+*  and the content is greater than 0.95 * slide height
 */
 function setScrollingSlide(config) {
 
@@ -191,7 +192,7 @@ function setScrollingSlide(config) {
     if (scroll === true) {
       var h = $('.reveal').height() * 0.95;
       var hpx = "" + h + "px";
-      $('.slides section').find('section')
+      $('section.present').find('section')
         .filter(function() {
           return $(this).height() > h;
         })
@@ -325,14 +326,14 @@ function Revealer(selected_slide, config) {
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
-      //window.scrollTo(0,0);
-      //Reveal.layout();
-      //$('#start_livereveal').blur();
+      // check and set the scrolling slide when you start the whole thing
+      setScrollingSlide(config);
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
-      //window.scrollTo(0,0);
+      // check and set the scrolling slide every time the slide change
+      setScrollingSlide(config);
     });
 
     // Sync when an output is generated.
@@ -340,9 +341,6 @@ function Revealer(selected_slide, config) {
 
     // Setup the starting slide
     setStartingSlide(selected_slide, config);
-
-    // Setup the scrolling slides
-    setScrollingSlide(config);
 
   });
 }
@@ -369,7 +367,6 @@ function fixCellHeight(){
     }
   }
 }
-
 
 function setupKeys(mode){
   // Lets setup some specific keys for the reveal_mode

@@ -257,6 +257,93 @@ Note for developers: the --symlink argument allow you to modify the JavaScript c
 This feature is probably not available in Win. So you will need to "re-install" the nbextension
 to actually see any changes you made.
 
+## Pre-Release check
+
+1 - Clean your local repo copy:
+
+```
+git clean -fdx
+```
+
+2 - Build the JS and CSS
+
+```
+npm install
+npm run build-reveal
+npm run reset-reveal
+npm run build-css
+```
+
+3 - Check for updated version numbers at `rise/_version.py` and `conda.recipe/meta.yaml`
+
+## Release
+
+4 - Tag the repo with:
+
+```
+git tag -a release_tag -m "Release msg"
+git push origin release_tag
+```
+
+5 - Build sdist and wheels packages:
+
+```
+python setup.py sdist
+python setup.py bdist_wheel
+```
+
+6 - Build the conda packages
+
+For linux and osx packages:
+
+```
+RISE_RELEASE=1 conda build conda.recipe --python=3.5 --python=3.4 --python=2.7
+```
+
+and
+
+```
+conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py35_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
+conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py34_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
+conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py27_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
+```
+
+For Win packages you need to build in a Win VM (shared folders will make you things easier):
+
+```
+set RISE_RELEASE=1
+conda build conda.recipe --python=3.5
+#remove builder\Miniconda3\pkgs\.trash
+conda build conda.recipe --python=3.4
+#remove builder\Miniconda3\pkgs\.trash
+conda build conda.recipe --python=2.7
+#remove builder\Miniconda3\pkgs\.trash
+```
+
+and convert them in the same Win VM:
+
+```
+conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py35_0.tar.bz2 -p win-32
+conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py34_0.tar.bz2 -p win-32
+conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py27_0.tar.bz2 -p win-32
+```
+
+Finally copy all the built packages into the conda_dist folder.
+
+**Note**: You can increment the build number with the `RISE_BUILD_NUMBER` environment variable
+
+7 - Upload sdist and wheels to PyPI
+
+```
+twine upload dist/*
+```
+
+8 - Upload conda packages to anaconda.org/damianavila82 (5 platforms x 3 pythons):
+
+```
+anaconda upload -u damianavila82 conda_dist/<platform>/<package_name>
+```
+
 ## Changelog
 
 Lazy changelog: https://github.com/damianavila/RISE/milestone/1?closed=1

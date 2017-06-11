@@ -1,31 +1,34 @@
 /* -*- coding: utf-8 -*-
 * ----------------------------------------------------------------------------
-* Copyright (c) 2013 - Damián Avila
+* Copyright (c) 2013-2017 Damián Avila and contributors.
 *
 * Distributed under the terms of the Modified BSD License.
 *
-* An IPython notebook extension to support *Live* Reveal.js-based slideshows.
+* A Jupyter notebook extension to support *Live* Reveal.js-based slideshows.
 * -----------------------------------------------------------------------------
 */
 
 define([
         'require',
         'jquery',
+        'base/js/namespace',
         'base/js/utils',
         'services/config',
-], function(require, $, utils, configmod) {
+], function(require, $, Jupyter, utils, configmod) {
 
+/*
+* Add customized config on top of the default options using the notebook metadata
+* or the config-derived values
+*/
 function configSlides() {
-  /*
-  * Add customized config on top of the default options using the notebook metadata
-  * or the config system
-  */
+
   var default_config = {
       controls: true,
       progress: true,
       history: true,
-      width: 1140,
-      height: 855, // 4:3 ratio
+      width: "100%",
+      height: "100%",
+      margin: 0.1,
       minScale: 1.0, //we need this for codemirror to work right
       theme: 'simple',
       transition: 'linear',
@@ -45,7 +48,7 @@ function configSlides() {
 
   var final_config;
 
-  var rise_meta = IPython.notebook.metadata.livereveal;
+  var rise_meta = Jupyter.notebook.metadata.livereveal;
 
   if(rise_meta !== undefined && Object.keys(rise_meta).length > 0){
       final_config = $.extend(true, default_config, rise_meta);
@@ -60,15 +63,15 @@ function configSlides() {
 
 }
 
-Object.getPrototypeOf(IPython.notebook).get_cell_elements = function () {
-  /*
-  * Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
-  * allowing container divs, etc to be used without breaking notebook machinery.
-  * You'll need to make sure the cells are getting detected in the right order.
-  * NOTE: We use the Object prototype to workaround a firefox issue, check the following
-  * link to know more about the discussion leading to this use:
-  * https://github.com/damianavila/RISE/issues/117#issuecomment-127331816
-  */
+/*
+* Version of get_cell_elements that will see cell divs at any depth in the HTML tree,
+* allowing container divs, etc to be used without breaking notebook machinery.
+* You'll need to make sure the cells are getting detected in the right order.
+* NOTE: We use the Object prototype to workaround a firefox issue, check the following
+* link to know more about the discussion leading to this use:
+* https://github.com/damianavila/RISE/issues/117#issuecomment-127331816
+*/
+Object.getPrototypeOf(Jupyter.notebook).get_cell_elements = function () {
     return this.container.find("div.cell");
 };
 
@@ -95,7 +98,7 @@ function markupSlides(container) {
     subslide_section = new_subslide();
     var current_fragment = subslide_section;
 
-    var selected_cell_idx = IPython.notebook.get_selected_index();
+    var selected_cell_idx = Jupyter.notebook.get_selected_index();
     var selected_cell_slide = [0, 0];
 
     // Special handling for the first slide: it will work even if the user
@@ -105,7 +108,7 @@ function markupSlides(container) {
     // the first slide.
     var content_on_slide1 = false;
 
-    var cells = IPython.notebook.get_cells();
+    var cells = Jupyter.notebook.get_cells();
     var i, cell, slide_type;
 
     for (i=0; i < cells.length; i++) {
@@ -154,8 +157,6 @@ function markupSlides(container) {
         }
     }
 
-    // Put .end_space back at the end after all the rearrangement
-    $('.end_space').appendTo('div#notebook-container');
     return selected_cell_slide;
 }
 
@@ -172,12 +173,33 @@ function setStartingSlide(selected, config) {
     start_slideshow_promise.then(function(start_slideshow){
       if (start_slideshow === 'selected') {
           // Start from the selected cell
-          window.location.hash = "/slide-"+selected[0]+"-"+selected[1];
+          Reveal.slide(selected[0], selected[1]);
       } else {
           // Start from the beginning
-          window.location.hash = "/slide-0-0";
+          Reveal.slide(0, 0);
       }
     });
+
+}
+
+/* Setup the scrolling in the current slide if the config option is activated
+*  and the content is greater than 0.95 * slide height
+*/
+function setScrollingSlide(config) {
+
+  var scroll_promise = config.get('scroll');
+  scroll_promise.then(function(scroll){
+    if (scroll === true) {
+      var h = $('.reveal').height() * 0.95;
+      $('section.present').find('section')
+        .filter(function() {
+          return $(this).height() > h;
+        })
+        .css('height', 'calc(95vh)')
+        .css('overflow-y', 'scroll')
+        .css('margin-top', '20px');
+    }
+  });
 
 }
 
@@ -211,28 +233,31 @@ function disconnectOutputObserver() {
 }
 
 
-function Revealer(config) {
+function Revealer(selected_slide, config) {
   $('body').addClass("rise-enabled");
   // Prepare the DOM to start the slideshow
-  //$('div#header').hide();
-  //$('div#site').css("height", "100%");
-  //$('div#ipython-main-app').css("position", "static");
-  // Set up the scrolling feature
-  // We need to wait for the config resolution, let use the promise... then ;-)
-  var scroll_promise = config.get('scroll');
-  scroll_promise.then(function(scroll){
-    if (scroll === true) {
-      $('body').css("overflow-y", "auto");
-      $('body').css("overflow-x", "hidden");
-    }
-  });
+  $('div#header').hide();
+  $('.end_space').hide();
 
+  // Add the main reveal.js classes
   $('div#notebook').addClass("reveal");
   $('div#notebook-container').addClass("slides");
 
   // Header
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reveal.js/css/theme/simple.css") + ' id="theme" />');
-  $('head').prepend('<link rel="stylesheet" href=' + require.toUrl("./reset_reveal.css") + ' id="revealcss" />');
+  // Available themes are in static/css/theme
+  var theme_promise = config.get('theme');
+  theme_promise.then(function(theme){
+    $('head')
+    .prepend('<link rel="stylesheet" href='
+    + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
+    + ' id="theme" />');
+  });
+
+  // Add reveal css
+  $('head')
+  .prepend('<link rel="stylesheet" href='
+  + require.toUrl("./reveal.js/css/reveal.css")
+  + ' id="revealcss" />');
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',
@@ -251,12 +276,11 @@ function Revealer(config) {
     // You can switch width and height to fix the projector
     width: config.get_sync('width'),
     height: config.get_sync('height'),
+    margin: config.get_sync('margin'),
     minScale: config.get_sync('minScale'), //we need this for codemirror to work right)
 
-    // available themes are in /css/theme
-    theme: Reveal.getQueryHash().theme || config.get_sync('theme'),
     // default/cube/page/concave/zoom/linear/none
-    transition: Reveal.getQueryHash().transition || config.get_sync('transition'),
+    transition: config.get_sync('transition'),
 
     slideNumber: config.get_sync('slideNumber'),
 
@@ -269,6 +293,7 @@ function Revealer(config) {
     38: null, // up arrow disabled
     40: null, // down arrow disabled
     66: null, // b, black pause disabled, use period or forward slash
+    70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unrealiable
     72: null, // h, left disabled
     74: null, // j, down disabled
     75: null, // k, up disabled
@@ -301,22 +326,27 @@ function Revealer(config) {
 
     Reveal.addEventListener( 'ready', function( event ) {
       Unselecter();
-      window.scrollTo(0,0);
-      Reveal.layout();
-      $('#start_livereveal').blur();
+      // check and set the scrolling slide when you start the whole thing
+      setScrollingSlide(config);
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
-      window.scrollTo(0,0);
+      // check and set the scrolling slide every time the slide change
+      setScrollingSlide(config);
     });
 
+    // Sync when an output is generated.
     setupOutputObserver();
+
+    // Setup the starting slide
+    setStartingSlide(selected_slide, config);
+
   });
 }
 
 function Unselecter(){
-  var cells = IPython.notebook.get_cells();
+  var cells = Jupyter.notebook.get_cells();
   for(var i in cells){
     var cell = cells[i];
     cell.unselect();
@@ -325,10 +355,10 @@ function Unselecter(){
 
 function fixCellHeight(){
   // Let's start with all the cell unselected, the unselect the current selected one
-  var scell = IPython.notebook.get_selected_cell()
+  var scell = Jupyter.notebook.get_selected_cell()
   scell.unselect()
   // This select/unselect code cell triggers the "correct" heigth in the codemirror instance
-  var cells = IPython.notebook.get_cells();
+  var cells = Jupyter.notebook.get_cells();
   for(var i in cells){
     var cell = cells[i];
     if (cell.cell_type === "code") {
@@ -338,21 +368,20 @@ function fixCellHeight(){
   }
 }
 
-
 function setupKeys(mode){
   // Lets setup some specific keys for the reveal_mode
   if (mode === 'reveal_mode') {
     // Prevent next cell after execution because it does not play well with the slides assembly
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
-    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
     // Save the f keyboard event for the Reveal fullscreen action
-    IPython.keyboard_manager.command_shortcuts.remove_shortcut("f");
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
+    Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
   } else if (mode === 'notebook_mode') {
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
-    IPython.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
-    IPython.keyboard_manager.command_shortcuts.remove_shortcut("shift-f");
-    IPython.keyboard_manager.command_shortcuts.set_shortcut("f", "jupyter-notebook:find-and-replace");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
+    Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
+    Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("shift-f");
+    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("f", "jupyter-notebook:find-and-replace");
   }
 }
 
@@ -362,7 +391,6 @@ function KeysMessager() {
                     "<ul>" +
                       "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
                       "<li><kbd>w</kbd>: Toggle overview mode</li>" +
-                      "<li><kbd>f</kbd>: Fullscreen mode (exit with <kbd>Esc</kbd>)</li>" +
                       "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
                       "<li><kbd>Home</kbd>: First slide</li>" +
                       "<li><kbd>End</kbd>: Last slide</li>" +
@@ -378,7 +406,7 @@ function KeysMessager() {
                     )
                 );
 
-  IPython.dialog.modal({
+  Jupyter.dialog.modal({
     title : "Reveal Shortcuts Help",
     body : message,
     buttons : {
@@ -425,18 +453,38 @@ function buttonExit() {
     $('.reveal').after(exit_button);
 }
 
+function fullscreenHelp() {
+  var message = $('<div/>').append(
+                  $("<p/></p>").addClass('dialog').html(
+                    "<b>Entering Fullscreen mode from inside RISE is disabled.</b>" +
+                    "<br>" +
+                    "<b>Exit RISE, make you browser Fullscreen and re-enter RISE</b>" +
+                    "<br>" +
+                    "That will help Reveal.js to perform the correct transformations " +
+                    "at the time to interact with code cells."
+                    )
+                );
+
+  Jupyter.dialog.modal({
+    title : "Fullscreen Help",
+    body : message,
+    buttons : {
+        OK : {class: "btn-danger"}
+    }
+  });
+
+}
+
+function removeHash() {
+  history.pushState("", document.title, window.location.pathname
+                                                     + window.location.search);
+}
+
 function Remover(config) {
   Reveal.configure({minScale: 1.0});
   Reveal.removeEventListeners();
   $('body').removeClass("rise-enabled");
-
-  var scroll = config.get_sync('scroll');
-  if (scroll === true) {
-    $('body').css("overflow-y", "");
-    $('body').css("overflow-x", "");
-  }
-
-  IPython.menubar._size_header();
+  $('div#header').show();
 
   $('div#notebook').removeClass("reveal");
   // woekaround to fix fade class conflicting between notebook and reveal css...
@@ -449,33 +497,35 @@ function Remover(config) {
   $('#theme').remove();
   $('#revealcss').remove();
 
-  $('.progress').remove();
-  $('.controls').remove();
-  $('.slide-number').remove();
-  $('.state-background').remove();
-  $('.pause-overlay').remove();
+  $('.backgrounds').hide();
+  $('.progress').hide();
+  $('.controls').hide();
+  $('.slide-number').hide();
+  $('.speaker-notes').hide();
+  $('.pause-overlay').hide();
+  $('div#aria-status-div').hide();
 
-  var cells = IPython.notebook.get_cells();
+  var cells = Jupyter.notebook.get_cells();
   for(var i in cells){
     $('.cell:nth('+i+')').removeClass('reveal-skip');
     $('div#notebook-container').append(cells[i].element);
   }
 
   $('div#notebook-container').children('section').remove();
-  $('.end_space').appendTo('div#notebook');
-  IPython.page.show_site();
+  $('.end_space').show();
 
   disconnectOutputObserver();
+  removeHash();
 }
 
-// just before exiting reveal mode, we run this function
-// whose job is to find the notebook index
-// for the first cell in the current (sub)slide
-// this allows to restore the notebook at the correct location,
-// i.e. with that cell being selected
-//
-// we use the current URL that ends up in 'slide-n-m'
-// to find out about the slide and subslide 
+/* Just before exiting reveal mode, we run this function
+ * whose job is to find the notebook index
+ * for the first cell in the current (sub)slide
+ * this allows to restore the notebook at the correct location,
+ * i.e. with that cell being selected
+
+ * we use the current URL that ends up in 'slide-n-m'
+ * to find out about the slide and subslide */
 function reveal_cell_index(notebook) {
   // last part of the current URL holds slide and subslide numbers
   var href = window.location.href;
@@ -517,27 +567,23 @@ function reveal_cell_index(notebook) {
 }
 	
 function revealMode() {
-  /*
-  * We search for a class tag in the maintoolbar to check if reveal mode is "on".
-  * If the tag exits, we exit. Otherwise, we enter the reveal mode.
-  */
+  // We search for a class tag in the maintoolbar to check if reveal mode is "on".
+  // If the tag exits, we exit. Otherwise, we enter the reveal mode.
   var tag = $('#maintoolbar').hasClass('reveal_tagging');
   var config = configSlides()
 
   if (!tag) {
     // Preparing the new reveal-compatible structure
     var selected_slide = markupSlides($('div#notebook-container'));
-    // Set the hash part of the URL
-    setStartingSlide(selected_slide, config);
     // Adding the reveal stuff
-    Revealer(config);
+    Revealer(selected_slide, config);
     // Minor modifications for usability
     setupKeys("reveal_mode");
     buttonExit();
     buttonHelp();
     $('#maintoolbar').addClass('reveal_tagging');
   } else {
-    var current_cell_index = reveal_cell_index(IPython.notebook);
+    var current_cell_index = reveal_cell_index(Jupyter.notebook);
     Remover(config);
     setupKeys("notebook_mode");
     $('#exit_b').remove();
@@ -546,15 +592,16 @@ function revealMode() {
     // Workaround... should be a better solution. Need to investigate codemirror
     fixCellHeight();
     // select and focus on current cell
-    IPython.notebook.select(current_cell_index);
-    IPython.notebook.get_selected_cell().ensure_focused();
+    Jupyter.notebook.select(current_cell_index);
+    // Need to delay the action a little bit so it actually focus the selected slide
+    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 1000);
   }
 }
 
 function setup() {
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
-  IPython.toolbar.add_buttons_group([
+  Jupyter.toolbar.add_buttons_group([
     {
     'label'   : 'Enter/Exit Live Reveal Slideshow',
     'icon'    : 'fa-bar-chart-o',

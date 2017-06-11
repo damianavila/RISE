@@ -1,4 +1,4 @@
-#RISE
+# RISE
 
 **Reveal.js - Jupyter/IPython Slideshow Extension**, also known as *live_reveal*
 
@@ -28,7 +28,7 @@ jupyter-nbextension install rise --py --sys-prefix
 and enable the nbextension:
 
 ```
-jupyter-nbextension" enable rise --py --sys-prefix
+jupyter-nbextension enable rise --py --sys-prefix
 ```
 
 3 - The old way (are sure sure you want to go this path?):
@@ -45,7 +45,7 @@ jupyter-nbextension install rise --py --sys-prefix
 and
 
 ```
-jupyter-nbextension" enable rise --py --sys-prefix
+jupyter-nbextension enable rise --py --sys-prefix
 ```
 
 Conclusion: If you use conda, life will be easy ;-)
@@ -95,6 +95,8 @@ compatible with previous IPython versions:
 
 ## Usage
 
+A Very quick video showing how to use RISE lives here: https://youtu.be/sXyFa_r1nxA
+
 In the notebook toolbar, a new button ("Enter/Exit Live Reveal Slideshow")
 will be available.
 
@@ -121,6 +123,9 @@ When you exit the presentation mode, the behavior comes back to normal.
 
 4- Darkish themes have css conflict with the notebook css, so it need customization
 to make them work (not provided by default).
+
+5- Markdown Images get left aligned by default. Enclose the image like 
+``<center>![noimg](path/to/image.png)</center>`` to center it.
 
 ## Configure your own options
 
@@ -210,6 +215,37 @@ cm.update('livereveal', {'leap_motion': None})
 
 You can install RISE in development mode in this way:
 
+First, you'll need to install `npm` (and `node`, `conda install nodejs` is a good idea).
+
+1. Install the JS dependencies
+
+```bash
+npm install
+```
+
+2. Copy reveal into the static folder and avoid reveal.js RESET styling
+
+```bash
+npm run build-reveal
+npm run reset-reveal
+```
+
+To remove reveal.js from the static folder you can use `npm run clean-reveal`.
+
+3. Build the CSS assets
+
+```bash
+npm run build-css
+```
+
+To have per-save automatic building of CSS, you can use
+
+```bash
+npm run watch-less
+```
+
+Second, let's install RISE in a editable form
+
 ```bash
 git clone https://github.com/damianavila/RISE.git
 pip install -e .
@@ -221,18 +257,6 @@ Note for developers: the --symlink argument allow you to modify the JavaScript c
 This feature is probably not available in Win. So you will need to "re-install" the nbextension
 to actually see any changes you made.
 
-To build the CSS assets, you'll need to install `npm` and `node` (quick tip: `conda install nodejs`) and then:
-
-```bash
-npm install
-npm run build
-```
-
-To have per-save automatic building of CSS, use:
-```bash
-npm run watch-less
-```
-
 ## Pre-Release check
 
 1 - Clean your local repo copy:
@@ -241,10 +265,13 @@ npm run watch-less
 git clean -fdx
 ```
 
-2 - Build the CSS and check there is not any diff
+2 - Build the JS and CSS
 
 ```
-npm run build
+npm install
+npm run build-reveal
+npm run reset-reveal
+npm run build-css
 ```
 
 3 - Check for updated version numbers at `rise/_version.py` and `conda.recipe/meta.yaml`
@@ -261,7 +288,7 @@ git push origin release_tag
 5 - Build sdist and wheels packages:
 
 ```
-python setup.py sdist --formats=zip,gztar
+python setup.py sdist
 python setup.py bdist_wheel
 ```
 

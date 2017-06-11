@@ -35,6 +35,7 @@ function configSlides() {
       slideNumber: true,
       start_slideshow_at: 'beginning',
       scroll: false,
+      center: true
   };
 
   var config_section = new configmod.ConfigSection('livereveal',
@@ -283,6 +284,7 @@ function Revealer(selected_slide, config) {
     transition: config.get_sync('transition'),
 
     slideNumber: config.get_sync('slideNumber'),
+    center: config.get_sync('center'),
 
     //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
     //parallaxBackgroundSize: '2560px 1600px',

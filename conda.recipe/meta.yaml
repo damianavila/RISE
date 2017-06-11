@@ -1,6 +1,6 @@
 package:
   name: rise
-  version: "5.0.0.dev"
+  version: "5.0.0"
 
 source:
   path: ../

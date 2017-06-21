@@ -88,6 +88,7 @@ compatible with previous IPython versions:
     *  3.x tag compatible with **IPython** 3.x series
     *  3.x.1 tag also compatible with `notebook` 4.x series, but using old installation mechanism
     *  4.0.0b1 tag compatible with the `notebook` 4.2 and above, beta release, please test and report any issues
+    *  5.0.0 tag compatible with `notebook` 5 (and "probably" with the upcoming 5.x releases).
 
 3- With **Jupyter** landing we will provide a conda and pip-instalable packages too
 

@@ -205,6 +205,20 @@ function setScrollingSlide(config) {
 
 }
 
+/* Setup the auto-launch function, which checks metadata to see if
+*  RISE should launch automatically when the notebook is opened.
+*/
+function autoLaunch(config) {
+
+  var autolaunch_promise = config.get('autolaunch');
+  autolaunch_promise.then(function(autolaunch){
+    if (autolaunch === true) {
+          revealMode();
+      }
+  });
+
+}
+
 /* Setup a MutationObserver to call Reveal.sync when an output is generated.
  * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
  */
@@ -623,10 +637,7 @@ function setup() {
 
   // autolaunch if specified in metadata
   var config = configSlides()
-  var autolaunch = config.get_sync('autolaunch');
-  if (autolaunch == true) {
-      revealMode();
-  }
+  autoLaunch(config);
 }
 
 setup.load_ipython_extension = setup;

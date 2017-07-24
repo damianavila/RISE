@@ -8,13 +8,13 @@
 
 From the most simple to the most complex one, you have 3 options:
 
-1 - Using conda (recommended):
+### Option 1 - Using conda (recommended):
 
 ```
 conda install -c damianavila82 rise
 ```
 
-2 - Using pip (less recommended):
+### Option 2 - Using pip (less recommended):
 
 ```
 pip install RISE
@@ -31,7 +31,7 @@ and enable the nbextension:
 jupyter-nbextension enable rise --py --sys-prefix
 ```
 
-3 - The old way (are sure sure you want to go this path?):
+### Option 3 - The old way (are sure sure you want to go this path?):
 
 To install this nbextension, simply run ``python setup.py install`` from the
 *RISE* repository (please use the latest tag available or try master if you want).
@@ -48,11 +48,13 @@ and
 jupyter-nbextension enable rise --py --sys-prefix
 ```
 
-Conclusion: If you use conda, life will be easy ;-)
+### Conclusion
 
-**NOTE**: in alll the options available the `--sys-prefix` option will install and
+If you use conda, life will be easy ;-)
+
+**NOTE**: in all the options available the `--sys-prefix` option will install and
 enable the extension in the current environment, if you want a `--user` based or a
-`--system` based installation just use those option instead in the above commands.
+`--system` based installation just use those options instead in the above commands.
 
 ## RISE talk
 

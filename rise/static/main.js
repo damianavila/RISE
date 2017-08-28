@@ -35,7 +35,8 @@ function configSlides() {
       slideNumber: true,
       start_slideshow_at: 'beginning',
       scroll: false,
-      center: true
+      center: true,
+      autolaunch: false
   };
 
   var config_section = new configmod.ConfigSection('livereveal',
@@ -204,8 +205,22 @@ function setScrollingSlide(config) {
 
 }
 
+/* Setup the auto-launch function, which checks metadata to see if
+*  RISE should launch automatically when the notebook is opened.
+*/
+function autoLaunch(config) {
+
+  var autolaunch_promise = config.get('autolaunch');
+  autolaunch_promise.then(function(autolaunch){
+    if (autolaunch === true) {
+          revealMode();
+      }
+  });
+
+}
+
 /* Setup a MutationObserver to call Reveal.sync when an output is generated.
- * This fixes issue #188: https://github.com/damianavila/RISE/issues/188 
+ * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
  */
 var outputObserver = null;
 function setupOutputObserver() {
@@ -220,7 +235,7 @@ function setupOutputObserver() {
   var $output = $(".output");
   var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
   outputObserver = new MutationObserver(mutationHandler);
-  
+
   var observerConfig = { childList: true, characterData: false, attributes: false, subtree: false };
   $output.each(function () {
     outputObserver.observe(this, observerConfig);
@@ -550,9 +565,9 @@ function reveal_cell_index(notebook) {
   var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
   var subslide_counter = 0;
   var result = null;
-	
+
   notebook.get_cells().forEach(function (cell, index) {
-    if (result) 
+    if (result)
       // keep it short: skip if we found already
       return;
     if (is_slide(cell)) {
@@ -567,7 +582,7 @@ function reveal_cell_index(notebook) {
   })
     return result;
 }
-	
+
 function revealMode() {
   // We search for a class tag in the maintoolbar to check if reveal mode is "on".
   // If the tag exits, we exit. Otherwise, we enter the reveal mode.
@@ -619,6 +634,10 @@ function setup() {
     return true;
   };
   $(document).keydown(document_keydown);
+
+  // autolaunch if specified in metadata
+  var config = configSlides()
+  autoLaunch(config);
 }
 
 setup.load_ipython_extension = setup;

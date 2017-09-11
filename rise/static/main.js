@@ -34,6 +34,12 @@ function configSlides() {
       transition: 'linear',
       slideNumber: true,
       start_slideshow_at: 'beginning',
+      /* can be either
+       * "none" - no autoselect,
+       * "first" - select first cell in slide
+       * "code" - select first code cell in slide
+       */
+      auto_select: "none",
       scroll: false,
       center: true,
       autolaunch: false
@@ -283,7 +289,7 @@ function Revealer(selected_slide, config) {
     Reveal.initialize();
 
     var options = {
-    // All this config option load correctly just because of require-indeced delay,
+    // All this config option load correctly just because of require-induced delay,
     // it would be better to catch them from the config.get promise.
     controls: config.get_sync('controls'),
     progress: config.get_sync('progress'),
@@ -345,12 +351,14 @@ function Revealer(selected_slide, config) {
       Unselecter();
       // check and set the scrolling slide when you start the whole thing
       setScrollingSlide(config);
+      autoSelectHook(config);
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
       // check and set the scrolling slide every time the slide change
       setScrollingSlide(config);
+      autoSelectHook(config);
     });
 
     // Sync when an output is generated.
@@ -542,8 +550,14 @@ function Remover(config) {
  * i.e. with that cell being selected
 
  * we use the current URL that ends up in 'slide-n-m'
- * to find out about the slide and subslide */
-function reveal_cell_index(notebook) {
+ * to find out about the slide and subslide
+ *
+ * if cell_type is not set, returns the first cell in slide
+ * otherwise, it returns the first cell of that type in slide
+ * 
+ * returns null if no match is found
+ */
+function reveal_cell_index(notebook, cell_type=null) {
   // last part of the current URL holds slide and subslide numbers
   var href = window.location.href;
   var chunks = href.split('-');
@@ -552,7 +566,7 @@ function reveal_cell_index(notebook) {
   var subslide = Number(chunks[len-1]);
 
   // just scan all cells until we find one at that address
-  // except that we need to start at -1 0r 0 depending on
+  // except that we need to start at -1 or 0 depending on
   // whether the first slide has a slide tag or not
   var is_slide = function(cell) {
     return cell.metadata.slideshow
@@ -577,10 +591,12 @@ function reveal_cell_index(notebook) {
       subslide_counter += 1;
     }
     if ((slide_counter == slide) && (subslide_counter == subslide)) {
+      if ((cell_type === null) || (cell.cell_type == cell_type)) {
 	result = index;
+      }
     }
   })
-    return result;
+  return result;
 }
 
 function revealMode() {
@@ -613,6 +629,32 @@ function revealMode() {
     // Need to delay the action a little bit so it actually focus the selected slide
     setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 1000);
   }
+}
+
+/* I'm unsure how to deal with 2 config flags w/ the promise thing,
+ * so I hard-wire this for now
+ */
+let autoSelectTimeout = 250;
+
+function autoSelectHook(config) {
+    var auto_select_promise = config.get('auto_select');
+    auto_select_promise.then(function(auto_select) {
+	var cell_type =
+	    (auto_select == "code") ? 'code'
+	    : (auto_select == "first") ? null
+	    : undefined;
+
+	/* turned off */
+	if (cell_type === undefined) {
+	    return;
+	}
+	setTimeout(function(){
+	    var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type);
+	    console.log(`found current_cell_index = ${current_cell_index}`);
+	    // select and focus on current cell
+	    Jupyter.notebook.select(current_cell_index)
+	}, autoSelectTimeout);
+    });
 }
 
 function setup() {

@@ -650,7 +650,6 @@ function autoSelectHook(config) {
 	}
 	setTimeout(function(){
 	    var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type);
-	    console.log(`found current_cell_index = ${current_cell_index}`);
 	    // select and focus on current cell
 	    Jupyter.notebook.select(current_cell_index)
 	}, autoSelectTimeout);

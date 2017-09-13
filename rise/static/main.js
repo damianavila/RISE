@@ -1,5 +1,4 @@
-/* -*- coding: utf-8 -*-
- * -*- js-indent-level: 2 -*-
+/* -*- coding: utf-8; js-indent-level: 2 -*-
 * ----------------------------------------------------------------------------
 * Copyright (c) 2013-2017 Damián Avila and contributors.
 *

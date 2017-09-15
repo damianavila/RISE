@@ -43,7 +43,7 @@ function configSlides() {
       /* if auto_select is not "none", this boolean
          says if selection focuses on the current fragment
          or considers the whole slide */
-      auto_select_fragment: false,
+      auto_select_fragment: true,
       scroll: false,
       center: true,
       autolaunch: false,

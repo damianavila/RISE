@@ -454,7 +454,7 @@ function buttonHelp() {
 function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
-        .attr('title','RISE Exit')
+        .attr('title','Exit RISE')
         .addClass('fa-times-circle fa-4x fa')
         .addClass('my-main-tool-bar')
         .css('position','fixed')
@@ -462,11 +462,7 @@ function buttonExit() {
         .css('left','0.48em')
         .css('opacity', '0.6')
         .css('z-index', '30')
-        .click(
-            function(){
-                revealMode('simple', 'zoom');
-            }
-        );
+        .click(revealMode);
     $('.reveal').after(exit_button);
 }
 
@@ -583,6 +579,7 @@ function reveal_cell_index(notebook) {
     return result;
 }
 
+// the entrypoint - call this to enter or exit reveal mode
 function revealMode() {
   // We search for a class tag in the maintoolbar to check if reveal mode is "on".
   // If the tag exits, we exit. Otherwise, we enter the reveal mode.
@@ -618,23 +615,19 @@ function revealMode() {
 function setup() {
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
-  Jupyter.toolbar.add_buttons_group([
-    {
-    'label'   : 'Enter/Exit Live Reveal Slideshow',
-    'icon'    : 'fa-bar-chart-o',
-    'callback': function(){ revealMode(); },
-    'id'      : 'start_livereveal'
-    },
-  ]);
-  var document_keydown = function(event) {
-    if (event.which == 82 && event.altKey) {
-      revealMode();
-      return false;
-    }
-    return true;
-  };
-  $(document).keydown(document_keydown);
+  // use same label in button and shortcut
+  var rise_label = 'Enter/Exit RISE Slideshow';
 
+  Jupyter.toolbar.add_buttons_group([{
+    label   : rise_label,
+    icon    : 'fa-bar-chart-o',
+    callback: revealMode,
+    id      : 'RISE'
+  }]);
+  Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-r', {
+    help    : rise_label,
+    handler : revealMode,
+  });
   // autolaunch if specified in metadata
   var config = configSlides()
   autoLaunch(config);

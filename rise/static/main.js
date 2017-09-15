@@ -618,16 +618,29 @@ function setup() {
   // use same label in button and shortcut
   var rise_label = 'Enter/Exit RISE Slideshow';
 
+  // create button
   Jupyter.toolbar.add_buttons_group([{
     label   : rise_label,
     icon    : 'fa-bar-chart-o',
     callback: revealMode,
     id      : 'RISE'
   }]);
-  Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-r', {
+  // define action
+  var action = {
     help    : rise_label,
     handler : revealMode,
-  });
+  }
+  // register action    
+  Jupyter.actions.register(revealMode, "revealMode", "RISE");
+  // bind keyboard shortcut
+  Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-r', action);
+  // with this above, users can locate this action object as
+  // Jupyter.actions.get("RISE:revealMode")
+  // so e.g. in custom.js
+  // var RISE_action = Jupyter.actions.get("RISE:revealMode");
+  // Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-a', RISE_action);
+  
+
   // autolaunch if specified in metadata
   var config = configSlides()
   autoLaunch(config);

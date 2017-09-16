@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Customizing RISE &#8212; RISE 5.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '5.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Usage" href="usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="customizing-rise">
+<h1>Customizing RISE<a class="headerlink" href="#customizing-rise" title="Permalink to this headline">¶</a></h1>
+<p>There are two main ways to configure RISE. One invokes Python code to
+update RISE configuration. The other involves updating the notebook’s
+metadata, which is stored as a YAML file.</p>
+<div class="section" id="using-python">
+<h2>Using python<a class="headerlink" href="#using-python" title="Permalink to this headline">¶</a></h2>
+<p>To configure RISE with python, you need to use the JSON config manager
+from <code class="docutils literal"><span class="pre">traitlets</span></code>. Do so with the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitlets.config.manager</span> <span class="kn">import</span> <span class="n">BaseJSONConfigManager</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/home/damian/miniconda3/envs/rise_latest/etc/jupyter/nbconfig&quot;</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">BaseJSONConfigManager</span><span class="p">(</span><span class="n">config_dir</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;sky&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="s2">&quot;zoom&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;start_slideshow_at&quot;</span><span class="p">:</span> <span class="s2">&quot;selected&quot;</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-notebook-metadata">
+<h2>Using notebook metadata<a class="headerlink" href="#using-notebook-metadata" title="Permalink to this headline">¶</a></h2>
+<p>You can also put <code class="docutils literal"><span class="pre">reveal.js</span></code> configuration in your notebook metadata
+(Edit-&gt;Edit Notebook Metadata) like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="o">...</span>
+    <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;serif&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="s2">&quot;zoom&quot;</span><span class="p">,</span>
+        <span class="o">...</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration-options">
+<h2>Configuration options<a class="headerlink" href="#configuration-options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="choosing-a-theme-and-transition">
+<h3>Choosing a theme and transition<a class="headerlink" href="#choosing-a-theme-and-transition" title="Permalink to this headline">¶</a></h3>
+<p>The following options can be configured with either the Python or notebook
+metadata approach.</p>
+<p>You can configure the <code class="docutils literal"><span class="pre">theme</span></code>, the <code class="docutils literal"><span class="pre">`transition</span></code>, and from where the
+slideshow starts with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitlets.config.manager</span> <span class="k">import</span> <span class="n">BaseJSONConfigManager</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/home/damian/miniconda3/envs/rise_latest/etc/jupyter/nbconfig&quot;</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">BaseJSONConfigManager</span><span class="p">(</span><span class="n">config_dir</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;sky&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="s2">&quot;zoom&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;start_slideshow_at&quot;</span><span class="p">:</span> <span class="s2">&quot;selected&quot;</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">path</span></code> is where the <code class="docutils literal"><span class="pre">nbconfig</span></code> is located (for possible different locations,
+depending on where did you “install” and “enable” the nbextension, check these docs:
+<a class="reference external" href="http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html">http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html</a> and
+<a class="reference external" href="http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html">http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html</a>).</p>
+<p>With these options, your slides will get the <code class="docutils literal"><span class="pre">serif</span></code> theme and the
+<code class="docutils literal"><span class="pre">zoom</span></code> transition and the slideshow will start from the selected cell (instead
+of from the beginning, which is the default).</p>
+</div>
+<div class="section" id="change-the-width-and-height-of-slides">
+<h3>Change the width and height of slides<a class="headerlink" href="#change-the-width-and-height-of-slides" title="Permalink to this headline">¶</a></h3>
+<p>You can use a similar piece of python code to change the <code class="docutils literal"><span class="pre">width</span></code> and
+<code class="docutils literal"><span class="pre">height</span></code> of your slides:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
+              <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">768</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="enable-a-right-scroll-bar">
+<h3>Enable a right scroll bar<a class="headerlink" href="#enable-a-right-scroll-bar" title="Permalink to this headline">¶</a></h3>
+<p>Or to enable a right scroll bar for your content exceeding the slide vertical
+height with:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;scroll&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="usage-with-leap-motion">
+<h3>Usage with Leap Motion<a class="headerlink" href="#usage-with-leap-motion" title="Permalink to this headline">¶</a></h3>
+<p><strong>Reveal.js</strong> supports the <a class="reference external" href="https://www.leapmotion.com">Leap Motion</a> controller.
+To control RISE slides with the Leap, put the
+<a class="reference external" href="https://github.com/hakimel/reveal.js#leap-motion">reveal leap plugin options</a>
+in your config with the following parameters:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s2">&quot;leap_motion&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;naturalSwipe&quot;</span>  <span class="p">:</span> <span class="bp">True</span><span class="p">,</span>     <span class="c1"># Invert swipe gestures</span>
+                <span class="s2">&quot;pointerOpacity&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>      <span class="c1"># Set pointer opacity to 0.5</span>
+                <span class="s2">&quot;pointerColor&quot;</span>  <span class="p">:</span> <span class="s2">&quot;#d80000&quot;</span><span class="p">,</span><span class="c1"># Red pointer</span>
+            <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To disable it:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;leap_motion&quot;</span><span class="p">:</span> <span class="bp">None</span><span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="other-configuration-options">
+<h3>Other configuration options<a class="headerlink" href="#other-configuration-options" title="Permalink to this headline">¶</a></h3>
+<p>There are also options for <code class="docutils literal"><span class="pre">controls</span></code>, <code class="docutils literal"><span class="pre">progress</span></code>, <code class="docutils literal"><span class="pre">history</span></code>, <code class="docutils literal"><span class="pre">minScale</span></code>
+and <code class="docutils literal"><span class="pre">slideNumber</span></code>.</p>
+<p><strong>Note</strong>: The use of the <code class="docutils literal"><span class="pre">minScale</span></code> option (values other then <code class="docutils literal"><span class="pre">1.0</span></code>) can cause
+problems with codemirror.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customizing RISE</a><ul>
+<li><a class="reference internal" href="#using-python">Using python</a></li>
+<li><a class="reference internal" href="#using-notebook-metadata">Using notebook metadata</a></li>
+<li><a class="reference internal" href="#configuration-options">Configuration options</a><ul>
+<li><a class="reference internal" href="#choosing-a-theme-and-transition">Choosing a theme and transition</a></li>
+<li><a class="reference internal" href="#change-the-width-and-height-of-slides">Change the width and height of slides</a></li>
+<li><a class="reference internal" href="#enable-a-right-scroll-bar">Enable a right scroll bar</a></li>
+<li><a class="reference internal" href="#usage-with-leap-motion">Usage with Leap Motion</a></li>
+<li><a class="reference internal" href="#other-configuration-options">Other configuration options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="usage.html" title="previous chapter">Usage</a></li>
+      <li>Next: <a href="changelog.html" title="next chapter">Changelog</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/customize.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damian Avila.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/customize.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

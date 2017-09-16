@@ -18,6 +18,13 @@ From the most simple to the most complex one, you have 3 options:
 conda install -c damianavila82 rise
 ```
 
+If you are a Julia user, you can do this from the Julia REPL with
+```
+using Conda
+Conda.add_channel("damianavila82")
+Conda.add("rise")
+```
+
 ### Option 2 - Using pip (less recommended):
 
 ```

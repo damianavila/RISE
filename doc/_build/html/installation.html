@@ -1,0 +1,138 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installation &#8212; RISE 5.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '5.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="RISE" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To install RISE in development mode, see
+the <a class="reference external" href="dev/index.rst">Developer Documentaion</a>.</p>
+</div>
+<p>From the most simple to the most complex one, you have 3 options:</p>
+<p>1 - Using conda (recommended):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">damianavila82</span> <span class="n">rise</span>
+</pre></div>
+</div>
+<p>2 - Using pip (less recommended):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">RISE</span>
+</pre></div>
+</div>
+<p>and then two more steps to install the JS and CSS in the proper places:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span><span class="o">-</span><span class="n">nbextension</span> <span class="n">install</span> <span class="n">rise</span> <span class="o">--</span><span class="n">py</span> <span class="o">--</span><span class="n">sys</span><span class="o">-</span><span class="n">prefix</span>
+</pre></div>
+</div>
+<p>and enable the nbextension:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span><span class="o">-</span><span class="n">nbextension</span> <span class="n">enable</span> <span class="n">rise</span> <span class="o">--</span><span class="n">py</span> <span class="o">--</span><span class="n">sys</span><span class="o">-</span><span class="n">prefix</span>
+</pre></div>
+</div>
+<p>3 - The old way (are sure sure you want to go this path?):</p>
+<p>To install this nbextension, simply run <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code> from the
+<em>RISE</em> repository (please use the latest tag available or try master if you want).</p>
+<p>And then the same two step described in the pip-based installation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span><span class="o">-</span><span class="n">nbextension</span> <span class="n">install</span> <span class="n">rise</span> <span class="o">--</span><span class="n">py</span> <span class="o">--</span><span class="n">sys</span><span class="o">-</span><span class="n">prefix</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span><span class="o">-</span><span class="n">nbextension</span> <span class="n">enable</span> <span class="n">rise</span> <span class="o">--</span><span class="n">py</span> <span class="o">--</span><span class="n">sys</span><span class="o">-</span><span class="n">prefix</span>
+</pre></div>
+</div>
+<p>Conclusion: If you use conda, life will be easy ;-)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In all the options available the <code class="docutils literal"><span class="pre">--sys-prefix</span></code> option will install and
+enable the extension in the current environment, if you want a <code class="docutils literal"><span class="pre">--user</span></code> based or a
+<code class="docutils literal"><span class="pre">--system</span></code> based installation just use those option instead in the above commands.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">RISE</a></li>
+      <li>Next: <a href="usage.html" title="next chapter">Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damian Avila.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/installation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

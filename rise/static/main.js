@@ -634,11 +634,12 @@ function setup() {
   Jupyter.actions.register(revealMode, "revealMode", "RISE");
   // bind keyboard shortcut
   Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-r', action);
-  // with this above, users can locate this action object as
-  // Jupyter.actions.get("RISE:revealMode")
-  // so e.g. in custom.js
+  // with this above, users can bind another key with e.g.
+  // Jupyter.keyboard_manager.command_shortcuts.set_shortcut("alt-a", "RISE:revealMode");
+  // which essentially is equivalent to this more verbose version:
   // var RISE_action = Jupyter.actions.get("RISE:revealMode");
   // Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-a', RISE_action);
+
   
 
   // autolaunch if specified in metadata

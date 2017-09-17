@@ -134,29 +134,7 @@ function markupSlides(container) {
 
     var cells = Jupyter.notebook.get_cells();
 
-    // implement the 'smart_exec' tag; ignore notes and skip and the like
-    function set_smart_exec_based_on_next(cells, i) {
-      var cell = cells[i];
-      // default is 'pinned' because this applies to the last cell
-      var tag = 'smart_exec_slide';
-      for (var j = i+1; j < cells.length; j++) {
-        var next_type = get_slide_type(cells[j]);
-        if ((next_type == 'slide') || (next_type) == 'subslide') {
-          tag = 'smart_exec_slide';
-          break;
-        } else if (next_type == 'fragment') {
-          tag = 'smart_exec_fragment';
-          break;
-        } else if (next_type == '') {
-          tag = 'smart_exec_next';
-          break;
-        }
-      }
-      cell.smart_exec = tag;
-    }
-
-    for (var i=0; i < cells.length; i++) {
-        var cell = cells[i];
+    for (var cell of cells) {
         var slide_type = get_slide_type(cell);
         //~ console.log(`cell ${i} is: ${slide_type}`);
 
@@ -171,7 +149,9 @@ function markupSlides(container) {
                 // Start new subslide
                 current_fragment = subslide_section = new_subslide();
             } else if (slide_type === 'fragment') {
-                current_fragment = $('<div>').addClass('fragment')
+              // record the <div class='fragment'> element corresponding
+              // to each fragment cell in the 'fragment_div' attribute
+              cell.fragment_div = current_fragment = $('<div>').addClass('fragment')
                                     .appendTo(subslide_section);
             }
         } else if (slide_type !== 'notes' && slide_type !== 'skip') {
@@ -200,8 +180,40 @@ function markupSlides(container) {
             cell.element.addClass('reveal-skip');
         }
 
-      set_smart_exec_based_on_next(cells, i);
       //console.log(`marked cell ${i} as ${cell.smart_exec}`)
+    }
+
+  // set on all cells a smart_exec tag that says how smart exec
+  // should behave on that cell
+  // the fragment cell also get a smart_exec_next_fragment
+  // attribute that points at the <div class='fragment'>
+  // corresponding to the (usually immediately) next cell
+  // that is a fragment cell
+  for (var i=0; i< cells.length; i++) {
+      var cell = cells[i];
+      // default is 'pinned' because this applies to the last cell
+      var tag = 'smart_exec_slide';
+      for (var j = i+1; j < cells.length; j++) {
+        var next_cell = cells[j];
+        var next_type = get_slide_type(next_cell);
+        if ((next_type == 'slide') || (next_type) == 'subslide') {
+          tag = 'smart_exec_slide';
+          break;
+        } else if (next_type == 'fragment') {
+          tag = 'smart_exec_fragment';
+          // these cells are the last before a fragment
+          // and when running smart-exec we'll want to know
+          // if that fragment is visible, so we keep a link to
+          // the <div class='fragment'> element of that (next)
+          // fragment cell
+          cell.smart_exec_next_fragment = next_cell.fragment_div;
+          break;
+        } else if (next_type == '') {
+          tag = 'smart_exec_next';
+          break;
+        }
+      }
+      cell.smart_exec = tag;
     }
 
     return selected_cell_slide;
@@ -439,15 +451,20 @@ function smartExec() {
   if (smart_exec == 'smart_exec_slide') {
     Jupyter.notebook.execute_selected_cells();
   } else if (smart_exec == "smart_exec_fragment") {
-    Jupyter.notebook.execute_selected_cells();
-    // missing: show next fragment
-    // which in turn will do the right thing...
+    // let's see if the next fragment is visible or not
+    var cell = Jupyter.notebook.get_selected_cell();
+    var fragment_div = cell.smart_exec_next_fragment;
+    var visible = $(fragment_div).hasClass('visible');
+    if (visible) {
+      Jupyter.notebook.execute_cell_and_select_below();
+    } else {
+      Jupyter.notebook.execute_selected_cells();
+    }
   } else {
     Jupyter.notebook.execute_cell_and_select_below();
   }
-}    
+}
 
-  
 function setupKeys(mode){
   // Lets setup some specific keys for the reveal_mode
   if (mode === 'reveal_mode') {

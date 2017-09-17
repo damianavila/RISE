@@ -138,7 +138,7 @@ function markupSlides(container) {
     function set_smart_exec_based_on_next(cells, i) {
       var cell = cells[i];
       // default is 'pinned' because this applies to the last cell
-      var tag = 'pinned';
+      var tag = 'smart_exec_slide';
       for (var j = i+1; j < cells.length; j++) {
         var next_type = get_slide_type(cells[j]);
         if ((next_type == 'slide') || (next_type) == 'subslide') {

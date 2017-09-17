@@ -631,13 +631,13 @@ function setup() {
     handler : revealMode,
   }
   // register action    
-  Jupyter.actions.register(revealMode, "revealMode", "RISE");
+  Jupyter.actions.register(revealMode, "slideshow", "RISE");
   // bind keyboard shortcut
   Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-r', action);
   // with this above, users can bind another key with e.g.
-  // Jupyter.keyboard_manager.command_shortcuts.set_shortcut("alt-a", "RISE:revealMode");
+  // Jupyter.keyboard_manager.command_shortcuts.set_shortcut("alt-a", "RISE:slideshow");
   // which essentially is equivalent to this more verbose version:
-  // var RISE_action = Jupyter.actions.get("RISE:revealMode");
+  // var RISE_action = Jupyter.actions.get("RISE:slideshow");
   // Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-a', RISE_action);
 
   

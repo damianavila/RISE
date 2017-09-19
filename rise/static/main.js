@@ -579,6 +579,65 @@ function reveal_cell_index(notebook) {
     return result;
 }
 
+function registerHelperActions() {
+
+    function init_metadata_slideshow(optional_cell) {
+      // use selected cell if not specified
+      var cell = optional_cell || Jupyter.notebook.get_selected_cell();
+      let metadata = cell.metadata;
+      if (metadata.slideshow === undefined)
+        metadata.slideshow = {};
+      return metadata.slideshow;
+    }
+    
+    // accessing Jupyter.actions directly results in a warning message
+    // https://github.com/jupyter/notebook/issues/2401
+    let actions = Jupyter.notebook.keyboard_manager.actions;
+    actions.register(
+      {
+        help: '(un)set current cell as a Slide cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'slide') ? '' : 'slide';
+	  Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-slide", "RISE");
+
+    actions.register(
+      {
+        help: '(un)set current cell as a Fragment cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'fragment') ? '' : 'fragment';
+	  Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-fragment", "RISE");
+
+    actions.register(
+      { help: 'render all cells (all cells go to command mode)',
+        handler: function() {
+          Jupyter.notebook.get_cells().forEach(function(cell){
+	    cell.render();
+          })
+        }
+      },
+      "render-all-cells", "RISE");
+
+    actions.register(
+      {
+        help: 'edit all cells (all cells go to edit mode)',
+        handler: function() {
+          Jupyter.notebook.get_cells().forEach(function(cell){
+	    cell.unrender();
+          })
+        }
+      },
+      "edit-all-cells", "RISE");
+
+}
+
 // the entrypoint - call this to enter or exit reveal mode
 function revealMode() {
   // We search for a class tag in the maintoolbar to check if reveal mode is "on".
@@ -612,6 +671,11 @@ function revealMode() {
   }
 }
 
+// users can bind another key with e.g.
+// Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('alt-a', 'RISE:slideshow');
+// and likewise bind helper actions with e.g.
+// Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
+    
 function setup() {
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
@@ -625,22 +689,18 @@ function setup() {
     callback: revealMode,
     id      : 'RISE'
   }]);
-  // define action
-  var action = {
+  // define the slideshow action
+  var slideshow_action = {
     help    : rise_label,
     handler : revealMode,
   }
   // register action    
-  Jupyter.actions.register(revealMode, "slideshow", "RISE");
-  // bind keyboard shortcut
-  Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-r', action);
-  // with this above, users can bind another key with e.g.
-  // Jupyter.keyboard_manager.command_shortcuts.set_shortcut("alt-a", "RISE:slideshow");
-  // which essentially is equivalent to this more verbose version:
-  // var RISE_action = Jupyter.actions.get("RISE:slideshow");
-  // Jupyter.keyboard_manager.command_shortcuts.add_shortcut('alt-a', RISE_action);
+  Jupyter.notebook.keyboard_manager.actions.register(slideshow_action, "slideshow", "RISE");
+  // bind action to keyboard shortcut
+  Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut('alt-r', slideshow_action);
 
-  
+  // same with utility actions
+  registerHelperActions();
 
   // autolaunch if specified in metadata
   var config = configSlides()

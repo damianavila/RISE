@@ -134,7 +134,8 @@ function markupSlides(container) {
 
     var cells = Jupyter.notebook.get_cells();
 
-    for (var cell of cells) {
+    for (var i=0; i < cells.length; i++) {
+        var cell = cells[i];
         var slide_type = get_slide_type(cell);
         //~ console.log(`cell ${i} is: ${slide_type}`);
 
@@ -159,7 +160,8 @@ function markupSlides(container) {
             content_on_slide1 = true;
         }
 
-        // Record that this slide contains the selected cell
+      // Record that this slide contains the selected cell
+      // this is where we need i as set in the loop over cells
         if (i === selected_cell_idx) {
             selected_cell_slide = [slide_counter, subslide_counter];
         }
@@ -189,7 +191,7 @@ function markupSlides(container) {
   // attribute that points at the <div class='fragment'>
   // corresponding to the (usually immediately) next cell
   // that is a fragment cell
-  for (var i=0; i< cells.length; i++) {
+  for (var i=0; i < cells.length; i++) {
       var cell = cells[i];
       // default is 'pinned' because this applies to the last cell
       var tag = 'smart_exec_slide';

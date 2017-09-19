@@ -685,7 +685,7 @@ function revealMode() {
     // select and focus on current cell
     Jupyter.notebook.select(current_cell_index);
     // Need to delay the action a little bit so it actually focus the selected slide
-    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 1000);
+    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 500);
   }
 }
 

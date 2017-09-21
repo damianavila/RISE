@@ -252,9 +252,12 @@ function addHeaderFooterOverlay(config) {
     let overlay = config.get_sync('overlay');
     let header =  config.get_sync('header');
     let footer =  config.get_sync('footer');
-    // minimum styling
+    let backimage =  config.get_sync('backimage');
+    // minimum styling to make these 3 things look
+    // like what their name says they should look
     let header_style = "position: absolute; top: 0px;";
     let footer_style = "position: absolute; bottom: 0px;";
+    let backimage_style = "width: 100%; height: 100%;";
 
     let overlay_body = "";
     if (overlay) {
@@ -262,6 +265,8 @@ function addHeaderFooterOverlay(config) {
     } else {
         if (header)
             overlay_body += `<div id='rise-header' style='${header_style}'>${header}</div>`;
+        if (backimage)
+            overlay_body += `<img id='rise-backimage' style='${backimage_style}' src='${backimage}' />`;
         if (footer)
             overlay_body += `<div id='rise-footer' style='${footer_style}'>${footer}</div>`;
     }

@@ -1,0 +1,13 @@
+/* this is for styling the header and footer
+ * see metadata in notebook
+ */
+
+#rise-header {
+    margin: 10px;
+    left: 10%;
+}
+
+#rise-footer {
+    margin: 10px;
+    right: 10%;
+}

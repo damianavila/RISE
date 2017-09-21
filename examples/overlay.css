@@ -1,0 +1,23 @@
+/* this is for styling the header and footer
+ * see metadata in notebook
+ */
+
+/* when setting overlay,
+ * it's your responsability to put this where you want,
+ * in the middle if that's what you want
+ */
+
+div.myheader {
+    position: absolute;
+    margin: 30px;
+    left: 8%;
+    background: blue;
+    font-size: xx-large;
+}
+
+div.myfooter {
+    position: absolute;
+    background: red;
+    font-size: 120%;
+    right: 10%;
+}

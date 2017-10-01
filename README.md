@@ -70,7 +70,7 @@ enable the extension in the current environment, if you want a `--user` based or
 ## Development
 
 To install RISE in development mode, see the
-[Developer section](damianavila.github.io/RISE/dev/index) of the RISE
+[Developer section](https://damianavila.github.io/RISE/dev/develop.html) of the RISE
 documentation.
 
 ## Feedback

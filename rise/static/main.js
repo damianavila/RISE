@@ -599,12 +599,12 @@ function reveal_current_position() {
  * if cell_type is not set, returns the first cell in slide
  * otherwise, it returns the first cell of that type in slide
  * 
- * if focus_fragment is set to true, search is restricted to the current fragment
+ * if auto_select_fragment is set to true, search is restricted to the current fragment
  * otherwise, the whole slide is considered
  * 
  * returns null if no match is found
  */
-function reveal_cell_index(notebook, cell_type=null, focus_fragment=false) {
+function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false) {
   var [slide, subslide, fragment] = reveal_current_position();
 
   // just scan all cells until we find one at that address
@@ -628,7 +628,6 @@ function reveal_cell_index(notebook, cell_type=null, focus_fragment=false) {
   var result = null;
 
   notebook.get_cells().forEach(function (cell, index) {
-    // console.log(`result=${result}, sl=${slide_counter}/${slide} subsl=${subslide_counter}/${subslide} fr=${fragment_counter}/${fragment}`);
     if (result) {
       // keep it short: skip if we found already
       return;
@@ -640,18 +639,20 @@ function reveal_cell_index(notebook, cell_type=null, focus_fragment=false) {
       subslide_counter += 1;
     }
     if ((slide_counter == slide) && (subslide_counter == subslide)) {
-	    // keep count of fragments but only on current slide
+      // keep count of fragments but only on current slide
       if (is_fragment(cell)) {
-	      fragment_counter += 1;
-	    }
+	fragment_counter += 1;
+      }
       // we're on the right slide
-      // do we need to worry about fragment
-      var in_fragment = (! focus_fragment ) ? true // 
-	        : (fragment_counter == fragment);
- 	    if ( in_fragment &&
-	       ((cell_type === null) || (cell.cell_type == cell_type))) {
-	      result = index;
-	    }
+      // now: do we need to also worry about focusing on the right fragment ?
+      // if auto_select_fragment is true, we only consider cells in the fragment
+      // otherwise, the whole (sub)slide is considered valid
+      var fragment_match = (auto_select_fragment) ? (fragment_counter == fragment) : true;
+      // we still need to match cell types
+      if ( fragment_match &&
+	   ((cell_type === null) || (cell.cell_type == cell_type))) {
+	result = index;
+      }
     }
   })
   return result;

@@ -137,7 +137,6 @@ function markupSlides(container) {
     for (var i=0; i < cells.length; i++) {
         var cell = cells[i];
         var slide_type = get_slide_type(cell);
-        //~ console.log(`cell ${i} is: ${slide_type}`);
 
         if (content_on_slide1) {
             if (slide_type === 'slide') {
@@ -182,7 +181,6 @@ function markupSlides(container) {
             cell.element.addClass('reveal-skip');
         }
 
-      //console.log(`marked cell ${i} as ${cell.smart_exec}`)
     }
 
   // set on all cells a smart_exec tag that says how smart exec

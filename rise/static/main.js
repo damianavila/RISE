@@ -1,4 +1,4 @@
-/* -*- coding: utf-8 -*-
+/* -*- coding: utf-8; js-indent-level: 2 -*-
 * ----------------------------------------------------------------------------
 * Copyright (c) 2013-2017 Damián Avila and contributors.
 *
@@ -34,9 +34,19 @@ function configSlides() {
       transition: 'linear',
       slideNumber: true,
       start_slideshow_at: 'beginning',
+      /* can be either
+       * "none" - no autoselect,
+       * "first" - select first cell 
+       * "code" - select first code cell
+       */
+      auto_select: "none",
+      /* if auto_select is not "none", this boolean
+         says if selection focuses on the current fragment
+         or considers the whole slide */
+      auto_select_fragment: true,
       scroll: false,
       center: true,
-      autolaunch: false
+      autolaunch: false,
   };
 
   var config_section = new configmod.ConfigSection('livereveal',
@@ -283,7 +293,7 @@ function Revealer(selected_slide, config) {
     Reveal.initialize();
 
     var options = {
-    // All this config option load correctly just because of require-indeced delay,
+    // All this config option load correctly just because of require-induced delay,
     // it would be better to catch them from the config.get promise.
     controls: config.get_sync('controls'),
     progress: config.get_sync('progress'),
@@ -345,12 +355,21 @@ function Revealer(selected_slide, config) {
       Unselecter();
       // check and set the scrolling slide when you start the whole thing
       setScrollingSlide(config);
+      autoSelectHook(config);
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
       // check and set the scrolling slide every time the slide change
       setScrollingSlide(config);
+      autoSelectHook(config);
+    });
+
+    Reveal.addEventListener( 'fragmentshown', function( event ) {
+      autoSelectHook(config);
+    });
+    Reveal.addEventListener( 'fragmenthidden', function( event ) {
+      autoSelectHook(config);
     });
 
     // Sync when an output is generated.
@@ -531,24 +550,61 @@ function Remover(config) {
   removeHash();
 }
 
+/*
+  using Reveal.getCurrentSlide() it is possible to get a lot of data 
+  about where we are in the slideshow
+
+  the following function inspects this and returns a triple
+  [slide, subslide, fragments]
+
+  slide and subslide both start at 0 (1st slide numbered 0)
+
+  fragments is the number of <fragments> tags currently showed
+  that is to say, **in addition** to the slide beginning
+  note that a jupyter cell cannot be a slide *and* a fragment at the same time
+  the first slide however may be different as the first cell may be a fragment
+  which I chose not to support for now
+  bottom line: is fragments also starts at 0
+
+  ---------- historical note
+
+  in a previous implementation - for traditional notebooks - 
+  we used to get slide and subslide from window.location.href
+  however this in jupyter lab may be no longer possible
+
+  in addition this is the way to go for getting info on the current fragment
+*/
+function reveal_current_position() {
+	let current_slide = Reveal.getCurrentSlide();
+	// href of the form slide-2-3 
+	let href = current_slide.id;
+	let chunks = href.split('-');
+	let slide = Number(chunks[1]);
+	let subslide = Number(chunks[2]);
+	let fragments = $(current_slide).find('div.fragment.visible').length;
+	return [slide, subslide, fragments];
+}
+	
+    
 /* Just before exiting reveal mode, we run this function
  * whose job is to find the notebook index
  * for the first cell in the current (sub)slide
  * this allows to restore the notebook at the correct location,
  * i.e. with that cell being selected
-
- * we use the current URL that ends up in 'slide-n-m'
- * to find out about the slide and subslide */
-function reveal_cell_index(notebook) {
-  // last part of the current URL holds slide and subslide numbers
-  var href = window.location.href;
-  var chunks = href.split('-');
-  var len = chunks.length;
-  var slide = Number(chunks[len-2]);
-  var subslide = Number(chunks[len-1]);
+ *
+ * if cell_type is not set, returns the first cell in slide
+ * otherwise, it returns the first cell of that type in slide
+ * 
+ * if focus_fragment is set to true, search is restricted to the current fragment
+ * otherwise, the whole slide is considered
+ * 
+ * returns null if no match is found
+ */
+function reveal_cell_index(notebook, cell_type=null, focus_fragment=false) {
+  var [slide, subslide, fragment] = reveal_current_position();
 
   // just scan all cells until we find one at that address
-  // except that we need to start at -1 0r 0 depending on
+  // except that we need to start at -1 or 0 depending on
   // whether the first slide has a slide tag or not
   var is_slide = function(cell) {
     return cell.metadata.slideshow
@@ -558,14 +614,21 @@ function reveal_cell_index(notebook) {
     return cell.metadata.slideshow
 	&& cell.metadata.slideshow.slide_type == 'subslide';
   }
+  var is_fragment = function(cell) {
+    return cell.metadata.slideshow
+	&& cell.metadata.slideshow.slide_type == 'fragment';
+  }
   var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
   var subslide_counter = 0;
+  var fragment_counter = 0;    
   var result = null;
 
   notebook.get_cells().forEach(function (cell, index) {
-    if (result)
+    // console.log(`result=${result}, sl=${slide_counter}/${slide} subsl=${subslide_counter}/${subslide} fr=${fragment_counter}/${fragment}`);
+    if (result) {
       // keep it short: skip if we found already
       return;
+    }
     if (is_slide(cell)) {
       slide_counter += 1;
       subslide_counter = 0;
@@ -573,10 +636,21 @@ function reveal_cell_index(notebook) {
       subslide_counter += 1;
     }
     if ((slide_counter == slide) && (subslide_counter == subslide)) {
-	result = index;
+	    // keep count of fragments but only on current slide
+      if (is_fragment(cell)) {
+	      fragment_counter += 1;
+	    }
+      // we're on the right slide
+      // do we need to worry about fragment
+      var in_fragment = (! focus_fragment ) ? true // 
+	        : (fragment_counter == fragment);
+ 	    if ( in_fragment &&
+	       ((cell_type === null) || (cell.cell_type == cell_type))) {
+	      result = index;
+	    }
     }
   })
-    return result;
+  return result;
 }
 
 function registerHelperActions() {
@@ -667,7 +741,7 @@ function revealMode() {
     // select and focus on current cell
     Jupyter.notebook.select(current_cell_index);
     // Need to delay the action a little bit so it actually focus the selected slide
-    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 1000);
+    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 500);
   }
 }
 
@@ -676,6 +750,37 @@ function revealMode() {
 // and likewise bind helper actions with e.g.
 // Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
     
+/* I'm unsure how to deal with 2 config flags w/ the promise thing,
+ * so I hard-wire this for now
+ */
+let autoSelectTimeout = 250;
+
+function autoSelectHook(config) {
+  // well I do need 2 config flags now so let's chain the promises
+  var auto_select_promise = config.get('auto_select');
+  auto_select_promise.then(function(auto_select) {
+	  var cell_type =
+        (auto_select == "code") ? 'code'
+	      : (auto_select == "first") ? null
+	      : undefined;
+    
+	  /* turned off altogether */
+	  if (cell_type === undefined) {
+	    return;
+	  }
+
+    var auto_select_fragment_promise = config.get('auto_select_fragment');
+    auto_select_fragment_promise.then(function(auto_select_fragment) {
+	    setTimeout(function(){
+	      var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type, auto_select_fragment);
+	      // select and focus on current cell
+	      Jupyter.notebook.select(current_cell_index)
+	    }, autoSelectTimeout);
+    });
+  })
+}
+
+
 function setup() {
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 

@@ -113,7 +113,7 @@ either ``auto_select = "none"`` - in which case the other setting is
 ignored, or ``auto_select = "code"` and ``auto_select_fragment = True``.
 
 
-      
+
 Enable a right scroll bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 

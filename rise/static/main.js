@@ -473,7 +473,7 @@ function buttonHelp() {
 function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
-        .attr('title','RISE Exit')
+        .attr('title','Exit RISE')
         .addClass('fa-times-circle fa-4x fa')
         .addClass('my-main-tool-bar')
         .css('position','fixed')
@@ -481,11 +481,7 @@ function buttonExit() {
         .css('left','0.48em')
         .css('opacity', '0.6')
         .css('z-index', '30')
-        .click(
-            function(){
-                revealMode('simple', 'zoom');
-            }
-        );
+        .click(revealMode);
     $('.reveal').after(exit_button);
 }
 
@@ -658,6 +654,77 @@ function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false)
   return result;
 }
 
+function registerHelperActions() {
+
+    function init_metadata_slideshow(optional_cell) {
+      // use selected cell if not specified
+      var cell = optional_cell || Jupyter.notebook.get_selected_cell();
+      let metadata = cell.metadata;
+      if (metadata.slideshow === undefined)
+        metadata.slideshow = {};
+      return metadata.slideshow;
+    }
+    
+    // accessing Jupyter.actions directly results in a warning message
+    // https://github.com/jupyter/notebook/issues/2401
+    let actions = Jupyter.notebook.keyboard_manager.actions;
+    actions.register(
+      {
+        help: '(un)set current cell as a Slide cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'slide') ? '' : 'slide';
+	  Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-slide", "RISE");
+
+    actions.register(
+      {
+        help: '(un)set current cell as a Sub-slide cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'subslide') ? '' : 'subslide';
+    Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-subslide", "RISE");
+
+    actions.register(
+      {
+        help: '(un)set current cell as a Fragment cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'fragment') ? '' : 'fragment';
+	  Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-fragment", "RISE");
+
+    actions.register(
+      { help: 'render all cells (all cells go to command mode)',
+        handler: function() {
+          Jupyter.notebook.get_cells().forEach(function(cell){
+	    cell.render();
+          })
+        }
+      },
+      "render-all-cells", "RISE");
+
+    actions.register(
+      {
+        help: 'edit all cells (all cells go to edit mode)',
+        handler: function() {
+          Jupyter.notebook.get_cells().forEach(function(cell){
+	    cell.unrender();
+          })
+        }
+      },
+      "edit-all-cells", "RISE");
+
+}
+
+// the entrypoint - call this to enter or exit reveal mode
 function revealMode() {
   // We search for a class tag in the maintoolbar to check if reveal mode is "on".
   // If the tag exits, we exit. Otherwise, we enter the reveal mode.
@@ -689,7 +756,7 @@ function revealMode() {
     setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 500);
   }
 }
-
+    
 /* I'm unsure how to deal with 2 config flags w/ the promise thing,
  * so I hard-wire this for now
  */
@@ -720,25 +787,36 @@ function autoSelectHook(config) {
   })
 }
 
+
 function setup() {
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
-  Jupyter.toolbar.add_buttons_group([
-    {
-    'label'   : 'Enter/Exit Live Reveal Slideshow',
-    'icon'    : 'fa-bar-chart-o',
-    'callback': function(){ revealMode(); },
-    'id'      : 'start_livereveal'
-    },
-  ]);
-  var document_keydown = function(event) {
-    if (event.which == 82 && event.altKey) {
-      revealMode();
-      return false;
-    }
-    return true;
-  };
-  $(document).keydown(document_keydown);
+  // use same label in button and shortcut
+  var rise_label = 'Enter/Exit RISE Slideshow';
+
+  // create button
+  Jupyter.toolbar.add_buttons_group([{
+    label   : rise_label,
+    icon    : 'fa-bar-chart-o',
+    callback: revealMode,
+    id      : 'RISE'
+  }]);
+  // define the slideshow action
+  var slideshow_action = {
+    help    : rise_label,
+    handler : revealMode,
+  }
+  // register action    
+  Jupyter.notebook.keyboard_manager.actions.register(slideshow_action, "slideshow", "RISE");
+  // bind action to keyboard shortcut
+  Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut('alt-r', 'RISE:slideshow');
+
+  // same with utility actions
+  registerHelperActions();
+
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-o', 'RISE:toggle-subslide');
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-p', 'RISE:toggle-fragment');
 
   // autolaunch if specified in metadata
   var config = configSlides()

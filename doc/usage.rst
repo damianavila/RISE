@@ -11,6 +11,16 @@ you access to the metadata for each cell. If you select the Slideshow preset, yo
 will see in the right corner of each cell a little box where you can select
 the cell type (similar as for the static reveal slides with nbconvert).
 
+Starting version 5.1.0 you can customize some keyboard shortcuts using the keyboard
+shortcut editor from the notebook UI.
+
+We have defined 4 main shortcuts by default that you can change accordingly to your needs:
+* ``alt-r``, "Enter/Exit Live Reveal Slideshow"
+* ``shift-i``, Toggle slide
+* ``shift-o``, Toggle-subslide
+* ``shift-p``, Toggle-fragment
+In future version we will provide full customization for all the important RISE actions.
+
 Some notes:
 
 1- Use ``spacebar`` to go forward and ``shift+spacebar`` to go backward (or the

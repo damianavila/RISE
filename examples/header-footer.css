@@ -15,5 +15,10 @@
 }
 
 #rise-backimage {
-    opacity: 0.05;
+    opacity: 0.20;
+}
+
+/* TODO: maybe we need to port this to main.css?  */
+.reveal img {
+    max-width: 100%;
 }

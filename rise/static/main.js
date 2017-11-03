@@ -802,7 +802,7 @@ function setup() {
   // register action    
   Jupyter.notebook.keyboard_manager.actions.register(slideshow_action, "slideshow", "RISE");
   // bind action to keyboard shortcut
-  Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut('alt-r', slideshow_action);
+  Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut('alt-r', 'RISE:slideshow');
 
   // same with utility actions
   registerHelperActions();

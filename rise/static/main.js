@@ -680,6 +680,17 @@ function registerHelperActions() {
 
     actions.register(
       {
+        help: '(un)set current cell as a Sub-slide cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'subslide') ? '' : 'subslide';
+    Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-subslide", "RISE");
+
+    actions.register(
+      {
         help: '(un)set current cell as a Fragment cell',
         handler: function() {
           let slideshow = init_metadata_slideshow();
@@ -744,11 +755,6 @@ function revealMode() {
     setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 500);
   }
 }
-
-// users can bind another key with e.g.
-// Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('alt-a', 'RISE:slideshow');
-// and likewise bind helper actions with e.g.
-// Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
     
 /* I'm unsure how to deal with 2 config flags w/ the promise thing,
  * so I hard-wire this for now
@@ -806,6 +812,10 @@ function setup() {
 
   // same with utility actions
   registerHelperActions();
+
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-o', 'RISE:toggle-subslide');
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-p', 'RISE:toggle-fragment');
 
   // autolaunch if specified in metadata
   var config = configSlides()

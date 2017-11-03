@@ -87,8 +87,30 @@ Object.getPrototypeOf(Jupyter.notebook).get_cell_elements = function () {
     return this.container.find("div.cell");
 };
 
+// uniform way to access slide type, whether the slideshow metadata is set or not
+// also sometimes slide_type is set to '-' by the toolbar 
+function get_slide_type(cell) {
+  var slide_type = (cell.metadata.slideshow || {}).slide_type;
+  return ( (slide_type === undefined) || (slide_type == '-')) ? '' : slide_type;
+}
+
+function is_slide(cell)    {return get_slide_type(cell) == 'slide';}
+function is_subslide(cell) {return get_slide_type(cell) == 'subslide';}
+function is_fragment(cell) {return get_slide_type(cell) == 'fragment';}
+function is_regular(cell)  {return get_slide_type(cell) == '';}
+
 /* Use the slideshow metadata to rearrange cell DOM elements into the
  * structure expected by reveal.js
+ *
+ * in the process, each cell receives a 'smart_exec' tag that says
+ * how to behave when the cell gets executed with Shift-Enter
+ * this tag can be either
+ * 'smart_exec_slide' : just do exec, which is what RISE did on all cells at first
+   this is for the last cell on a (sub)slide
+   i.e. if next cell is slide or subslide
+ * 'smart_exec_fragment' : do exec + show next fragment
+   if next cell is a fragment
+ * 'smart_exec_next' : do the usual exec + select next like in classic notebook
  */
 function markupSlides(container) {
     // Machinery to create slide/subslide <section>s and give them IDs
@@ -121,12 +143,10 @@ function markupSlides(container) {
     var content_on_slide1 = false;
 
     var cells = Jupyter.notebook.get_cells();
-    var i, cell, slide_type;
 
-    for (i=0; i < cells.length; i++) {
-        cell = cells[i];
-        slide_type = (cell.metadata.slideshow || {}).slide_type;
-        //~ console.log('cell ' + i + ' is: '+ slide_type);
+    for (var i=0; i < cells.length; i++) {
+        var cell = cells[i];
+        var slide_type = get_slide_type(cell);
 
         if (content_on_slide1) {
             if (slide_type === 'slide') {
@@ -139,7 +159,9 @@ function markupSlides(container) {
                 // Start new subslide
                 current_fragment = subslide_section = new_subslide();
             } else if (slide_type === 'fragment') {
-                current_fragment = $('<div>').addClass('fragment')
+              // record the <div class='fragment'> element corresponding
+              // to each fragment cell in the 'fragment_div' attribute
+              cell.fragment_div = current_fragment = $('<div>').addClass('fragment')
                                     .appendTo(subslide_section);
             }
         } else if (slide_type !== 'notes' && slide_type !== 'skip') {
@@ -147,7 +169,8 @@ function markupSlides(container) {
             content_on_slide1 = true;
         }
 
-        // Record that this slide contains the selected cell
+      // Record that this slide contains the selected cell
+      // this is where we need i as set in the loop over cells
         if (i === selected_cell_idx) {
             selected_cell_slide = [slide_counter, subslide_counter];
         }
@@ -167,6 +190,40 @@ function markupSlides(container) {
         if (slide_type === 'skip') {
             cell.element.addClass('reveal-skip');
         }
+
+    }
+
+  // set on all cells a smart_exec tag that says how smart exec
+  // should behave on that cell
+  // the fragment cell also get a smart_exec_next_fragment
+  // attribute that points at the <div class='fragment'>
+  // corresponding to the (usually immediately) next cell
+  // that is a fragment cell
+  for (var i=0; i < cells.length; i++) {
+      var cell = cells[i];
+      // default is 'pinned' because this applies to the last cell
+      var tag = 'smart_exec_slide';
+      for (var j = i+1; j < cells.length; j++) {
+        var next_cell = cells[j];
+        var next_type = get_slide_type(next_cell);
+        if ((next_type == 'slide') || (next_type) == 'subslide') {
+          tag = 'smart_exec_slide';
+          break;
+        } else if (next_type == 'fragment') {
+          tag = 'smart_exec_fragment';
+          // these cells are the last before a fragment
+          // and when running smart-exec we'll want to know
+          // if that fragment is visible, so we keep a link to
+          // the <div class='fragment'> element of that (next)
+          // fragment cell
+          cell.smart_exec_next_fragment = next_cell.fragment_div;
+          break;
+        } else if (next_type == '') {
+          tag = 'smart_exec_next';
+          break;
+        }
+      }
+      cell.smart_exec = tag;
     }
 
     return selected_cell_slide;
@@ -404,12 +461,39 @@ function fixCellHeight(){
   }
 }
 
+// from notebook/actions.js
+// jupyter-notebook:run-cell -> notebook.execute_selected_cells()
+// jupyter-notebook:run-cell-and-select-next -> notebook.execute_cell_and_select_below()
+function smartExec() {
+  // is it really the selected cell that matters ?
+  var smart_exec = Jupyter.notebook.get_selected_cell().smart_exec;
+  if (smart_exec == 'smart_exec_slide') {
+    Jupyter.notebook.execute_selected_cells();
+  } else if (smart_exec == "smart_exec_fragment") {
+    // let's see if the next fragment is visible or not
+    var cell = Jupyter.notebook.get_selected_cell();
+    var fragment_div = cell.smart_exec_next_fragment;
+    var visible = $(fragment_div).hasClass('visible');
+    if (visible) {
+      Jupyter.notebook.execute_cell_and_select_below();
+    } else {
+      Jupyter.notebook.execute_selected_cells();
+    }
+  } else {
+    Jupyter.notebook.execute_cell_and_select_below();
+  }
+}
+
 function setupKeys(mode){
   // Lets setup some specific keys for the reveal_mode
   if (mode === 'reveal_mode') {
+    var action = {
+      help: "execute cell, and move to the next if on the same slide",
+      handler: smartExec,
+    };
     // Prevent next cell after execution because it does not play well with the slides assembly
-    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
-    Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    Jupyter.keyboard_manager.command_shortcuts.add_shortcut("shift-enter", action);
+    Jupyter.keyboard_manager.edit_shortcuts.add_shortcut("shift-enter", action);
     // Save the f keyboard event for the Reveal fullscreen action
     Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
     Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
@@ -606,18 +690,6 @@ function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false)
   // just scan all cells until we find one at that address
   // except that we need to start at -1 or 0 depending on
   // whether the first slide has a slide tag or not
-  var is_slide = function(cell) {
-    return cell.metadata.slideshow
-	&& cell.metadata.slideshow.slide_type == 'slide';
-  }
-  var is_subslide = function(cell) {
-    return cell.metadata.slideshow
-	&& cell.metadata.slideshow.slide_type == 'subslide';
-  }
-  var is_fragment = function(cell) {
-    return cell.metadata.slideshow
-	&& cell.metadata.slideshow.slide_type == 'fragment';
-  }
   var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
   var subslide_counter = 0;
   var fragment_counter = 0;    

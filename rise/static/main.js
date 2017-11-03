@@ -315,6 +315,39 @@ function disconnectOutputObserver() {
   }
 }
 
+function addHeaderFooterOverlay(config) {
+    let overlay = config.get_sync('overlay');
+    let header =  config.get_sync('header');
+    let footer =  config.get_sync('footer');
+    let backimage =  config.get_sync('backimage');
+    // minimum styling to make these 3 things look
+    // like what their name says they should look
+    let header_style = "position: absolute; top: 0px;";
+    let footer_style = "position: absolute; bottom: 0px;";
+    let backimage_style = "width: 100%; height: 100%;";
+
+    let overlay_body = "";
+    if (overlay) {
+        overlay_body = overlay;
+    } else {
+        if (header)
+            overlay_body += `<div id='rise-header' style='${header_style}'>${header}</div>`;
+        if (backimage)
+            overlay_body += `<img id='rise-backimage' style='${backimage_style}' src='${backimage}' />`;
+        if (footer)
+            overlay_body += `<div id='rise-footer' style='${footer_style}'>${footer}</div>`;
+    }
+    let overlay_div = `<div id='rise-overlay'>${overlay_body}</div>`;
+    console.log(`adding overlay ${overlay_div}`);
+    $('div.reveal').append(overlay_div);
+}
+
+function removeHeaderFooterOverlay() {
+    // it's easier to remove than to hide, plus this way
+    // changes in the metadata will be reflected each time
+    // we enter reveal again   
+    $('div#rise-overlay').remove();
+}
 
 function Revealer(selected_slide, config) {
   $('body').addClass("rise-enabled");
@@ -341,6 +374,18 @@ function Revealer(selected_slide, config) {
   .prepend('<link rel="stylesheet" href='
   + require.toUrl("./reveal.js/css/reveal.css")
   + ' id="revealcss" />');
+
+  /* this policy of trying ./rise.css and then <notebook>.css
+   * should be redefinable in the config
+   */
+  if (window.location.pathname.endsWith('.ipynb')) {
+      // Attempt to load rise.css 
+      $('head').append(`<link rel="stylesheet" href="./rise.css" id="rise-custom-css" />`);
+      // Attempt to load CSS with the same path as the .ipynb but with .css extension instead
+      let notebook_css = window.location.pathname.replace(/\.ipynb$/,'.css');
+      $('head').append(`<link rel="stylesheet" href="${notebook_css}" id="notebook-custom-css" />`);
+
+  }
 
   // Tailer
   require(['./reveal.js/lib/js/head.min.js',
@@ -434,6 +479,7 @@ function Revealer(selected_slide, config) {
 
     // Setup the starting slide
     setStartingSlide(selected_slide, config);
+    addHeaderFooterOverlay(config);
 
   });
 }
@@ -632,6 +678,7 @@ function Remover(config) {
 
   disconnectOutputObserver();
   removeHash();
+  removeHeaderFooterOverlay();
 }
 
 /*

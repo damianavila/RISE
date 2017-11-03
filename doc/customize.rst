@@ -112,8 +112,6 @@ their introduction it seems like the most meaningful combinations are
 either ``auto_select = "none"`` - in which case the other setting is
 ignored, or ``auto_select = "code"` and ``auto_select_fragment = True``.
 
-
-
 Enable a right scroll bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -125,6 +123,47 @@ height with:
       cm.update("livereveal", {
                     "scroll": True,
       })
+
+
+Add overlay, header, footer and background images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible to add the config option ``overlay`` to build a constant background.
+It is wrapped in a ``<div>``, so it can be text or html and, in this case, the user is
+entirely responsible for styling:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+        "overlay": "<div class='myheader'><h2>my company</h2></div><div class='myfooter'><h2>the date</h2></div>",
+      })
+
+Otherwise, RISE looks for the config tags ``header``,
+``background`` and ``footer`` and, in this case, minimum styling is applied (floor and
+ceiling) but user is still responsible for cosmetic styling:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+                    "backimage": "mybackimage.png",
+                    "footer": "<h3>world</h3>",
+                    "header": "<h1>Hello</h1>",
+      })
+
+You can see some examples using these options at ``RISE/examples/overlay.ipynb`` and
+``RISE/examples/header-footer.ipynb``
+
+Add custom css
+~~~~~~~~~~~~~~
+
+RISE looks for two css files to apply CSS changes on top of the slideshow view.
+First, it attemps to load ``rise.css`` and this will be applied to all notebooks in the
+current directory.
+Second, it attemps to load ``<my_notebook_name>.css`` and this will be **only** applied
+to ``my_notebook_name.ipynb`` notebook file.
+Both files needs to be placed alongside with the notebook if interest, in the same directory.
+
+You can see some examples using this customization with ``RISE/examples/showflow.ipynb``.
 
 Usage with Leap Motion
 ~~~~~~~~~~~~~~~~~~~~~~

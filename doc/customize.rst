@@ -79,6 +79,41 @@ You can use a similar piece of python code to change the ``width`` and
                     "height": 768,
       })
 
+Autoselect
+~~~~~~~~~~
+
+As you progress into your slideshow, you either move to a new
+(sub)slide, or show (or hide) a new fragment; whenever any
+of these events occur, you may wish to have the jupyter selection
+keep in sync or not; this is the purpose of the auto-select feature.
+
+There are currently two settings that let you change the way
+auto-select behaves, here are their default values:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+                    "auto_select": "none",
+                    "auto_select_fragment": True,
+      })
+
+``auto_select`` can be any of ``"none"`` (default) ``"first"`` or
+``"code"``. When set to ``"first"``, the first cell is auto-selected,
+and when set to ``"code"`` the first code cell is auto-selected. Using
+``"none"`` turns off auto-selection.
+
+``auto_select_fragment`` is a boolean that states whether auto-selection
+should compute the cell to select based on the current slide as a
+whole (when set to ``False``) or restrict to the current fragment
+(when set to ``True``, the default).
+
+These settings are experimental and may change in the future. As of
+their introduction it seems like the most meaningful combinations are
+either ``auto_select = "none"`` - in which case the other setting is
+ignored, or ``auto_select = "code"` and ``auto_select_fragment = True``.
+
+
+
 Enable a right scroll bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 

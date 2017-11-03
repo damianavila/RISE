@@ -1,4 +1,4 @@
-/* -*- coding: utf-8 -*-
+/* -*- coding: utf-8; js-indent-level: 2 -*-
 * ----------------------------------------------------------------------------
 * Copyright (c) 2013-2017 Damián Avila and contributors.
 *
@@ -34,9 +34,19 @@ function configSlides() {
       transition: 'linear',
       slideNumber: true,
       start_slideshow_at: 'beginning',
+      /* can be either
+       * "none" - no autoselect,
+       * "first" - select first cell 
+       * "code" - select first code cell
+       */
+      auto_select: "none",
+      /* if auto_select is not "none", this boolean
+         says if selection focuses on the current fragment
+         or considers the whole slide */
+      auto_select_fragment: true,
       scroll: false,
       center: true,
-      autolaunch: false
+      autolaunch: false,
   };
 
   var config_section = new configmod.ConfigSection('livereveal',
@@ -77,8 +87,30 @@ Object.getPrototypeOf(Jupyter.notebook).get_cell_elements = function () {
     return this.container.find("div.cell");
 };
 
+// uniform way to access slide type, whether the slideshow metadata is set or not
+// also sometimes slide_type is set to '-' by the toolbar 
+function get_slide_type(cell) {
+  var slide_type = (cell.metadata.slideshow || {}).slide_type;
+  return ( (slide_type === undefined) || (slide_type == '-')) ? '' : slide_type;
+}
+
+function is_slide(cell)    {return get_slide_type(cell) == 'slide';}
+function is_subslide(cell) {return get_slide_type(cell) == 'subslide';}
+function is_fragment(cell) {return get_slide_type(cell) == 'fragment';}
+function is_regular(cell)  {return get_slide_type(cell) == '';}
+
 /* Use the slideshow metadata to rearrange cell DOM elements into the
  * structure expected by reveal.js
+ *
+ * in the process, each cell receives a 'smart_exec' tag that says
+ * how to behave when the cell gets executed with Shift-Enter
+ * this tag can be either
+ * 'smart_exec_slide' : just do exec, which is what RISE did on all cells at first
+   this is for the last cell on a (sub)slide
+   i.e. if next cell is slide or subslide
+ * 'smart_exec_fragment' : do exec + show next fragment
+   if next cell is a fragment
+ * 'smart_exec_next' : do the usual exec + select next like in classic notebook
  */
 function markupSlides(container) {
     // Machinery to create slide/subslide <section>s and give them IDs
@@ -111,12 +143,10 @@ function markupSlides(container) {
     var content_on_slide1 = false;
 
     var cells = Jupyter.notebook.get_cells();
-    var i, cell, slide_type;
 
-    for (i=0; i < cells.length; i++) {
-        cell = cells[i];
-        slide_type = (cell.metadata.slideshow || {}).slide_type;
-        //~ console.log('cell ' + i + ' is: '+ slide_type);
+    for (var i=0; i < cells.length; i++) {
+        var cell = cells[i];
+        var slide_type = get_slide_type(cell);
 
         if (content_on_slide1) {
             if (slide_type === 'slide') {
@@ -129,7 +159,9 @@ function markupSlides(container) {
                 // Start new subslide
                 current_fragment = subslide_section = new_subslide();
             } else if (slide_type === 'fragment') {
-                current_fragment = $('<div>').addClass('fragment')
+              // record the <div class='fragment'> element corresponding
+              // to each fragment cell in the 'fragment_div' attribute
+              cell.fragment_div = current_fragment = $('<div>').addClass('fragment')
                                     .appendTo(subslide_section);
             }
         } else if (slide_type !== 'notes' && slide_type !== 'skip') {
@@ -137,7 +169,8 @@ function markupSlides(container) {
             content_on_slide1 = true;
         }
 
-        // Record that this slide contains the selected cell
+      // Record that this slide contains the selected cell
+      // this is where we need i as set in the loop over cells
         if (i === selected_cell_idx) {
             selected_cell_slide = [slide_counter, subslide_counter];
         }
@@ -157,6 +190,40 @@ function markupSlides(container) {
         if (slide_type === 'skip') {
             cell.element.addClass('reveal-skip');
         }
+
+    }
+
+  // set on all cells a smart_exec tag that says how smart exec
+  // should behave on that cell
+  // the fragment cell also get a smart_exec_next_fragment
+  // attribute that points at the <div class='fragment'>
+  // corresponding to the (usually immediately) next cell
+  // that is a fragment cell
+  for (var i=0; i < cells.length; i++) {
+      var cell = cells[i];
+      // default is 'pinned' because this applies to the last cell
+      var tag = 'smart_exec_slide';
+      for (var j = i+1; j < cells.length; j++) {
+        var next_cell = cells[j];
+        var next_type = get_slide_type(next_cell);
+        if ((next_type == 'slide') || (next_type) == 'subslide') {
+          tag = 'smart_exec_slide';
+          break;
+        } else if (next_type == 'fragment') {
+          tag = 'smart_exec_fragment';
+          // these cells are the last before a fragment
+          // and when running smart-exec we'll want to know
+          // if that fragment is visible, so we keep a link to
+          // the <div class='fragment'> element of that (next)
+          // fragment cell
+          cell.smart_exec_next_fragment = next_cell.fragment_div;
+          break;
+        } else if (next_type == '') {
+          tag = 'smart_exec_next';
+          break;
+        }
+      }
+      cell.smart_exec = tag;
     }
 
     return selected_cell_slide;
@@ -328,7 +395,7 @@ function Revealer(selected_slide, config) {
     Reveal.initialize();
 
     var options = {
-    // All this config option load correctly just because of require-indeced delay,
+    // All this config option load correctly just because of require-induced delay,
     // it would be better to catch them from the config.get promise.
     controls: config.get_sync('controls'),
     progress: config.get_sync('progress'),
@@ -390,12 +457,21 @@ function Revealer(selected_slide, config) {
       Unselecter();
       // check and set the scrolling slide when you start the whole thing
       setScrollingSlide(config);
+      autoSelectHook(config);
     });
 
     Reveal.addEventListener( 'slidechanged', function( event ) {
       Unselecter();
       // check and set the scrolling slide every time the slide change
       setScrollingSlide(config);
+      autoSelectHook(config);
+    });
+
+    Reveal.addEventListener( 'fragmentshown', function( event ) {
+      autoSelectHook(config);
+    });
+    Reveal.addEventListener( 'fragmenthidden', function( event ) {
+      autoSelectHook(config);
     });
 
     // Sync when an output is generated.
@@ -431,12 +507,39 @@ function fixCellHeight(){
   }
 }
 
+// from notebook/actions.js
+// jupyter-notebook:run-cell -> notebook.execute_selected_cells()
+// jupyter-notebook:run-cell-and-select-next -> notebook.execute_cell_and_select_below()
+function smartExec() {
+  // is it really the selected cell that matters ?
+  var smart_exec = Jupyter.notebook.get_selected_cell().smart_exec;
+  if (smart_exec == 'smart_exec_slide') {
+    Jupyter.notebook.execute_selected_cells();
+  } else if (smart_exec == "smart_exec_fragment") {
+    // let's see if the next fragment is visible or not
+    var cell = Jupyter.notebook.get_selected_cell();
+    var fragment_div = cell.smart_exec_next_fragment;
+    var visible = $(fragment_div).hasClass('visible');
+    if (visible) {
+      Jupyter.notebook.execute_cell_and_select_below();
+    } else {
+      Jupyter.notebook.execute_selected_cells();
+    }
+  } else {
+    Jupyter.notebook.execute_cell_and_select_below();
+  }
+}
+
 function setupKeys(mode){
   // Lets setup some specific keys for the reveal_mode
   if (mode === 'reveal_mode') {
+    var action = {
+      help: "execute cell, and move to the next if on the same slide",
+      handler: smartExec,
+    };
     // Prevent next cell after execution because it does not play well with the slides assembly
-    Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
-    Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell");
+    Jupyter.keyboard_manager.command_shortcuts.add_shortcut("shift-enter", action);
+    Jupyter.keyboard_manager.edit_shortcuts.add_shortcut("shift-enter", action);
     // Save the f keyboard event for the Reveal fullscreen action
     Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
     Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
@@ -500,7 +603,7 @@ function buttonHelp() {
 function buttonExit() {
     var exit_button = $('<i/>')
         .attr('id','exit_b')
-        .attr('title','RISE Exit')
+        .attr('title','Exit RISE')
         .addClass('fa-times-circle fa-4x fa')
         .addClass('my-main-tool-bar')
         .css('position','fixed')
@@ -508,11 +611,7 @@ function buttonExit() {
         .css('left','0.48em')
         .css('opacity', '0.6')
         .css('z-index', '30')
-        .click(
-            function(){
-                revealMode('simple', 'zoom');
-            }
-        );
+        .click(revealMode);
     $('.reveal').after(exit_button);
 }
 
@@ -582,41 +681,72 @@ function Remover(config) {
   removeHeaderFooterOverlay();
 }
 
+/*
+  using Reveal.getCurrentSlide() it is possible to get a lot of data 
+  about where we are in the slideshow
+
+  the following function inspects this and returns a triple
+  [slide, subslide, fragments]
+
+  slide and subslide both start at 0 (1st slide numbered 0)
+
+  fragments is the number of <fragments> tags currently showed
+  that is to say, **in addition** to the slide beginning
+  note that a jupyter cell cannot be a slide *and* a fragment at the same time
+  the first slide however may be different as the first cell may be a fragment
+  which I chose not to support for now
+  bottom line: is fragments also starts at 0
+
+  ---------- historical note
+
+  in a previous implementation - for traditional notebooks - 
+  we used to get slide and subslide from window.location.href
+  however this in jupyter lab may be no longer possible
+
+  in addition this is the way to go for getting info on the current fragment
+*/
+function reveal_current_position() {
+	let current_slide = Reveal.getCurrentSlide();
+	// href of the form slide-2-3 
+	let href = current_slide.id;
+	let chunks = href.split('-');
+	let slide = Number(chunks[1]);
+	let subslide = Number(chunks[2]);
+	let fragments = $(current_slide).find('div.fragment.visible').length;
+	return [slide, subslide, fragments];
+}
+	
+    
 /* Just before exiting reveal mode, we run this function
  * whose job is to find the notebook index
  * for the first cell in the current (sub)slide
  * this allows to restore the notebook at the correct location,
  * i.e. with that cell being selected
-
- * we use the current URL that ends up in 'slide-n-m'
- * to find out about the slide and subslide */
-function reveal_cell_index(notebook) {
-  // last part of the current URL holds slide and subslide numbers
-  var href = window.location.href;
-  var chunks = href.split('-');
-  var len = chunks.length;
-  var slide = Number(chunks[len-2]);
-  var subslide = Number(chunks[len-1]);
+ *
+ * if cell_type is not set, returns the first cell in slide
+ * otherwise, it returns the first cell of that type in slide
+ * 
+ * if auto_select_fragment is set to true, search is restricted to the current fragment
+ * otherwise, the whole slide is considered
+ * 
+ * returns null if no match is found
+ */
+function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false) {
+  var [slide, subslide, fragment] = reveal_current_position();
 
   // just scan all cells until we find one at that address
-  // except that we need to start at -1 0r 0 depending on
+  // except that we need to start at -1 or 0 depending on
   // whether the first slide has a slide tag or not
-  var is_slide = function(cell) {
-    return cell.metadata.slideshow
-	&& cell.metadata.slideshow.slide_type == 'slide';
-  }
-  var is_subslide = function(cell) {
-    return cell.metadata.slideshow
-	&& cell.metadata.slideshow.slide_type == 'subslide';
-  }
   var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
   var subslide_counter = 0;
+  var fragment_counter = 0;    
   var result = null;
 
   notebook.get_cells().forEach(function (cell, index) {
-    if (result)
+    if (result) {
       // keep it short: skip if we found already
       return;
+    }
     if (is_slide(cell)) {
       slide_counter += 1;
       subslide_counter = 0;
@@ -624,12 +754,96 @@ function reveal_cell_index(notebook) {
       subslide_counter += 1;
     }
     if ((slide_counter == slide) && (subslide_counter == subslide)) {
+      // keep count of fragments but only on current slide
+      if (is_fragment(cell)) {
+	fragment_counter += 1;
+      }
+      // we're on the right slide
+      // now: do we need to also worry about focusing on the right fragment ?
+      // if auto_select_fragment is true, we only consider cells in the fragment
+      // otherwise, the whole (sub)slide is considered valid
+      var fragment_match = (auto_select_fragment) ? (fragment_counter == fragment) : true;
+      // we still need to match cell types
+      if ( fragment_match &&
+	   ((cell_type === null) || (cell.cell_type == cell_type))) {
 	result = index;
+      }
     }
   })
-    return result;
+  return result;
 }
 
+function registerHelperActions() {
+
+    function init_metadata_slideshow(optional_cell) {
+      // use selected cell if not specified
+      var cell = optional_cell || Jupyter.notebook.get_selected_cell();
+      let metadata = cell.metadata;
+      if (metadata.slideshow === undefined)
+        metadata.slideshow = {};
+      return metadata.slideshow;
+    }
+    
+    // accessing Jupyter.actions directly results in a warning message
+    // https://github.com/jupyter/notebook/issues/2401
+    let actions = Jupyter.notebook.keyboard_manager.actions;
+    actions.register(
+      {
+        help: '(un)set current cell as a Slide cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'slide') ? '' : 'slide';
+	  Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-slide", "RISE");
+
+    actions.register(
+      {
+        help: '(un)set current cell as a Sub-slide cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'subslide') ? '' : 'subslide';
+    Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-subslide", "RISE");
+
+    actions.register(
+      {
+        help: '(un)set current cell as a Fragment cell',
+        handler: function() {
+          let slideshow = init_metadata_slideshow();
+          slideshow.slide_type = (slideshow.slide_type == 'fragment') ? '' : 'fragment';
+	  Jupyter.CellToolbar.rebuild_all();
+        }
+      },
+      "toggle-fragment", "RISE");
+
+    actions.register(
+      { help: 'render all cells (all cells go to command mode)',
+        handler: function() {
+          Jupyter.notebook.get_cells().forEach(function(cell){
+	    cell.render();
+          })
+        }
+      },
+      "render-all-cells", "RISE");
+
+    actions.register(
+      {
+        help: 'edit all cells (all cells go to edit mode)',
+        handler: function() {
+          Jupyter.notebook.get_cells().forEach(function(cell){
+	    cell.unrender();
+          })
+        }
+      },
+      "edit-all-cells", "RISE");
+
+}
+
+// the entrypoint - call this to enter or exit reveal mode
 function revealMode() {
   // We search for a class tag in the maintoolbar to check if reveal mode is "on".
   // If the tag exits, we exit. Otherwise, we enter the reveal mode.
@@ -658,29 +872,70 @@ function revealMode() {
     // select and focus on current cell
     Jupyter.notebook.select(current_cell_index);
     // Need to delay the action a little bit so it actually focus the selected slide
-    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 1000);
+    setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 500);
   }
 }
+    
+/* I'm unsure how to deal with 2 config flags w/ the promise thing,
+ * so I hard-wire this for now
+ */
+let autoSelectTimeout = 250;
+
+function autoSelectHook(config) {
+  // well I do need 2 config flags now so let's chain the promises
+  var auto_select_promise = config.get('auto_select');
+  auto_select_promise.then(function(auto_select) {
+	  var cell_type =
+        (auto_select == "code") ? 'code'
+	      : (auto_select == "first") ? null
+	      : undefined;
+    
+	  /* turned off altogether */
+	  if (cell_type === undefined) {
+	    return;
+	  }
+
+    var auto_select_fragment_promise = config.get('auto_select_fragment');
+    auto_select_fragment_promise.then(function(auto_select_fragment) {
+	    setTimeout(function(){
+	      var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type, auto_select_fragment);
+	      // select and focus on current cell
+	      Jupyter.notebook.select(current_cell_index)
+	    }, autoSelectTimeout);
+    });
+  })
+}
+
 
 function setup() {
   $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
-  Jupyter.toolbar.add_buttons_group([
-    {
-    'label'   : 'Enter/Exit Live Reveal Slideshow',
-    'icon'    : 'fa-bar-chart-o',
-    'callback': function(){ revealMode(); },
-    'id'      : 'start_livereveal'
-    },
-  ]);
-  var document_keydown = function(event) {
-    if (event.which == 82 && event.altKey) {
-      revealMode();
-      return false;
-    }
-    return true;
-  };
-  $(document).keydown(document_keydown);
+  // use same label in button and shortcut
+  var rise_label = 'Enter/Exit RISE Slideshow';
+
+  // create button
+  Jupyter.toolbar.add_buttons_group([{
+    label   : rise_label,
+    icon    : 'fa-bar-chart-o',
+    callback: revealMode,
+    id      : 'RISE'
+  }]);
+  // define the slideshow action
+  var slideshow_action = {
+    help    : rise_label,
+    handler : revealMode,
+  }
+  // register action    
+  Jupyter.notebook.keyboard_manager.actions.register(slideshow_action, "slideshow", "RISE");
+  // bind action to keyboard shortcut
+  Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut('alt-r', 'RISE:slideshow');
+
+  // same with utility actions
+  registerHelperActions();
+
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-o', 'RISE:toggle-subslide');
+  Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-p', 'RISE:toggle-fragment');
 
   // autolaunch if specified in metadata
   var config = configSlides()

@@ -31,7 +31,18 @@ you can use ``pgup`` and ``pgdown``.
 2- You can know more about the reveal-specific shortcuts just pressing the help
 button at the slideshow left bottom corner.
 
-3- In contrast to the traditional Jupyter notebook, the ``Shift-Enter``
+3- Shift_Enter behaviour
+
+Starting version 5.1.0:
+We have developed a ``smart exec`` functionality which essentially it is bound to the
+Shift-Enter keyboard shortcut and allows you to execute cells and then proceed to the
+next cell **WHEN** the context permits. It is pretty similar to the native behaviour
+in the notebook view but it takes into consideration the slideshow view limitations
+and particularities. You can find a demo notebook at ``RISE/examples/showflow.ipynb``,
+but pretty sure you will find the behavior familiar enough to play with it immediately.
+
+Prior to version 5.1.0:
+In contrast to the traditional Jupyter notebook, the ``Shift-Enter``
 shortcut does not select the next cell, but will only run the cell (same as
 ``Ctrl-Enter``). This is intentional to not switch slides by running a cell
 and because some problem arises when you inject new cells on the fly.

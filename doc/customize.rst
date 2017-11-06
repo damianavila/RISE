@@ -79,6 +79,18 @@ You can use a similar piece of python code to change the ``width`` and
                     "height": 768,
       })
 
+Autolaunch
+~~~~~~~~~~
+
+You can setup your notebook to start immediately with the slideshow view using
+the `autolaunch` config option:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+                    "autolaunch": true,
+      })
+
 Autoselect
 ~~~~~~~~~~
 

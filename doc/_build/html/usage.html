@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Usage &#8212; RISE 5.0.0 documentation</title>
+    <title>Usage &#8212; RISE 5.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '5.0.0',
+        VERSION:     '5.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,6 +49,14 @@ will be available.</p>
 you access to the metadata for each cell. If you select the Slideshow preset, you
 will see in the right corner of each cell a little box where you can select
 the cell type (similar as for the static reveal slides with nbconvert).</p>
+<p>Starting version 5.1.0 you can customize some keyboard shortcuts using the keyboard
+shortcut editor from the notebook UI.</p>
+<p>We have defined 4 main shortcuts by default that you can change accordingly to your needs:
+* <code class="docutils literal"><span class="pre">alt-r</span></code>, “Enter/Exit Live Reveal Slideshow”
+* <code class="docutils literal"><span class="pre">shift-i</span></code>, Toggle slide
+* <code class="docutils literal"><span class="pre">shift-o</span></code>, Toggle-subslide
+* <code class="docutils literal"><span class="pre">shift-p</span></code>, Toggle-fragment
+In future version we will provide full customization for all the important RISE actions.</p>
 <p>Some notes:</p>
 <p>1- Use <code class="docutils literal"><span class="pre">spacebar</span></code> to go forward and <code class="docutils literal"><span class="pre">shift+spacebar</span></code> to go backward (or the
 visual controller in the slideshow right bottom corner). <code class="docutils literal"><span class="pre">Up</span></code> and <code class="docutils literal"><span class="pre">down</span></code> arrows are reserved to
@@ -56,7 +64,16 @@ interact with notebook cells and cannot be used to navigate the slides, instead
 you can use <code class="docutils literal"><span class="pre">pgup</span></code> and <code class="docutils literal"><span class="pre">pgdown</span></code>.</p>
 <p>2- You can know more about the reveal-specific shortcuts just pressing the help
 button at the slideshow left bottom corner.</p>
-<p>3- In contrast to the traditional Jupyter notebook, the <code class="docutils literal"><span class="pre">Shift-Enter</span></code>
+<p>3- Shift_Enter behaviour</p>
+<p>Starting version 5.1.0:
+We have developed a <code class="docutils literal"><span class="pre">smart</span> <span class="pre">exec</span></code> functionality which essentially it is bound to the
+Shift-Enter keyboard shortcut and allows you to execute cells and then proceed to the
+next cell <strong>WHEN</strong> the context permits. It is pretty similar to the native behaviour
+in the notebook view but it takes into consideration the slideshow view limitations
+and particularities. You can find a demo notebook at <code class="docutils literal"><span class="pre">RISE/examples/showflow.ipynb</span></code>,
+but pretty sure you will find the behavior familiar enough to play with it immediately.</p>
+<p>Prior to version 5.1.0:
+In contrast to the traditional Jupyter notebook, the <code class="docutils literal"><span class="pre">Shift-Enter</span></code>
 shortcut does not select the next cell, but will only run the cell (same as
 <code class="docutils literal"><span class="pre">Ctrl-Enter</span></code>). This is intentional to not switch slides by running a cell
 and because some problem arises when you inject new cells on the fly.

@@ -79,6 +79,51 @@ You can use a similar piece of python code to change the ``width`` and
                     "height": 768,
       })
 
+Autolaunch
+~~~~~~~~~~
+
+You can setup your notebook to start immediately with the slideshow view using
+the `autolaunch` config option:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+                    "autolaunch": true,
+      })
+
+Autoselect
+~~~~~~~~~~
+
+As you progress into your slideshow, you either move to a new
+(sub)slide, or show (or hide) a new fragment; whenever any
+of these events occur, you may wish to have the jupyter selection
+keep in sync or not; this is the purpose of the auto-select feature.
+
+There are currently two settings that let you change the way
+auto-select behaves, here are their default values:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+                    "auto_select": "none",
+                    "auto_select_fragment": True,
+      })
+
+``auto_select`` can be any of ``"none"`` (default) ``"first"`` or
+``"code"``. When set to ``"first"``, the first cell is auto-selected,
+and when set to ``"code"`` the first code cell is auto-selected. Using
+``"none"`` turns off auto-selection.
+
+``auto_select_fragment`` is a boolean that states whether auto-selection
+should compute the cell to select based on the current slide as a
+whole (when set to ``False``) or restrict to the current fragment
+(when set to ``True``, the default).
+
+These settings are experimental and may change in the future. As of
+their introduction it seems like the most meaningful combinations are
+either ``auto_select = "none"`` - in which case the other setting is
+ignored, or ``auto_select = "code"` and ``auto_select_fragment = True``.
+
 Enable a right scroll bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -90,6 +135,47 @@ height with:
       cm.update("livereveal", {
                     "scroll": True,
       })
+
+
+Add overlay, header, footer and background images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible to add the config option ``overlay`` to build a constant background.
+It is wrapped in a ``<div>``, so it can be text or html and, in this case, the user is
+entirely responsible for styling:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+        "overlay": "<div class='myheader'><h2>my company</h2></div><div class='myfooter'><h2>the date</h2></div>",
+      })
+
+Otherwise, RISE looks for the config tags ``header``,
+``background`` and ``footer`` and, in this case, minimum styling is applied (floor and
+ceiling) but user is still responsible for cosmetic styling:
+
+  .. code-block:: python
+
+      cm.update("livereveal", {
+                    "backimage": "mybackimage.png",
+                    "footer": "<h3>world</h3>",
+                    "header": "<h1>Hello</h1>",
+      })
+
+You can see some examples using these options at ``RISE/examples/overlay.ipynb`` and
+``RISE/examples/header-footer.ipynb``
+
+Add custom css
+~~~~~~~~~~~~~~
+
+RISE looks for two css files to apply CSS changes on top of the slideshow view.
+First, it attemps to load ``rise.css`` and this will be applied to all notebooks in the
+current directory.
+Second, it attemps to load ``<my_notebook_name>.css`` and this will be **only** applied
+to ``my_notebook_name.ipynb`` notebook file.
+Both files needs to be placed alongside with the notebook if interest, in the same directory.
+
+You can see some examples using this customization with ``RISE/examples/showflow.ipynb``.
 
 Usage with Leap Motion
 ~~~~~~~~~~~~~~~~~~~~~~

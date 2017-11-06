@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Customizing RISE &#8212; RISE 5.0.0 documentation</title>
+    <title>Customizing RISE &#8212; RISE 5.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '5.0.0',
+        VERSION:     '5.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -115,6 +115,47 @@ of from the beginning, which is the default).</p>
 </div>
 </div></blockquote>
 </div>
+<div class="section" id="autolaunch">
+<h3>Autolaunch<a class="headerlink" href="#autolaunch" title="Permalink to this headline">¶</a></h3>
+<p>You can setup your notebook to start immediately with the slideshow view using
+the <cite>autolaunch</cite> config option:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;autolaunch&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="autoselect">
+<h3>Autoselect<a class="headerlink" href="#autoselect" title="Permalink to this headline">¶</a></h3>
+<p>As you progress into your slideshow, you either move to a new
+(sub)slide, or show (or hide) a new fragment; whenever any
+of these events occur, you may wish to have the jupyter selection
+keep in sync or not; this is the purpose of the auto-select feature.</p>
+<p>There are currently two settings that let you change the way
+auto-select behaves, here are their default values:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;auto_select&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;auto_select_fragment&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><code class="docutils literal"><span class="pre">auto_select</span></code> can be any of <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> (default) <code class="docutils literal"><span class="pre">&quot;first&quot;</span></code> or
+<code class="docutils literal"><span class="pre">&quot;code&quot;</span></code>. When set to <code class="docutils literal"><span class="pre">&quot;first&quot;</span></code>, the first cell is auto-selected,
+and when set to <code class="docutils literal"><span class="pre">&quot;code&quot;</span></code> the first code cell is auto-selected. Using
+<code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> turns off auto-selection.</p>
+<p><code class="docutils literal"><span class="pre">auto_select_fragment</span></code> is a boolean that states whether auto-selection
+should compute the cell to select based on the current slide as a
+whole (when set to <code class="docutils literal"><span class="pre">False</span></code>) or restrict to the current fragment
+(when set to <code class="docutils literal"><span class="pre">True</span></code>, the default).</p>
+<p>These settings are experimental and may change in the future. As of
+their introduction it seems like the most meaningful combinations are
+either <code class="docutils literal"><span class="pre">auto_select</span> <span class="pre">=</span> <span class="pre">&quot;none&quot;</span></code> - in which case the other setting is
+ignored, or <code class="docutils literal"><span class="pre">auto_select</span> <span class="pre">=</span> <span class="pre">&quot;code&quot;`</span> <span class="pre">and</span> <span class="pre">``auto_select_fragment</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
+</div>
 <div class="section" id="enable-a-right-scroll-bar">
 <h3>Enable a right scroll bar<a class="headerlink" href="#enable-a-right-scroll-bar" title="Permalink to this headline">¶</a></h3>
 <p>Or to enable a right scroll bar for your content exceeding the slide vertical
@@ -126,6 +167,43 @@ height with:</p>
 </pre></div>
 </div>
 </div></blockquote>
+</div>
+<div class="section" id="add-overlay-header-footer-and-background-images">
+<h3>Add overlay, header, footer and background images<a class="headerlink" href="#add-overlay-header-footer-and-background-images" title="Permalink to this headline">¶</a></h3>
+<p>It is possible to add the config option <code class="docutils literal"><span class="pre">overlay</span></code> to build a constant background.
+It is wrapped in a <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code>, so it can be text or html and, in this case, the user is
+entirely responsible for styling:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="s2">&quot;overlay&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;div class=&#39;myheader&#39;&gt;&lt;h2&gt;my company&lt;/h2&gt;&lt;/div&gt;&lt;div class=&#39;myfooter&#39;&gt;&lt;h2&gt;the date&lt;/h2&gt;&lt;/div&gt;&quot;</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Otherwise, RISE looks for the config tags <code class="docutils literal"><span class="pre">header</span></code>,
+<code class="docutils literal"><span class="pre">background</span></code> and <code class="docutils literal"><span class="pre">footer</span></code> and, in this case, minimum styling is applied (floor and
+ceiling) but user is still responsible for cosmetic styling:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;backimage&quot;</span><span class="p">:</span> <span class="s2">&quot;mybackimage.png&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;footer&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;h3&gt;world&lt;/h3&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;h1&gt;Hello&lt;/h1&gt;&quot;</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can see some examples using these options at <code class="docutils literal"><span class="pre">RISE/examples/overlay.ipynb</span></code> and
+<code class="docutils literal"><span class="pre">RISE/examples/header-footer.ipynb</span></code></p>
+</div>
+<div class="section" id="add-custom-css">
+<h3>Add custom css<a class="headerlink" href="#add-custom-css" title="Permalink to this headline">¶</a></h3>
+<p>RISE looks for two css files to apply CSS changes on top of the slideshow view.
+First, it attemps to load <code class="docutils literal"><span class="pre">rise.css</span></code> and this will be applied to all notebooks in the
+current directory.
+Second, it attemps to load <code class="docutils literal"><span class="pre">&lt;my_notebook_name&gt;.css</span></code> and this will be <strong>only</strong> applied
+to <code class="docutils literal"><span class="pre">my_notebook_name.ipynb</span></code> notebook file.
+Both files needs to be placed alongside with the notebook if interest, in the same directory.</p>
+<p>You can see some examples using this customization with <code class="docutils literal"><span class="pre">RISE/examples/showflow.ipynb</span></code>.</p>
 </div>
 <div class="section" id="usage-with-leap-motion">
 <h3>Usage with Leap Motion<a class="headerlink" href="#usage-with-leap-motion" title="Permalink to this headline">¶</a></h3>
@@ -175,7 +253,11 @@ problems with codemirror.</p>
 <li><a class="reference internal" href="#configuration-options">Configuration options</a><ul>
 <li><a class="reference internal" href="#choosing-a-theme-and-transition">Choosing a theme and transition</a></li>
 <li><a class="reference internal" href="#change-the-width-and-height-of-slides">Change the width and height of slides</a></li>
+<li><a class="reference internal" href="#autolaunch">Autolaunch</a></li>
+<li><a class="reference internal" href="#autoselect">Autoselect</a></li>
 <li><a class="reference internal" href="#enable-a-right-scroll-bar">Enable a right scroll bar</a></li>
+<li><a class="reference internal" href="#add-overlay-header-footer-and-background-images">Add overlay, header, footer and background images</a></li>
+<li><a class="reference internal" href="#add-custom-css">Add custom css</a></li>
 <li><a class="reference internal" href="#usage-with-leap-motion">Usage with Leap Motion</a></li>
 <li><a class="reference internal" href="#other-configuration-options">Other configuration options</a></li>
 </ul>

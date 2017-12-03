@@ -4,3 +4,4 @@ rise.egg-info/
 rise/__pycache__/
 rise/static/main.css
 rise/static/reveal.js/
+doc/_build/

@@ -299,11 +299,12 @@ define([
    * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
    */
   var outputObserver = null;
-  function setupOutputObserver() {
+  function setupOutputObserver(config) {
     function mutationHandler(mutationRecords) {
       mutationRecords.forEach(function(mutation) {
         if (mutation.addedNodes && mutation.addedNodes.length) {
           Reveal.sync();
+          setScrollingSlide(config);
         }
       });
     }
@@ -494,7 +495,7 @@ define([
               });
 
               // Sync when an output is generated.
-              setupOutputObserver();
+              setupOutputObserver(config);
 
               // Setup the starting slide
               setStartingSlide(selected_slide, config);

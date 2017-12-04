@@ -818,8 +818,8 @@ define([
       return metadata.slideshow;
     }
 
-    // newtype can be any of 'slide' 'subslide' 'fragment' 'note' 'skip'
-    function toggle_slide_type(newtype) {
+    // new_type can be any of 'slide' 'subslide' 'fragment' 'note' 'skip'
+    function toggle_slide_type(new_type) {
       let slideshow = init_metadata_slideshow();
       slideshow.slide_type = (slideshow.slide_type == new_type) ? '' : new_type;
       Jupyter.CellToolbar.rebuild_all();

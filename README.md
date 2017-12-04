@@ -3,6 +3,8 @@
 **Reveal.js - Jupyter/IPython Slideshow Extension**, also known as *live_reveal*.
 Quickly turn your Jupyter Notebooks into a live presentation.
 
+![Usage](https://damianavila.github.io/RISE/_images/basic_usage.gif)
+
 See the [RISE Documentation](https://damianavila.github.io/RISE) for more
 details.
 

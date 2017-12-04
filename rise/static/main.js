@@ -860,12 +860,12 @@ define([
                      },
                      "render-all-cells", "RISE");
 
-    actions.register({help: 'edit all cells (all cells go to edit mode)',
-                      handler: function() {
-                        Jupyter.notebook.get_cells().forEach(function(cell){
-	                  cell.unrender();
-                        })
-                      }
+    actions.register({ help   : 'edit all cells (all cells go to edit mode)',
+                       handler: function() {
+                         Jupyter.notebook.get_cells().forEach(function(cell){
+	                   cell.unrender();
+                         })
+                       }
                      },
                      "edit-all-cells", "RISE");
 

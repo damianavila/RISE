@@ -256,6 +256,7 @@ define([
         // Start from the beginning
         Reveal.slide(0, 0);
       }
+      setScrollingSlide(config);
     });
 
   }

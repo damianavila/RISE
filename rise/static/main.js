@@ -939,19 +939,16 @@ define([
   function setup() {
     $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
-    // use same label in button and shortcut
-    var rise_label = 'Enter/Exit RISE Slideshow';
-
     // create button
     Jupyter.toolbar.add_buttons_group([{
-      label   : rise_label,
+      label   : 'RISE Slideshow',
       icon    : 'fa-bar-chart-o',
       callback: revealMode,
       id      : 'RISE'
     }]);
     // define the slideshow action
     var slideshow_action = {
-      help    : rise_label,
+      help    : 'Enter/Exit RISE Slideshow',
       handler : revealMode,
     }
     // register action    

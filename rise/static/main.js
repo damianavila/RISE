@@ -33,14 +33,25 @@ define([
       theme: 'simple',
       transition: 'linear',
       slideNumber: true,
-      start_slideshow_at: 'beginning',
-      /* can be either
-       * "none" - no autoselect,
-       * "first" - select first cell
-       * "code" - select first code cell
+      /* describe where to start slideshow
+       * can be either:
+       * 'beginning' : start on first slide 
+       * 'selected'  : start on current slide
+       * xxx: could be useful to add more policies
+       * like alowing to start on a hard-wired slide number
        */
-      auto_select: "none",
-      /* if auto_select is not "none", this boolean
+      start_slideshow_at: 'selected',
+      /* describe how to select cells when new contents
+       * is displayed (new slide or new fragment)
+       * can be either:
+       * 'none' - no autoselect
+       * 'code' - auto-select first code cell if any
+       * 'first' - select first cell - should be
+       * considered an experimental attempt, does
+       * not seem very helpful in real life
+       */
+      auto_select: 'code',
+      /* if auto_select is not 'none', this boolean
        * says if selection focuses on the current fragment
        * or considers the whole slide
        */

@@ -19,6 +19,9 @@ version! A notebook **rendered** as a **Reveal.js**-based slideshow,
 where you can **execute** code or show to the audience whatever you can show/do
 inside the notebook itself (but in a "slidy" way).
 
+.. image:: basic_usage.gif
+    :alt: basic_usage
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

@@ -566,13 +566,8 @@ define([
   function setupKeys(mode){
     // Lets setup some specific keys for the reveal_mode
     if (mode === 'reveal_mode') {
-      var action = {
-        help: "execute cell, and move to the next if on the same slide",
-        handler: smartExec,
-      };
-      // Prevent next cell after execution because it does not play well with the slides assembly
-      Jupyter.keyboard_manager.command_shortcuts.add_shortcut("shift-enter", action);
-      Jupyter.keyboard_manager.edit_shortcuts.add_shortcut("shift-enter", action);
+      Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "RISE:smart-exec");
+      Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "RISE:smart-exec");
       // Save the f keyboard event for the Reveal fullscreen action
       Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
       Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
@@ -820,6 +815,10 @@ define([
                      },
                      "slideshow", "RISE");
 
+    actions.register({ help: "execute cell, and move to the next if on the same slide",
+                       handler: smartExec,
+                     },
+                     "smart-exec", "RISE");
 
     // helpers for toggling slide_type
     function init_metadata_slideshow(optional_cell) {

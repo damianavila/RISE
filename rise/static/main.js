@@ -566,13 +566,8 @@ define([
   function setupKeys(mode){
     // Lets setup some specific keys for the reveal_mode
     if (mode === 'reveal_mode') {
-      var action = {
-        help: "execute cell, and move to the next if on the same slide",
-        handler: smartExec,
-      };
-      // Prevent next cell after execution because it does not play well with the slides assembly
-      Jupyter.keyboard_manager.command_shortcuts.add_shortcut("shift-enter", action);
-      Jupyter.keyboard_manager.edit_shortcuts.add_shortcut("shift-enter", action);
+      Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "RISE:smart-exec");
+      Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "RISE:smart-exec");
       // Save the f keyboard event for the Reveal fullscreen action
       Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
       Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
@@ -808,8 +803,24 @@ define([
     return result;
   }
 
-  function registerHelperActions() {
+  function registerJupyterActions() {
 
+    // accessing Jupyter.actions directly results in a warning message
+    // https://github.com/jupyter/notebook/issues/2401
+    let actions = Jupyter.notebook.keyboard_manager.actions;
+
+    // register main action
+    actions.register({ help    : 'Enter/Exit RISE Slideshow',
+                       handler : revealMode,
+                     },
+                     "slideshow", "RISE");
+
+    actions.register({ help: "execute cell, and move to the next if on the same slide",
+                       handler: smartExec,
+                     },
+                     "smart-exec", "RISE");
+
+    // helpers for toggling slide_type
     function init_metadata_slideshow(optional_cell) {
       // use selected cell if not specified
       var cell = optional_cell || Jupyter.notebook.get_selected_cell();
@@ -819,62 +830,56 @@ define([
       return metadata.slideshow;
     }
 
-    // accessing Jupyter.actions directly results in a warning message
-    // https://github.com/jupyter/notebook/issues/2401
-    let actions = Jupyter.notebook.keyboard_manager.actions;
-    actions.register(
-      {
-        help: '(un)set current cell as a Slide cell',
-        handler: function() {
-          let slideshow = init_metadata_slideshow();
-          slideshow.slide_type = (slideshow.slide_type == 'slide') ? '' : 'slide';
-	  Jupyter.CellToolbar.rebuild_all();
-        }
-      },
-      "toggle-slide", "RISE");
+    // new_type can be any of 'slide' 'subslide' 'fragment' 'note' 'skip'
+    function toggle_slide_type(new_type) {
+      let slideshow = init_metadata_slideshow();
+      slideshow.slide_type = (slideshow.slide_type == new_type) ? '' : new_type;
+      Jupyter.CellToolbar.rebuild_all();
+    }
 
-    actions.register(
-      {
-        help: '(un)set current cell as a Sub-slide cell',
-        handler: function() {
-          let slideshow = init_metadata_slideshow();
-          slideshow.slide_type = (slideshow.slide_type == 'subslide') ? '' : 'subslide';
-          Jupyter.CellToolbar.rebuild_all();
-        }
-      },
-      "toggle-subslide", "RISE");
+    actions.register({ help   : '(un)set current cell as a Slide cell',
+                       handler: function() { toggle_slide_type('slide'); }
+                     },
+                     "toggle-slide", "RISE");
 
-    actions.register(
-      {
-        help: '(un)set current cell as a Fragment cell',
-        handler: function() {
-          let slideshow = init_metadata_slideshow();
-          slideshow.slide_type = (slideshow.slide_type == 'fragment') ? '' : 'fragment';
-	  Jupyter.CellToolbar.rebuild_all();
-        }
-      },
-      "toggle-fragment", "RISE");
+    actions.register({ help   : '(un)set current cell as a Sub-slide cell',
+                       handler: function() { toggle_slide_type('subslide'); }
+                     },
+                     "toggle-subslide", "RISE");
 
-    actions.register(
-      { help: 'render all cells (all cells go to command mode)',
-        handler: function() {
-          Jupyter.notebook.get_cells().forEach(function(cell){
-	    cell.render();
-          })
-        }
-      },
-      "render-all-cells", "RISE");
+    actions.register({ help   : '(un)set current cell as a Fragment cell',
+                       handler: function() { toggle_slide_type('fragment'); }
+                     },
+                     "toggle-fragment", "RISE");
 
-    actions.register(
-      {
-        help: 'edit all cells (all cells go to edit mode)',
-        handler: function() {
-          Jupyter.notebook.get_cells().forEach(function(cell){
-	    cell.unrender();
-          })
-        }
-      },
-      "edit-all-cells", "RISE");
+    actions.register({ help   : '(un)set current cell as a Note cell',
+                       handler: function() { toggle_slide_type('note'); }
+                     },
+                     "toggle-note", "RISE");
+
+    actions.register({ help   : '(un)set current cell as a Skip cell',
+                       handler: function() { toggle_slide_type('skip'); }
+                     },
+                     "toggle-skip", "RISE");
+
+
+    actions.register({ help   : 'render all cells (all cells go to command mode)',
+                       handler: function() {
+                         Jupyter.notebook.get_cells().forEach(function(cell){
+	                   cell.render();
+                         })
+                       }
+                     },
+                     "render-all-cells", "RISE");
+
+    actions.register({ help   : 'edit all cells (all cells go to edit mode)',
+                       handler: function() {
+                         Jupyter.notebook.get_cells().forEach(function(cell){
+	                   cell.unrender();
+                         })
+                       }
+                     },
+                     "edit-all-cells", "RISE");
 
   }
 
@@ -941,29 +946,20 @@ define([
   function setup() {
     $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
 
-    // use same label in button and shortcut
-    var rise_label = 'Enter/Exit RISE Slideshow';
+    // register all known actions
+    registerJupyterActions();
 
     // create button
     Jupyter.toolbar.add_buttons_group([{
-      label   : rise_label,
+      action  : "RISE:slideshow",
       icon    : 'fa-bar-chart-o',
-      callback: revealMode,
       id      : 'RISE'
     }]);
-    // define the slideshow action
-    var slideshow_action = {
-      help    : rise_label,
-      handler : revealMode,
-    }
-    // register action    
-    Jupyter.notebook.keyboard_manager.actions.register(slideshow_action, "slideshow", "RISE");
-    // bind action to keyboard shortcut
+
+    //////// bind to keyboard shortcut
+    // main
     Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut('alt-r', 'RISE:slideshow');
-
-    // same with utility actions
-    registerHelperActions();
-
+    // a selection of utilities - more for the sake of example
     Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
     Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-o', 'RISE:toggle-subslide');
     Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-p', 'RISE:toggle-fragment');

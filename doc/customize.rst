@@ -98,11 +98,12 @@ Choosing where the slideshow begins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following configure changes where the slides begin. By default, RISE
-will start at the first slide of the presentation. To use the current selected
-slide use the following configuration::
+will start at the selected slide. To have it start at the first slide instead,
+use the following configuration::
 
-  {...
-   "livereveal": {"start_slideshow_at": "selected"}
+  {
+   ...
+   "livereveal": {"start_slideshow_at": "beginning"}
   }
 
 .. _config_width_height:
@@ -150,25 +151,30 @@ auto-select behaves, here are their default values::
 
   {
    ...
-   "livereveal": {"auto_select": "none",
+   "livereveal": {"auto_select": "code",
                   "auto_select_fragment": true}
   }
 
 ``auto_select`` can be any of:
 
-* ``"none"`` (no auto-selection, default)
-* ``"first"`` (the first cell is auto-selected)
 * ``"code"`` (the first code cell is auto-selected)
+* ``"none"`` (no auto-selection) 
+* ``"first"`` (the first cell is auto-selected) 
 
 ``auto_select_fragment`` is a boolean that states whether auto-selection
 should select cells based on the current slide as a
 whole (when set to ``false``) or restrict to the current fragment
 (when set to ``true``, the default).
 
-These settings are experimental and may change in the future. As of
-their introduction it seems like the most meaningful combinations are
+These settings are experimental and may change in the future; we
+might remove ``auto_select_fragment`` as a setting altogether; we
+might also turn ``auto_select`` into a mere boolean, since the
+current setting ``auto_select = "first"`` has not proved of any
+practical value. Regardless, it seems like the most meaningful
+combinations as of now are
 either ``auto_select = "none"`` - in which case the other setting is
-ignored, or ``auto_select = "code"` and ``auto_select_fragment = true``.
+ignored, or ``auto_select = "code"` and ``auto_select_fragment =
+true``, which now is the default.
 
 .. _config_right_scroll:
 
@@ -257,3 +263,39 @@ to ``my_notebook_name.ipynb`` notebook file.
 Both files needs to be placed alongside with the notebook if interest, in the same directory.
 
 You can see some examples using this customization with ``RISE/examples/showflow.ipynb``.
+
+Jupyter actions
+~~~~~~~~~~~~~~~
+
+Here are the Jupyter actions registered by RISE:
+
+    RISE:slideshow         // Enter/Exit RISE Slideshow
+    RISE:smart-exec        // execute cell, and move to the next if on the same slide
+
+    RISE:toggle-slide      // (un)set current cell as a Slide cell
+    RISE:toggle-subslide   // (un)set current cell as a Sub-slide cell
+    RISE:toggle-fragment   // (un)set current cell as a Fragment cell
+    RISE:toggle-note       // (un)set current cell as a Note cell
+    RISE:toggle-skip       // (un)set current cell as a Skip cell
+    
+    RISE:render-all-cells  // render all cells (all cells go to command mode)
+    RISE:edit-all-cells    // edit all cells (all cells go to edit mode)
+
+
+
+Here is an example of what you can put in your
+``~/.jupyter/custom/custom.js`` in order to attach one of these
+actions to a custom keyboard shortcut:
+
+    define(
+        ['base/js/namespace'],
+        function(Jupyter) {
+    
+            let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
+            
+            // set / unset the 'Slide' tag in slideshow metadata
+            command_shortcuts.set_shortcut(
+                'shift-i', 'RISE:toggle-slide');
+        })
+
+        

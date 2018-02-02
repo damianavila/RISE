@@ -15,23 +15,25 @@ Starting version 5.1.0 you can customize some keyboard shortcuts using the keybo
 shortcut editor from the notebook UI.
 
 We have defined 4 main shortcuts by default that you can change accordingly to your needs:
+
 * ``alt-r``, "Enter/Exit Live Reveal Slideshow"
 * ``shift-i``, Toggle slide
 * ``shift-o``, Toggle-subslide
 * ``shift-p``, Toggle-fragment
+
 In future version we will provide full customization for all the important RISE actions.
 
 Some notes:
 
-1- Use ``spacebar`` to go forward and ``shift+spacebar`` to go backward (or the
+1. Use ``spacebar`` to go forward and ``shift+spacebar`` to go backward (or the
 visual controller in the slideshow right bottom corner). ``Up`` and ``down`` arrows are reserved to
 interact with notebook cells and cannot be used to navigate the slides, instead
 you can use ``pgup`` and ``pgdown``.
 
-2- You can know more about the reveal-specific shortcuts just pressing the help
+2. You can know more about the reveal-specific shortcuts just pressing the help
 button at the slideshow left bottom corner.
 
-3- Shift_Enter behaviour
+3. Shift_Enter behaviour
 
 Starting version 5.1.0:
 We have developed a ``smart exec`` functionality which essentially it is bound to the
@@ -48,10 +50,10 @@ shortcut does not select the next cell, but will only run the cell (same as
 and because some problem arises when you inject new cells on the fly.
 When you exit the presentation mode, the behavior comes back to normal.
 
-4- Darkish themes have css conflict with the notebook css, so it need customization
+4. Darkish themes have css conflict with the notebook css, so it need customization
 to make them work (not provided by default).
 
-5- Markdown Images get left aligned by default. Enclose the image like
+5. Markdown Images get left aligned by default. Enclose the image like
 ``<center>![noimg](path/to/image.png)</center>`` to center it.
 
 

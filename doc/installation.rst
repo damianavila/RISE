@@ -44,3 +44,19 @@ Conclusion: If you use conda, life will be easy ;-)
    In all the options available the ``--sys-prefix`` option will install and
    enable the extension in the current environment, if you want a ``--user`` based or a
    ``--system`` based installation just use those option instead in the above commands.
+
+
+Disable and Removal
+-------------------
+
+You can disable RISE with::
+
+ jupyter-nbextension disable rise --py --sys-prefix
+
+If you want to remove it from your environment::
+
+ jupyter-nbextension uninstall rise --py --sys-prefix
+
+Alternative, you can also remove it with conda (if you already installed it using conda)::
+
+ conda remove rise

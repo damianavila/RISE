@@ -33,7 +33,7 @@ you can use ``pgup`` and ``pgdown``.
 2. You can know more about the reveal-specific shortcuts just pressing the help
 button at the slideshow left bottom corner.
 
-3. Shift_Enter behaviour
+3. Shift-Enter behaviour
 
 Starting version 5.1.0:
 We have developed a ``smart exec`` functionality which essentially it is bound to the

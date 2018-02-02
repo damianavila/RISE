@@ -122,6 +122,8 @@ configuration::
 
 Note that you may want to increase the slide height to ensure that cell
 outputs fit within a single slide.
+Additionally you can use your browser's shortcuts to zoom in/out (``Cmd/Ctrl +``
+and ``Cmd/Ctrl -``) and to adjust the slide content to your screen/projector size.
 
 .. _config_autolaunch:
 
@@ -267,35 +269,31 @@ You can see some examples using this customization with ``RISE/examples/showflow
 Jupyter actions
 ~~~~~~~~~~~~~~~
 
-Here are the Jupyter actions registered by RISE:
+Here are the Jupyter actions registered by RISE::
 
-    RISE:slideshow         // Enter/Exit RISE Slideshow
-    RISE:smart-exec        // execute cell, and move to the next if on the same slide
-
-    RISE:toggle-slide      // (un)set current cell as a Slide cell
-    RISE:toggle-subslide   // (un)set current cell as a Sub-slide cell
-    RISE:toggle-fragment   // (un)set current cell as a Fragment cell
-    RISE:toggle-note       // (un)set current cell as a Note cell
-    RISE:toggle-skip       // (un)set current cell as a Skip cell
-    
-    RISE:render-all-cells  // render all cells (all cells go to command mode)
-    RISE:edit-all-cells    // edit all cells (all cells go to edit mode)
-
-
+  RISE:slideshow         // Enter/Exit RISE Slideshow
+  RISE:smart-exec        // execute cell, and move to the next if on the same slide
+  RISE:toggle-slide      // (un)set current cell as a Slide cell
+  RISE:toggle-subslide   // (un)set current cell as a Sub-slide cell
+  RISE:toggle-fragment   // (un)set current cell as a Fragment cell
+  RISE:toggle-note       // (un)set current cell as a Note cell
+  RISE:toggle-skip       // (un)set current cell as a Skip cell
+  RISE:render-all-cells  // render all cells (all cells go to command mode)
+  RISE:edit-all-cells    // edit all cells (all cells go to edit mode)
 
 Here is an example of what you can put in your
 ``~/.jupyter/custom/custom.js`` in order to attach one of these
-actions to a custom keyboard shortcut:
+actions to a custom keyboard shortcut::
 
-    define(
-        ['base/js/namespace'],
-        function(Jupyter) {
-    
-            let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
-            
-            // set / unset the 'Slide' tag in slideshow metadata
-            command_shortcuts.set_shortcut(
-                'shift-i', 'RISE:toggle-slide');
-        })
+  define(
+      ['base/js/namespace'],
+      function(Jupyter) {
+
+          let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
+
+          // set / unset the 'Slide' tag in slideshow metadata
+          command_shortcuts.set_shortcut(
+              'shift-i', 'RISE:toggle-slide');
+      })
 
         

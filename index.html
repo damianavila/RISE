@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>RISE &#8212; RISE 5.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '5.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rise">
+<h1>RISE<a class="headerlink" href="#rise" title="Permalink to this headline">¶</a></h1>
+<p><strong>Reveal.js - Jupyter/IPython Slideshow Extension</strong>, also known as <em>live_reveal</em></p>
+<a class="reference external image-reference" href="https://gitter.im/damianavila/RISE"><img alt="Gitter" src="https://badges.gitter.im/Join%20Chat.svg" /></a>
+<div class="section" id="what-is-rise">
+<h2>What is RISE?<a class="headerlink" href="#what-is-rise" title="Permalink to this headline">¶</a></h2>
+<p>As you know… we love <strong>Jupyter/IPython</strong> and we like <strong>Reveal.js</strong> too.</p>
+<p>Previously, we developed a “converter” for the <cite>nbconvert</cite> library to
+export a <code class="docutils literal"><span class="pre">ipynb</span></code> file to a <em>STATIC</em> html slideshow based in <strong>Reveal.js</strong> library.</p>
+<p>But with RISE, you don’t have a <em>STATIC</em> version anymore, you have a <strong>LIVE</strong>
+version! A notebook <strong>rendered</strong> as a <strong>Reveal.js</strong>-based slideshow,
+where you can <strong>execute</strong> code or show to the audience whatever you can show/do
+inside the notebook itself (but in a “slidy” way).</p>
+<img alt="basic_usage" src="_images/basic_usage.gif" />
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#disable-and-removal">Disable and Removal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#pdf-export">PDF Export</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#using-nbconvert">Using nbconvert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#using-decktape">Using decktape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#talks">Talks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize.html">Customizing RISE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#using-python">Using python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#using-notebook-metadata">Using notebook metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#configuration-options">Configuration options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#adding-custom-css">Adding custom CSS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#versions">Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev/index.html">Developer Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev/develop.html">Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/release.html">Releases</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="feedback">
+<h2>Feedback<a class="headerlink" href="#feedback" title="Permalink to this headline">¶</a></h2>
+<p>If you have any feedback, or find any bugs, please
+<a class="reference external" href="https://github.com/damianavila/RISE/issues">open an issue</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">RISE</a></h1>
+
+
+
+<p class="blurb">RISE: "Live" Reveal.js Jupyter/IPython Slideshow Extension</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=damianavila&repo=RISE&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#disable-and-removal">Disable and Removal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#pdf-export">PDF Export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#talks">Talks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize.html">Customizing RISE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/index.html">Developer Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="installation.html" title="next chapter">Installation</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damian Avila.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

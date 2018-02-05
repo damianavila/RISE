@@ -1,0 +1,398 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Customizing RISE &#8212; RISE 5.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '5.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Usage" href="usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="customizing-rise">
+<h1>Customizing RISE<a class="headerlink" href="#customizing-rise" title="Permalink to this headline">¶</a></h1>
+<p>There are two main ways to configure RISE. One invokes Python code to
+update RISE configuration. The other involves updating the notebook’s
+metadata, which is stored as a YAML file.</p>
+<div class="section" id="using-python">
+<span id="config-python"></span><h2>Using python<a class="headerlink" href="#using-python" title="Permalink to this headline">¶</a></h2>
+<p>To configure RISE with python, you need to use the JSON config manager
+from <code class="docutils literal"><span class="pre">traitlets</span></code>. Do so with the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traitlets.config.manager</span> <span class="kn">import</span> <span class="n">BaseJSONConfigManager</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/home/damian/miniconda3/envs/rise_latest/etc/jupyter/nbconfig&quot;</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">BaseJSONConfigManager</span><span class="p">(</span><span class="n">config_dir</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="n">cm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;livereveal&quot;</span><span class="p">,</span> <span class="p">{</span>
+              <span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;sky&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="s2">&quot;zoom&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;start_slideshow_at&quot;</span><span class="p">:</span> <span class="s2">&quot;selected&quot;</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal"><span class="pre">path</span></code> is where the <code class="docutils literal"><span class="pre">nbconfig</span></code> is located. This will vary depending
+on where you “installed” and “enabled” the nbextension. For more information,
+see these docs:
+<a class="reference external" href="http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html">http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html</a> and
+<a class="reference external" href="http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html">http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html</a>.</p>
+</div>
+</div>
+<div class="section" id="using-notebook-metadata">
+<h2>Using notebook metadata<a class="headerlink" href="#using-notebook-metadata" title="Permalink to this headline">¶</a></h2>
+<p>You can also put <code class="docutils literal"><span class="pre">reveal.js</span></code> configuration in your notebook metadata
+(Edit-&gt;Edit Notebook Metadata) like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="o">...</span>
+    <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;serif&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="s2">&quot;zoom&quot;</span><span class="p">,</span>
+        <span class="o">...</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration-options">
+<h2>Configuration options<a class="headerlink" href="#configuration-options" title="Permalink to this headline">¶</a></h2>
+<p>There are many configuration options in RISE. This section includes details
+how to use each one. We’ll use JSON to show key/value combinations, but see
+<a class="reference internal" href="#config-python"><span class="std std-ref">Using python</span></a> for how to set configurations directly from python.</p>
+<p>Below is a list of all configuration options and links
+to the section for each.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">theme</span></code> (<a class="reference internal" href="#config-theme"><span class="std std-ref">Choosing a theme</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">transition</span></code> (<a class="reference internal" href="#config-transition"><span class="std std-ref">Choosing a transition</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">start_slideshow_at</span></code> (<a class="reference internal" href="#config-slide-begin"><span class="std std-ref">Choosing where the slideshow begins</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">width</span></code> and <code class="docutils literal"><span class="pre">height</span></code> (<a class="reference internal" href="#config-width-height"><span class="std std-ref">Change the width and height of slides</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">autolaunch</span></code> (<a class="reference internal" href="#config-autolaunch"><span class="std std-ref">Automatically launch RISE</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">auto_select</span></code> and <code class="docutils literal"><span class="pre">auto_select_fragment</span></code> (<a class="reference internal" href="#config-autoselect"><span class="std std-ref">Select cells based on the current slide</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">scroll</span></code> (<a class="reference internal" href="#config-right-scroll"><span class="std std-ref">Enable a right scroll bar</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">backimage</span></code>, <code class="docutils literal"><span class="pre">header</span></code>, <code class="docutils literal"><span class="pre">footer</span></code>, <code class="docutils literal"><span class="pre">overlay</span></code> (<a class="reference internal" href="#config-overlay"><span class="std std-ref">Add overlay, header, footer and background images</span></a>)</li>
+<li><code class="docutils literal"><span class="pre">leap_motion</span></code> (<a class="reference internal" href="#config-leap-motion"><span class="std std-ref">Usage with Leap Motion</span></a>)</li>
+</ul>
+<div class="section" id="choosing-a-theme">
+<span id="config-theme"></span><h3>Choosing a theme<a class="headerlink" href="#choosing-a-theme" title="Permalink to this headline">¶</a></h3>
+<p>You can configure the <code class="docutils literal"><span class="pre">theme</span></code> of your presentation (which controls the
+general look and feel of the presentation) with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;sky&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="choosing-a-transition">
+<span id="config-transition"></span><h3>Choosing a transition<a class="headerlink" href="#choosing-a-transition" title="Permalink to this headline">¶</a></h3>
+<p>The transition configuration defines what happens in between slides.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="s2">&quot;zoom&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="choosing-where-the-slideshow-begins">
+<span id="config-slide-begin"></span><h3>Choosing where the slideshow begins<a class="headerlink" href="#choosing-where-the-slideshow-begins" title="Permalink to this headline">¶</a></h3>
+<p>The following configure changes where the slides begin. By default, RISE
+will start at the selected slide. To have it start at the first slide instead,
+use the following configuration:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start_slideshow_at&quot;</span><span class="p">:</span> <span class="s2">&quot;beginning&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="change-the-width-and-height-of-slides">
+<span id="config-width-height"></span><h3>Change the width and height of slides<a class="headerlink" href="#change-the-width-and-height-of-slides" title="Permalink to this headline">¶</a></h3>
+<p>To control the width and height of your slides, use the following
+configuration:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
+                <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">768</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that you may want to increase the slide height to ensure that cell
+outputs fit within a single slide.
+Additionally you can use your browser’s shortcuts to zoom in/out (<code class="docutils literal"><span class="pre">Cmd/Ctrl</span> <span class="pre">+</span></code>
+and <code class="docutils literal"><span class="pre">Cmd/Ctrl</span> <span class="pre">-</span></code>) and to adjust the slide content to your screen/projector size.</p>
+</div>
+<div class="section" id="automatically-launch-rise">
+<span id="config-autolaunch"></span><h3>Automatically launch RISE<a class="headerlink" href="#automatically-launch-rise" title="Permalink to this headline">¶</a></h3>
+<p>You can setup your notebook to start immediately with the slideshow view using
+the <code class="docutils literal"><span class="pre">autolaunch</span></code> config option:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;autolaunch&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="select-cells-based-on-the-current-slide">
+<span id="config-autoselect"></span><h3>Select cells based on the current slide<a class="headerlink" href="#select-cells-based-on-the-current-slide" title="Permalink to this headline">¶</a></h3>
+<p>As you progress into your slideshow, you either move to a new
+(sub)slide, or show (or hide) a new fragment; whenever any
+of these events occur, you may wish to have the jupyter selection
+keep in sync or not; this is the purpose of the auto-select feature.</p>
+<p>There are currently two settings that let you change the way
+auto-select behaves, here are their default values:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;auto_select&quot;</span><span class="p">:</span> <span class="s2">&quot;code&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;auto_select_fragment&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">auto_select</span></code> can be any of:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&quot;code&quot;</span></code> (the first code cell is auto-selected)</li>
+<li><code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> (no auto-selection)</li>
+<li><code class="docutils literal"><span class="pre">&quot;first&quot;</span></code> (the first cell is auto-selected)</li>
+</ul>
+<p><code class="docutils literal"><span class="pre">auto_select_fragment</span></code> is a boolean that states whether auto-selection
+should select cells based on the current slide as a
+whole (when set to <code class="docutils literal"><span class="pre">false</span></code>) or restrict to the current fragment
+(when set to <code class="docutils literal"><span class="pre">true</span></code>, the default).</p>
+<p>These settings are experimental and may change in the future; we
+might remove <code class="docutils literal"><span class="pre">auto_select_fragment</span></code> as a setting altogether; we
+might also turn <code class="docutils literal"><span class="pre">auto_select</span></code> into a mere boolean, since the
+current setting <code class="docutils literal"><span class="pre">auto_select</span> <span class="pre">=</span> <span class="pre">&quot;first&quot;</span></code> has not proved of any
+practical value. Regardless, it seems like the most meaningful
+combinations as of now are
+either <code class="docutils literal"><span class="pre">auto_select</span> <span class="pre">=</span> <span class="pre">&quot;none&quot;</span></code> - in which case the other setting is
+ignored, or <code class="docutils literal"><span class="pre">auto_select</span> <span class="pre">=</span> <span class="pre">&quot;code&quot;`</span> <span class="pre">and</span> <span class="pre">``auto_select_fragment</span> <span class="pre">=</span>
+<span class="pre">true</span></code>, which now is the default.</p>
+</div>
+<div class="section" id="enable-a-right-scroll-bar">
+<span id="config-right-scroll"></span><h3>Enable a right scroll bar<a class="headerlink" href="#enable-a-right-scroll-bar" title="Permalink to this headline">¶</a></h3>
+<p>To enable a right scroll bar for your content exceeding the slide vertical
+height, use the following configuratoin:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scroll&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-overlay-header-footer-and-background-images">
+<span id="config-overlay"></span><h3>Add overlay, header, footer and background images<a class="headerlink" href="#add-overlay-header-footer-and-background-images" title="Permalink to this headline">¶</a></h3>
+<p>It is possible to add the config option <code class="docutils literal"><span class="pre">overlay</span></code> to build a constant background.
+It is wrapped in a <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code>, so it can be text or html. In this case, the user is
+entirely responsible for styling. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;overlay&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;div class=&#39;myheader&#39;&gt;&lt;h2&gt;my company&lt;/h2&gt;&lt;/div&gt;&lt;div class=&#39;myfooter&#39;&gt;&lt;h2&gt;the date&lt;/h2&gt;&lt;/div&gt;&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In addition, you can specify headers, footers, and backgrounds. In this case,
+minimal styling is applied (floor and ceiling) but user is still responsible
+for cosmetic styling:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;backimage&quot;</span><span class="p">:</span> <span class="s2">&quot;mybackimage.png&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;h1&gt;Hello&lt;/h1&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;footer&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;h3&gt;World!&lt;/h3&gt;&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can see some examples using these options at <code class="docutils literal"><span class="pre">RISE/examples/overlay.ipynb</span></code> and
+<code class="docutils literal"><span class="pre">RISE/examples/header-footer.ipynb</span></code></p>
+</div>
+<div class="section" id="usage-with-leap-motion">
+<span id="config-leap-motion"></span><h3>Usage with Leap Motion<a class="headerlink" href="#usage-with-leap-motion" title="Permalink to this headline">¶</a></h3>
+<p><strong>Reveal.js</strong> supports the <a class="reference external" href="https://www.leapmotion.com">Leap Motion</a> controller.
+To control RISE slides with the Leap, put the
+<a class="reference external" href="https://github.com/hakimel/reveal.js#leap-motion">reveal leap plugin options</a>
+in your config with the following parameters:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;leap_motion&quot;</span><span class="p">:</span> <span class="p">{</span>
+                   <span class="s2">&quot;naturalSwipe&quot;</span>  <span class="p">:</span> <span class="n">true</span><span class="p">,</span>     <span class="c1"># Invert swipe gestures</span>
+                   <span class="s2">&quot;pointerOpacity&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>      <span class="c1"># Set pointer opacity to 0.5</span>
+                   <span class="s2">&quot;pointerColor&quot;</span>  <span class="p">:</span> <span class="s2">&quot;#d80000&quot;</span><span class="p">}</span><span class="c1"># Red pointer&quot;nat.png&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To disable it:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="o">...</span>
+ <span class="s2">&quot;livereveal&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;leap_motion&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-configuration-options">
+<h3>Other configuration options<a class="headerlink" href="#other-configuration-options" title="Permalink to this headline">¶</a></h3>
+<p>There are also options for <code class="docutils literal"><span class="pre">controls</span></code>, <code class="docutils literal"><span class="pre">progress</span></code>, <code class="docutils literal"><span class="pre">history</span></code>, <code class="docutils literal"><span class="pre">minScale</span></code>
+and <code class="docutils literal"><span class="pre">slideNumber</span></code>.</p>
+<p><strong>Note</strong>: The use of the <code class="docutils literal"><span class="pre">minScale</span></code> option (values other then <code class="docutils literal"><span class="pre">1.0</span></code>) can cause
+problems with codemirror.</p>
+</div>
+</div>
+<div class="section" id="adding-custom-css">
+<h2>Adding custom CSS<a class="headerlink" href="#adding-custom-css" title="Permalink to this headline">¶</a></h2>
+<p>RISE looks for two css files to apply CSS changes on top of the slideshow view.
+First, it attemps to load <code class="docutils literal"><span class="pre">rise.css</span></code> and this will be applied to all notebooks in the
+current directory.</p>
+<p>Second, it attemps to load <code class="docutils literal"><span class="pre">&lt;my_notebook_name&gt;.css</span></code> and this will be <strong>only</strong> applied
+to <code class="docutils literal"><span class="pre">my_notebook_name.ipynb</span></code> notebook file.
+Both files needs to be placed alongside with the notebook if interest, in the same directory.</p>
+<p>You can see some examples using this customization with <code class="docutils literal"><span class="pre">RISE/examples/showflow.ipynb</span></code>.</p>
+<div class="section" id="jupyter-actions">
+<h3>Jupyter actions<a class="headerlink" href="#jupyter-actions" title="Permalink to this headline">¶</a></h3>
+<p>Here are the Jupyter actions registered by RISE:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RISE</span><span class="p">:</span><span class="n">slideshow</span>         <span class="o">//</span> <span class="n">Enter</span><span class="o">/</span><span class="n">Exit</span> <span class="n">RISE</span> <span class="n">Slideshow</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">smart</span><span class="o">-</span><span class="n">exec</span>        <span class="o">//</span> <span class="n">execute</span> <span class="n">cell</span><span class="p">,</span> <span class="ow">and</span> <span class="n">move</span> <span class="n">to</span> <span class="n">the</span> <span class="nb">next</span> <span class="k">if</span> <span class="n">on</span> <span class="n">the</span> <span class="n">same</span> <span class="n">slide</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">toggle</span><span class="o">-</span><span class="n">slide</span>      <span class="o">//</span> <span class="p">(</span><span class="n">un</span><span class="p">)</span><span class="nb">set</span> <span class="n">current</span> <span class="n">cell</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Slide</span> <span class="n">cell</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">toggle</span><span class="o">-</span><span class="n">subslide</span>   <span class="o">//</span> <span class="p">(</span><span class="n">un</span><span class="p">)</span><span class="nb">set</span> <span class="n">current</span> <span class="n">cell</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Sub</span><span class="o">-</span><span class="n">slide</span> <span class="n">cell</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">toggle</span><span class="o">-</span><span class="n">fragment</span>   <span class="o">//</span> <span class="p">(</span><span class="n">un</span><span class="p">)</span><span class="nb">set</span> <span class="n">current</span> <span class="n">cell</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Fragment</span> <span class="n">cell</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">toggle</span><span class="o">-</span><span class="n">note</span>       <span class="o">//</span> <span class="p">(</span><span class="n">un</span><span class="p">)</span><span class="nb">set</span> <span class="n">current</span> <span class="n">cell</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Note</span> <span class="n">cell</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">toggle</span><span class="o">-</span><span class="n">skip</span>       <span class="o">//</span> <span class="p">(</span><span class="n">un</span><span class="p">)</span><span class="nb">set</span> <span class="n">current</span> <span class="n">cell</span> <span class="k">as</span> <span class="n">a</span> <span class="n">Skip</span> <span class="n">cell</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">render</span><span class="o">-</span><span class="nb">all</span><span class="o">-</span><span class="n">cells</span>  <span class="o">//</span> <span class="n">render</span> <span class="nb">all</span> <span class="n">cells</span> <span class="p">(</span><span class="nb">all</span> <span class="n">cells</span> <span class="n">go</span> <span class="n">to</span> <span class="n">command</span> <span class="n">mode</span><span class="p">)</span>
+<span class="n">RISE</span><span class="p">:</span><span class="n">edit</span><span class="o">-</span><span class="nb">all</span><span class="o">-</span><span class="n">cells</span>    <span class="o">//</span> <span class="n">edit</span> <span class="nb">all</span> <span class="n">cells</span> <span class="p">(</span><span class="nb">all</span> <span class="n">cells</span> <span class="n">go</span> <span class="n">to</span> <span class="n">edit</span> <span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is an example of what you can put in your
+<code class="docutils literal"><span class="pre">~/.jupyter/custom/custom.js</span></code> in order to attach one of these
+actions to a custom keyboard shortcut:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">define</span><span class="p">(</span>
+    <span class="p">[</span><span class="s1">&#39;base/js/namespace&#39;</span><span class="p">],</span>
+    <span class="n">function</span><span class="p">(</span><span class="n">Jupyter</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="n">let</span> <span class="n">command_shortcuts</span> <span class="o">=</span> <span class="n">Jupyter</span><span class="o">.</span><span class="n">keyboard_manager</span><span class="o">.</span><span class="n">command_shortcuts</span><span class="p">;</span>
+
+        <span class="o">//</span> <span class="nb">set</span> <span class="o">/</span> <span class="n">unset</span> <span class="n">the</span> <span class="s1">&#39;Slide&#39;</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">slideshow</span> <span class="n">metadata</span>
+        <span class="n">command_shortcuts</span><span class="o">.</span><span class="n">set_shortcut</span><span class="p">(</span>
+            <span class="s1">&#39;shift-i&#39;</span><span class="p">,</span> <span class="s1">&#39;RISE:toggle-slide&#39;</span><span class="p">);</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">RISE</a></h1>
+
+
+
+<p class="blurb">RISE: "Live" Reveal.js Jupyter/IPython Slideshow Extension</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=damianavila&repo=RISE&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#disable-and-removal">Disable and Removal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#pdf-export">PDF Export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#talks">Talks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Customizing RISE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-python">Using python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-notebook-metadata">Using notebook metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-options">Configuration options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-custom-css">Adding custom CSS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/index.html">Developer Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="usage.html" title="previous chapter">Usage</a></li>
+      <li>Next: <a href="changelog.html" title="next chapter">Changelog</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/customize.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damian Avila.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/customize.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

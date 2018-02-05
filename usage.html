@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Usage &#8212; RISE 5.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '5.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Customizing RISE" href="customize.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>A Very quick video showing how to use RISE lives here: <a class="reference external" href="https://youtu.be/sXyFa_r1nxA">https://youtu.be/sXyFa_r1nxA</a></p>
+<p>In the notebook toolbar, a new button (“Enter/Exit Live Reveal Slideshow”)
+will be available.</p>
+<p>In the notebook menu, the “View” option contains a “Cell Toolbar” sub-menu that gives
+you access to the metadata for each cell. If you select the Slideshow preset, you
+will see in the right corner of each cell a little box where you can select
+the cell type (similar as for the static reveal slides with nbconvert).</p>
+<p>Starting version 5.1.0 you can customize some keyboard shortcuts using the keyboard
+shortcut editor from the notebook UI.</p>
+<p>We have defined 4 main shortcuts by default that you can change accordingly to your needs:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">alt-r</span></code>, “Enter/Exit Live Reveal Slideshow”</li>
+<li><code class="docutils literal"><span class="pre">shift-i</span></code>, Toggle slide</li>
+<li><code class="docutils literal"><span class="pre">shift-o</span></code>, Toggle-subslide</li>
+<li><code class="docutils literal"><span class="pre">shift-p</span></code>, Toggle-fragment</li>
+</ul>
+<p>In future version we will provide full customization for all the important RISE actions.</p>
+<p>Some notes:</p>
+<p>1. Use <code class="docutils literal"><span class="pre">spacebar</span></code> to go forward and <code class="docutils literal"><span class="pre">shift+spacebar</span></code> to go backward (or the
+visual controller in the slideshow right bottom corner). <code class="docutils literal"><span class="pre">Up</span></code> and <code class="docutils literal"><span class="pre">down</span></code> arrows are reserved to
+interact with notebook cells and cannot be used to navigate the slides, instead
+you can use <code class="docutils literal"><span class="pre">pgup</span></code> and <code class="docutils literal"><span class="pre">pgdown</span></code>.</p>
+<p>2. You can know more about the reveal-specific shortcuts just pressing the help
+button at the slideshow left bottom corner.</p>
+<ol class="arabic simple" start="3">
+<li>Shift-Enter behaviour</li>
+</ol>
+<p>Starting version 5.1.0:
+We have developed a <code class="docutils literal"><span class="pre">smart</span> <span class="pre">exec</span></code> functionality which essentially it is bound to the
+Shift-Enter keyboard shortcut and allows you to execute cells and then proceed to the
+next cell <strong>WHEN</strong> the context permits. It is pretty similar to the native behaviour
+in the notebook view but it takes into consideration the slideshow view limitations
+and particularities. You can find a demo notebook at <code class="docutils literal"><span class="pre">RISE/examples/showflow.ipynb</span></code>,
+but pretty sure you will find the behavior familiar enough to play with it immediately.</p>
+<p>Prior to version 5.1.0:
+In contrast to the traditional Jupyter notebook, the <code class="docutils literal"><span class="pre">Shift-Enter</span></code>
+shortcut does not select the next cell, but will only run the cell (same as
+<code class="docutils literal"><span class="pre">Ctrl-Enter</span></code>). This is intentional to not switch slides by running a cell
+and because some problem arises when you inject new cells on the fly.
+When you exit the presentation mode, the behavior comes back to normal.</p>
+<p>4. Darkish themes have css conflict with the notebook css, so it need customization
+to make them work (not provided by default).</p>
+<p>5. Markdown Images get left aligned by default. Enclose the image like
+<code class="docutils literal"><span class="pre">&lt;center&gt;![noimg](path/to/image.png)&lt;/center&gt;</span></code> to center it.</p>
+</div>
+<div class="section" id="pdf-export">
+<h1>PDF Export<a class="headerlink" href="#pdf-export" title="Permalink to this headline">¶</a></h1>
+<p>You can export your RISE presentation to PDF using the following procedures:</p>
+<div class="section" id="using-nbconvert">
+<h2>Using nbconvert<a class="headerlink" href="#using-nbconvert" title="Permalink to this headline">¶</a></h2>
+<p>1 - Generate the slides and serve them using nbconvert:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">slides</span> <span class="n">your_talk</span><span class="o">.</span><span class="n">ipynb</span> <span class="o">--</span><span class="n">post</span> <span class="n">serve</span>
+</pre></div>
+</div>
+<p>It opens up a webpage in the browser at <a class="reference external" href="http://127.0.0.1:8000/your_talk.slides.html#/">http://127.0.0.1:8000/your_talk.slides.html#/</a></p>
+<p>2 - Add <code class="docutils literal"><span class="pre">?print-pdf</span></code> to the query string as <a class="reference external" href="http://127.0.0.1:8000/your_talk.slides.html?print-pdf">http://127.0.0.1:8000/your_talk.slides.html?print-pdf</a></p>
+<p>Note that you need to remove the <code class="docutils literal"><span class="pre">#</span></code> at the end. The page will render the slides vertically.</p>
+<p>3 - Save to PDF in Chrome using the print option</p>
+<blockquote>
+<div><ul class="simple">
+<li>Open the in-browser print dialog (Cmd/Ctrl + P).</li>
+<li>Change the Destination setting to Save as PDF.</li>
+<li>Change the Layout to Landscape.</li>
+<li>Change the Margins to None.</li>
+<li>Enable the Background graphics option.</li>
+<li>Click Save.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="using-decktape">
+<h2>Using decktape<a class="headerlink" href="#using-decktape" title="Permalink to this headline">¶</a></h2>
+<p>1 - Clone decktape:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">astefanutti</span><span class="o">/</span><span class="n">decktape</span>
+</pre></div>
+</div>
+<p>2 - Download decktape’s forked version of phantomjs (see <a class="reference external" href="https://github.com/astefanutti/decktape">https://github.com/astefanutti/decktape</a>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Windows (MSVC 2013), for Windows Vista or later, bundles VC++ Runtime 2013</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">L</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">astefanutti</span><span class="o">/</span><span class="n">decktape</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v1</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="n">phantomjs</span><span class="o">-</span><span class="n">msvc2013</span><span class="o">-</span><span class="n">x86</span><span class="o">.</span><span class="n">exe</span> <span class="o">-</span><span class="n">o</span> <span class="n">phantomjs</span><span class="o">.</span><span class="n">exe</span>
+<span class="c1"># Mac OS X (Cocoa), 64-bit, for OS X 10.6 or later</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">L</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">astefanutti</span><span class="o">/</span><span class="n">decktape</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v1</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="n">phantomjs</span><span class="o">-</span><span class="n">osx</span><span class="o">-</span><span class="n">cocoa</span><span class="o">-</span><span class="n">x86</span><span class="o">-</span><span class="mi">64</span> <span class="o">-</span><span class="n">o</span> <span class="n">phantomjs</span>
+<span class="c1"># Linux (static build), 64-bit, requires fontconfig (CentOS) or libfontconfig (Debian, Ubuntu)</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">L</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">astefanutti</span><span class="o">/</span><span class="n">decktape</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v1</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="n">phantomjs</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86</span><span class="o">-</span><span class="mi">64</span> <span class="o">-</span><span class="n">o</span> <span class="n">phantomjs</span>
+</pre></div>
+</div>
+<p>3 - Put phantomjs on your PATH</p>
+<p>4 - Start the jupyter-notebook server (you don’t have to start the RISE presentation, you even don’t have to open any notebook at all)</p>
+<p>5 - <code class="docutils literal"><span class="pre">cd</span></code> into decktape’s cloned repository</p>
+<p>6 - Within decktape’s cloned repository run the decktape.js file like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phantomjs</span> <span class="n">decktape</span><span class="o">.</span><span class="n">js</span> <span class="n">rise</span> <span class="o">&lt;</span><span class="n">Jupyter</span><span class="o">-</span><span class="n">Notebook</span><span class="o">-</span><span class="n">URL</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">Output</span><span class="o">-</span><span class="n">File</span><span class="o">&gt;.</span>
+</pre></div>
+</div>
+<p>More concretely, it looks something like the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>phantomjs decktape.js rise http://localhost:8888/notebooks/your/notebook.ipynb?token=5413981230123YourIndividualJupyterNotebookSessionToken412417923   /path/to/outputfile.pdf
+</pre></div>
+</div>
+<p>Note that the jupyter-notebook session token which seems needed for more recent jupyter-notebook versions. The token is shown to you when you start the jupter-notebook server from commandline.</p>
+<p>You can run into some problems using this approach:</p>
+<p>1 - If you run decktape.js with wrong token first, or some other things first, it could fail. Restarting the jupyter-notebook server helped.</p>
+<p>2 - If you have changed the default presentation size/width/height using the notebook metadata, you might have to adapt the call to include the <code class="docutils literal"><span class="pre">-s</span> <span class="pre">&lt;width&gt;x&lt;height&gt;</span></code> parameter:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">phantomjs</span> <span class="n">decktape</span><span class="o">.</span><span class="n">js</span> <span class="n">rise</span> <span class="o">-</span><span class="n">s</span> <span class="mi">1500</span><span class="n">x900</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8888</span><span class="o">/...</span>
+</pre></div>
+</div>
+<p>3 - If you experience issues when rendering svg files, please post your fix at astefanutti/decktape#90</p>
+<p>4 - Math rendering problems: just try to rerender (issue posted at astefanutti/decktape#91)</p>
+<p>5 - Fragments don’t show up at all. The current decktape rise plugin puts <code class="docutils literal"><span class="pre">fragments:</span> <span class="pre">false</span></code>,
+see <a class="reference external" href="https://github.com/astefanutti/decktape/blob/master/plugins/rise.js#L40">https://github.com/astefanutti/decktape/blob/master/plugins/rise.js#L40</a> which should render everything together but it is not working.
+When changing the above line to <code class="docutils literal"><span class="pre">fragments:</span> <span class="pre">true</span></code>, every fragment is rendered as a single slide which is a very efficient work around for the moment
+as you can simply delete the unwanted slides afterwards.</p>
+</div>
+</div>
+<div class="section" id="talks">
+<h1>Talks<a class="headerlink" href="#talks" title="Permalink to this headline">¶</a></h1>
+<p>My old talk about <strong>RISE</strong> at <em>SciPy 2014</em> (click on the image to see it):</p>
+<a class="reference external image-reference" href="https://www.youtube.com/watch?v=sZBKruEh0jI"><img alt="RJSE/RISE video" src="http://img.youtube.com/vi/sZBKruEh0jI/0.jpg" /></a>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">RISE</a></h1>
+
+
+
+<p class="blurb">RISE: "Live" Reveal.js Jupyter/IPython Slideshow Extension</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=damianavila&repo=RISE&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#disable-and-removal">Disable and Removal</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#pdf-export">PDF Export</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-nbconvert">Using nbconvert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-decktape">Using decktape</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#talks">Talks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize.html">Customizing RISE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/index.html">Developer Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="customize.html" title="next chapter">Customizing RISE</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Damian Avila.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/usage.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

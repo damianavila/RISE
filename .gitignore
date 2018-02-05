@@ -1,7 +1,0 @@
-.ipynb_checkpoints/
-node_modules
-rise.egg-info/
-rise/__pycache__/
-rise/static/main.css
-rise/static/reveal.js/
-doc/_build/

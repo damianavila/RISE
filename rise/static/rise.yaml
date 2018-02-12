@@ -1,0 +1,23 @@
+Type: Jupyter Notebook Extension
+Compatibility: jupyter-4.3, jupyter-notebook-5.2
+Name: RISE - Slideshow with reveal.js
+Main: main.js
+Description: "Run notebook as a slideshow thanks to reveal.js"
+Link: README.md
+Icon: rise.png
+Parameters:
+- name: RISE.controls
+  description: Add  buttons to exit and get help
+  input_type: checkbox
+  default: true
+- name: RISE.progress
+  description: Show progress as a line at the bottom 
+  input_type: checkbox
+  default: true
+- name: RISE.width
+  description: a css width attribute, like 1920 or 100%
+  input_type: string
+  default: 100%
+- name: RISE.toolbar_icon
+  description: font-awesome class for the RISE button in toolbar
+  default: fa-bar-chart-o

@@ -22,7 +22,7 @@ define([
    */
   function configSlides() {
 
-    var default_config = {
+    var hardwired_defaults = {
       controls: true,
       progress: true,
       history: true,
@@ -59,7 +59,17 @@ define([
       scroll: false,
       center: true,
       autolaunch: false,
+      toolbar_icon: 'fa-bar-chart',
     };
+
+    /* the config data:
+     * whose contents is defined n our yaml file
+     * whose values are set by nbextensions_configurator
+     * and that gets stored in nbconfig/notebook.json,
+     * this is where this data shows up */
+    nbextensions_config = Jupyter.notebook.config.data.RISE;
+    // merge it as appropriate
+    $.extend(true, hardwired_defaults, nbextensions_config);
 
     var config_section = new configmod.ConfigSection(
       'livereveal',
@@ -76,18 +86,19 @@ define([
 
     var final_config;
 
-    var rise_meta = Jupyter.notebook.metadata.livereveal;
+    var notebook_config = Jupyter.notebook.metadata.livereveal;
 
-    if(rise_meta !== undefined && Object.keys(rise_meta).length > 0){
-      final_config = $.extend(true, default_config, rise_meta);
+    if(notebook_config !== undefined && Object.keys(notebook_config).length > 0){
+      final_config = $.extend(true, hardwired_defaults, notebook_config);
       final_config = new configmod.ConfigWithDefaults(_config_section, final_config);
-      console.log("RISE metadata detected. Using ONLY RISE metadata on top of the default config. Custom config disabled.")
+      console.log("RISE metadata detected in notebook."
+                  + " Using ONLY RISE metadata on top of the default config. Custom config disabled.")
     } else {
-      final_config = new configmod.ConfigWithDefaults(config_section, default_config);
+      final_config = new configmod.ConfigWithDefaults(config_section, hardwired_defaults);
       console.log("No (or empty) RISE metadata. Using ONLY custom config (if exist) on top of the default config.")
     }
 
-    return final_config
+    return final_config;
 
   }
 
@@ -888,7 +899,7 @@ define([
     // We search for a class tag in the maintoolbar to check if reveal mode is "on".
     // If the tag exits, we exit. Otherwise, we enter the reveal mode.
     var tag = $('#maintoolbar').hasClass('reveal_tagging');
-    var config = configSlides()
+    var config = configSlides();
 
     if (!tag) {
       // Preparing the new reveal-compatible structure
@@ -949,11 +960,12 @@ define([
     // register all known actions
     registerJupyterActions();
 
+    var config = configSlides();
     // create button
     Jupyter.toolbar.add_buttons_group([{
       action  : "RISE:slideshow",
-      icon    : 'fa-bar-chart-o',
-      id      : 'RISE'
+      icon    : config.toobar_icon,
+      id      : 'RISE',
     }]);
 
     //////// bind to keyboard shortcut
@@ -965,11 +977,11 @@ define([
     Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-p', 'RISE:toggle-fragment');
 
     // autolaunch if specified in metadata
-    var config = configSlides()
     autoLaunch(config);
   }
 
   setup.load_ipython_extension = setup;
+  setup.load_jupyter_extension = setup;
 
   return setup;
 });

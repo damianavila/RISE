@@ -1,23 +1,194 @@
+#
+# NOTE that the defaults defined here are essentially NOT used
+# in the code, but if only for documentation purposes it is important
+# that they reflect the defaults that are hardwired in main.js
+#
 Type: Jupyter Notebook Extension
 Compatibility: jupyter-4.3, jupyter-notebook-5.2
 Name: RISE - Slideshow with reveal.js
 Main: main.js
 Description: "Run notebook as a slideshow thanks to reveal.js"
-Link: README.md
+Link: configurator.md
 Icon: rise.png
 Parameters:
-- name: RISE.controls
-  description: Add  buttons to exit and get help
+#
+- name: rise.autolaunch
+  description: >
+     autolaunch: autorun slideshow upon opening if set; active only
+     on notebooks that have a 'livereveal' or 'rise' section in their
+     metadata
+  input_type: checkbox
+  default: false
+#
+# xxx: could be useful to add more policies
+# like allowing to start on a hard-wired slide number
+#
+- name: rise.start_slideshow_at
+  description: >
+    start_slideshow_at: a string that describes where to start the slideshow
+    this can be either 'beginning' (start on first slide)
+    or 'selected' (start on the slide that contains the currently selected cell)
+  input_type: text
+  default: selected
+# 
+# the code also has provision for setting this to 'first'
+# but that's really not useful so I leave it out of this description
+#
+- name: rise.auto_select
+  description: >
+    auto_select: a string that specifies how to select cells when new contents
+    is displayed during the slideshow (typically, new slide or new fragment).
+    It can be either 'none' (no automatic selection),
+    or 'code' (select first code cell in new content).
+  input_type: text
+  default: code
+#
+# a companion to the above - probably not needed
+#
+- name: rise.auto_select_fragment
+  description: >
+    auto_select_fragment: when auto_select is not 'none', this boolean
+    says if auto selection focuses on the current fragment or considers
+    the whole slide. Probably safe to keep as true.
   input_type: checkbox
   default: true
-- name: RISE.progress
-  description: Show progress as a line at the bottom 
-  input_type: checkbox
+#
+# headers and footer and background image
+#
+- name: rise.header
+  description: >
+    header: the html text for a header that will show up on all slides
+  input_type: text
+  default:
+#
+- name: rise.footer
+  description: >
+    footer: the html text for a footer that will show up on all slides
+  input_type: text
+  default:
+#
+- name: rise.backimage
+  description: >
+    backimage: a (relative) filename for a background image that will show up on all slides
+  input_type: text
+  default:
+#
+- name: rise.overlay
+  description: >
+    overlay: some html text that will be inserted as-is on all pages. If this is provided,
+    the 3 previous settings (header, footer and backimage) are ignored altogether
+  input_type: text
+  default:
+#
+# the UI elements for RISE itself
+#
+- name: rise.toolbar_icon
+  description: >
+    toolbar_icon: font-awesome class for the RISE button in toolbar
+  default: fa-bar-chart
+#
+- name: rise.shortcuts.slideshow
+  description: shortcut to enter and exit slideshow 
+  input_type: hotkey
+  default: alt-r
+- name: rise.shortcuts.toggle-slide
+  description: shortcut to toggle the 'slide' tag on current cell
+  input_type: hotkey
+  default: shift-i
+- name: rise.shortcuts.toggle-subslide
+  description: shortcut to toggle the 'subslide' tag on current cell
+  input_type: hotkey
+  default: shift-u
+- name: rise.shortcuts.toggle-fragment
+  description: shortcut to toggle the 'fragment' tag on current cell
+  input_type: hotkey
+  default: shift-f
+- name: rise.shortcuts.toggle-notes
+  description: shortcut to toggle the 'notes' tag on current cell
+  input_type: hotkey
+  default: none
+- name: rise.shortcuts.toggle-skip
+  description: shortcut to toggle the 'skip' tag on current cell
+  input_type: hotkey
+  default: none
+#
+# passed to reveal as-is
+#
+- name: rise.theme
+  description: >
+    <strong>This setting, like all the ones below,
+    is passed directly to <a href="https://github.com/hakimel/reveal.js">
+    <code>reveal.js</code> see this doc</a></strong>.
+    <br/> theme: <a href="https://github.com/hakimel/reveal.js#theming">see a list of reveal's available native themes</a>
+  input_type: string
+  default: 'simple'
+#
+- name: rise.transition
+  description: >
+    transition: at least available: none - fade - slide - convex - concave - zoom - cube - linear
+  input_type: string
+  default: 'linear'
+#
+- name: rise.slideNumber
+  description: >
+    slideNumber: a string to specify if and how to number slides;
+    <a href="https://github.com/hakimel/reveal.js#slide-number" target='_'>see reveal's explanations.</a>
+  input_type: string
   default: true
-- name: RISE.width
-  description: a css width attribute, like 1920 or 100%
+#
+- name: rise.width
+  description: >
+    width: a css width attribute, like 1920 or 10cm or 100%
   input_type: string
   default: 100%
-- name: RISE.toolbar_icon
-  description: font-awesome class for the RISE button in toolbar
-  default: fa-bar-chart-o
+#
+- name: rise.height
+  description: >
+    height: xxx
+  default: "100%"
+#
+- name: rise.controls
+  description: >
+    controls: add buttons to exit and get help
+  input_type: checkbox
+  default: true
+#
+- name: rise.progress
+  description: >
+    progress: show progress as a line at the bottom 
+  input_type: checkbox
+  default: true
+#
+- name: rise.history
+  description: >
+    history: Push each slide change to the browser history
+  input_type: checkbox
+  default : true,
+#
+- name: rise.scroll
+  description: >
+    scroll: see reveal documentation
+  input_type: checkbox
+  default: false
+#
+- name: rise.center
+  description: >
+    center: see reveal documentation
+  input_type: checkbox
+  default: true
+#
+# I prefer to keep these 2 unexposed, it's unclear how to properly enter
+# floats using the configurator UI, and it may be more harmful than helpful
+# on the long run
+# - name: rise.margin
+#   description: >
+#     margin: see reveal documentation
+#   input_type: float
+#   default: 0.1
+# #
+# - name: rise.minScale
+#   description: >
+#     minScale: we need this for codemirror to work righ
+#   input_type: float
+#   default: 1.0
+#

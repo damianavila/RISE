@@ -85,7 +85,7 @@ general look and feel of the presentation) with::
 Choosing a transition
 ~~~~~~~~~~~~~~~~~~~~~
 
-The transition configuration defines what happens in between slides.::
+The transition configuration defines what happens in between slides::
 
   {
    ...

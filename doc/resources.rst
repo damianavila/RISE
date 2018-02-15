@@ -9,7 +9,8 @@ The following places are assets in the RISE development landscape:
   + Videos on youtube
     + basic usage (4'30'') https://youtu.be/sXyFa_r1nxA
     + see also below the talk from *SciPy 2014* (21')
-  + Demo notebook (no installation required) on mybinder (to be checked though) https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2Fheader-footer.ipynb
+  + Demo notebook (no installation required) on mybinder https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2FREADME.ipynb
+
       
 Talks
 -----

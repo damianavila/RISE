@@ -1,10 +1,10 @@
 PDF Export
-----------
+==========
 
 You can export your RISE presentation to PDF using the following procedures:
 
 Using nbconvert
-+++++++++++++++
+---------------
 
 1 - Generate the slides and serve them using nbconvert::
 
@@ -26,7 +26,7 @@ Note that you need to remove the ``#`` at the end. The page will render the slid
   + Click Save.
 
 Using decktape
-++++++++++++++
+--------------
 
 1 - Clone decktape::
 

@@ -1,6 +1,18 @@
 Customizing RISE
 ================
 
+xxx
+
+![](../examples/configurator.png)
+
+xxx configurator
+
+xxx compatibility livereveal / rise
+
+xxx see also damian's email, and in particular mention
+  jupyter --paths
+
+
 There are two main ways to configure RISE. One invokes Python code to
 update RISE configuration. The other involves updating the notebook's
 metadata, which is stored as a YAML file.
@@ -170,6 +182,8 @@ For example:
          "overlay": "<div class='myheader'><h2>my company</h2></div><div class='myfooter'><h2>the date</h2></div>"
      }
     }
+
+xxx
 
 In addition, you can specify headers, footers, and backgrounds.
 In this case, minimal styling is applied (floor and ceiling), but user is still responsible for cosmetic styling:

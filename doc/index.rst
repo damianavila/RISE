@@ -29,7 +29,7 @@ inside the notebook itself (but in a "slidy" way).
    installation.rst
    usage.rst
    customize.rst 
-   resources.rst 
+   resources.md 
    exportpdf.rst
    changelog.rst
    dev/index.rst

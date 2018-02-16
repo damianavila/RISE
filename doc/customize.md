@@ -1,89 +1,22 @@
 Customizing RISE
 ================
 
-xxx
-
-![](../examples/configurator.png)
-
-xxx configurator
-
-xxx compatibility livereveal / rise
-
-xxx see also damian's email, and in particular mention
-  jupyter --paths
-
-
-There are two main ways to configure RISE. One invokes Python code to
-update RISE configuration. The other involves updating the notebook's
-metadata, which is stored as a YAML file.
-
-Using python
-------------
-
-To configure RISE with python, you need to use the JSON config manager
-from `traitlets`. Do so with the following code:
-
-```python
-from traitlets.config.manager import BaseJSONConfigManager
-path = "/home/damian/miniconda3/envs/rise_latest/etc/jupyter/nbconfig"
-cm = BaseJSONConfigManager(config_dir=path)
-cm.update("livereveal", {
-              "theme": "sky",
-              "transition": "zoom",
-              "start_slideshow_at": "selected",
-})
-```
-
-**Notes:**
-
-* `path` is where the `nbconfig` is located. This will vary depending on
-where you "installed" and "enabled" the nbextension.
-* For more information, see these docs:
-<http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
-and
-<http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
-
-Using notebook metadata
------------------------
-
-You can also put `reveal.js` configuration in your notebook metadata
-(Edit → Edit Notebook Metadata) like this:
-
-    {
-        ...
-        "livereveal": {
-            "theme": "serif",
-            "transition": "zoom",
-            ...
-        },
-        ...
-    }
-
-Configuration options
----------------------
+What to configure
+-----------------
 
 There are many configuration options in RISE. This section includes
-details how to use each one. We'll use JSON to show key/value
-combinations, but see [Using python](#using-python) for how to set
-configurations directly from python.
+details on how to use each one. We'll use JSON to show key/value
+combinations, see the second part for how to actually implement those
+settings.
 
-### Choosing a theme
+### Automatically launch RISE
 
-You can configure the `theme` of your presentation (which controls the
-general look and feel of the presentation) with:
-
-    {
-     ...
-     "livereveal": {"theme": "sky"}
-    }
-
-### Choosing a transition
-
-The transition configuration defines what happens in between slides:
+You can setup your notebook to start immediately with the slideshow view
+using the `autolaunch` config option:
 
     {
      ...
-     "livereveal": {"transition": "zoom"}
+     "rise": {"autolaunch": true}
     }
 
 ### Choosing where the slideshow begins
@@ -94,7 +27,26 @@ instead, use the following configuration:
 
     {
      ...
-     "livereveal": {"start_slideshow_at": "beginning"}
+     "rise": {"start_slideshow_at": "beginning"}
+    }
+
+### Choosing a theme
+
+You can configure the `theme` of your presentation (which controls the
+general look and feel of the presentation) with:
+
+    {
+     ...
+     "rise": {"theme": "sky"}
+    }
+
+### Choosing a transition
+
+The transition configuration defines what happens in between slides:
+
+    {
+     ...
+     "rise": {"transition": "zoom"}
     }
 
 ### Change the width and height of slides
@@ -104,24 +56,14 @@ configuration:
 
     {
      ...
-     "livereveal": {"width": 1024,
-                    "height": 768}
+     "rise": {"width": 1024,
+              "height": 768}
     }
 
 Note that you may want to increase the slide height to ensure that cell
 outputs fit within a single slide. Additionally you can use your
 browser's shortcuts to zoom in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`) and
 to adjust the slide content to your screen/projector size.
-
-### Automatically launch RISE
-
-You can setup your notebook to start immediately with the slideshow view
-using the `autolaunch` config option:
-
-    {
-     ...
-     "livereveal": {"autolaunch": true}
-    }
 
 ### Select cells based on the current slide
 
@@ -135,7 +77,7 @@ behaves, here are their default values:
 
     {
      ...
-     "livereveal": {"auto_select": "code",
+     "rise": {"auto_select": "code",
                     "auto_select_fragment": true}
     }
 
@@ -166,10 +108,10 @@ use the following configuration:
 
     {
      ...
-    "livereveal": {"scroll": true}
+    "rise": {"scroll": true}
     }
 
-## Add overlay, header, footer and background images
+### Add overlay, header, footer and background images
 
 It is possible to add the config option `overlay` to build a constant background.
 It is wrapped in a`<div>`, so it can be text or html.
@@ -178,7 +120,7 @@ For example:
 
     {
      ...
-     "livereveal": {
+     "rise": {
          "overlay": "<div class='myheader'><h2>my company</h2></div><div class='myfooter'><h2>the date</h2></div>"
      }
     }
@@ -190,7 +132,7 @@ In this case, minimal styling is applied (floor and ceiling), but user is still 
 
     {
      ...
-     "livereveal": {
+     "rise": {
          "backimage": "mybackimage.png",
          "header": "<h1>Hello</h1>",
          "footer": "<h3>World!</h3>"
@@ -209,7 +151,7 @@ in your config with the following parameters:
 
     {
      ...
-     "livereveal": {
+     "rise": {
          "leap_motion": {
             "naturalSwipe"  : true,     # Invert swipe gestures
             "pointerOpacity": 0.5,      # Set pointer opacity to 0.5
@@ -222,7 +164,7 @@ To disable it:
 
     {
      ...
-     "livereveal": {
+     "rise": {
          "leap_motion": "none"
      }
     }
@@ -256,6 +198,9 @@ Here are the Jupyter actions registered by RISE:
     RISE:render-all-cells  // render all cells (all cells go to command mode)
     RISE:edit-all-cells    // edit all cells (all cells go to edit mode)
 
+
+xxx also show an example of a shortcut redefined through JSON
+
 Here is an example of what you can put in your `~/.jupyter/custom/custom.js`
 in order to attach one of these actions to a custom keyboard shortcut:
 
@@ -271,3 +216,112 @@ in order to attach one of these actions to a custom keyboard shortcut:
                 'shift-i', 'RISE:toggle-slide');
         })
 ```
+
+How to customize
+----------------
+
+RISE can be customized in a lot of ways. As of RISE version 5.3, you can:
+
+1. use `nbextensions_configurator`; this tool offers an interactive
+   way to enable, disable and tweak all notebook extensions;
+
+1. you can also embed settings in a specific notebook's metadata;
+
+1. and you can also provide your own css file(s), that can supersede
+   styling of the various DOM pieces.
+ 
+These are the main sources for configuration. At the end of this page
+we will cover alternative ways to control these settings, but at this
+point you need to be aware that, as far as the first 2 categories are
+concerned:
+
+* settings changed through the configurator - or using python as we
+  will see below - are stored on your own file system, typically in
+  your home directory, and so are only be applicable to you;
+
+* *a contrario* settings embedded in a specific notebook's metadata
+   will be applicable to all users, even if they end up in a mybinder
+   instance.
+
+Apart from that, the scope of what is configurable through both
+channels (configurator and metadata) is identical, so it is possible
+to use the configurator as some sort of an online reference manual.
+
+### The configurator
+
+You may need to install a separate module:
+
+    pip3 install jupyter-nbextensions-configurator
+
+You should then see a fourth tab in jupyter's directory views, as
+depicted below. Settings are stored in JSON format, typically in
+
+    ~/.jupyter/nbconfig/notebook.json
+
+![](../examples/configurator.png)
+
+
+### Notebook metadata
+
+These settings can also be stored in your notebook metadata, which
+holds a JSON object, that can be edited through Jupyter's standard
+menu (Edit → Edit Notebook Metadata); typically it would look like
+this:
+
+    {
+        ...
+        "rise": {
+            "theme": "serif",
+            "transition": "zoom",
+            ...
+        },
+        ...
+    }
+You can edit notebook metadata as follows
+
+![](../examples/metadata.png)
+
+### Note on legacy naming
+
+In all this document we store settings in a JSON key named `rise`.
+You may also see some notebooks using the `livereveal` key instead,
+which is a older name for the same project. Both names are actually
+taken into account, however you should know that `rise` will take
+precedence on `livereveal` if the same setting in defined under both
+names.
+
+
+
+xxx see also damian's email, and in particular mention
+  jupyter --paths
+
+
+There are two main ways to configure RISE. One invokes Python code to
+update RISE configuration. The other involves updating the notebook's
+metadata, which is stored as a YAML file.
+
+### Using python
+
+To configure RISE with python, you need to use the JSON config manager
+from `traitlets`. Do so with the following code:
+
+```python
+from traitlets.config.manager import BaseJSONConfigManager
+path = "/home/damian/miniconda3/envs/rise_latest/etc/jupyter/nbconfig"
+cm = BaseJSONConfigManager(config_dir=path)
+cm.update("rise", {
+              "theme": "sky",
+              "transition": "zoom",
+              "start_slideshow_at": "selected",
+})
+```
+
+**Notes:**
+
+* `path` is where the `nbconfig` is located. This will vary depending on
+where you "installed" and "enabled" the nbextension.
+* For more information, see these docs:
+<http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
+and
+<http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
+

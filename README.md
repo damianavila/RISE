@@ -5,7 +5,7 @@ Quickly turn your Jupyter Notebooks into a live presentation.
 
 ![Basic usage](https://media.giphy.com/media/3oxHQtTxAaZwMOHr9u/giphy.gif)
 
-See the [RISE Documentation](https://damianavila.github.io/RISE) for more
+See the [RISE Documentation](http://rise.readthedocs.io/en/latest/) for more
 details.
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/damianavila/RISE)
@@ -72,7 +72,7 @@ enable the extension in the current environment, if you want a `--user` based or
 ## Development
 
 To install RISE in development mode, see the
-[Developer section](https://damianavila.github.io/RISE/dev/develop.html) of the RISE
+[Developer section](http://rise.readthedocs.io/en/latest/dev/develop.html) of the RISE
 documentation.
 
 ## Feedback

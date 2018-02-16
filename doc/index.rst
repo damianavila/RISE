@@ -28,8 +28,8 @@ inside the notebook itself (but in a "slidy" way).
 
    installation.rst
    usage.rst
-   customize.md 
    resources.md 
+   customize.md 
    exportpdf.rst
    changelog.rst
    dev/index.rst

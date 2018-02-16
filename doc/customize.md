@@ -4,10 +4,26 @@ Customizing RISE
 What to configure
 -----------------
 
-There are many configuration options in RISE. This section includes
-details on how to use each one. We'll use JSON to show key/value
-combinations, see the second part for how to actually implement those
-settings.
+[See below for more details on how to implement those settings](#how-to-customize)
+
+### Choosing a theme
+
+You can configure the `theme` of your presentation (which controls the
+general look and feel of the presentation) with:
+
+    {
+     ...
+     "rise": {"theme": "sky"}
+    }
+
+### Choosing a transition
+
+The transition configuration defines what happens in between slides:
+
+    {
+     ...
+     "rise": {"transition": "zoom"}
+    }
 
 ### Automatically launch RISE
 
@@ -30,41 +46,6 @@ instead, use the following configuration:
      "rise": {"start_slideshow_at": "beginning"}
     }
 
-### Choosing a theme
-
-You can configure the `theme` of your presentation (which controls the
-general look and feel of the presentation) with:
-
-    {
-     ...
-     "rise": {"theme": "sky"}
-    }
-
-### Choosing a transition
-
-The transition configuration defines what happens in between slides:
-
-    {
-     ...
-     "rise": {"transition": "zoom"}
-    }
-
-### Change the width and height of slides
-
-To control the width and height of your slides, use the following
-configuration:
-
-    {
-     ...
-     "rise": {"width": 1024,
-              "height": 768}
-    }
-
-Note that you may want to increase the slide height to ensure that cell
-outputs fit within a single slide. Additionally you can use your
-browser's shortcuts to zoom in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`) and
-to adjust the slide content to your screen/projector size.
-
 ### Select cells based on the current slide
 
 As you progress into your slideshow, you either move to a new
@@ -78,14 +59,14 @@ behaves, here are their default values:
     {
      ...
      "rise": {"auto_select": "code",
-                    "auto_select_fragment": true}
+              "auto_select_fragment": true}
     }
 
 `auto_select` can be any of:
 
--   `"code"` (the first code cell is auto-selected)
--   `"none"` (no auto-selection)
--   `"first"` (the first cell is auto-selected)
+-   `code` (the first code cell is auto-selected)
+-   `none` (no auto-selection)
+-   `first` (the first cell is auto-selected)
 
 `auto_select_fragment` is a boolean that states whether auto-selection
 should select cells based on the current slide as a whole (when set to
@@ -98,20 +79,46 @@ turn `auto_select` into a mere boolean, since the current setting
 `auto_select = "first"` has not proved of any practical value.
 Regardless, it seems like the most meaningful combinations as of now are
 either `auto_select = "none"` - in which case the other setting is
-ignored, or `` auto_select = "code"` and ``auto_select_fragment =
+ignored, or `auto_select = "code"` and `auto_select_fragment =
 true`, which now is the default.
 
-### Enable a right scroll bar
+### Change the width and height of slides
 
-To enable a right scroll bar when your content exceeds the slide vertical height,
-use the following configuration:
+To control the width and height of your slides, use the following
+configuration:
 
     {
      ...
-    "rise": {"scroll": true}
+     "rise": {"width": "90%",
+              "height": "90%"}
     }
 
-### Add overlay, header, footer and background images
+**Important notes**
+
+* remember that you can always use your browser's shortcuts to zoom
+in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`), and this way adjust the slide
+content to your screen/projector size.
+
+* this method is *often preferable* than setting sizes. In particular
+  it is dangerous to set sizes in pixels, as most often you cannot
+  rehearse with the actiual projector. We recommend setting relative
+  sizes (in percents) rather than absolute ones (in `px` or `cm`).
+
+* in any case you may want to increase the slide height to ensure that
+cell outputs fit within a single slide; keep in mind that cell
+contents tend to take more space as you run your code.
+
+### Decorating all slides
+
+RISE offers two levels for inserting a static background. You can either
+
+* define `overlay`, in which case you take full control,
+* **or** you can define `header`, `footer` and `backimage`.
+
+So if you define `overlay`, the 3 latter options will be ignored.
+
+
+#### `overlay`
 
 It is possible to add the config option `overlay` to build a constant background.
 It is wrapped in a`<div>`, so it can be text or html.
@@ -125,9 +132,10 @@ For example:
      }
     }
 
-xxx
+#### `header`, `footer` and `backimage`
 
-In addition, you can specify headers, footers, and backgrounds.
+As a more limited, but often more convenient alternative, you can define any of the following 3 settings.
+
 In this case, minimal styling is applied (floor and ceiling), but user is still responsible for cosmetic styling:
 
     {
@@ -139,8 +147,31 @@ In this case, minimal styling is applied (floor and ceiling), but user is still 
      }
     }
 
-You can see some examples using these options at `RISE/examples/overlay.ipynb` and `RISE/examples/header-footer.ipynb``
+You can see some examples using these options at
+`RISE/examples/overlay.ipynb` and `RISE/examples/header-footer.ipynb``,
+or in binder respectively
+[![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2Foverlay.ipynb)
+[![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2Fheader-footer.ipynb)
 
+
+### `toolbar_icon`
+
+You can chose the name of a `font-awesome` icon to be used for RISE's toolbar button.
+
+    {
+     ...
+     "rise": {"toolbar_icon": "bar-chart"}
+    }
+
+### Enable a right scroll bar
+
+To enable a right scroll bar when your content exceeds the slide vertical height,
+use the following configuration:
+
+    {
+     ...
+     "rise": {"scroll": true}
+    }
 
 ### Usage with Leap Motion
 
@@ -183,39 +214,6 @@ Second, it attemps to load `<my_notebook_name>.css` and this will hence be only 
 
 Both files need to be placed alongside with the notebook of interest, i.e. in the same directory.
 You can see some examples using this customization with `RISE/examples/showflow.ipynb`.
-
-### Jupyter actions
-
-Here are the Jupyter actions registered by RISE:
-
-    RISE:slideshow         // Enter/Exit RISE Slideshow
-    RISE:smart-exec        // execute cell, and move to the next if on the same slide
-    RISE:toggle-slide      // (un)set current cell as a Slide cell
-    RISE:toggle-subslide   // (un)set current cell as a Sub-slide cell
-    RISE:toggle-fragment   // (un)set current cell as a Fragment cell
-    RISE:toggle-note       // (un)set current cell as a Note cell
-    RISE:toggle-skip       // (un)set current cell as a Skip cell
-    RISE:render-all-cells  // render all cells (all cells go to command mode)
-    RISE:edit-all-cells    // edit all cells (all cells go to edit mode)
-
-
-xxx also show an example of a shortcut redefined through JSON
-
-Here is an example of what you can put in your `~/.jupyter/custom/custom.js`
-in order to attach one of these actions to a custom keyboard shortcut:
-
-```javascript
-    define(
-        ['base/js/namespace'],
-        function(Jupyter) {
-
-            let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
-
-            // set / unset the 'Slide' tag in slideshow metadata
-            command_shortcuts.set_shortcut(
-                'shift-i', 'RISE:toggle-slide');
-        })
-```
 
 How to customize
 ----------------
@@ -324,4 +322,69 @@ where you "installed" and "enabled" the nbextension.
 <http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
 and
 <http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
+
+
+## Keyboard shortcuts and Jupyter actions
+
+Here are the Jupyter actions registered by RISE:
+
+    action name             key      behaviour
+    ------------------------------------------------------
+    RISE:slideshow         alt-r  enter/exit RISE Slideshow
+    RISE:smart-exec               execute cell, move to the next if on same slide
+    RISE:toggle-slide     shift-i (un)set current cell as a Slide cell
+    RISE:toggle-subslide  shift-u (un)set current cell as a Sub-slide cell
+    RISE:toggle-fragment  shift-f (un)set current cell as a Fragment cell
+    RISE:toggle-note              (un)set current cell as a Note cell
+    RISE:toggle-skip              (un)set current cell as a Skip cell
+    RISE:render-all-cells         render all cells (all cells go to command mode)
+    RISE:edit-all-cells           edit all cells (all cells go to edit mode)
+
+Some, but not all, come bound to default keyboard shortcuts. There are 2 ways you can change the bindings
+
+### Through JSON
+
+Like the other settings described in this section, you can define
+shortcuts in JSON ([see below for more info](#how-to-customize)) with
+e.g.
+
+    {
+     ...
+     "rise": {
+         "shortcuts": {
+             "slideshow": "alt-a",
+             "edit-all-cells": "ctrl-e"
+         }
+    }
+
+With the above settings, RISE would **not** bind the default `Alt-R` key to `RISE:slideshow`,
+but it would bind `Alt-A` instead. It would also bind `RISE:edit-all-cells` to `Ctrl-e`.
+
+### Through `custom.js`
+
+You can also use these actions in some regular javascript code,
+typically your `~/.jupyter/custom/custom.js`. Here is an example that will attach one
+of these actions to a custom keyboard shortcut:
+
+```javascript
+    define(
+        ['base/js/namespace'],
+        function(Jupyter) {
+
+            let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
+
+            // set / unset the 'Slide' tag in slideshow metadata
+            command_shortcuts.set_shortcut(
+                'alt-a', 'RISE:slideshow');
+        })
+```
+
+Note that with this approach, you will end up with the
+`RISE:slideshow` action bound to **both** `Alt-R` and `Alt-A`.
+
+
+There are many configuration options in RISE. This section includes
+details on how to use each one. We'll use JSON to show key/value
+combinations, see the second part for how to actually implement those
+settings.
 

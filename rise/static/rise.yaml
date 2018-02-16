@@ -26,8 +26,8 @@ Parameters:
 - name: rise.start_slideshow_at
   description: >
     <code>start_slideshow_at</code>: a string that describes where to start the slideshow
-    this can be either 'beginning' (start on first slide)
-    or 'selected' (start on the slide that contains the currently selected cell)
+    this can be either <code>beginning</code> (start on first slide)
+    or <code>selected</code> (start on the slide that contains the currently selected cell)
   input_type: text
   default: selected
 # 
@@ -38,8 +38,8 @@ Parameters:
   description: >
     <code>auto_select</code>: a string that specifies how to select cells when new contents
     is displayed during the slideshow (typically, new slide or new fragment).
-    It can be either 'none' (no automatic selection),
-    or 'code' (select first code cell in new content).
+    It can be either <code>none</code> (no automatic selection),
+    or <code>code</code> (select first code cell in new content).
   input_type: text
   default: code
 #
@@ -47,7 +47,7 @@ Parameters:
 #
 - name: rise.auto_select_fragment
   description: >
-    <code>auto_select_fragment</code>: when auto_select is not 'none', this boolean
+    <code>auto_select_fragment</code>: when auto_select is not <code>none</code>, this boolean
     says if auto selection focuses on the current fragment or considers
     the whole slide. Probably safe to keep as true.
   input_type: checkbox
@@ -72,14 +72,14 @@ Parameters:
 - name: rise.backimage
   description: >
     <code>backimage</code>: a (relative) filename for a background image that will show up on all slides.
-    <strong>Effective only if <code>overlay</code> is not defined)</strong>
+    <strong>(effective only if <code>overlay</code> is not defined)</strong>
   input_type: text
   default:
 #
 - name: rise.overlay
   description: >
     <code>overlay</code>: some html text that will be inserted as-is on all pages. If this is provided,
-    the 3 previous settings (header, footer and backimage) are ignored altogether
+    the 3 previous settings (header, footer and backimage) are ignored altogether.
   input_type: text
   default:
 #
@@ -114,6 +114,15 @@ Parameters:
   description: <code>rise.shortcuts.toggle-skip</code> shortcut to toggle the 'skip' tag on current cell
   input_type: hotkey
   default: none
+- name: rise.shortcuts.render-all-cells
+  description: <code>rise.shortcuts.render-all-cells</code> shortcut to put all cells in render mode
+  input_type: hotkey
+  default: none
+- name: rise.shortcuts.toggle-skip
+  description: <code>rise.shortcuts.edit-all-cells</code> shortcut to put all cells in edit mode
+  input_type: hotkey
+  default: none
+
 #
 # passed to reveal as-is
 #

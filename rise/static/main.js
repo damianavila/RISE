@@ -65,8 +65,8 @@ define([
       shortcuts: {
         'slideshow' : 'alt-r',
         'toggle-slide': 'shift-i',
-        'toggle-subslide': 'shift-o',
-        'toggle-fragment': 'shift-p',
+        'toggle-subslide': 'shift-u',
+        'toggle-fragment': 'shift-f',
         // unassigned by default
         'toggle-note': '',
         'toggle-skip': '',

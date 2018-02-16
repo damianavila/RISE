@@ -28,7 +28,7 @@ inside the notebook itself (but in a "slidy" way).
 
    installation.rst
    usage.rst
-   customize.rst 
+   customize.md 
    resources.md 
    exportpdf.rst
    changelog.rst

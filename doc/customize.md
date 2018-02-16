@@ -1,0 +1,259 @@
+Customizing RISE
+================
+
+There are two main ways to configure RISE. One invokes Python code to
+update RISE configuration. The other involves updating the notebook's
+metadata, which is stored as a YAML file.
+
+Using python
+------------
+
+To configure RISE with python, you need to use the JSON config manager
+from `traitlets`. Do so with the following code:
+
+```python
+from traitlets.config.manager import BaseJSONConfigManager
+path = "/home/damian/miniconda3/envs/rise_latest/etc/jupyter/nbconfig"
+cm = BaseJSONConfigManager(config_dir=path)
+cm.update("livereveal", {
+              "theme": "sky",
+              "transition": "zoom",
+              "start_slideshow_at": "selected",
+})
+```
+
+**Notes:**
+
+* `path` is where the `nbconfig` is located. This will vary depending on
+where you "installed" and "enabled" the nbextension.
+* For more information, see these docs:
+<http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
+and
+<http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
+
+Using notebook metadata
+-----------------------
+
+You can also put `reveal.js` configuration in your notebook metadata
+(Edit → Edit Notebook Metadata) like this:
+
+    {
+        ...
+        "livereveal": {
+            "theme": "serif",
+            "transition": "zoom",
+            ...
+        },
+        ...
+    }
+
+Configuration options
+---------------------
+
+There are many configuration options in RISE. This section includes
+details how to use each one. We'll use JSON to show key/value
+combinations, but see [Using python](#using-python) for how to set
+configurations directly from python.
+
+### Choosing a theme
+
+You can configure the `theme` of your presentation (which controls the
+general look and feel of the presentation) with:
+
+    {
+     ...
+     "livereveal": {"theme": "sky"}
+    }
+
+### Choosing a transition
+
+The transition configuration defines what happens in between slides:
+
+    {
+     ...
+     "livereveal": {"transition": "zoom"}
+    }
+
+### Choosing where the slideshow begins
+
+The following configure changes where the slides begin. By default, RISE
+will start at the selected slide. To have it start at the first slide
+instead, use the following configuration:
+
+    {
+     ...
+     "livereveal": {"start_slideshow_at": "beginning"}
+    }
+
+### Change the width and height of slides
+
+To control the width and height of your slides, use the following
+configuration:
+
+    {
+     ...
+     "livereveal": {"width": 1024,
+                    "height": 768}
+    }
+
+Note that you may want to increase the slide height to ensure that cell
+outputs fit within a single slide. Additionally you can use your
+browser's shortcuts to zoom in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`) and
+to adjust the slide content to your screen/projector size.
+
+### Automatically launch RISE
+
+You can setup your notebook to start immediately with the slideshow view
+using the `autolaunch` config option:
+
+    {
+     ...
+     "livereveal": {"autolaunch": true}
+    }
+
+### Select cells based on the current slide
+
+As you progress into your slideshow, you either move to a new
+(sub)slide, or show (or hide) a new fragment; whenever any of these
+events occur, you may wish to have the jupyter selection keep in sync or
+not; this is the purpose of the auto-select feature.
+
+There are currently two settings that let you change the way auto-select
+behaves, here are their default values:
+
+    {
+     ...
+     "livereveal": {"auto_select": "code",
+                    "auto_select_fragment": true}
+    }
+
+`auto_select` can be any of:
+
+-   `"code"` (the first code cell is auto-selected)
+-   `"none"` (no auto-selection)
+-   `"first"` (the first cell is auto-selected)
+
+`auto_select_fragment` is a boolean that states whether auto-selection
+should select cells based on the current slide as a whole (when set to
+`false`) or restrict to the current fragment (when set to `true`, the
+default).
+
+These settings are experimental and may change in the future; we might
+remove `auto_select_fragment` as a setting altogether; we might also
+turn `auto_select` into a mere boolean, since the current setting
+`auto_select = "first"` has not proved of any practical value.
+Regardless, it seems like the most meaningful combinations as of now are
+either `auto_select = "none"` - in which case the other setting is
+ignored, or `` auto_select = "code"` and ``auto_select_fragment =
+true`, which now is the default.
+
+### Enable a right scroll bar
+
+To enable a right scroll bar when your content exceeds the slide vertical height,
+use the following configuration:
+
+    {
+     ...
+    "livereveal": {"scroll": true}
+    }
+
+## Add overlay, header, footer and background images
+
+It is possible to add the config option `overlay` to build a constant background.
+It is wrapped in a`<div>`, so it can be text or html.
+In this case, the user is entirely responsible for styling.
+For example:
+
+    {
+     ...
+     "livereveal": {
+         "overlay": "<div class='myheader'><h2>my company</h2></div><div class='myfooter'><h2>the date</h2></div>"
+     }
+    }
+
+In addition, you can specify headers, footers, and backgrounds.
+In this case, minimal styling is applied (floor and ceiling), but user is still responsible for cosmetic styling:
+
+    {
+     ...
+     "livereveal": {
+         "backimage": "mybackimage.png",
+         "header": "<h1>Hello</h1>",
+         "footer": "<h3>World!</h3>"
+     }
+    }
+
+You can see some examples using these options at `RISE/examples/overlay.ipynb` and `RISE/examples/header-footer.ipynb``
+
+
+### Usage with Leap Motion
+
+**Reveal.js** supports the [Leap Motion](https://www.leapmotion.com) controller.
+To control RISE slides with the Leap, put the
+[reveal leap plugin options](https://github.com/hakimel/reveal.js#leap-motion)
+in your config with the following parameters:
+
+    {
+     ...
+     "livereveal": {
+         "leap_motion": {
+            "naturalSwipe"  : true,     # Invert swipe gestures
+            "pointerOpacity": 0.5,      # Set pointer opacity to 0.5
+            "pointerColor"  : "#d80000" # Red pointer"nat.png"
+            }
+        }
+    }
+
+To disable it:
+
+    {
+     ...
+     "livereveal": {
+         "leap_motion": "none"
+     }
+    }
+
+### Other configuration options
+
+There are also options for `controls`, `progress`, `history`, `minScale` and `slideNumber`.
+
+**Note**: The use of the `minScale` option (values other then`1.0`) can cause problems with codemirror.
+
+### Adding custom CSS
+
+RISE looks for two css files to apply CSS changes on top of the slideshow view.
+First, it attemps to load `rise.css` and this will be applied to all notebooks in the current directory.
+Second, it attemps to load `<my_notebook_name>.css` and this will hence be only applied to `my_notebook_name.ipynb`.
+
+Both files need to be placed alongside with the notebook of interest, i.e. in the same directory.
+You can see some examples using this customization with `RISE/examples/showflow.ipynb`.
+
+### Jupyter actions
+
+Here are the Jupyter actions registered by RISE:
+
+    RISE:slideshow         // Enter/Exit RISE Slideshow
+    RISE:smart-exec        // execute cell, and move to the next if on the same slide
+    RISE:toggle-slide      // (un)set current cell as a Slide cell
+    RISE:toggle-subslide   // (un)set current cell as a Sub-slide cell
+    RISE:toggle-fragment   // (un)set current cell as a Fragment cell
+    RISE:toggle-note       // (un)set current cell as a Note cell
+    RISE:toggle-skip       // (un)set current cell as a Skip cell
+    RISE:render-all-cells  // render all cells (all cells go to command mode)
+    RISE:edit-all-cells    // edit all cells (all cells go to edit mode)
+
+Here is an example of what you can put in your `~/.jupyter/custom/custom.js`
+in order to attach one of these actions to a custom keyboard shortcut:
+
+```javascript
+    define(
+        ['base/js/namespace'],
+        function(Jupyter) {
+
+            let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
+
+            // set / unset the 'Slide' tag in slideshow metadata
+            command_shortcuts.set_shortcut(
+                'shift-i', 'RISE:toggle-slide');
+        })
+```

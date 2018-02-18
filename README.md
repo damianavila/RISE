@@ -1,14 +1,31 @@
 # RISE
 
-**Reveal.js - Jupyter/IPython Slideshow Extension**, also known as *live_reveal*.
-Quickly turn your Jupyter Notebooks into a live presentation.
+RISE allows you to turn your Jupyter Notebooks into a slideshow.
 
 ![Basic usage](https://media.giphy.com/media/3oxHQtTxAaZwMOHr9u/giphy.gif)
 
-See the [RISE Documentation](https://damianavila.github.io/RISE) for more
-details.
+## Resources
+RISE stands for
+***Reveal.js - Jupyter/IPython Slideshow Extension***:
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/damianavila/RISE)
+* Demo notebook (no installation required)
+  * [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2FREADME.ipynb)
+
+* Source code is on github <https://github.com/damianavila/RISE>
+  * [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
+
+* Documentation is hosted on readthedocs
+  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/en/latest/)
+  * Note / check out another location here that is planned to be phased out: <https://damianavila.github.io/RISE/>
+
+* Chat room on gitter
+  * [![Gitter chat](https://badges.gitter.im/damianavila/RISE.png)](https://gitter.im/damianavila/RISE "Gitter chat")
+
+* Videos on youtube
+  * basic usage (4'30'')
+
+    <https://youtu.be/sXyFa_r1nxA>
+
 
 ## Installation
 

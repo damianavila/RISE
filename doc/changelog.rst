@@ -17,7 +17,7 @@ compatible with previous IPython versions:
     *  5.0.0 tag compatible with `notebook` 5 (and "probably" with the upcoming 5.x releases).
     *  5.1.0 tag compatible with `notebook` 5 (and "probably" with the upcoming 5.x releases).
 
-3. With **Jupyter** landing we will provide a conda and pip-instalable packages too
+3. With **Jupyter** landing we will provide a conda and pip-installable packages too
 
 **NOTE**: We will only maintain the latest released version.
 

@@ -387,7 +387,8 @@ Note that with this approach, you will end up with the
 `RISE:slideshow` action bound to **both** `Alt-R` and `Alt-A`.
 
 
-There are many configuration options in RISE. This section includes
-details on how to use each one. We'll use JSON to show key/value
-combinations, see the second part for how to actually implement those
-settings.
+### Keyboard shortcut editors
+
+The actions exposed to Jupyter are also present in Jupyter's
+mainstream keyboard shortcuts editor, that you can use to (un)define
+your custom shortcuts.

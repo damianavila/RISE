@@ -101,7 +101,7 @@ content to your screen/projector size.
 
 * this method is *often preferable* than setting sizes. In particular
   it is dangerous to set sizes in pixels, as most often you cannot
-  rehearse with the actiual projector. We recommend setting relative
+  rehearse with the actual projector. We recommend setting relative
   sizes (in percents) rather than absolute ones (in `px` or `cm`).
 
 * in any case you may want to increase the slide height to ensure that
@@ -221,29 +221,12 @@ How to customize
 RISE can be customized in a lot of ways. As of RISE version 5.3, you can:
 
 1. use `nbextensions_configurator`; this tool offers an interactive
-   way to enable, disable and tweak all notebook extensions;
+   way to enable, disable and tweak all notebook extensions - see screenshot below;
 
 1. you can also embed settings in a specific notebook's metadata;
 
 1. and you can also provide your own css file(s), that can supersede
    styling of the various DOM pieces.
- 
-These are the main sources for configuration. At the end of this page
-we will cover alternative ways to control these settings, but at this
-point you need to be aware that, as far as the first 2 categories are
-concerned:
-
-* settings changed through the configurator - or using python as we
-  will see below - are stored on your own file system, typically in
-  your home directory, and so are only be applicable to you;
-
-* *a contrario* settings embedded in a specific notebook's metadata
-   will be applicable to all users, even if they end up in a mybinder
-   instance.
-
-Apart from that, the scope of what is configurable through both
-channels (configurator and metadata) is identical, so it is possible
-to use the configurator as some sort of an online reference manual.
 
 ### The configurator
 
@@ -283,25 +266,47 @@ You can edit notebook metadata as follows
 
 In all this document we store settings in a JSON key named `rise`.
 You may also see some notebooks using the `livereveal` key instead,
-which is a older name for the same project. Both names are actually
+which is an older name for the same project. Both names are actually
 taken into account, however you should know that `rise` will take
 precedence on `livereveal` if the same setting in defined under both
 names.
 
+### Order of precedence
 
+If we forget about custom CSS for now, that is to say as far as the
+first 2 categories are concerned: at this point you need to be aware
+that:
 
-xxx see also damian's email, and in particular mention
-  jupyter --paths
+* settings changed through the configurator - or using python as we
+  will see below - are stored on your own file system, typically in
+  your home directory, and so are only be applicable to you;
 
+* *a contrario* settings embedded in a specific notebook's metadata
+   will be applicable to all users, even if they end up in a mybinder
+   instance.
 
-There are two main ways to configure RISE. One invokes Python code to
-update RISE configuration. The other involves updating the notebook's
-metadata, which is stored as a YAML file.
+Apart from that, the scope of what is configurable through both
+channels (configurator and metadata) is identical, so it is possible
+to use the configurator as some sort of an online reference manual,
+as it describes each and every setting.
+
+Finally, the following priorities apply:
+
+* a setting will always be used if you define it in the `rise` section
+  of the nodebook metadata;
+
+* if not, it will be used if it is present in the legacy `livereveal`
+  (see below) section of the notebook metadata;
+
+* then if not, the settings from your own profile (either defined
+  through the configurator, or through python) are applied.
 
 ### Using python
 
-To configure RISE with python, you need to use the JSON config manager
-from `traitlets`. Do so with the following code:
+As an alternative way to tweak your local user's settings with a
+script rather than from the configurator, you can use python like show
+in this example that leverages the JSON config manager from
+`traitlets`:
 
 ```python
 from traitlets.config.manager import BaseJSONConfigManager
@@ -318,10 +323,10 @@ cm.update("rise", {
 
 * `path` is where the `nbconfig` is located. This will vary depending on
 where you "installed" and "enabled" the nbextension.
-* For more information, see these docs:
-<http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
-and
-<http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
+* you can use `jupyter --paths` to see the path locations that are applicable.
+* for more information, see these docs:
+  * <http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
+  * <http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
 
 
 ## Keyboard shortcuts and Jupyter actions
@@ -345,8 +350,7 @@ Some, but not all, come bound to default keyboard shortcuts. There are 2 ways yo
 ### Through JSON
 
 Like the other settings described in this section, you can define
-shortcuts in JSON ([see below for more info](#how-to-customize)) with
-e.g.
+shortcuts in JSON with e.g.
 
     {
      ...
@@ -363,8 +367,8 @@ but it would bind `Alt-A` instead. It would also bind `RISE:edit-all-cells` to `
 ### Through `custom.js`
 
 You can also use these actions in some regular javascript code,
-typically your `~/.jupyter/custom/custom.js`. Here is an example that will attach one
-of these actions to a custom keyboard shortcut:
+typically your `~/.jupyter/custom/custom.js`. Here is an example that
+will attach one of these actions to a custom keyboard shortcut:
 
 ```javascript
     define(
@@ -387,4 +391,3 @@ There are many configuration options in RISE. This section includes
 details on how to use each one. We'll use JSON to show key/value
 combinations, see the second part for how to actually implement those
 settings.
-

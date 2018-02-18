@@ -14,8 +14,8 @@ notebook into a *reveal.js* presentation.
     :alt: basic_usage
 
 .. toctree::
-   :maxdepth: 2
    :caption: Contents:
+   :maxdepth: 3
 
    installation.rst
    usage.md

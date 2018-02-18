@@ -18,7 +18,7 @@ notebook into a *reveal.js* presentation.
    :caption: Contents:
 
    installation.rst
-   usage.rst
+   usage.md
    resources.md 
    customize.md 
    exportpdf.rst

@@ -4,7 +4,22 @@ Customizing RISE
 What to configure
 -----------------
 
-[See below for more details on how to implement those settings](#how-to-customize)
+Here's a list of things that can be customized. [See below for more
+details](#how-to-customize) on how to implement those settings.
+
+* [presentation theme](#choosing-a-theme)
+* [transiton between slides ](#choosing-a-transition)
+* [auto-launch presentation mode](#automatically-launch-rise)
+* [where to start the presentation](#choosing-where-the-slideshow-begins)
+* [automatic selection of cells](#select-cells-based-on-the-current-slide)
+* [slide sizes](#change-the-width-and-height-of-slides)
+* [decoration (header/footer/background)](#decorating-all-slides)
+* [vertical scrollbar](#enable-a-right-scroll-bar)
+* [using a leap motion controller](#usage-with-leap-motion)
+* [native `reveal.js` settings](#other-configuration-options)
+* [custom CSS](#adding-custom-css)
+* [keyboard shortcuts](#keyboard-shortcuts-and-jupyter-actions)
+* [changing the toolbar icon](#toolbar-icon)
 
 ### Choosing a theme
 

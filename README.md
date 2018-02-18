@@ -1,6 +1,8 @@
 # RISE
 
-RISE allows you to turn your Jupyter Notebooks into a slideshow.
+RISE allows you to instantly turn your Jupyter Notebooks into a
+slideshow. No out-of-band conversion is needed, switch from jupyter to
+reveal in a single keystroke, and back.
 
 ![Basic usage](https://media.giphy.com/media/3oxHQtTxAaZwMOHr9u/giphy.gif)
 

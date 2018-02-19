@@ -97,7 +97,7 @@ html_theme = 'alabaster'
 #
 html_theme_options = {
     'show_related': True,
-    'description': 'RISE: "Live" Reveal.js Jupyter/IPython Slideshow Extension',
+    'description': 'Jupyter slideshow extension',
     'github_user': 'damianavila',
     'github_repo': 'RISE',
 }
@@ -106,8 +106,8 @@ html_sidebars = {
     '**': [
         'about.html',
         'navigation.html',
-        'relations.html',
-        'sourcelink.html',
+#        'relations.html',
+#        'sourcelink.html',
         'searchbox.html'
     ]
 }

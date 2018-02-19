@@ -13,8 +13,10 @@ notebook into a *reveal.js* presentation.
 .. image:: basic_usage.gif
     :alt: basic_usage
 
+Detailed Contents
+-----------------
+          
 .. toctree::
-   :caption: Contents:
    :maxdepth: 3
 
    installation.rst

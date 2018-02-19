@@ -1,5 +1,7 @@
 # Resources about RISE
 
+## github, readthedocs, gitter, youtube
+
 The following places are assets in the RISE development landscape:
 
 * Demo notebook (no installation required)

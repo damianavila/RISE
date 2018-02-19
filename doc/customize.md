@@ -16,7 +16,7 @@ details](#how-to-customize) on how to implement those settings.
 * [decoration (header/footer/background)](#decorating-all-slides)
 * [vertical scrollbar](#enable-a-right-scroll-bar)
 * [using a leap motion controller](#usage-with-leap-motion)
-* [native `reveal.js` settings](#other-configuration-options)
+* [native `reveal.js` settings](#reveal-js-configuration-options)
 * [custom CSS](#adding-custom-css)
 * [keyboard shortcuts](#keyboard-shortcuts-and-jupyter-actions)
 * [changing the toolbar icon](#toolbar-icon)
@@ -42,13 +42,17 @@ The transition configuration defines what happens in between slides:
 
 ### Automatically launch RISE
 
-You can setup your notebook to start immediately with the slideshow view
-using the `autolaunch` config option:
+You can setup your notebook to start immediately with the slideshow
+view using the `autolaunch` config option. This typically is very
+helpful if you plan on publishing slideshows through something like
+`mybinder.org`:
+
 
     {
      ...
      "rise": {"autolaunch": true}
     }
+
 
 ### Choosing where the slideshow begins
 
@@ -88,14 +92,15 @@ should select cells based on the current slide as a whole (when set to
 `false`) or restrict to the current fragment (when set to `true`, the
 default).
 
-These settings are experimental and may change in the future; we might
-remove `auto_select_fragment` as a setting altogether; we might also
-turn `auto_select` into a mere boolean, since the current setting
+**These settings are experimental and may change in the future**;
+hopefully the current default behaviour is just fine. We might remove
+`auto_select_fragment` as a setting altogether; we might also turn
+`auto_select` into a mere boolean, since the current setting
 `auto_select = "first"` has not proved of any practical value.
-Regardless, it seems like the most meaningful combinations as of now are
-either `auto_select = "none"` - in which case the other setting is
-ignored, or `auto_select = "code"` and `auto_select_fragment =
-true`, which now is the default.
+Regardless, it seems like the most meaningful combinations as of now
+are either `auto_select = "none"` - in which case the other setting is
+ignored, or `auto_select = "code"` and `auto_select_fragment = true`,
+which now is the default.
 
 ### Change the width and height of slides
 
@@ -135,10 +140,9 @@ So if you define `overlay`, the 3 latter options will be ignored.
 
 #### `overlay`
 
-It is possible to add the config option `overlay` to build a constant background.
-It is wrapped in a`<div>`, so it can be text or html.
-In this case, the user is entirely responsible for styling.
-For example:
+It is possible to add the config option `overlay` to build a constant
+background.  It is wrapped in a`<div>`, so it can be text or html.  In
+this case, the user is entirely responsible for styling.  For example:
 
     {
      ...
@@ -149,9 +153,11 @@ For example:
 
 #### `header`, `footer` and `backimage`
 
-As a more limited, but often more convenient alternative, you can define any of the following 3 settings.
+As a more limited, but often more convenient alternative, you can
+define any of the following 3 settings.
 
-In this case, minimal styling is applied (floor and ceiling), but user is still responsible for cosmetic styling:
+In this case, minimal styling is applied (floor and ceiling), but user
+is still responsible for cosmetic styling:
 
     {
      ...
@@ -163,8 +169,8 @@ In this case, minimal styling is applied (floor and ceiling), but user is still 
     }
 
 You can see some examples using these options at
-`RISE/examples/overlay.ipynb` and `RISE/examples/header-footer.ipynb``,
-or in binder respectively
+`RISE/examples/overlay.ipynb` and
+`RISE/examples/header-footer.ipynb``, or in binder respectively
 [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2Foverlay.ipynb)
 [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2Fheader-footer.ipynb)
 
@@ -215,20 +221,41 @@ To disable it:
      }
     }
 
-### Other configuration options
+### `reveal.js` configuration options
 
-There are also options for `controls`, `progress`, `history`, `minScale` and `slideNumber`.
+`reveal.js` offers a few configuration of its own, [as described in
+`reveal.js`'s documentation](https://github.com/hakimel/reveal.js). Out of this
+category, RISE will pass through the following settings:
 
-**Note**: The use of the `minScale` option (values other then`1.0`) can cause problems with codemirror.
+* `controls` to enable or disable the left hand side icon buttons
+  (help and exit)
+
+* `progress` to enable or disable the thin progress bar at the bottom
+  of the slideshow
+
+* `slideNumber` that allows you to turn off, or customize, slide
+  numbers. Set to boolean `false` to turn off, [see `reveal.js`'s doc
+  for more details](https://github.com/hakimel/reveal.js#slide-number)
+
+* as well as `history` and `minScale`.
+
+**Note**: The use of the `minScale` option (values other then`1.0`)
+  can cause problems with codemirror.
 
 ### Adding custom CSS
 
-RISE looks for two css files to apply CSS changes on top of the slideshow view.
-First, it attemps to load `rise.css` and this will be applied to all notebooks in the current directory.
-Second, it attemps to load `<my_notebook_name>.css` and this will hence be only applied to `my_notebook_name.ipynb`.
+RISE looks for two css files to apply CSS changes on top of the
+slideshow view:
 
-Both files need to be placed alongside with the notebook of interest, i.e. in the same directory.
-You can see some examples using this customization with `RISE/examples/showflow.ipynb`.
+* First, it attemps to load `rise.css`, and hence this will be
+applied to all notebooks in the current directory;
+
+* Second, it attempts to load `the_notebook_name.css` and so this will
+hence be only applied to `the_notebook_name.ipynb`.
+
+Both files need to be placed alongside with the notebook of interest,
+i.e. in the same directory.  You can see some examples using this
+customization with `RISE/examples/showflow.ipynb`.
 
 How to customize
 ----------------
@@ -236,7 +263,8 @@ How to customize
 RISE can be customized in a lot of ways. As of RISE version 5.3, you can:
 
 1. use `nbextensions_configurator`; this tool offers an interactive
-   way to enable, disable and tweak all notebook extensions - see screenshot below;
+   way to enable, disable and tweak all notebook extensions - see
+   screenshot below;
 
 1. you can also embed settings in a specific notebook's metadata;
 
@@ -336,9 +364,12 @@ cm.update("rise", {
 
 **Notes:**
 
-* `path` is where the `nbconfig` is located. This will vary depending on
-where you "installed" and "enabled" the nbextension.
-* you can use `jupyter --paths` to see the path locations that are applicable.
+* `path` is where the `nbconfig` is located. This will vary depending
+  on where you "installed" and "enabled" the nbextension.
+
+* you can use `jupyter --paths` to see the path locations that are
+  applicable.
+
 * for more information, see these docs:
   * <http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
   * <http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
@@ -360,7 +391,8 @@ Here are the Jupyter actions registered by RISE:
     RISE:render-all-cells         render all cells (all cells go to command mode)
     RISE:edit-all-cells           edit all cells (all cells go to edit mode)
 
-Some, but not all, come bound to default keyboard shortcuts. There are 2 ways you can change the bindings
+Some, but not all, come bound to default keyboard shortcuts. There are
+2 ways you can change the bindings
 
 ### Through JSON
 
@@ -376,8 +408,9 @@ shortcuts in JSON with e.g.
          }
     }
 
-With the above settings, RISE would **not** bind the default `Alt-R` key to `RISE:slideshow`,
-but it would bind `Alt-A` instead. It would also bind `RISE:edit-all-cells` to `Ctrl-e`.
+With the above settings, RISE would **not** bind the default `Alt-R`
+key to `RISE:slideshow`, but it would bind `Alt-A` instead. It would
+also bind `RISE:edit-all-cells` to `Ctrl-e`.
 
 ### Through `custom.js`
 

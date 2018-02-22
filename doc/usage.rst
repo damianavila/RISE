@@ -82,6 +82,8 @@ Note that you need to remove the ``#`` at the end. The page will render the slid
   + Change the Margins to None.
   + Enable the Background graphics option.
   + Click Save.
+  
+Note that if you are using JavaScript-based packages like [Bokeh](http://bokeh.pydata.org) in your slides, you will need to ensure that any cells that define JS code used by other cells are *not* skipped by RISE.  For instance, Bokeh plots will only be visible in the PDF output if you include the cell containing ``output_notebook()`` (or ``hv.extension()`` if using Bokeh via [HoloViews](http://holoviews.org)), even if the live RISE presentation works fine when skipping those cells.
 
 Using decktape
 ++++++++++++++

@@ -30,7 +30,7 @@ your slides, you will need to ensure that any cells that define JS
 code used by other cells are *not* skipped by RISE.  For instance,
 Bokeh plots will only be visible in the PDF output if you include the
 cell containing ``output_notebook()`` (or ``hv.extension()`` if using
-Bokeh via HoloViews_, even if the live RISE presentation works fine
+Bokeh via HoloViews_), even if the live RISE presentation works fine
 when skipping those cells. You can use the `Notes` slide type for that
 cell if you want it to be omitted from the RISE slideshow but included
 in HTML or PDF output.

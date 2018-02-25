@@ -491,7 +491,6 @@ define([
                 options.leap = leap;
               }
 
-              console.log(`options when it really matters: ${options.controls}`, options);
               Reveal.configure(options);
 
               Reveal.addEventListener( 'ready', function( event ) {
@@ -947,8 +946,6 @@ define([
   }
 
   function addButtonsAndShortcuts() {
-
-    console.log(`completeConfig loaded from setup() = `, complete_config);
 
     // create button
     Jupyter.toolbar.add_buttons_group([{

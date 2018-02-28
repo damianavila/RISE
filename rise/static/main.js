@@ -453,7 +453,7 @@ define([
                   38: null, // up arrow disabled
                   40: null, // down arrow disabled
                   66: null, // b, black pause disabled, use period or forward slash
-                  70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unrealiable
+                  70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unreliable
                   72: null, // h, left disabled
                   74: null, // j, down disabled
                   75: null, // k, up disabled

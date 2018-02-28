@@ -485,7 +485,7 @@ define([
               }
 
               // Set up the Leap Motion integration if configured
-              var leap = complete_config.leap_motion;
+              var leap = complete_config.enable_leap_motion;
               if (leap !== undefined) {
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
                 options.leap = leap;

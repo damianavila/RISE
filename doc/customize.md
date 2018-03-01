@@ -257,6 +257,13 @@ Both files need to be placed alongside with the notebook of interest,
 i.e. in the same directory.  You can see some examples using this
 customization with `RISE/examples/showflow.ipynb`.
 
+**NOTE.** The implementation of this feature is rather rough, both css
+files are blindly included without checking for their existence, which
+may result in error messages in your browser console, complaining
+about `No such file or directory`. These messages can be safely
+ignored. See also <https://github.com/damianavila/RISE/issues/353> about
+this.
+
 How to customize
 ----------------
 

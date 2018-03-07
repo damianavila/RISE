@@ -5,9 +5,9 @@
 #
 Type: Jupyter Notebook Extension
 Compatibility: jupyter-4.3, jupyter-notebook-5.2
-Name: RISE - Slideshow with reveal.js
+Name: RISE
 Main: main.js
-Description: "Run notebook as a slideshow thanks to reveal.js"
+Description: "Turn your Jupyter Notebooks into a live presentation (slideshow)"
 Link: configurator.md
 Icon: rise.png
 Parameters:
@@ -16,7 +16,8 @@ Parameters:
   description: >
      <code>autolaunch</code>: autorun slideshow upon opening if set; active only
      on notebooks that have a 'livereveal' or 'rise' section in their
-     metadata
+     metadata; this provision is here to avoid starting RISE
+     on regular notebooks that are not intended for slideshow.
   input_type: checkbox
   default: false
 #
@@ -124,7 +125,7 @@ Parameters:
   description: <code>rise.shortcuts.render-all-cells</code> shortcut to put all cells in render mode
   input_type: hotkey
   default: none
-- name: rise.shortcuts.toggle-skip
+- name: rise.shortcuts.edit-all-cells
   description: <code>rise.shortcuts.edit-all-cells</code> shortcut to put all cells in edit mode
   input_type: hotkey
   default: none
@@ -137,7 +138,10 @@ Parameters:
     <code>theme</code>: <strong>This setting, like all the ones below,
     is passed directly to <a href="https://github.com/hakimel/reveal.js">
     <code>reveal.js</code> see this doc</a></strong>.
-    <br/> theme: <a href="https://github.com/hakimel/reveal.js#theming">see a list of reveal's available native themes</a>
+    <br/> theme: <a href="https://github.com/hakimel/reveal.js#theming">
+    see a list of reveal's available native themes</a>.
+    Note that dark themes from reveal do not work well with RISE,
+    at least not without additional and manual tweaks.
   input_type: string
   default: 'simple'
 #

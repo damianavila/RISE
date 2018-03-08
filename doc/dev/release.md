@@ -17,6 +17,7 @@ Instructions and notes for preparing and publishing a release.
 
 **Step 3.** Check for updated version numbers in
 
+* `package.json`
 * `rise/_version.py`
 * `conda.recipe/meta.yaml`
 * `doc/conf.py`

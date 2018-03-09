@@ -4,7 +4,7 @@
 # that they reflect the defaults that are hardwired in main.js
 #
 Type: Jupyter Notebook Extension
-Compatibility: jupyter-4.3, jupyter-notebook-5.2
+Compatibility: jupyter-4.3, jupyter-notebook-5.0
 Name: RISE
 Main: main.js
 Description: "Turn your Jupyter Notebooks into a live presentation (slideshow)"

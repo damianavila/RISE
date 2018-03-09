@@ -2,15 +2,28 @@
 
 You can install RISE in development mode in this way:
 
-### Install npm
+### Requirements
 
-First, you'll need to install `npm` (and `node`, `conda install nodejs` is a good idea).
+Use your usual package manager to install the required build tools.
+Essentially you will need
+
+* `git`,
+* `npm` and `nodejs`,
+* and of course `jupyter`;
+* `sphinx` comes in handy to produce the documentation.
+
+### Clone the git repo
+
+    git clone https://github.com/damianavila/RISE.git
+    cd RISE
+
+### Prepare a development tree
 
 **Step 1.** Install the JS dependencies:
 
     npm install
 
-**Step 2.** Copy reveal into the static folder and avoid reveal.js RESET styling:
+**Step 2.** Copy reveal into the static folder and reset reveal.js styling:
 
     npm run build-reveal
     npm run reset-reveal
@@ -21,25 +34,33 @@ To remove `reveal.js` from the static folder you can use `npm run clean-reveal`.
 
     npm run build-css
 
-To have per-save automatic building of CSS, you can use::
-
-```
-npm run watch-less
-```
-
 ### Install RISE in developer mode
 
 Second, let's install RISE in a editable form:
 
-    git clone https://github.com/damianavila/RISE.git
     pip install -e .
     jupyter-nbextension install rise --py --sys-prefix --symlink
     jupyter-nbextension enable rise --py --sys-prefix
 
-**Notes for developers**:
+**Notes**:
 
-* the `--symlink` argument allow you to modify the JavaScript code
-  in-place.
+* the `--symlink` argument is meant to allow you to modify the
+  JavaScript code in-place.
 
-* This feature is probably not available in Win. So you will need to
-"re-install" the nbextension to actually see any changes you made.
+* This feature however is probably not available in Win.
+
+* If you cannot use this *symlink* trick, you will need to
+  "re-install" the nbextension to actually see any changes you made.
+
+* Also please make sure to properly and thoroughly reload your page in the browser;
+  using *Shift* when reloading is generally a good idea.
+
+### Convenience
+
+If you change the `less` source often, it can be convenient to enable
+per-save automatic building of CSS, and for that you can use:
+
+    npm run watch-less
+
+which will update the `css` code from `less` each time a change
+happens on the disk. Kill with Control-C when you are done.

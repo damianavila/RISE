@@ -1,8 +1,8 @@
-Customizing RISE
-================
+# Customizing RISE
 
-What to configure
------------------
+
+
+## What to configure
 
 Here's a list of things that can be customized. [See below for more
 details](#how-to-customize) on how to implement those settings.
@@ -19,7 +19,6 @@ details](#how-to-customize) on how to implement those settings.
 * [native `reveal.js` settings](#reveal-js-configuration-options)
 * [custom CSS](#adding-custom-css)
 * [keyboard shortcuts](#keyboard-shortcuts-and-jupyter-actions)
-* [changing the toolbar icon](#toolbar-icon)
 
 ### Choosing a theme
 
@@ -175,15 +174,6 @@ You can see some examples using these options at
 [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2Fheader-footer.ipynb)
 
 
-### `toolbar_icon`
-
-You can chose the name of a `font-awesome` icon to be used for RISE's toolbar button.
-
-    {
-     ...
-     "rise": {"toolbar_icon": "bar-chart"}
-    }
-
 ### Enable a right scroll bar
 
 To enable a right scroll bar when your content exceeds the slide vertical height,
@@ -227,8 +217,7 @@ To disable it:
 `reveal.js`'s documentation](https://github.com/hakimel/reveal.js). Out of this
 category, RISE will pass through the following settings:
 
-* `controls` to enable or disable the left hand side icon buttons
-  (help and exit)
+* `controls` to enable or disable the lower right navigation arrows
 
 * `progress` to enable or disable the thin progress bar at the bottom
   of the slideshow
@@ -237,10 +226,7 @@ category, RISE will pass through the following settings:
   numbers. Set to boolean `false` to turn off, [see `reveal.js`'s doc
   for more details](https://github.com/hakimel/reveal.js#slide-number)
 
-* as well as `history` and `minScale`.
-
-**Note**: The use of the `minScale` option (values other then`1.0`)
-  can cause problems with codemirror.
+* as well as `history`.
 
 ### Adding custom CSS
 
@@ -264,14 +250,19 @@ about `No such file or directory`. These messages can be safely
 ignored. See also <https://github.com/damianavila/RISE/issues/353> about
 this.
 
-How to customize
-----------------
+***
+
+## How to customize
+
 
 RISE can be customized in a lot of ways. As of RISE version 5.3, you can:
 
 1. use `nbextensions_configurator`; this tool offers an interactive
    way to enable, disable and tweak all notebook extensions - see
    screenshot below;
+
+1. define settings [in JSON files,
+   typically by using python scripts](customize.html#using-python);
 
 1. you can also embed settings in a specific notebook's metadata;
 
@@ -290,6 +281,48 @@ depicted below. Settings are stored in JSON format, typically in
     ~/.jupyter/nbconfig/notebook.json
 
 ![](../examples/configurator.png)
+
+
+### Using python
+
+As an alternative way, you can tweak your local user's settings with a
+script rather than from the configurator. For example you can use
+python like shown in this example below, that leverages the JSON config
+manager from `traitlets`:
+
+```python
+#!/usr/bin/env python3
+from traitlets.config.manager import BaseJSONConfigManager
+from pathlib import Path
+path = Path.home() / ".jupyter"
+cm = BaseJSONConfigManager(config_dir=str(path))
+cm.update(
+    "rise",
+    {
+        "theme": "sky",
+        "transition": "zoom",
+        "start_slideshow_at": "selected",
+     }
+)
+```
+
+**Notes:**
+
+* the `config_dir` parameter should point at where the `nbconfig` is
+  located. This will vary depending on your setup, and specifically on
+  where you "installed" and "enabled" the nbextension.
+
+* running the example above would result in the creation (or
+  modification) of a file named `~/.jupyter/rise.json`, which is
+  generally the right place to store user preferences,
+
+* to adjust this path to your own setup, you can use `jupyter
+  --paths`, and specifically the `config` section, to see the path
+  locations that are applicable.
+
+* for more information, see these docs:
+  * <http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
+  * <http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
 
 
 ### Notebook metadata
@@ -312,74 +345,45 @@ You can edit notebook metadata as follows
 
 ![](../examples/metadata.png)
 
-### Note on legacy naming
-
-In all this document we store settings in a JSON key named `rise`.
-You may also see some notebooks using the `livereveal` key instead,
-which is an older name for the same project. Both names are actually
-taken into account, however you should know that `rise` will take
-precedence on `livereveal` if the same setting in defined under both
-names.
-
 ### Order of precedence
 
-If we forget about custom CSS for now, that is to say as far as the
-first 2 categories are concerned: at this point you need to be aware
-that:
+Let us forget about custom CSS for now, and concentrate on the 
+first 3 methods (configurator, JSON files, and notebook metadata).
+At this point you need to be aware that:
 
-* settings changed through the configurator - or using python as we
-  will see below - are stored on your own file system, typically in
-  your home directory, and so are only be applicable to you;
+* settings changed through the configurator or JSON files - are stored
+  on your own file system, typically in your home directory, and so
+  are only be applicable to people using this notebook server;
+  generally it is used for user preferences or such.
 
 * *a contrario* settings embedded in a specific notebook's metadata
-   will be applicable to all users, even if they end up in a mybinder
-   instance.
+   will be applicable to all users that get their hands on that notebook,
+   even if they end up in a mybinder instance via github.
 
-Apart from that, the scope of what is configurable through both
-channels (configurator and metadata) is identical, so it is possible
+Apart from that, the scope of what is configurable through these channels
+channels (configurator, JSON and metadata) is identical, so it is possible
 to use the configurator as some sort of an online reference manual,
 as it describes each and every setting.
 
 Finally, the following priorities apply:
 
 * a setting will always be used if you define it in the `rise` section
-  of the nodebook metadata;
-
-* if not, it will be used if it is present in the legacy `livereveal`
-  (see below) section of the notebook metadata;
+  of the nodebook metadata (or the 'livereveal' section, for backward
+  compatibility, see below)
 
 * then if not, the settings from your own profile (either defined
   through the configurator, or through python) are applied.
 
-### Using python
+### Note on legacy naming
 
-As an alternative way to tweak your local user's settings with a
-script rather than from the configurator, you can use python like show
-in this example that leverages the JSON config manager from
-`traitlets`:
+In all this document we refer to settings stored in a JSON key named `rise`.
+You may also see some notebooks using the `livereveal` key instead,
+which is an older name for the same project. Both names are actually
+taken into account, however you should know that `rise` will take
+precedence on `livereveal` if the same setting in defined under both
+names.
 
-```python
-from traitlets.config.manager import BaseJSONConfigManager
-path = "/home/damian/miniconda3/envs/rise_latest/etc/jupyter/nbconfig"
-cm = BaseJSONConfigManager(config_dir=path)
-cm.update("rise", {
-              "theme": "sky",
-              "transition": "zoom",
-              "start_slideshow_at": "selected",
-})
-```
-
-**Notes:**
-
-* `path` is where the `nbconfig` is located. This will vary depending
-  on where you "installed" and "enabled" the nbextension.
-
-* you can use `jupyter --paths` to see the path locations that are
-  applicable.
-
-* for more information, see these docs:
-  * <http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
-  * <http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
+****
 
 
 ## Keyboard shortcuts and Jupyter actions

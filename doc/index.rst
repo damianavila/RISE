@@ -8,7 +8,7 @@ What is RISE?
 As you know... we love **Jupyter** and we like **reveal.js** too.
 
 With RISE, a Jupyter notebook extension, you can instantly turn your
-notebook into a *reveal.js* presentation.
+jupyter notebook into a live *reveal.js*-based presentation.
 
 .. image:: basic_usage.gif
     :alt: basic_usage

@@ -26,11 +26,16 @@ You can choose between the following types:
   slide; it will not show up right away, you will need to press Space
   one more time to see it.
 
-* **skip**: this cell will be ignored altogether when presenting the slideshow.
+* **skip**: this cell is meant to be rendered in speaker view
 
-* **notes**: a cell for the presentation mode under reveal (xxx is that a fact?)
+* **notes**: likewise - xxx
 
-Starting version 5.1.0 you can customize some keyboard shortcuts using
+**Note** that as of version 5.3, the support for speaker view is not
+  working, so these cells will be ignored when in *reveal* mode.
+
+**Keyboard shortcuts**
+
+Starting with version 5.1.0 you can customize some keyboard shortcuts using
 the keyboard shortcut editor from the notebook UI.
 
 We have defined 4 main shortcuts by default that you can change

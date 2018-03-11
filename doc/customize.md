@@ -275,6 +275,10 @@ You may need to install a separate module:
 
     pip3 install jupyter-nbextensions-configurator
 
+or
+
+    conda install -c conda-forge jupyter_nbextensions_configurator 
+
 You should then see a fourth tab in jupyter's directory views, as
 depicted below. Settings are stored in JSON format, typically in
 

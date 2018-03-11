@@ -26,12 +26,15 @@ You can choose between the following types:
   slide; it will not show up right away, you will need to press Space
   one more time to see it.
 
-* **skip**: this cell is meant to be rendered in speaker view
+* **skip**: this cell are ignored altogether in *reveal* mode,
+it will not appear either in the main view, nor in the speaker view.
 
-* **notes**: likewise - xxx
+* **notes**: similarly, this cell is marked to be discarded from
+  the main view, but is meant to appear in the speaker view.
 
-**Note** that as of version 5.3, the support for speaker view is not
-  working, so these cells will be ignored when in *reveal* mode.
+**Note** that as of RISE version 5.3, the support for speaker view is not
+  working, so the *notes* cells will not show up at all either
+  when in *reveal* mode.
 
 **Keyboard shortcuts**
 

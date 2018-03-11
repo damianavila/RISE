@@ -116,3 +116,10 @@ slides by running a cell and because some problem arises when you inject
 new cells on the fly. When you exit the presentation mode, the behavior
 comes back to normal.
 
+### JupyterLab
+
+Please be aware that as of 5.3 RISE is unfortunately not yet
+compatible with JupyterLab and must be used with the classic notebook.
+
+See https://github.com/damianavila/RISE/issues/270 for the github
+issue on this topic.

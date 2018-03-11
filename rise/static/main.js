@@ -13,7 +13,8 @@ define([
   'jquery',
   'base/js/namespace',
   'base/js/utils',
-], function(require, $, Jupyter, utils) {
+  'services/config',
+], function(require, $, Jupyter, utils, configmod) {
 
   "use strict";
 
@@ -21,16 +22,18 @@ define([
    * load configuration
    *
    * 1) start from the hardwired settings (in this file)
-   * 2) add the settings from nbextensions_configurator (i.e. .jupyter/nbconfig/notebook.json)
+   * 2) add settings configured in python; these typically can be
+   *   2a) either in a legacy file named `livereveal.json` 
+   *   2b) or, with the official name, in `rise.json`
+   * 3) add the settings from nbextensions_configurator (i.e. .jupyter/nbconfig/notebook.json)
    *    they should all belong in the 'rise' category
-   * 3) and finally add the settings from the notebook metadata
-   *   3a) for legacy reasons: use the 'livereveal' key
-   *   3b) for more consistency, then override with the 'rise' key
-   * 4) also stores in complete_config.is_slideshow a boolean
-   *    that says if the notebook metadata contains 
-   *    either livereveal or rise
+   *    the configurator came after the shift from 'livereveal' to 'rise'
+   *    so no need to consider 'livereveal' here
+   * 4) and finally add the settings from the notebook metadata
+   *   4a) for legacy reasons: use the 'livereveal' key
+   *   4b) for more consistency, then override with the 'rise' key
    * 
-   * loadConfig alters the complete_config object in place.
+   * configLoaded alters the complete_config object in place.
    * it will hold a consolidated set of all relevant settings with their priorities resolved
    *
    * it returns a promise that can be then'ed once the config is loaded
@@ -43,7 +46,9 @@ define([
 
   var complete_config = {};
 
-  function loadConfig() {
+  // returns a promise; you can do 'then()' on this promise
+  // to do stuff *after* the configuration is completely loaded 
+  function configLoaded() {
 
     // see rise.yaml for more details
     var hardwired_config = {
@@ -90,27 +95,64 @@ define([
       minScale: 1.0, // we need this for codemirror to work right
     };
 
-    // 1) initialize with hardwired defaults
-    $.extend(true, complete_config, hardwired_config);
+    // honour the 2 names: 'livereveal' and 'rise'
+    // use the ones in livereveal/legacy first
+    // so they get overridden if redefined in rise
+    let config_section_legacy = new configmod.ConfigSection(
+      'livereveal',
+      {base_url: utils.get_body_data("baseUrl")});
+    // trigger an asynchronous load
+    config_section_legacy.load();
+    let config_section = new configmod.ConfigSection(
+      'rise',
+      {base_url: utils.get_body_data("baseUrl")});
+    config_section.load();
 
-    // this is a ConfigSection object as per notebook/static/services/config.js 
+    // this is also a ConfigSection object as per notebook/static/services/config.js 
     let nbext_configurator = Jupyter.notebook.config;
-    // returning this will allow further chaining of then
-    return nbext_configurator.loaded.then(
-      // once we have the (nbextensions) config loaded
-      function() {
-        // 2) 
-        $.extend(true, complete_config, nbext_configurator.data.rise);
-        // 3a) from the notebook metadata
-        let metadata_legacy = Jupyter.notebook.metadata.livereveal;
-        $.extend(true, complete_config, metadata_legacy);
-        // 3b) ditto
-        let metadata = Jupyter.notebook.metadata.rise;
-        $.extend(true, complete_config, metadata);
-        // 4)
-        complete_config.is_slideshow =
-          (metadata_legacy !== undefined) || (metadata !== undefined);
-      });
+    nbext_configurator.load();
+
+    // with Promise.all we can wait for all 3 configs to have loaded
+    return Promise.all([
+      config_section_legacy.loaded,
+      config_section.loaded,
+      nbext_configurator.loaded,
+    ]).then(
+        // and now we can compute the layered config
+        function() {
+          // 1) initialize with hardwired defaults
+          $.extend(true, complete_config, hardwired_config);
+          // 2a) and 2b)
+          $.extend(true, complete_config, config_section_legacy.data);
+          $.extend(true, complete_config, config_section.data);
+          // 3)
+          $.extend(true, complete_config, nbext_configurator.data.rise);
+          // 4a) from the notebook metadata
+          let metadata_legacy = Jupyter.notebook.metadata.livereveal;
+          $.extend(true, complete_config, metadata_legacy);
+          // 4b) ditto
+          let metadata = Jupyter.notebook.metadata.rise;
+          $.extend(true, complete_config, metadata);
+          // console.log("complete_config is OK");
+        });
+  }
+    
+  /*
+   * this function is a heuristic that says if this notebook seems to
+   * be meant to be a slideshow.
+   * this primarily is for autolaunch, so that somebody who would
+   * enable autolaunch in her ~/.jupyter/ area would not
+   * see RISE trigger on every single notebook
+   *
+   * xxx note that this might take too long on large notebooks
+   * a possible improvement would be to look for the first, say, 10 cells only
+   * as a matter of fact, in most cases the first cell would be a slide cell really
+   */
+  function is_slideshow(notebook) {
+    for (let cell of notebook.get_cells())
+      if (is_slide(cell) || is_subslide(cell))
+        return true;
+    return false;
   }
 
   /*
@@ -318,7 +360,7 @@ define([
    * and so can possibly have a too big impact if we are not careful
    */
   function autoLaunch() {
-    if (complete_config.autolaunch && complete_config.is_slideshow)
+    if (complete_config.autolaunch && is_slideshow(Jupyter.notebook))
       revealMode()
   }
 
@@ -889,6 +931,11 @@ define([
                      },
                      "edit-all-cells", "RISE");
 
+    // mostly for debug / information
+    actions.register({ help   : 'show RISE config in console',
+                       handler: showConfig},
+                     "show-config", "RISE");
+
   }
 
   // the entrypoint - call this to enter or exit reveal mode
@@ -966,6 +1013,10 @@ define([
     }
   }
 
+  function showConfig() {
+    console.log("RISE configuration", complete_config);
+    console.log(`Current notebook ${is_slideshow(Jupyter.notebook) ? "is" : "not"} a slideshow`);
+  }
 
 
   /* load_jupyter_extension */
@@ -978,7 +1029,8 @@ define([
             })
       .appendTo('head');
 
-    loadConfig()
+    configLoaded()
+//      .then(showConfig)
       .then(registerJupyterActions)
       .then(addButtonsAndShortcuts)
       .then(autoLaunch)

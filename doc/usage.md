@@ -121,5 +121,5 @@ comes back to normal.
 Please be aware that as of 5.3 RISE is unfortunately not yet
 compatible with JupyterLab and must be used with the classic notebook.
 
-See https://github.com/damianavila/RISE/issues/270 for the github
+See <https://github.com/damianavila/RISE/issues/270> for the github
 issue on this topic.

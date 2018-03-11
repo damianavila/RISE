@@ -349,10 +349,45 @@ You can edit notebook metadata as follows
 
 ![](../examples/metadata.png)
 
+### Note on legacy naming
+
+For the remaining of this section, let us forget about custom CSS for
+a while, and concentrate on the first 3 configuration methods :
+configurator, JSON files, and notebook metadata.
+
+In all this document we refer to settings stored in a JSON key or
+filename `rise`. You may also see some notebooks using the
+`livereveal` key instead, which is an older name for the same
+project. FOr backward compatibility, both names are actually taken
+into account, however you should know that `rise` will take precedence
+on `livereveal` if the same setting in defined under both names.
+
+You are encouraged to always use the `rise` naming as much as possible.
+
 ### Order of precedence
 
-Let us forget about custom CSS for now, and concentrate on the 
-first 3 methods (configurator, JSON files, and notebook metadata).
+The order of precedence between these 3 sources of configuration is as
+follows:
+
+* a setting defined in the notebook's metadata is always valid; among
+  these, as described above, settings in the `rise` category will
+  override those defined in `livereveal` if both entries apply;
+
+* if still undefined, a setting defined in the configurator will be valid;
+Finally, the following priorities apply:
+
+* if still undefined, a setting defined in any of the JSON files
+  considered by your jupyter server will be taken into account. Here
+  again, `rise.json` supersedes `livereveal.json` in case of an overlap.
+
+Apart from that, the scope of what is configurable through these
+various channels (configurator, JSON and metadata) is
+identical, so it is possible to use the configurator as some sort of
+an online reference manual, as it describes each and every setting.
+
+
+### Local setting vs hosted infrastructure
+
 At this point you need to be aware that:
 
 * settings changed through the configurator or JSON files - are stored
@@ -364,28 +399,8 @@ At this point you need to be aware that:
    will be applicable to all users that get their hands on that notebook,
    even if they end up in a mybinder instance via github.
 
-Apart from that, the scope of what is configurable through these channels
-channels (configurator, JSON and metadata) is identical, so it is possible
-to use the configurator as some sort of an online reference manual,
-as it describes each and every setting.
 
-Finally, the following priorities apply:
 
-* a setting will always be used if you define it in the `rise` section
-  of the nodebook metadata (or the 'livereveal' section, for backward
-  compatibility, see below)
-
-* then if not, the settings from your own profile (either defined
-  through the configurator, or through python) are applied.
-
-### Note on legacy naming
-
-In all this document we refer to settings stored in a JSON key named `rise`.
-You may also see some notebooks using the `livereveal` key instead,
-which is an older name for the same project. Both names are actually
-taken into account, however you should know that `rise` will take
-precedence on `livereveal` if the same setting in defined under both
-names.
 
 ****
 

@@ -16,79 +16,143 @@ define([
   'services/config',
 ], function(require, $, Jupyter, utils, configmod) {
 
-  /*
-   * Add customized config on top of the default options using the notebook metadata
-   * or the config-derived values
-   */
-  function configSlides() {
+  "use strict";
 
-    var default_config = {
+  /*
+   * load configuration
+   *
+   * 1) start from the hardwired settings (in this file)
+   * 2) add settings configured in python; these typically can be
+   *   2a) either in a legacy file named `livereveal.json` 
+   *   2b) or, with the official name, in `rise.json`
+   * 3) add the settings from nbextensions_configurator (i.e. .jupyter/nbconfig/notebook.json)
+   *    they should all belong in the 'rise' category
+   *    the configurator came after the shift from 'livereveal' to 'rise'
+   *    so no need to consider 'livereveal' here
+   * 4) and finally add the settings from the notebook metadata
+   *   4a) for legacy reasons: use the 'livereveal' key
+   *   4b) for more consistency, then override with the 'rise' key
+   * 
+   * configLoaded alters the complete_config object in place.
+   * it will hold a consolidated set of all relevant settings with their priorities resolved
+   *
+   * it returns a promise that can be then'ed once the config is loaded
+   *
+   * setup waits for the config to be loaded before it actually enables keyboard shortcuts 
+   * and other menu items; so this means that the bulk of the code can assume that the config
+   * is already loaded and does not need to worry about using promises, or 
+   * waiting for any asyncronous code to complete
+   */
+
+  var complete_config = {};
+
+  // returns a promise; you can do 'then()' on this promise
+  // to do stuff *after* the configuration is completely loaded 
+  function configLoaded() {
+
+    // see rise.yaml for more details
+    var hardwired_config = {
+
+      // behaviour
+      autolaunch: false,
+      start_slideshow_at: 'selected',
+      auto_select: 'code',
+      auto_select_fragment: true,
+
+      // aspect
+      header: undefined,
+      footer: undefined,
+      backimage: undefined,
+      overlay: undefined,
+
+      // UI
+      toolbar_icon: 'fa-bar-chart',
+      shortcuts: {
+        'slideshow' : 'alt-r',
+        'toggle-slide': 'shift-i',
+        'toggle-subslide': 'shift-u',
+        'toggle-fragment': 'shift-f',
+        // unassigned by default
+        'toggle-note': '',
+        'toggle-skip': '',
+      },
+
+      // reveal native settings passed as-is
+      theme: 'simple',
+      transition: 'linear',
+      // xxx there might be a need to tweak this one when set
+      // by the configurator, as e.g. 'false' or 'true' will result
+      // in a string and not a boolean
+      slideNumber: true,
+      width: "100%",
+      height: "100%",
       controls: true,
       progress: true,
       history: true,
-      width: "100%",
-      height: "100%",
-      margin: 0.1,
-      minScale: 1.0, // we need this for codemirror to work right
-      theme: 'simple',
-      transition: 'linear',
-      slideNumber: true,
-      /* describe where to start slideshow
-       * can be either:
-       * 'beginning' : start on first slide 
-       * 'selected'  : start on current slide
-       * xxx: could be useful to add more policies
-       * like alowing to start on a hard-wired slide number
-       */
-      start_slideshow_at: 'selected',
-      /* describe how to select cells when new contents
-       * is displayed (new slide or new fragment)
-       * can be either:
-       * 'none' - no autoselect
-       * 'code' - auto-select first code cell if any
-       * 'first' - select first cell - should be
-       * considered an experimental attempt, does
-       * not seem very helpful in real life
-       */
-      auto_select: 'code',
-      /* if auto_select is not 'none', this boolean
-       * says if selection focuses on the current fragment
-       * or considers the whole slide
-       */
-      auto_select_fragment: true,
       scroll: false,
       center: true,
-      autolaunch: false,
+      margin: 0.1,
+      minScale: 1.0, // we need this for codemirror to work right
     };
 
-    var config_section = new configmod.ConfigSection(
+    // honour the 2 names: 'livereveal' and 'rise'
+    // use the ones in livereveal/legacy first
+    // so they get overridden if redefined in rise
+    let config_section_legacy = new configmod.ConfigSection(
       'livereveal',
+      {base_url: utils.get_body_data("baseUrl")});
+    // trigger an asynchronous load
+    config_section_legacy.load();
+    let config_section = new configmod.ConfigSection(
+      'rise',
       {base_url: utils.get_body_data("baseUrl")});
     config_section.load();
 
-    /* dummy empty config section to load
-     * the metadata + default as a ConfigWithDefaults object
-     */
-    var _config_section = new configmod.ConfigSection(
-      '_livereveal',
-      {base_url: utils.get_body_data("baseUrl")});
-    _config_section.load();
+    // this is also a ConfigSection object as per notebook/static/services/config.js 
+    let nbext_configurator = Jupyter.notebook.config;
+    nbext_configurator.load();
 
-    var final_config;
-
-    var rise_meta = Jupyter.notebook.metadata.livereveal;
-
-    if(rise_meta !== undefined && Object.keys(rise_meta).length > 0){
-      final_config = $.extend(true, default_config, rise_meta);
-      final_config = new configmod.ConfigWithDefaults(_config_section, final_config);
-      console.log("RISE metadata detected. Using ONLY RISE metadata on top of the default config. Custom config disabled.")
-    } else {
-      final_config = new configmod.ConfigWithDefaults(config_section, default_config);
-      console.log("No (or empty) RISE metadata. Using ONLY custom config (if exist) on top of the default config.")
-    }
-
-    return final_config
-
+    // with Promise.all we can wait for all 3 configs to have loaded
+    return Promise.all([
+      config_section_legacy.loaded,
+      config_section.loaded,
+      nbext_configurator.loaded,
+    ]).then(
+        // and now we can compute the layered config
+        function() {
+          // 1) initialize with hardwired defaults
+          $.extend(true, complete_config, hardwired_config);
+          // 2a) and 2b)
+          $.extend(true, complete_config, config_section_legacy.data);
+          $.extend(true, complete_config, config_section.data);
+          // 3)
+          $.extend(true, complete_config, nbext_configurator.data.rise);
+          // 4a) from the notebook metadata
+          let metadata_legacy = Jupyter.notebook.metadata.livereveal;
+          $.extend(true, complete_config, metadata_legacy);
+          // 4b) ditto
+          let metadata = Jupyter.notebook.metadata.rise;
+          $.extend(true, complete_config, metadata);
+          // console.log("complete_config is OK");
+        });
+  }
+    
+  /*
+   * this function is a heuristic that says if this notebook seems to
+   * be meant to be a slideshow.
+   * this primarily is for autolaunch, so that somebody who would
+   * enable autolaunch in her ~/.jupyter/ area would not
+   * see RISE trigger on every single notebook
+   *
+   * xxx note that this might take too long on large notebooks
+   * a possible improvement would be to look for the first, say, 10 cells only
+   * as a matter of fact, in most cases the first cell would be a slide cell really
+   */
+  function is_slideshow(notebook) {
+    for (let cell of notebook.get_cells())
+      if (is_slide(cell) || is_subslide(cell))
+        return true;
+    return false;
   }
 
   /*
@@ -255,68 +319,61 @@ define([
    * changing to the one we want. By changing the URL before setting up reveal,
    * the slideshow really starts on the desired slide.
    */
-  function setStartingSlide(selected, config) {
+  function setStartingSlide(selected) {
 
-    var start_slideshow_promise = config.get('start_slideshow_at');
-    // We need the value after the promise resolution
-    start_slideshow_promise.then(function(start_slideshow){
-      if (start_slideshow === 'selected') {
-        // Start from the selected cell
-        Reveal.slide(selected[0], selected[1]);
-      } else {
-        // Start from the beginning
-        Reveal.slide(0, 0);
-      }
-      setScrollingSlide(config);
-    });
-
+    var start_slideshow = complete_config.start_slideshow_at;
+    if (start_slideshow === 'selected') {
+      // Start from the selected cell
+      Reveal.slide(selected[0], selected[1]);
+    } else {
+      // Start from the beginning
+      Reveal.slide(0, 0);
+    }
+    setScrollingSlide();
   }
 
   /* Setup the scrolling in the current slide if the config option is activated
    *  and the content is greater than 0.95 * slide height
    */
-  function setScrollingSlide(config) {
+  function setScrollingSlide() {
 
-    var scroll_promise = config.get('scroll');
-    scroll_promise.then(function(scroll){
-      if (scroll === true) {
-        var h = $('.reveal').height() * 0.95;
-        $('section.present').find('section')
-          .filter(function() {
-            return $(this).height() > h;
-          })
-          .css('height', 'calc(95vh)')
-          .css('overflow-y', 'scroll')
-          .css('margin-top', '20px');
-      }
-    });
-
+    var scroll = complete_config.scroll;
+    if (scroll === true) {
+      var h = $('.reveal').height() * 0.95;
+      $('section.present').find('section')
+        .filter(function() {
+          return $(this).height() > h;
+        })
+        .css('height', 'calc(95vh)')
+        .css('overflow-y', 'scroll')
+        .css('margin-top', '20px');
+    }
   }
 
-  /* Setup the auto-launch function, which checks metadata to see if
+  /* 
+   * Setup the auto-launch function, which checks metadata to see if
    * RISE should launch automatically when the notebook is opened.
+   * 
+   * this will trigger only on notebooks that have 
+   * either a 'livereveal' or a 'rise' section in their metadata
+   * this is because autolaunch can be enabled in nbextensions_configurator
+   * and so can possibly have a too big impact if we are not careful
    */
-  function autoLaunch(config) {
-
-    var autolaunch_promise = config.get('autolaunch');
-    autolaunch_promise.then(function(autolaunch){
-      if (autolaunch === true) {
-        revealMode();
-      }
-    });
-
+  function autoLaunch() {
+    if (complete_config.autolaunch && is_slideshow(Jupyter.notebook))
+      revealMode()
   }
 
   /* Setup a MutationObserver to call Reveal.sync when an output is generated.
    * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
    */
   var outputObserver = null;
-  function setupOutputObserver(config) {
+  function setupOutputObserver() {
     function mutationHandler(mutationRecords) {
       mutationRecords.forEach(function(mutation) {
         if (mutation.addedNodes && mutation.addedNodes.length) {
           Reveal.sync();
-          setScrollingSlide(config);
+          setScrollingSlide();
         }
       });
     }
@@ -325,9 +382,13 @@ define([
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     outputObserver = new MutationObserver(mutationHandler);
 
-    var observerConfig = { childList: true, characterData: false, attributes: false, subtree: false };
+    var observerOptions = { childList: true,
+                           characterData: false,
+                           attributes: false,
+                           subtree: false
+                         };
     $output.each(function () {
-      outputObserver.observe(this, observerConfig);
+      outputObserver.observe(this, observerOptions);
     });
   }
 
@@ -337,11 +398,11 @@ define([
     }
   }
 
-  function addHeaderFooterOverlay(config) {
-    let overlay = config.get_sync('overlay');
-    let header =  config.get_sync('header');
-    let footer =  config.get_sync('footer');
-    let backimage =  config.get_sync('backimage');
+  function addHeaderFooterOverlay() {
+    let overlay = complete_config.overlay;
+    let header =  complete_config.header;
+    let footer =  complete_config.footer;
+    let backimage =  complete_config.backimage;
     // minimum styling to make these 3 things look
     // like what their name says they should look
     let header_style = "position: absolute; top: 0px;";
@@ -360,7 +421,6 @@ define([
         overlay_body += `<div id='rise-footer' style='${footer_style}'>${footer}</div>`;
     }
     let overlay_div = `<div id='rise-overlay'>${overlay_body}</div>`;
-    console.log(`adding overlay ${overlay_div}`);
     $('div.reveal').append(overlay_div);
   }
 
@@ -371,7 +431,7 @@ define([
     $('div#rise-overlay').remove();
   }
 
-  function Revealer(selected_slide, config) {
+  function Revealer(selected_slide) {
     $('body').addClass("rise-enabled");
     // Prepare the DOM to start the slideshow
     $('div#header').hide();
@@ -383,14 +443,11 @@ define([
 
     // Header
     // Available themes are in static/css/theme
-    var theme_promise = config.get('theme');
-    theme_promise.then(function(theme){
-      $('head')
-        .prepend('<link rel="stylesheet" href='
-                 + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
-                 + ' id="theme" />');
-    });
-
+    var theme = complete_config.theme;
+    $('head')
+      .prepend('<link rel="stylesheet" href='
+               + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
+               + ' id="theme" />');
     // Add reveal css
     $('head')
       .prepend('<link rel="stylesheet" href='
@@ -420,24 +477,14 @@ define([
 
               Reveal.initialize();
 
+              // all these settings are passed along to reveal as-is
+              // xxx it might be just better to copy the whole complete_config instead
+              // of selecting some names, which would allow users to transparently use
+              // all reveal's features
+              let inherited = ['controls', 'progress', 'history', 'width', 'height', 'margin',
+                               'minScale', 'transition', 'slideNumber', 'center'];
+
               var options = {
-                // All this config option load correctly just because of require-induced delay,
-                // it would be better to catch them from the config.get promise.
-                controls: config.get_sync('controls'),
-                progress: config.get_sync('progress'),
-                history: config.get_sync('history'),
-
-                // You can switch width and height to fix the projector
-                width: config.get_sync('width'),
-                height: config.get_sync('height'),
-                margin: config.get_sync('margin'),
-                minScale: config.get_sync('minScale'), //we need this for codemirror to work right)
-
-                // default/cube/page/concave/zoom/linear/none
-                transition: config.get_sync('transition'),
-
-                slideNumber: config.get_sync('slideNumber'),
-                center: config.get_sync('center'),
 
                 //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
                 //parallaxBackgroundSize: '2560px 1600px',
@@ -448,7 +495,7 @@ define([
                   38: null, // up arrow disabled
                   40: null, // down arrow disabled
                   66: null, // b, black pause disabled, use period or forward slash
-                  70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unrealiable
+                  70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unreliable
                   72: null, // h, left disabled
                   74: null, // j, down disabled
                   75: null, // k, up disabled
@@ -475,9 +522,12 @@ define([
                     condition: function() { return !!document.body.classList; } }
                 ]
               };
+              for (let setting of inherited) {
+                options[setting] = complete_config[setting];
+              }
 
               // Set up the Leap Motion integration if configured
-              var leap = config.get_sync('leap_motion');
+              var leap = complete_config.enable_leap_motion;
               if (leap !== undefined) {
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
                 options.leap = leap;
@@ -488,30 +538,30 @@ define([
               Reveal.addEventListener( 'ready', function( event ) {
                 Unselecter();
                 // check and set the scrolling slide when you start the whole thing
-                setScrollingSlide(config);
-                autoSelectHook(config);
+                setScrollingSlide();
+                autoSelectHook();
               });
 
               Reveal.addEventListener( 'slidechanged', function( event ) {
                 Unselecter();
                 // check and set the scrolling slide every time the slide change
-                setScrollingSlide(config);
-                autoSelectHook(config);
+                setScrollingSlide();
+                autoSelectHook();
               });
 
               Reveal.addEventListener( 'fragmentshown', function( event ) {
-                autoSelectHook(config);
+                autoSelectHook();
               });
               Reveal.addEventListener( 'fragmenthidden', function( event ) {
-                autoSelectHook(config);
+                autoSelectHook();
               });
 
               // Sync when an output is generated.
-              setupOutputObserver(config);
+              setupOutputObserver();
 
               // Setup the starting slide
-              setStartingSlide(selected_slide, config);
-              addHeaderFooterOverlay(config);
+              setStartingSlide(selected_slide);
+              addHeaderFooterOverlay();
 
             });
   }
@@ -670,7 +720,7 @@ define([
                       + window.location.search);
   }
 
-  function Remover(config) {
+  function Remover() {
     Reveal.configure({minScale: 1.0});
     Reveal.removeEventListeners();
     $('body').removeClass("rise-enabled");
@@ -881,6 +931,11 @@ define([
                      },
                      "edit-all-cells", "RISE");
 
+    // mostly for debug / information
+    actions.register({ help   : 'show RISE config in console',
+                       handler: showConfig},
+                     "show-config", "RISE");
+
   }
 
   // the entrypoint - call this to enter or exit reveal mode
@@ -888,13 +943,12 @@ define([
     // We search for a class tag in the maintoolbar to check if reveal mode is "on".
     // If the tag exits, we exit. Otherwise, we enter the reveal mode.
     var tag = $('#maintoolbar').hasClass('reveal_tagging');
-    var config = configSlides()
 
     if (!tag) {
       // Preparing the new reveal-compatible structure
       var selected_slide = markupSlides($('div#notebook-container'));
       // Adding the reveal stuff
-      Revealer(selected_slide, config);
+      Revealer(selected_slide);
       // Minor modifications for usability
       setupKeys("reveal_mode");
       buttonExit();
@@ -902,7 +956,7 @@ define([
       $('#maintoolbar').addClass('reveal_tagging');
     } else {
       var current_cell_index = reveal_cell_index(Jupyter.notebook);
-      Remover(config);
+      Remover();
       setupKeys("notebook_mode");
       $('#exit_b').remove();
       $('#help_b').remove();
@@ -918,58 +972,74 @@ define([
 
   let autoSelectTimeout = 250;
 
-  function autoSelectHook(config) {
-    var auto_select_promise = config.get('auto_select');
-    auto_select_promise.then(function(auto_select) {
-      var cell_type =
-          (auto_select == "code") ? 'code'
-	  : (auto_select == "first") ? null
-	  : undefined;
+  function autoSelectHook() {
+    var auto_select = complete_config.auto_select;
+    var cell_type =
+        (auto_select == "code") ? 'code'
+	: (auto_select == "first") ? null
+	: undefined;
 
-      /* turned off altogether */
-      if (cell_type === undefined) {
-	return;
-      }
+    /* turned off altogether */
+    if (cell_type === undefined) {
+      return;
+    }
 
-      var auto_select_fragment_promise = config.get('auto_select_fragment');
-      auto_select_fragment_promise.then(function(auto_select_fragment) {
-	setTimeout(function(){
-	  var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type, auto_select_fragment);
-	  // select and focus on current cell
-	  Jupyter.notebook.select(current_cell_index)
-	}, autoSelectTimeout);
-      });
-    })
+    var auto_select_fragment = complete_config.auto_select_fragment;
+    setTimeout(function(){
+      var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type, auto_select_fragment);
+      // select and focus on current cell
+      Jupyter.notebook.select(current_cell_index)
+    }, autoSelectTimeout);
   }
 
-  
-  function setup() {
-    $('head').append('<link rel="stylesheet" href=' + require.toUrl("./main.css") + ' id="maincss" />');
-
-    // register all known actions
-    registerJupyterActions();
+  function addButtonsAndShortcuts() {
 
     // create button
     Jupyter.toolbar.add_buttons_group([{
       action  : "RISE:slideshow",
-      icon    : 'fa-bar-chart-o',
-      id      : 'RISE'
+      icon    : complete_config.toolbar_icon,
+      id      : 'RISE',
     }]);
 
     //////// bind to keyboard shortcut
-    // main
-    Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut('alt-r', 'RISE:slideshow');
-    // a selection of utilities - more for the sake of example
-    Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-i', 'RISE:toggle-slide');
-    Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-o', 'RISE:toggle-subslide');
-    Jupyter.notebook.keyboard_manager.command_shortcuts.set_shortcut('shift-p', 'RISE:toggle-fragment');
-
-    // autolaunch if specified in metadata
-    var config = configSlides()
-    autoLaunch(config);
+    let shortcuts = complete_config.shortcuts;
+    for (let action_name in complete_config.shortcuts) {
+      let shortcut = shortcuts[action_name];
+      // ignore if shortcut is set to an empty string
+      if (shortcut) {
+        Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut(
+          shortcut, `RISE:${action_name}`)
+      }
+    }
   }
 
+  function showConfig() {
+    console.log("RISE configuration", complete_config);
+    console.log(`Current notebook ${is_slideshow(Jupyter.notebook) ? "is" : "not"} a slideshow`);
+  }
+
+
+  /* load_jupyter_extension */
+  function setup() {
+    // load css first
+    $('<link/>')
+      .attr({rel: " stylesheet",
+             href: require.toUrl("./main.css"),
+             id: 'maincss',
+            })
+      .appendTo('head');
+
+    configLoaded()
+//      .then(showConfig)
+      .then(registerJupyterActions)
+      .then(addButtonsAndShortcuts)
+      .then(autoLaunch)
+    ;
+    
+  }
+    
   setup.load_ipython_extension = setup;
+  setup.load_jupyter_extension = setup;
 
   return setup;
 });

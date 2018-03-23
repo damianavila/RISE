@@ -25,6 +25,7 @@ from distutils.core import setup
 pjoin = os.path.join
 here = os.path.abspath(os.path.dirname(__file__))
 pkg_root = pjoin(here, name)
+data_files = []
 
 packages = []
 for d, _, _ in os.walk(pkg_root):
@@ -33,8 +34,15 @@ for d, _, _ in os.walk(pkg_root):
 
 paths = []
 for (path, directories, filenames) in os.walk(pjoin(pkg_root, "static")):
+    target_dir = os.path.normpath(
+                          os.path.join('share/jupyter/nbextensions/rise',
+                          os.path.relpath(pjoin(path), pjoin(pkg_root, 'static'))))
+    files = []
     for filename in filenames:
         paths.append(os.path.relpath(pjoin(path, filename), pkg_root))
+        files.append(os.path.relpath(pjoin(path, filename), here))
+    data_files.append((target_dir, files))
+data_files.append(('etc/jupyter/nbconfig/notebook.d', ['rise.json']))
 
 version_ns = {}
 with open(pjoin(here, name, '_version.py')) as f:
@@ -48,6 +56,8 @@ setup_args = dict(
     version=version_ns['__version__'],
     packages=packages,
     package_data={name: paths},
+    data_files=data_files,
+    include_package_data=True,
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
     author="Damián Avila",

@@ -26,7 +26,7 @@ git branch -D gh-pages
 
 finally, reset the last commit and checkout .gitignore:
 
-```a
+```
 git reset HEAD~
 git checkout -- .gitignore
 ```

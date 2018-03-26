@@ -1,10 +1,10 @@
 Installation
-------------
+============
 
 .. note::
 
    To install RISE in development mode, see
-   the `Developer Documentaion <dev/index.rst>`_.
+   the `Developer Documentation <dev/index.rst>`_.
 
 From the most simple to the most complex one, you have 3 options:
 

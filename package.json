@@ -9,6 +9,7 @@
     "less-plugin-autoprefix": "~1.4.2",
     "less-plugin-clean-css": "~1.5.0",
     "reveal.js": "~3.5.0",
+    "reveal.js-chalkboard": "~1.0.0",
     "watch": "~0.16.0"
   },
   "license": "BSD-3-Clause",
@@ -19,9 +20,10 @@
     "url": "https://github.com/damianavila/RISE.git"
   },
   "scripts": {
+    "build": "for target in build-css build-reveal reset-reveal; do npm run $target; done",
     "build-css": "npm run less",
-    "build-reveal": "cp -r ./node_modules/reveal.js rise/static/reveal.js",
-    "reset-reveal": "sed -i.upstream '11 s_^_\/*_' rise/static/reveal.js/css/reveal.css",
+    "build-reveal": "for dep in reveal.js reveal.js-chalkboard; do cp -r ./node_modules/$dep rise/static/$dep; done",
+    "reset-reveal": "sed -i.upstream '11 s_^_/*_' rise/static/reveal.js/css/reveal.css",
     "clean-reveal": "rm -r rise/static/reveal.js",
     "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less rise/static/main.css",
     "watch-less": "./node_modules/.bin/watch 'npm run less' src/less"

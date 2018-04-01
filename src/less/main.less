@@ -49,7 +49,7 @@
       right: 3.3em;
       bottom: 3.9em;
       font-size: 100%;
-      color: #727272;
+      color: @some-grey;
       background-color: transparent;
     }
 
@@ -208,4 +208,45 @@
 
 #notebook {
   .transition-all;
+}
+
+
+/* chalkboard plugin and RISE buttons */
+#notescanvas { position: absolute; top: 0; }
+#chalkboard { display: none; }
+
+/* button toolbar */
+#help_b,
+#exit_b,
+.chalkboard-button {
+  color: @some-grey;
+  position: fixed !important;
+  z-index: 30;
+  cursor: pointer;
+}
+
+#exit_b {
+  top: 0.8em;
+  left: 0.6em;
+}
+
+#help_b {
+  left: 0.6em ;
+  bottom: 0.8em;
+}
+
+/* use !important to override stuff that
+   would normally be configured through
+   chalkboard options */
+.chalkboard-button i {
+  bottom: 1em !important;
+  font-size: 1.8em !important;
+  color: @some-grey !important;
+}
+
+#toggle-chalkboard.chalkboard-button {
+  left: 4em !important;
+}
+#toggle-notes {
+  left: 7em !important;
 }

@@ -475,7 +475,6 @@ define([
               // Full list of configuration options available here:
               // https://github.com/hakimel/reveal.js#configuration
 
-              Reveal.initialize();
 
               // all these settings are passed along to reveal as-is
               // xxx it might be just better to copy the whole complete_config instead
@@ -489,13 +488,17 @@ define([
                 //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
                 //parallaxBackgroundSize: '2560px 1600px',
 
+                // turn off reveal native help
+                help: false,
+
                 keyboard: {
                   13: null, // Enter disabled
                   27: null, // ESC disabled
                   38: null, // up arrow disabled
                   40: null, // down arrow disabled
                   66: null, // b, black pause disabled, use period or forward slash
-                  70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unreliable
+                            // f, disable fullscreen inside the slideshow, makes codemirror unreliable
+                  70: function () {fullscreenHelp();}, 
                   72: null, // h, left disabled
                   74: null, // j, down disabled
                   75: null, // k, up disabled
@@ -508,9 +511,9 @@ define([
                   188: function() {$('#help_b,#exit_b').fadeToggle();},
                 },
 
-                // Optional libraries used to extend on reveal.js
-                // Notes are working partially... it opens the notebooks, not the slideshows...
                 dependencies: [
+                  // Optional libraries used to extend on reveal.js
+                  // Notes are working partially... it opens the notebooks, not the slideshows...
                   /* { src: "static/custom/livereveal/reveal.js/lib/js/classList.js",
                    *   condition: function() { return !document.body.classList; } },
                    * { src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js",
@@ -519,21 +522,48 @@ define([
                    */
                   { src: require.toUrl("./reveal.js/plugin/notes/notes.js"),
                     async: true,
-                    condition: function() { return !!document.body.classList; } }
-                ]
+                    condition: function() { return !!document.body.classList; },
+                  },
+                ],
+
               };
+
               for (let setting of inherited) {
                 options[setting] = complete_config[setting];
               }
 
-              // Set up the Leap Motion integration if configured
-              var leap = complete_config.enable_leap_motion;
-              if (leap !== undefined) {
+              ////////// set up the leap motion integration if configured
+              var enable_leap_motion = complete_config.enable_leap_motion;
+              if (enable_leap_motion) {
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
-                options.leap = leap;
+                options.leap = enable_leap_motion;
               }
 
-              Reveal.configure(options);
+              ////////// set up chalkboard if configured
+              let enable_chalkboard = complete_config.enable_chalkboard;
+              if (enable_chalkboard) {
+                options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/chalkboard/chalkboard.js'), async: true });
+                // xxx need to explore the option of registering jupyter actions 
+                // and have jupyter handle the keyboard entirely instead of this approach
+                // could hopefully avoid conflicting behaviours in case of overlaps
+                $.extend(options.keyboard,
+                         {
+                           // for chalkboard; also bind uppercases just in case
+                           63:  KeysMessager,                                        // '?' show our help
+                           61:  function() { RevealChalkboard.reset() },             // '=' reset chalkboard data on current slide
+                           45:  function() { RevealChalkboard.clear() },             // '-' clear full size chalkboard
+                           67:  function() { RevealChalkboard.toggleChalkboard() },  // 'C' toggle full size chalkboard
+                           99:  function() { RevealChalkboard.toggleChalkboard() },  // 'c' toggle full size chalkboard
+                           78:  function() { RevealChalkboard.toggleNotesCanvas() }, // 'n' toggle notes (slide-local) 
+                           110: function() { RevealChalkboard.toggleNotesCanvas() }, // 'N' toggle notes (slide-local)
+                           68:  function() { RevealChalkboard.download() },          // 'D' download recorded chalkboard drawing
+                           100: function() { RevealChalkboard.download() },          // 'd' download recorded chalkboard drawing
+                           // when 'd' is pressed
+                         });
+              }
+
+
+              Reveal.initialize(options);
 
               Reveal.addEventListener( 'ready', function( event ) {
                 Unselecter();
@@ -634,17 +664,29 @@ define([
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
           "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
-          "<li><kbd>w</kbd>: Toggle overview mode</li>" +
-          "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
+          "<li><kbd>Space</kbd>: Next</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: Previous</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: Eval and select next cell if visible</li>" +
           "<li><kbd>Home</kbd>: First slide</li>" +
           "<li><kbd>End</kbd>: Last slide</li>" +
-          "<li><kbd>space</kbd>: Next</li>" +
-          "<li><kbd>Shift</kbd>+<kbd>space</kbd>: Previous</li>" +
-          "<li><kbd>PgUp</kbd>: Up</li>" +
-          "<li><kbd>PgDn</kbd>: Down</li>" +
-          "<li><kbd>left</kbd>: Left</li>" +
-          "<li><kbd>right</kbd>: Right</li>" +
+          "<li><kbd>w</kbd>: Toggle overview mode</li>" +
+          "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
           "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
+          "<li><strong>Not so useful:</strong>" +
+            "<ul>" +  
+            "<li><kbd>PgUp</kbd>: Up</li>" +
+            "<li><kbd>PgDn</kbd>: Down</li>" +
+            "<li><kbd>Left Arrow</kbd>: Left <em>(note: Space preferred)</em></li>" +
+            "<li><kbd>Right Arrow</kbd>: Right <em>(note: Shift Space preferred)</em></li>" +
+            "</ul>" +
+          "<li><strong>With chalkboard enabled:</strong>" +
+            "<ul>" +  
+            "<li><kbd>b</kbd> toggle fullscreen chalkboard</li>" +
+            "<li><kbd>c</kbd> toggle slide-local canvas</li>" +
+            "<li><kbd>d</kbd> download chalkboard drawing</li>" +
+            "<li><kbd>=</kbd> clear slide-local canvas</li>" +
+            "<li><kbd>Del</kbd> delete fullscreen chalkboard</li>" +
+            "</ul>" +
           "</ul>" +
           "<b>NOTE: You have to use these shortcuts in command mode.</b>"
       )
@@ -663,18 +705,9 @@ define([
     var help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
-        .addClass('fa-question fa-4x fa')
+        .addClass('fa-question fa-3x fa')
         .addClass('my-main-tool-bar')
-        .css('position','fixed')
-        .css('bottom','0.5em')
-        .css('left','0.6em')
-        .css('opacity', '0.6')
-        .css('z-index', '30')
-        .click(
-          function(){
-            KeysMessager();
-          }
-        );
+        .click(KeysMessager);
     $('.reveal').after(help_button);
   }
 
@@ -682,13 +715,8 @@ define([
     var exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','Exit RISE')
-        .addClass('fa-times-circle fa-4x fa')
+        .addClass('fa-times-circle fa-3x fa')
         .addClass('my-main-tool-bar')
-        .css('position','fixed')
-        .css('top','0.5em')
-        .css('left','0.48em')
-        .css('opacity', '0.6')
-        .css('z-index', '30')
         .click(revealMode);
     $('.reveal').after(exit_button);
   }

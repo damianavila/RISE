@@ -73,7 +73,7 @@ define([
         'toggle-subslide': 'shift-u',
         'toggle-fragment': 'shift-f',
         // unassigned by default
-        'toggle-note': '',
+        'toggle-notes': '',
         'toggle-skip': '',
       },
 
@@ -880,7 +880,7 @@ define([
       return metadata.slideshow;
     }
 
-    // new_type can be any of 'slide' 'subslide' 'fragment' 'note' 'skip'
+    // new_type can be any of 'slide' 'subslide' 'fragment' 'notes' 'skip'
     function toggle_slide_type(new_type) {
       let slideshow = init_metadata_slideshow();
       slideshow.slide_type = (slideshow.slide_type == new_type) ? '' : new_type;
@@ -905,7 +905,7 @@ define([
     actions.register({ help   : '(un)set current cell as a Note cell',
                        handler: function() { toggle_slide_type('note'); }
                      },
-                     "toggle-note", "RISE");
+                     "toggle-notes", "RISE");
 
     actions.register({ help   : '(un)set current cell as a Skip cell',
                        handler: function() { toggle_slide_type('skip'); }

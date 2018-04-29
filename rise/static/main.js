@@ -78,6 +78,7 @@ define([
       },
 
       // reveal native settings passed as-is
+      // see also the 'inherited' variable below in Revealer below
       theme: 'simple',
       transition: 'linear',
       // xxx there might be a need to tweak this one when set
@@ -93,6 +94,8 @@ define([
       center: true,
       margin: 0.1,
       minScale: 1.0, // we need this for codemirror to work right
+      // turn off reveal's help overlay that is by default bound to question mark / ?
+      help: false,
     };
 
     // honour the 2 names: 'livereveal' and 'rise'
@@ -482,7 +485,7 @@ define([
               // of selecting some names, which would allow users to transparently use
               // all reveal's features
               let inherited = ['controls', 'progress', 'history', 'width', 'height', 'margin',
-                               'minScale', 'transition', 'slideNumber', 'center'];
+                               'minScale', 'transition', 'slideNumber', 'center', 'help'];
 
               var options = {
 
@@ -495,7 +498,7 @@ define([
                   38: null, // up arrow disabled
                   40: null, // down arrow disabled
                   66: null, // b, black pause disabled, use period or forward slash
-                  70: function () {fullscreenHelp();}, // disable fullscreen inside the slideshow, makes codemirror unreliable
+                  70: fullscreenHelp, // disable fullscreen inside the slideshow, makes codemirror unreliable
                   72: null, // h, left disabled
                   74: null, // j, down disabled
                   75: null, // k, up disabled
@@ -504,7 +507,7 @@ define([
                   79: null, // o disabled
                   80: null, // p, up disable
                   // 83: null, // s, notes, but not working because notes is a plugin
-                  87: function() {Reveal.toggleOverview();}, // w, toggle overview
+                  87: Reveal.toggleOverview, // w, toggle overview
                   188: function() {$('#help_b,#exit_b').fadeToggle();},
                 },
 

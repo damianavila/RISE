@@ -55,9 +55,9 @@ helpful if you plan on publishing slideshows through something like
 
 ### Choosing where the slideshow begins
 
-The following configure changes where the slides begin. By default, RISE
+The following configuration changes where the slides begin. By default, RISE
 will start at the selected slide. To have it start at the first slide
-instead, use the following configuration:
+instead, use this configuration:
 
     {
      ...
@@ -277,7 +277,7 @@ You may need to install a separate module:
 
 or
 
-    conda install -c conda-forge jupyter_nbextensions_configurator 
+    conda install -c conda-forge jupyter_nbextensions_configurator
 
 You should then see a fourth tab in jupyter's directory views, as
 depicted below. Settings are stored in JSON format, typically in

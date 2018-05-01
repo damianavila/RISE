@@ -129,6 +129,12 @@ Parameters:
   description: <code>rise.shortcuts.edit-all-cells</code> shortcut to put all cells in edit mode
   input_type: hotkey
   default: none
+- name: rise.shortcuts.rise-nbconfigurator
+  description: >
+    <code>rise.shortcuts.rise-nbconfigurator</code> shortcut to open the nbconfigurator
+    pane for the RISE extension in a new tab (or window, depending on your browser config).
+  input_type: hotkey
+  default: shift-c
 
 #
 # passed to reveal as-is

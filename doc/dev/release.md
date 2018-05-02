@@ -11,9 +11,7 @@ Instructions and notes for preparing and publishing a release.
 **Step 2.** Build the JS and CSS:
 
     npm install
-    npm run build-reveal
-    npm run reset-reveal
-    npm run build-css
+    npm run build
 
 **Step 3.** Check for updated version numbers in
 

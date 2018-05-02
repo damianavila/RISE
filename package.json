@@ -19,6 +19,7 @@
     "url": "https://github.com/damianavila/RISE.git"
   },
   "scripts": {
+    "build": "for target in build-css build-reveal reset-reveal; do npm run $target; done",
     "build-css": "npm run less",
     "build-reveal": "cp -r ./node_modules/reveal.js rise/static/reveal.js",
     "reset-reveal": "sed -i.upstream '11 s_^_\/*_' rise/static/reveal.js/css/reveal.css",

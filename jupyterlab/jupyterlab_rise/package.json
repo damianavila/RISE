@@ -29,8 +29,8 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@jupyterlab/application": "^0.15.0",
-    "@jupyterlab/notebook": "^0.15.6",
+    "@jupyterlab/application": "^0.16.2",
+    "@jupyterlab/notebook": "^0.16.2",
     "reveal.js": "^3.6.0",
     "reveal_rise": "^1.0.0"
   },

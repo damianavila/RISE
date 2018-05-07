@@ -1,0 +1,44 @@
+{
+  "name": "jupyterlab_rise",
+  "version": "0.1.0",
+  "description": "A JupyterLab extension to turn your Jupyter Notebooks into a live presentation",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "homepage": "https://github.com/damianavila/jupyterlab_rise",
+  "bugs": {
+    "url": "https://github.com/damianavila/jupyterlab_rise/issues"
+  },
+  "license": "BSD-3-Clause",
+  "author": "Damian Avila",
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damianavila/jupyterlab_rise.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^0.15.0",
+    "@jupyterlab/notebook": "^0.15.6",
+    "reveal.js": "^3.6.0",
+    "reveal_rise": "^1.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "typescript": "~2.6.0"
+  },
+  "jupyterlab": {
+    "extension": true
+  }
+}

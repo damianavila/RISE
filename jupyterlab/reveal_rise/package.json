@@ -1,0 +1,17 @@
+{
+  "name": "reveal_rise",
+  "version": "1.0.0",
+  "description": "Customized reveal.js css used by jupyterlab_rise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rise",
+    "reveal.js",
+    "slides",
+    "jupyter"
+  ],
+  "author": "Damian Avila <info@oquanta.info> (http://www.damian.oquanta.info/)",
+  "license": "MIT"
+}

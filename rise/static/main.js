@@ -23,7 +23,7 @@ define([
    *
    * 1) start from the hardwired settings (in this file)
    * 2) add settings configured in python; these typically can be
-   *   2a) either in a legacy file named `livereveal.json` 
+   *   2a) either in a legacy file named `livereveal.json`
    *   2b) or, with the official name, in `rise.json`
    * 3) add the settings from nbextensions_configurator (i.e. .jupyter/nbconfig/notebook.json)
    *    they should all belong in the 'rise' category
@@ -32,22 +32,22 @@ define([
    * 4) and finally add the settings from the notebook metadata
    *   4a) for legacy reasons: use the 'livereveal' key
    *   4b) for more consistency, then override with the 'rise' key
-   * 
+   *
    * configLoaded alters the complete_config object in place.
    * it will hold a consolidated set of all relevant settings with their priorities resolved
    *
    * it returns a promise that can be then'ed once the config is loaded
    *
-   * setup waits for the config to be loaded before it actually enables keyboard shortcuts 
+   * setup waits for the config to be loaded before it actually enables keyboard shortcuts
    * and other menu items; so this means that the bulk of the code can assume that the config
-   * is already loaded and does not need to worry about using promises, or 
+   * is already loaded and does not need to worry about using promises, or
    * waiting for any asyncronous code to complete
    */
 
   var complete_config = {};
 
   // returns a promise; you can do 'then()' on this promise
-  // to do stuff *after* the configuration is completely loaded 
+  // to do stuff *after* the configuration is completely loaded
   function configLoaded() {
 
     // see rise.yaml for more details
@@ -72,12 +72,15 @@ define([
         'toggle-slide': 'shift-i',
         'toggle-subslide': 'shift-u',
         'toggle-fragment': 'shift-f',
+        // this can be helpful
+        'rise-nbconfigurator': 'shift-c',
         // unassigned by default
-        'toggle-note': '',
+        'toggle-notes': '',
         'toggle-skip': '',
       },
 
       // reveal native settings passed as-is
+      // see also the 'inherited' variable below in Revealer below
       theme: 'simple',
       transition: 'linear',
       // xxx there might be a need to tweak this one when set
@@ -93,6 +96,8 @@ define([
       center: true,
       margin: 0.1,
       minScale: 1.0, // we need this for codemirror to work right
+      // turn off reveal's help overlay that is by default bound to question mark / ?
+      help: false,
     };
 
     // honour the 2 names: 'livereveal' and 'rise'
@@ -108,7 +113,7 @@ define([
       {base_url: utils.get_body_data("baseUrl")});
     config_section.load();
 
-    // this is also a ConfigSection object as per notebook/static/services/config.js 
+    // this is also a ConfigSection object as per notebook/static/services/config.js
     let nbext_configurator = Jupyter.notebook.config;
     nbext_configurator.load();
 
@@ -136,7 +141,7 @@ define([
           // console.log("complete_config is OK");
         });
   }
-    
+
   /*
    * this function is a heuristic that says if this notebook seems to
    * be meant to be a slideshow.
@@ -168,7 +173,7 @@ define([
   };
 
   /* uniform way to access slide type, whether the slideshow metadata is set or not
-   * also sometimes slide_type is set to '-' by the toolbar 
+   * also sometimes slide_type is set to '-' by the toolbar
    */
   function get_slide_type(cell) {
     var slide_type = (cell.metadata.slideshow || {}).slide_type;
@@ -350,11 +355,11 @@ define([
     }
   }
 
-  /* 
+  /*
    * Setup the auto-launch function, which checks metadata to see if
    * RISE should launch automatically when the notebook is opened.
-   * 
-   * this will trigger only on notebooks that have 
+   *
+   * this will trigger only on notebooks that have
    * either a 'livereveal' or a 'rise' section in their metadata
    * this is because autolaunch can be enabled in nbextensions_configurator
    * and so can possibly have a too big impact if we are not careful
@@ -427,7 +432,7 @@ define([
   function removeHeaderFooterOverlay() {
     // it's easier to remove than to hide, plus this way
     // changes in the metadata will be reflected each time
-    // we enter reveal again   
+    // we enter reveal again
     $('div#rise-overlay').remove();
   }
 
@@ -458,7 +463,7 @@ define([
      * should be redefinable in the config
      */
     if (window.location.pathname.endsWith('.ipynb')) {
-      // Attempt to load rise.css 
+      // Attempt to load rise.css
       $('head').append(`<link rel="stylesheet" href="./rise.css" id="rise-custom-css" />`);
       // Attempt to load CSS with the same path as the .ipynb but with .css extension instead
       let notebook_css = window.location.pathname.replace(/\.ipynb$/,'.css');
@@ -481,7 +486,7 @@ define([
               // of selecting some names, which would allow users to transparently use
               // all reveal's features
               let inherited = ['controls', 'progress', 'history', 'width', 'height', 'margin',
-                               'minScale', 'transition', 'slideNumber', 'center'];
+                               'minScale', 'transition', 'slideNumber', 'center', 'help'];
 
               var options = {
 
@@ -497,8 +502,7 @@ define([
                   38: null, // up arrow disabled
                   40: null, // down arrow disabled
                   66: null, // b, black pause disabled, use period or forward slash
-                            // f, disable fullscreen inside the slideshow, makes codemirror unreliable
-                  70: function () {fullscreenHelp();}, 
+                  70: fullscreenHelp, // disable fullscreen inside the slideshow, makes codemirror unreliable
                   72: null, // h, left disabled
                   74: null, // j, down disabled
                   75: null, // k, up disabled
@@ -507,7 +511,7 @@ define([
                   79: null, // o disabled
                   80: null, // p, up disable
                   // 83: null, // s, notes, but not working because notes is a plugin
-                  87: function() {Reveal.toggleOverview();}, // w, toggle overview
+                  87: Reveal.toggleOverview, // w, toggle overview
                   188: function() {$('#help_b,#exit_b').fadeToggle();},
                 },
 
@@ -543,7 +547,7 @@ define([
               let enable_chalkboard = complete_config.enable_chalkboard;
               if (enable_chalkboard) {
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/chalkboard/chalkboard.js'), async: true });
-                // xxx need to explore the option of registering jupyter actions 
+                // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach
                 // could hopefully avoid conflicting behaviours in case of overlaps
                 $.extend(options.keyboard,
@@ -554,7 +558,7 @@ define([
                            45:  function() { RevealChalkboard.clear() },             // '-' clear full size chalkboard
                            67:  function() { RevealChalkboard.toggleChalkboard() },  // 'C' toggle full size chalkboard
                            99:  function() { RevealChalkboard.toggleChalkboard() },  // 'c' toggle full size chalkboard
-                           78:  function() { RevealChalkboard.toggleNotesCanvas() }, // 'n' toggle notes (slide-local) 
+                           78:  function() { RevealChalkboard.toggleNotesCanvas() }, // 'n' toggle notes (slide-local)
                            110: function() { RevealChalkboard.toggleNotesCanvas() }, // 'N' toggle notes (slide-local)
                            68:  function() { RevealChalkboard.download() },          // 'D' download recorded chalkboard drawing
                            100: function() { RevealChalkboard.download() },          // 'd' download recorded chalkboard drawing
@@ -673,14 +677,14 @@ define([
           "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
           "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
           "<li><strong>Not so useful:</strong>" +
-            "<ul>" +  
+            "<ul>" +
             "<li><kbd>PgUp</kbd>: Up</li>" +
             "<li><kbd>PgDn</kbd>: Down</li>" +
             "<li><kbd>Left Arrow</kbd>: Left <em>(note: Space preferred)</em></li>" +
             "<li><kbd>Right Arrow</kbd>: Right <em>(note: Shift Space preferred)</em></li>" +
             "</ul>" +
           "<li><strong>With chalkboard enabled:</strong>" +
-            "<ul>" +  
+            "<ul>" +
             "<li><kbd>b</kbd> toggle fullscreen chalkboard</li>" +
             "<li><kbd>c</kbd> toggle slide-local canvas</li>" +
             "<li><kbd>d</kbd> download chalkboard drawing</li>" +
@@ -788,7 +792,7 @@ define([
   }
 
   /*
-    using Reveal.getCurrentSlide() it is possible to get a lot of data 
+    using Reveal.getCurrentSlide() it is possible to get a lot of data
     about where we are in the slideshow
 
     the following function inspects this and returns a triple
@@ -805,7 +809,7 @@ define([
 
     ---------- historical note
 
-    in a previous implementation - for traditional notebooks - 
+    in a previous implementation - for traditional notebooks -
     we used to get slide and subslide from window.location.href
     however this in jupyter lab may be no longer possible
 
@@ -813,7 +817,7 @@ define([
   */
   function reveal_current_position() {
     let current_slide = Reveal.getCurrentSlide();
-    // href of the form slide-2-3 
+    // href of the form slide-2-3
     let href = current_slide.id;
     let chunks = href.split('-');
     let slide = Number(chunks[1]);
@@ -822,7 +826,7 @@ define([
     return [slide, subslide, fragments];
   }
 
-  
+
   /* Just before exiting reveal mode, we run this function
    * whose job is to find the notebook index
    * for the first cell in the current (sub)slide
@@ -831,10 +835,10 @@ define([
    *
    * if cell_type is not set, returns the first cell in slide
    * otherwise, it returns the first cell of that type in slide
-   * 
+   *
    * if auto_select_fragment is set to true, search is restricted to the current fragment
    * otherwise, the whole slide is considered
-   * 
+   *
    * returns null if no match is found
    */
   function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false) {
@@ -846,7 +850,7 @@ define([
      */
     var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
     var subslide_counter = 0;
-    var fragment_counter = 0;    
+    var fragment_counter = 0;
     var result = null;
 
     notebook.get_cells().forEach(function (cell, index) {
@@ -908,7 +912,7 @@ define([
       return metadata.slideshow;
     }
 
-    // new_type can be any of 'slide' 'subslide' 'fragment' 'note' 'skip'
+    // new_type can be any of 'slide' 'subslide' 'fragment' 'notes' 'skip'
     function toggle_slide_type(new_type) {
       let slideshow = init_metadata_slideshow();
       slideshow.slide_type = (slideshow.slide_type == new_type) ? '' : new_type;
@@ -933,7 +937,7 @@ define([
     actions.register({ help   : '(un)set current cell as a Note cell',
                        handler: function() { toggle_slide_type('note'); }
                      },
-                     "toggle-note", "RISE");
+                     "toggle-notes", "RISE");
 
     actions.register({ help   : '(un)set current cell as a Skip cell',
                        handler: function() { toggle_slide_type('skip'); }
@@ -959,10 +963,24 @@ define([
                      },
                      "edit-all-cells", "RISE");
 
+    // because the `Edit Keyboard Shortcuts` utility does not mention the
+    // actions prefix (i.e. 'RISE' in our case), we choose to make these two
+    // action names start with `rise-` even if it's a bit redundant.
+
+    // define an action that goes to the nbconfigurator page for rise
+    let nbconfigurator = function() {
+      let url = "/nbextensions/?nbextension=rise/main";
+      window.open(url, '_blank');
+    }
+
+    actions.register({ help: 'open the nbconfigurator page for RISE',
+                       handler: nbconfigurator},
+                     "rise-nbconfigurator", "RISE");
+
     // mostly for debug / information
-    actions.register({ help   : 'show RISE config in console',
+    actions.register({ help   : 'output RISE configuration in console, for debugging mostly',
                        handler: showConfig},
-                     "show-config", "RISE");
+                     "rise-dump-config", "RISE");
 
   }
 
@@ -1035,6 +1053,7 @@ define([
       let shortcut = shortcuts[action_name];
       // ignore if shortcut is set to an empty string
       if (shortcut) {
+//        console.log(`RISE: adding shortcut ${shortcut} for ${action_name}`)
         Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut(
           shortcut, `RISE:${action_name}`)
       }
@@ -1063,9 +1082,9 @@ define([
       .then(addButtonsAndShortcuts)
       .then(autoLaunch)
     ;
-    
+
   }
-    
+
   setup.load_ipython_extension = setup;
   setup.load_jupyter_extension = setup;
 

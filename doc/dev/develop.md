@@ -5,7 +5,7 @@ You can install RISE in development mode in this way:
 ### Requirements
 
 Use your usual package manager to install the required build tools.
-Essentially you will need
+Essentially you will need:
 
 * `git`,
 * `npm` and `nodejs`,
@@ -25,8 +25,7 @@ Essentially you will need
 
 **Step 2.** Copy reveal into the static folder and reset reveal.js styling:
 
-    npm run build-reveal
-    npm run reset-reveal
+    npm run build
 
 To remove `reveal.js` from the static folder you can use `npm run clean-reveal`.
 

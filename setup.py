@@ -3,66 +3,57 @@
 
 # Copyright (c) - Damian Avila
 
-from __future__ import print_function
+# pylint: disable = C0103
 
-name = "rise"
+"""
+Packaging
+"""
 
-# Minimal Python version sanity check
-
-import sys
-
-v = sys.version_info
-if v[:2] < (2, 7) or (v[0] >= 3 and v[:2] < (3, 4)):
-    error = "ERROR: %s requires Python version 2.7 or 3.4 or above." % name
-    print(error, file=sys.stderr)
-    sys.exit(1)
-
-# Main
+# inspired from
+# http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Distributing%20Jupyter%20Extensions%20as%20Python%20Packages.html#Example---Server-extension-and-nbextension
 
 import os
-from distutils.core import setup
+from setuptools import setup, find_packages
 
-pjoin = os.path.join
-here = os.path.abspath(os.path.dirname(__file__))
-pkg_root = pjoin(here, name)
-data_files = []
+from rise._version import __version__ as version
 
-packages = []
-for d, _, _ in os.walk(pkg_root):
-    if os.path.exists(pjoin(d, "__init__.py")):
-        packages.append(d[len(here)+1:].replace(os.path.sep, "."))
+NAME = "rise"
 
-paths = []
-for (path, directories, filenames) in os.walk(pjoin(pkg_root, "static")):
-    target_dir = os.path.normpath(
-                          os.path.join('share/jupyter/nbextensions/rise',
-                          os.path.relpath(pjoin(path), pjoin(pkg_root, 'static'))))
-    files = []
-    for filename in filenames:
-        paths.append(os.path.relpath(pjoin(path, filename), pkg_root))
-        files.append(os.path.relpath(pjoin(path, filename), here))
-    data_files.append((target_dir, files))
-data_files.append(('etc/jupyter/nbconfig/notebook.d', ['rise.json']))
-
-version_ns = {}
-with open(pjoin(here, name, '_version.py')) as f:
-    exec(f.read(), {}, version_ns)
+INSTALL_REQUIRES = [
+    'notebook>=5.5',
+]
 
 with open('./README.md') as readme:
     README = readme.read()
 
+DATA_FILES = [
+    # like `jupyter nbextension install --sys-prefix`
+    ("share/jupyter/nbextensions/rise", [
+        "rise/static/main.js",
+    ]),
+    # like `jupyter nbextension enable --sys-prefix`
+    ("etc/jupyter/nbconfig/notebook.d", [
+        "jupyter-config/nbconfig/notebook.d/rise.json"
+    ]),
+]
+
 setup_args = dict(
-    name=name,
-    version=version_ns['__version__'],
-    packages=packages,
-    package_data={name: paths},
-    data_files=data_files,
+    name=NAME,
+    version=version,
+    packages=find_packages(),
+    data_files=DATA_FILES,
     include_package_data=True,
+    install_requires=INSTALL_REQUIRES,
+    python_requires='>=2.7,>=3.4',
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
     author="Damián Avila",
     author_email="info@oquanta.info",
-    url="http://github.com/damianavila/RISE",
+    project_urls={
+        'source': "http://github.com/damianavila/RISE",
+        'documentation': "http://rise.readthedocs.io",
+        'gitter': "https://gitter.im/damianavila/RISE",
+    },
     license="BSD-3-Clause",
     platforms="Linux, Mac OS X, Windows",
     keywords=["jupyter", "ipython", "presentation", "slides", "revealjs"],
@@ -77,20 +68,10 @@ setup_args = dict(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
+    zip_safe=False,
 )
-
-if 'develop' in sys.argv or any(bdist in sys.argv for bdist in ['bdist_wheel', 'bdist_egg']):
-    import setuptools
-
-setuptools_args = {}
-
-install_requires = setuptools_args['install_requires'] = [
-    'notebook>=5.0.0',
-]
-
-if 'setuptools' in sys.modules:
-    setup_args.update(setuptools_args)
 
 if __name__ == '__main__':
     setup(**setup_args)

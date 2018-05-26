@@ -20,7 +20,7 @@ from rise._version import __version__ as version
 NAME = "rise"
 
 INSTALL_REQUIRES = [
-    'notebook>=5.5',
+    'notebook>=5.5.0',
 ]
 
 with open('./README.md') as readme:

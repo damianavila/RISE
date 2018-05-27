@@ -53,7 +53,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'RISE'
-copyright = '2017, Damian Avila'
+copyright = '2013-2018, Damian Avila'
 author = 'Damian Avila'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -100,6 +100,7 @@ html_theme_options = {
     'description': 'Jupyter slideshow extension',
     'github_user': 'damianavila',
     'github_repo': 'RISE',
+    'github_type': 'star',
 }
 
 html_sidebars = {

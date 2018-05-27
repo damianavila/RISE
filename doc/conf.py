@@ -53,7 +53,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'RISE'
-copyright = '2013-2018, Damian Avilaß'
+copyright = '2013-2018, Damian Avila'
 author = 'Damian Avila'
 
 # The version info for the project you're documenting, acts as replacement for

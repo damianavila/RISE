@@ -8,7 +8,7 @@ Compatibility: jupyter-4.3, jupyter-notebook-5.4
 Name: RISE
 Main: main.js
 Description: "Turn your Jupyter Notebooks into a live presentation (slideshow)"
-Link: configurator.md
+Link: README.md
 Icon: rise.png
 Parameters:
 #

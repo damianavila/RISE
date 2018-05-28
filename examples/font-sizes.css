@@ -1,0 +1,23 @@
+/* an example to illustrate how to tweak font sizes */
+
+/* to apply a setting only when under RISE, 
+   be aware that the <body> tag has class .rise-enabled */
+
+
+/* ---------- markdown cells
+ */
+body.rise-enabled div.inner_cell>div.text_cell_render.rendered_html {
+    font-size: 80%;
+}
+
+
+/* ---------- code blocks inside markdown
+   i.e. within ``` lines, or 4-space indented
+ */
+div.inner_cell>div.text_cell_render.rendered_html>pre {
+    margin: 0px;
+}
+
+div.inner_cell>div.text_cell_render.rendered_html>pre>code {
+    font-size: 70%;
+}

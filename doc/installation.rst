@@ -16,13 +16,9 @@ From the most simple to the most complex one, you have 3 options:
 
  pip install RISE
 
-and then two more steps to install the JS and CSS in the proper places::
+and then one more step to install the JS and CSS in the proper places::
 
  jupyter-nbextension install rise --py --sys-prefix
-
-and enable the nbextension::
-
-  jupyter-nbextension enable rise --py --sys-prefix
 
 3 - The old way (are sure sure you want to go this path?):
 

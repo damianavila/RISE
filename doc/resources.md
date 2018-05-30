@@ -11,8 +11,8 @@ The following places are assets in the RISE development landscape:
   * [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
 
 * Documentation is hosted on readthedocs
-  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/en/latest/)
-  * Note / check out another location here that is planned to be phased out: <https://damianavila.github.io/RISE/>
+  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
+  * *Historical note*: please note that older location for the RISE documentation here: <https://damianavila.github.io/RISE/> has been phased out and is no longer updated.
 
 * Chat room on gitter
   * [![Gitter chat](https://badges.gitter.im/damianavila/RISE.png)](https://gitter.im/damianavila/RISE "Gitter chat")

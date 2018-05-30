@@ -18,7 +18,7 @@ RISE stands for
   * [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
 
 * Documentation is hosted on readthedocs
-  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/en/latest/)
+  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
   * Note / check out another location here that is planned to be phased out: <https://damianavila.github.io/RISE/>
 
 * Chat room on gitter

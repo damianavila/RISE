@@ -1,1 +1,2 @@
+jupyter contrib nbextension install
 jupyter nbextension enable splitcell/splitcell

@@ -14,8 +14,10 @@ compatible with previous IPython versions:
     *  3.x tag compatible with **IPython** 3.x series
     *  3.x.1 tag also compatible with `notebook` 4.x series, but using old installation mechanism
     *  4.0.0b1 tag compatible with the `notebook` 4.2 and above, beta release, please test and report any issues
-    *  5.0.0 tag compatible with `notebook` 5 (and "probably" with the upcoming 5.x releases).
-    *  5.1.0 tag compatible with `notebook` 5 (and "probably" with the upcoming 5.x releases).
+    *  5.0.0 tag compatible with `notebook` >= 5.0.0
+    *  5.1.0 tag compatible with `notebook` >= 5.0.0
+    *  5.2.0 tag compatible with `notebook` >= 5.0.0
+    *  5.3.0 tag compatible with `notebook` >= 5.5.0
 
 3. With **Jupyter** landing we will provide a conda and pip-installable packages too
 
@@ -24,7 +26,17 @@ compatible with previous IPython versions:
 Changes
 =======
 
-* 5.1.1
+* 5.3.0
+
+  * Auto enable nbextension when installing with pip (https://github.com/damianavila/RISE/pull/342)
+  * Making rise compliant with nbextensions_configurator (https://github.com/damianavila/RISE/pull/344)
+  * Documentation general review, fixes and improvements (https://github.com/damianavila/RISE/pull/347)
+  * Mixup between `note` and `notes` (https://github.com/damianavila/RISE/pull/372)
+  * Keep `?` from popping up keyboard shortcuts (https://github.com/damianavila/RISE/pull/373)
+  * Create shortcut to go to the configurator (https://github.com/damianavila/RISE/pull/376)
+  * General review of `setup.py` (https://github.com/damianavila/RISE/pull/387)
+
+* 5.2.0
 
   * Source code cleanup and normalization (https://github.com/damianavila/RISE/pull/311)
   * Add some docs updates (https://github.com/damianavila/RISE/pull/312)

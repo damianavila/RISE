@@ -18,7 +18,7 @@ RISE stands for
   * [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
 
 * Documentation is hosted on readthedocs
-  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/en/latest/)
+  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
   * Note / check out another location here that is planned to be phased out: <https://damianavila.github.io/RISE/>
 
 * Chat room on gitter
@@ -52,13 +52,15 @@ Conda.add("rise")
 ```
 pip install RISE
 ```
-and then two more steps to install the JS and CSS in the proper places:
+
+and then one more step to install the JS and CSS in the proper places:
 
 ```
 jupyter-nbextension install rise --py --sys-prefix
 ```
 
-and enable the nbextension:
+As of version 5.3.0, it is **no longer required** to explicitly enable
+the nbextension, which you would do with
 
 ```
 jupyter-nbextension enable rise --py --sys-prefix
@@ -69,16 +71,10 @@ jupyter-nbextension enable rise --py --sys-prefix
 To install this nbextension, simply run ``python setup.py install`` from the
 *RISE* repository (please use the latest tag available or try master if you want).
 
-And then the same two step described in the pip-based installation:
+And then the same step as described in the pip-based installation:
 
 ```
 jupyter-nbextension install rise --py --sys-prefix
-```
-
-and
-
-```
-jupyter-nbextension enable rise --py --sys-prefix
 ```
 
 ### Conclusion

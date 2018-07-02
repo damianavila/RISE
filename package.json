@@ -27,5 +27,5 @@
     "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less rise/static/main.css",
     "watch-less": "./node_modules/.bin/watch 'npm run less' src/less"
   },
-  "version": "5.3.0"
+  "version": "5.4.dev0"
 }

@@ -1,5 +1,6 @@
 include LICENSE.md
 include README.md
+include package.json
 include rise/static/main.js
 include rise/static/main.css
 include rise/static/rise.png

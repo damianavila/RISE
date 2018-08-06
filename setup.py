@@ -44,7 +44,7 @@ setup_args = dict(
     data_files=DATA_FILES,
     include_package_data=True,
     install_requires=INSTALL_REQUIRES,
-    python_requires='>=2.7,>=3.4',
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
     author="Damián Avila",

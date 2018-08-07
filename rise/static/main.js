@@ -23,7 +23,7 @@ define([
    *
    * 1) start from the hardwired settings (in this file)
    * 2) add settings configured in python; these typically can be
-   *   2a) either in a legacy file named `livereveal.json` 
+   *   2a) either in a legacy file named `livereveal.json`
    *   2b) or, with the official name, in `rise.json`
    * 3) add the settings from nbextensions_configurator (i.e. .jupyter/nbconfig/notebook.json)
    *    they should all belong in the 'rise' category
@@ -32,22 +32,22 @@ define([
    * 4) and finally add the settings from the notebook metadata
    *   4a) for legacy reasons: use the 'livereveal' key
    *   4b) for more consistency, then override with the 'rise' key
-   * 
+   *
    * configLoaded alters the complete_config object in place.
    * it will hold a consolidated set of all relevant settings with their priorities resolved
    *
    * it returns a promise that can be then'ed once the config is loaded
    *
-   * setup waits for the config to be loaded before it actually enables keyboard shortcuts 
+   * setup waits for the config to be loaded before it actually enables keyboard shortcuts
    * and other menu items; so this means that the bulk of the code can assume that the config
-   * is already loaded and does not need to worry about using promises, or 
+   * is already loaded and does not need to worry about using promises, or
    * waiting for any asyncronous code to complete
    */
 
   var complete_config = {};
 
   // returns a promise; you can do 'then()' on this promise
-  // to do stuff *after* the configuration is completely loaded 
+  // to do stuff *after* the configuration is completely loaded
   function configLoaded() {
 
     // see rise.yaml for more details
@@ -113,7 +113,7 @@ define([
       {base_url: utils.get_body_data("baseUrl")});
     config_section.load();
 
-    // this is also a ConfigSection object as per notebook/static/services/config.js 
+    // this is also a ConfigSection object as per notebook/static/services/config.js
     let nbext_configurator = Jupyter.notebook.config;
     nbext_configurator.load();
 
@@ -141,7 +141,7 @@ define([
           // console.log("complete_config is OK");
         });
   }
-    
+
   /*
    * this function is a heuristic that says if this notebook seems to
    * be meant to be a slideshow.
@@ -173,7 +173,7 @@ define([
   };
 
   /* uniform way to access slide type, whether the slideshow metadata is set or not
-   * also sometimes slide_type is set to '-' by the toolbar 
+   * also sometimes slide_type is set to '-' by the toolbar
    */
   function get_slide_type(cell) {
     var slide_type = (cell.metadata.slideshow || {}).slide_type;
@@ -355,11 +355,11 @@ define([
     }
   }
 
-  /* 
+  /*
    * Setup the auto-launch function, which checks metadata to see if
    * RISE should launch automatically when the notebook is opened.
-   * 
-   * this will trigger only on notebooks that have 
+   *
+   * this will trigger only on notebooks that have
    * either a 'livereveal' or a 'rise' section in their metadata
    * this is because autolaunch can be enabled in nbextensions_configurator
    * and so can possibly have a too big impact if we are not careful
@@ -432,7 +432,7 @@ define([
   function removeHeaderFooterOverlay() {
     // it's easier to remove than to hide, plus this way
     // changes in the metadata will be reflected each time
-    // we enter reveal again   
+    // we enter reveal again
     $('div#rise-overlay').remove();
   }
 
@@ -463,7 +463,7 @@ define([
      * should be redefinable in the config
      */
     if (window.location.pathname.endsWith('.ipynb')) {
-      // Attempt to load rise.css 
+      // Attempt to load rise.css
       $('head').append(`<link rel="stylesheet" href="./rise.css" id="rise-custom-css" />`);
       // Attempt to load CSS with the same path as the .ipynb but with .css extension instead
       let notebook_css = window.location.pathname.replace(/\.ipynb$/,'.css');
@@ -480,7 +480,6 @@ define([
               // Full list of configuration options available here:
               // https://github.com/hakimel/reveal.js#configuration
 
-              Reveal.initialize();
 
               // all these settings are passed along to reveal as-is
               // xxx it might be just better to copy the whole complete_config instead
@@ -493,6 +492,9 @@ define([
 
                 //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
                 //parallaxBackgroundSize: '2560px 1600px',
+
+                // turn off reveal native help
+                help: false,
 
                 keyboard: {
                   13: null, // Enter disabled
@@ -513,9 +515,9 @@ define([
                   188: function() {$('#help_b,#exit_b').fadeToggle();},
                 },
 
-                // Optional libraries used to extend on reveal.js
-                // Notes are working partially... it opens the notebooks, not the slideshows...
                 dependencies: [
+                  // Optional libraries used to extend on reveal.js
+                  // Notes are working partially... it opens the notebooks, not the slideshows...
                   /* { src: "static/custom/livereveal/reveal.js/lib/js/classList.js",
                    *   condition: function() { return !document.body.classList; } },
                    * { src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js",
@@ -524,21 +526,48 @@ define([
                    */
                   { src: require.toUrl("./reveal.js/plugin/notes/notes.js"),
                     async: true,
-                    condition: function() { return !!document.body.classList; } }
-                ]
+                    condition: function() { return !!document.body.classList; },
+                  },
+                ],
+
               };
+
               for (let setting of inherited) {
                 options[setting] = complete_config[setting];
               }
 
-              // Set up the Leap Motion integration if configured
-              var leap = complete_config.enable_leap_motion;
-              if (leap !== undefined) {
+              ////////// set up the leap motion integration if configured
+              var enable_leap_motion = complete_config.enable_leap_motion;
+              if (enable_leap_motion) {
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
-                options.leap = leap;
+                options.leap = enable_leap_motion;
               }
 
-              Reveal.configure(options);
+              ////////// set up chalkboard if configured
+              let enable_chalkboard = complete_config.enable_chalkboard;
+              if (enable_chalkboard) {
+                options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/chalkboard/chalkboard.js'), async: true });
+                // xxx need to explore the option of registering jupyter actions
+                // and have jupyter handle the keyboard entirely instead of this approach
+                // could hopefully avoid conflicting behaviours in case of overlaps
+                $.extend(options.keyboard,
+                         {
+                           // for chalkboard; also bind uppercases just in case
+                           63:  KeysMessager,                                        // '?' show our help
+                           61:  function() { RevealChalkboard.reset() },             // '=' reset chalkboard data on current slide
+                           45:  function() { RevealChalkboard.clear() },             // '-' clear full size chalkboard
+                           67:  function() { RevealChalkboard.toggleChalkboard() },  // 'C' toggle full size chalkboard
+                           99:  function() { RevealChalkboard.toggleChalkboard() },  // 'c' toggle full size chalkboard
+                           78:  function() { RevealChalkboard.toggleNotesCanvas() }, // 'n' toggle notes (slide-local)
+                           110: function() { RevealChalkboard.toggleNotesCanvas() }, // 'N' toggle notes (slide-local)
+                           68:  function() { RevealChalkboard.download() },          // 'D' download recorded chalkboard drawing
+                           100: function() { RevealChalkboard.download() },          // 'd' download recorded chalkboard drawing
+                           // when 'd' is pressed
+                         });
+              }
+
+
+              Reveal.initialize(options);
 
               Reveal.addEventListener( 'ready', function( event ) {
                 Unselecter();
@@ -639,17 +668,29 @@ define([
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
           "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
-          "<li><kbd>w</kbd>: Toggle overview mode</li>" +
-          "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
+          "<li><kbd>Space</kbd>: Next</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: Previous</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: Eval and select next cell if visible</li>" +
           "<li><kbd>Home</kbd>: First slide</li>" +
           "<li><kbd>End</kbd>: Last slide</li>" +
-          "<li><kbd>space</kbd>: Next</li>" +
-          "<li><kbd>Shift</kbd>+<kbd>space</kbd>: Previous</li>" +
-          "<li><kbd>PgUp</kbd>: Up</li>" +
-          "<li><kbd>PgDn</kbd>: Down</li>" +
-          "<li><kbd>left</kbd>: Left</li>" +
-          "<li><kbd>right</kbd>: Right</li>" +
+          "<li><kbd>w</kbd>: Toggle overview mode</li>" +
+          "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
           "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
+          "<li><strong>Not so useful:</strong>" +
+            "<ul>" +
+            "<li><kbd>PgUp</kbd>: Up</li>" +
+            "<li><kbd>PgDn</kbd>: Down</li>" +
+            "<li><kbd>Left Arrow</kbd>: Left <em>(note: Space preferred)</em></li>" +
+            "<li><kbd>Right Arrow</kbd>: Right <em>(note: Shift Space preferred)</em></li>" +
+            "</ul>" +
+          "<li><strong>With chalkboard enabled:</strong>" +
+            "<ul>" +
+            "<li><kbd>b</kbd> toggle fullscreen chalkboard</li>" +
+            "<li><kbd>c</kbd> toggle slide-local canvas</li>" +
+            "<li><kbd>d</kbd> download chalkboard drawing</li>" +
+            "<li><kbd>=</kbd> clear slide-local canvas</li>" +
+            "<li><kbd>Del</kbd> delete fullscreen chalkboard</li>" +
+            "</ul>" +
           "</ul>" +
           "<b>NOTE: You have to use these shortcuts in command mode.</b>"
       )
@@ -668,18 +709,9 @@ define([
     var help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
-        .addClass('fa-question fa-4x fa')
+        .addClass('fa-question fa-3x fa')
         .addClass('my-main-tool-bar')
-        .css('position','fixed')
-        .css('bottom','0.5em')
-        .css('left','0.6em')
-        .css('opacity', '0.6')
-        .css('z-index', '30')
-        .click(
-          function(){
-            KeysMessager();
-          }
-        );
+        .click(KeysMessager);
     $('.reveal').after(help_button);
   }
 
@@ -687,13 +719,8 @@ define([
     var exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','Exit RISE')
-        .addClass('fa-times-circle fa-4x fa')
+        .addClass('fa-times-circle fa-3x fa')
         .addClass('my-main-tool-bar')
-        .css('position','fixed')
-        .css('top','0.5em')
-        .css('left','0.48em')
-        .css('opacity', '0.6')
-        .css('z-index', '30')
         .click(revealMode);
     $('.reveal').after(exit_button);
   }
@@ -765,7 +792,7 @@ define([
   }
 
   /*
-    using Reveal.getCurrentSlide() it is possible to get a lot of data 
+    using Reveal.getCurrentSlide() it is possible to get a lot of data
     about where we are in the slideshow
 
     the following function inspects this and returns a triple
@@ -782,7 +809,7 @@ define([
 
     ---------- historical note
 
-    in a previous implementation - for traditional notebooks - 
+    in a previous implementation - for traditional notebooks -
     we used to get slide and subslide from window.location.href
     however this in jupyter lab may be no longer possible
 
@@ -790,7 +817,7 @@ define([
   */
   function reveal_current_position() {
     let current_slide = Reveal.getCurrentSlide();
-    // href of the form slide-2-3 
+    // href of the form slide-2-3
     let href = current_slide.id;
     let chunks = href.split('-');
     let slide = Number(chunks[1]);
@@ -799,7 +826,7 @@ define([
     return [slide, subslide, fragments];
   }
 
-  
+
   /* Just before exiting reveal mode, we run this function
    * whose job is to find the notebook index
    * for the first cell in the current (sub)slide
@@ -808,10 +835,10 @@ define([
    *
    * if cell_type is not set, returns the first cell in slide
    * otherwise, it returns the first cell of that type in slide
-   * 
+   *
    * if auto_select_fragment is set to true, search is restricted to the current fragment
    * otherwise, the whole slide is considered
-   * 
+   *
    * returns null if no match is found
    */
   function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false) {
@@ -823,7 +850,7 @@ define([
      */
     var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
     var subslide_counter = 0;
-    var fragment_counter = 0;    
+    var fragment_counter = 0;
     var result = null;
 
     notebook.get_cells().forEach(function (cell, index) {
@@ -1055,9 +1082,9 @@ define([
       .then(addButtonsAndShortcuts)
       .then(autoLaunch)
     ;
-    
+
   }
-    
+
   setup.load_ipython_extension = setup;
   setup.load_jupyter_extension = setup;
 

@@ -546,7 +546,7 @@ define([
               ////////// set up chalkboard if configured
               let enable_chalkboard = complete_config.enable_chalkboard;
               if (enable_chalkboard) {
-                options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/chalkboard/chalkboard.js'), async: true });
+                options.dependencies.push({ src: require.toUrl('./reveal.js-chalkboard/chalkboard.js'), async: true });
                 // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach
                 // could hopefully avoid conflicting behaviours in case of overlaps
@@ -554,15 +554,11 @@ define([
                          {
                            // for chalkboard; also bind uppercases just in case
                            63:  KeysMessager,                                        // '?' show our help
-                           61:  function() { RevealChalkboard.reset() },             // '=' reset chalkboard data on current slide
-                           45:  function() { RevealChalkboard.clear() },             // '-' clear full size chalkboard
-                           67:  function() { RevealChalkboard.toggleChalkboard() },  // 'C' toggle full size chalkboard
-                           99:  function() { RevealChalkboard.toggleChalkboard() },  // 'c' toggle full size chalkboard
-                           78:  function() { RevealChalkboard.toggleNotesCanvas() }, // 'n' toggle notes (slide-local)
-                           110: function() { RevealChalkboard.toggleNotesCanvas() }, // 'N' toggle notes (slide-local)
-                           68:  function() { RevealChalkboard.download() },          // 'D' download recorded chalkboard drawing
-                           100: function() { RevealChalkboard.download() },          // 'd' download recorded chalkboard drawing
-                           // when 'd' is pressed
+                           187:  function() { RevealChalkboard.reset() },             // '=' reset chalkboard data on current slide
+                           189:  function() { RevealChalkboard.clear() },             // '-' clear full size chalkboard
+                           219:  function() { RevealChalkboard.toggleChalkboard() },  // '[' toggle full size chalkboard
+                           221:  function() { RevealChalkboard.toggleNotesCanvas() }, // ']' toggle notes (slide-local)
+                           220:  function() { RevealChalkboard.download() },          // '\' download recorded chalkboard drawing
                          });
               }
 

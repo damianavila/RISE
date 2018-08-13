@@ -565,8 +565,15 @@ define([
                          });
               }
 
-
-              Reveal.initialize(options);
+              if (Reveal.initialized) {
+                //delete options["dependencies"];
+                Reveal.configure(options);
+                console.log("Reveal is already initialized and is being configured");
+              } else {
+                Reveal.initialize(options);
+                Reveal["initialized"] = true;
+                console.log("Reveal initialized");
+              }
 
               Reveal.addEventListener( 'ready', function( event ) {
                 Unselecter();

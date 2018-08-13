@@ -98,6 +98,9 @@ define([
       minScale: 1.0, // we need this for codemirror to work right
       // turn off reveal's help overlay that is by default bound to question mark / ?
       help: false,
+
+      // plugins
+      enable_chalkboard: false,
     };
 
     // honour the 2 names: 'livereveal' and 'rise'

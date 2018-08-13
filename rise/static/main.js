@@ -681,11 +681,11 @@ define([
             "</ul>" +
           "<li><strong>With chalkboard enabled:</strong>" +
             "<ul>" +
-            "<li><kbd>b</kbd> toggle fullscreen chalkboard</li>" +
-            "<li><kbd>c</kbd> toggle slide-local canvas</li>" +
-            "<li><kbd>d</kbd> download chalkboard drawing</li>" +
+            "<li><kbd>[</kbd> toggle fullscreen chalkboard</li>" +
+            "<li><kbd>]</kbd> toggle slide-local canvas</li>" +
+            "<li><kbd>\</kbd> download chalkboard drawing</li>" +
             "<li><kbd>=</kbd> clear slide-local canvas</li>" +
-            "<li><kbd>Del</kbd> delete fullscreen chalkboard</li>" +
+            "<li><kbd>-</kbd> delete fullscreen chalkboard</li>" +
             "</ul>" +
           "</ul>" +
           "<b>NOTE: You have to use these shortcuts in command mode.</b>"

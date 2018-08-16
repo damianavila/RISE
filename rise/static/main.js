@@ -693,7 +693,7 @@ define([
             "<ul>" +
             "<li><kbd>[</kbd> toggle fullscreen chalkboard</li>" +
             "<li><kbd>]</kbd> toggle slide-local canvas</li>" +
-            "<li><kbd>\</kbd> download chalkboard drawing</li>" +
+            "<li><kbd>\\</kbd> download chalkboard drawing</li>" +
             "<li><kbd>=</kbd> clear slide-local canvas</li>" +
             "<li><kbd>-</kbd> delete fullscreen chalkboard</li>" +
             "</ul>" +

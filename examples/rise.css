@@ -2,7 +2,11 @@
  * this is loaded only because it's named rise.css in the current directory
  */
 
-div.rise {
-    background-color: blue;
-}
+ /* ***** just a stupid setting that you cannot miss ***** */
+ div.cell.code_cell.rendered {
+     border-radius: 0px 0px 30px 0px;
+ }
 
+div.input_area {
+    border-radius: 0px 0px 25px 0px;
+}

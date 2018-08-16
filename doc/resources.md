@@ -5,14 +5,14 @@
 The following places are assets in the RISE development landscape:
 
 * Demo notebook (no installation required)
-  * [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2FREADME.ipynb)
+  * [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2FREADME.ipynb)
 
 * Source code is on github <https://github.com/damianavila/RISE>
   * [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
 
 * Documentation is hosted on readthedocs
-  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/en/latest/)
-  * Note / check out another location here that is planned to be phased out: <https://damianavila.github.io/RISE/>
+  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
+  * *Historical note*: please note that older location for the RISE documentation here: <https://damianavila.github.io/RISE/> has been phased out and is no longer updated.
 
 * Chat room on gitter
   * [![Gitter chat](https://badges.gitter.im/damianavila/RISE.png)](https://gitter.im/damianavila/RISE "Gitter chat")
@@ -25,7 +25,7 @@ The following places are assets in the RISE development landscape:
 
     <https://www.youtu.be/sZBKruEh0jI>
 
-      
+
 ## Talks
 
 My old talk about **RISE** at *SciPy 2014* (click on the image to see it):

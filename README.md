@@ -12,13 +12,13 @@ RISE stands for
 ***Reveal.js - Jupyter/IPython Slideshow Extension***:
 
 * Demo notebook (no installation required)
-  * [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2FREADME.ipynb)
+  * [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2FREADME.ipynb)
 
 * Source code is on github <https://github.com/damianavila/RISE>
   * [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
 
 * Documentation is hosted on readthedocs
-  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/en/latest/)
+  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
   * Note / check out another location here that is planned to be phased out: <https://damianavila.github.io/RISE/>
 
 * Chat room on gitter

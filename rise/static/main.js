@@ -715,7 +715,7 @@ define([
     var help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
-        .addClass('fa-question fa-3x fa')
+        .addClass('fa-question fa-4x fa')
         .addClass('my-main-tool-bar')
         .click(KeysMessager);
     $('.reveal').after(help_button);
@@ -725,7 +725,7 @@ define([
     var exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','Exit RISE')
-        .addClass('fa-times-circle fa-3x fa')
+        .addClass('fa-times-circle fa-4x fa')
         .addClass('my-main-tool-bar')
         .click(revealMode);
     $('.reveal').after(exit_button);

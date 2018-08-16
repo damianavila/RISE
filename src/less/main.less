@@ -38,6 +38,8 @@
       p:first-child, p:last-child { display: inherit; }
     }
 
+    a { color: @some-grey; } &:hover { color: @some-grey; }
+
     .slides {
       .transition-all;
       text-align: left;
@@ -208,20 +210,20 @@
   }
 
   #exit_b {
-    top: 0.8em;
-    left: 0.6em;
+    top: 0.55em;
+    left: 0.5em;
   }
 
   #help_b {
     left: 0.6em ;
-    bottom: 0.8em;
+    bottom: 0.55em;
   }
 
   /* use !important to override stuff that
     would normally be configured through
     chalkboard options */
   .chalkboard-button i {
-    visibility: visible !important;
+    display: block !important;
     bottom: 1em !important;
     font-size: 1.8em !important;
     color: @some-grey !important;
@@ -232,6 +234,14 @@
   }
   #toggle-notes {
     left: 7em !important;
+  }
+
+  #notescanvas {
+    display: block !important;
+  }
+
+  #chalkboard {
+    display: block !important;
   }
 
 } //.reveal-enabled
@@ -251,5 +261,13 @@
 }
 
 .chalkboard-button i {
-  visibility: hidden;
+  display: none;
+}
+
+#notescanvas {
+  display: none;
+}
+
+#chalkboard {
+  display: none;
 }

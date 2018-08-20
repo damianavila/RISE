@@ -21,9 +21,25 @@ Parameters:
   input_type: checkbox
   default: false
 #
+- name: rise.enable_chalkboard
+  description: >
+    <code>enable_chalkboard</code>: if set, turn on the <code>chalkboard</code>
+    plugin to <code>reveal</code>. <br/>When enabled, this plugin adds two buttons
+    next to the help button. It also reacts to the following additional
+    keyboard commands:
+    <ul>
+    <li><code>[</code> to turn the whole space into an empty chalkboard;</li>
+    <li><code>]</code> to start adding free drawings to the current slide;</li>
+    <li><code>\</code> to download chalkboard drawing;</li>
+    <li><code>=</code>to reset chalkboard drawing on the current slide;</li>
+    <li><code>-</code> to clear the chalkboard.</li>
+    </ul>
+  input_type: checkbox
+  default: false
+#
 - name: rise.enable_leap_motion
   description: >
-    <code>leap_motion</code>: to use the leap motion device. xxx this needs more details.
+    <code>enable_leap_motion</code>: to use the leap motion device. xxx this needs more details.
   input_type: checkbox
   default: false
 #

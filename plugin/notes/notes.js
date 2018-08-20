@@ -8,6 +8,9 @@
  * 2. Notes window responds with 'connected' when it is available
  * 3. This window proceeds to send the current presentation state
  *    to the notes window
+ *
+ * Modified version from 3.5.0 notes plugin used by RISE
+ *
  */
 var RevealNotes = (function() {
 

@@ -368,8 +368,19 @@ define([
    * and so can possibly have a too big impact if we are not careful
    */
   function autoLaunch() {
-    if (complete_config.autolaunch && is_slideshow(Jupyter.notebook))
-      revealMode()
+    if (complete_config.autolaunch && is_slideshow(Jupyter.notebook)) {
+      revealMode();
+    }
+
+    // Ref: https://stackoverflow.com/a/7739035
+    var url = (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href;
+    var lastPart = url.substr(url.lastIndexOf('/') + 1);
+
+    if (lastPart === "notes.html") {
+      revealMode();
+    }
   }
 
   /* Setup a MutationObserver to call Reveal.sync when an output is generated.
@@ -510,26 +521,24 @@ define([
                   74: null, // j, down disabled
                   75: null, // k, up disabled
                   76: null, // l, right disabled
-                  78: null, // n, down disable
+                  78: null, // n, down disabled
                   79: null, // o disabled
-                  80: null, // p, up disable
-                  // 83: null, // s, notes, but not working because notes is a plugin
+                  80: null, // p, up disabled
+                  // 84: RevealNotes.open, // t, modified in the custom notes plugin.
                   87: Reveal.toggleOverview, // w, toggle overview
                   188: function() {$('#help_b,#exit_b').fadeToggle();},
                 },
 
                 dependencies: [
                   // Optional libraries used to extend on reveal.js
-                  // Notes are working partially... it opens the notebooks, not the slideshows...
                   /* { src: "static/custom/livereveal/reveal.js/lib/js/classList.js",
                    *   condition: function() { return !document.body.classList; } },
                    * { src: "static/custom/livereveal/reveal.js/plugin/highlight/highlight.js",
                    *   async: true,
                    *  callback: function() { hljs.initHighlightingOnLoad(); } },
                    */
-                  { src: require.toUrl("./reveal.js/plugin/notes/notes.js"),
+                  { src: require.toUrl("./notes_rise/notes.js"),
                     async: true,
-                    condition: function() { return !!document.body.classList; },
                   },
                 ],
 

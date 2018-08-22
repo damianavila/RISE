@@ -6,6 +6,11 @@ You can export your RISE presentation to PDF using the following procedures:
 Using nbconvert
 ---------------
 
+0 - This step will not be necessary when nbconvert makes a new release
+(https://github.com/jupyter/nbconvert/pull/748), but for now,
+if you want sintax highlighting in your printed slideshow, you need to follow these (or similar) instructions:
+https://github.com/jupyter/notebook/issues/840#issuecomment-365176083
+
 1 - Generate the slides and serve them using nbconvert::
 
  jupyter nbconvert --to slides your_talk.ipynb --post serve
@@ -41,34 +46,26 @@ in HTML or PDF output.
 Using decktape
 --------------
 
-1 - Clone decktape::
+1 - Install decktape with::
 
- git clone https://github.com/astefanutti/decktape
+  npm install decktape
 
-2 - Download decktape's forked version of phantomjs (see https://github.com/astefanutti/decktape)::
+2 - Start the jupyter-notebook server (you don't have to start the RISE presentation, you even don't have to open any notebook at all)::
 
- # Windows (MSVC 2013), for Windows Vista or later, bundles VC++ Runtime 2013
- curl -L https://github.com/astefanutti/decktape/releases/download/v1.0.0/phantomjs-msvc2013-x86.exe -o phantomjs.exe
- # Mac OS X (Cocoa), 64-bit, for OS X 10.6 or later
- curl -L https://github.com/astefanutti/decktape/releases/download/v1.0.0/phantomjs-osx-cocoa-x86-64 -o phantomjs
- # Linux (static build), 64-bit, requires fontconfig (CentOS) or libfontconfig (Debian, Ubuntu)
- curl -L https://github.com/astefanutti/decktape/releases/download/v1.0.0/phantomjs-linux-x86-64 -o phantomjs
+  jupyter notebook
 
-3 - Put phantomjs on your PATH
+NOTE: Make sure `autoLaunch` option is disabled, otherwise the decktape plugin will exit from the slideshow view before printing the slides.
+Discussion about this behavior lives at https://github.com/astefanutti/decktape/issues/110.
 
-4 - Start the jupyter-notebook server (you don't have to start the RISE presentation, you even don't have to open any notebook at all)
+3 - Run decktape with::
 
-5 - ``cd`` into decktape's cloned repository
-
-6 - Within decktape's cloned repository run the decktape.js file like::
-
- phantomjs decktape.js rise <Jupyter-Notebook-URL> <Output-File>.
+  `npm bin`/decktape rise <Jupyter-Notebook-URL> <Output-File>
 
 More concretely, it looks something like the following::
 
- phantomjs decktape.js rise http://localhost:8888/notebooks/your/notebook.ipynb?token=5413981230123YourIndividualJupyterNotebookSessionToken412417923   /path/to/outputfile.pdf
+  `npm bin`/decktape rise http://localhost:8888/notebooks/your/notebook.ipynb?token=YourIndividualJupyterNotebookSessionToken /path/to/outputfile.pdf
 
-Note that the jupyter-notebook session token which seems needed for more recent jupyter-notebook versions. The token is shown to you when you start the jupter-notebook server from commandline.
+Note that the jupyter-notebook session token is needed. The token is shown to you when you start the jupter-notebook server from commandline.
 
 You can run into some problems using this approach:
 
@@ -76,7 +73,7 @@ You can run into some problems using this approach:
 
 2 - If you have changed the default presentation size/width/height using the notebook metadata, you might have to adapt the call to include the ``-s <width>x<height>`` parameter::
 
- phantomjs decktape.js rise -s 1500x900 https://localhost:8888/...
+  `npm bin`/decktape rise -s 1500x900 https://localhost:8888/...
 
 3 - If you experience issues when rendering svg files, please post your fix at astefanutti/decktape#90
 

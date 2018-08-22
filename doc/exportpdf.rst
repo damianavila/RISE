@@ -6,6 +6,11 @@ You can export your RISE presentation to PDF using the following procedures:
 Using nbconvert
 ---------------
 
+0 - This step will not be necessary when nbconvert makes a new release
+(https://github.com/jupyter/nbconvert/pull/748), but for now,
+if you want sintax highlighting in our printed slideshow, you need to follow these (or similar) instructions:
+https://stackoverflow.com/questions/22969333/printing-ipython-notebook-preview-in-color/26785100#26785100
+
 1 - Generate the slides and serve them using nbconvert::
 
  jupyter nbconvert --to slides your_talk.ipynb --post serve

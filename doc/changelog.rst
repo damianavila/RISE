@@ -18,6 +18,7 @@ compatible with previous IPython versions:
     *  5.1.0 tag compatible with `notebook` >= 5.0.0
     *  5.2.0 tag compatible with `notebook` >= 5.0.0
     *  5.3.0 tag compatible with `notebook` >= 5.5.0
+    *  5.4.0 tag compatible with `notebook` >= 5.5.0
 
 3. With **Jupyter** landing we will provide a conda and pip-installable packages too
 
@@ -25,6 +26,18 @@ compatible with previous IPython versions:
 
 Changes
 =======
+
+* 5.4.0
+  * Support chalkboard functionality (https://github.com/damianavila/RISE/pull/355)
+  * Support speaker notes (https://github.com/damianavila/RISE/issues/174)
+  * Use a version number that npm can understand (https://github.com/damianavila/RISE/pull/410)
+  * Enhancement in setup.py and reduction of hard-written versions(https://github.com/damianavila/RISE/pull/399)
+  * Include LICENSE.md file in wheels (https://github.com/damianavila/RISE/pull/394)
+  * Fix python_requires (https://github.com/damianavila/RISE/pull/390)
+  * Remove conda recipe from the repo (https://github.com/damianavila/RISE/issues/405)
+  * Make the configurator comtaible with notebook 5.x versions (https://github.com/damianavila/RISE/pull/414)
+  * Docs fixes in exportation section (https://github.com/damianavila/RISE/pull/415)
+  * Make RISE compatible with python 3.7 (https://github.com/damianavila/RISE/issues/406)
 
 * 5.3.0
 

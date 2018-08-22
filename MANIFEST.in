@@ -8,3 +8,5 @@ include rise/static/rise.yaml
 include rise/static/README.md
 recursive-include jupyter-config *.json
 recursive-include rise/static/reveal.js *
+recursive-include rise/static/reveal.js-chalkboard *
+recursive-include rise/static/notes_rise *

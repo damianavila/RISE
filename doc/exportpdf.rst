@@ -54,13 +54,16 @@ Using decktape
 
   jupyter notebook
 
+NOTE: Make sure `autoLaunch` option is disabled, otherwise the decktape plugin will exit from the slideshow view before printing the slides.
+Discussion about this behavior lives at https://github.com/astefanutti/decktape/issues/110.
+
 3 - Run decktape with::
 
-  `npm bin`/decktape <Jupyter-Notebook-URL> <Output-File>
+  `npm bin`/decktape rise <Jupyter-Notebook-URL> <Output-File>
 
 More concretely, it looks something like the following::
 
-  `npm bin`/decktape http://localhost:8888/notebooks/your/notebook.ipynb?token=YourIndividualJupyterNotebookSessionToken /path/to/outputfile.pdf
+  `npm bin`/decktape rise http://localhost:8888/notebooks/your/notebook.ipynb?token=YourIndividualJupyterNotebookSessionToken /path/to/outputfile.pdf
 
 Note that the jupyter-notebook session token is needed. The token is shown to you when you start the jupter-notebook server from commandline.
 
@@ -70,7 +73,7 @@ You can run into some problems using this approach:
 
 2 - If you have changed the default presentation size/width/height using the notebook metadata, you might have to adapt the call to include the ``-s <width>x<height>`` parameter::
 
-  `npm bin`/decktape -s 1500x900 https://localhost:8888/...
+  `npm bin`/decktape rise -s 1500x900 https://localhost:8888/...
 
 3 - If you experience issues when rendering svg files, please post your fix at astefanutti/decktape#90
 

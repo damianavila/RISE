@@ -37,13 +37,13 @@ From the most simple to the most complex one, you have 3 options:
 ### Option 1 - Using conda (recommended):
 
 ```
-conda install -c damianavila82 rise
+conda install -c conda-forge rise
 ```
 
 If you are a Julia user, you can do this from the Julia REPL with
 ```
 using Conda
-Conda.add_channel("damianavila82")
+Conda.add_channel("conda-forge")
 Conda.add("rise")
 ```
 

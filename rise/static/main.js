@@ -689,6 +689,7 @@ define([
           "<li><kbd>Home</kbd>: First slide</li>" +
           "<li><kbd>End</kbd>: Last slide</li>" +
           "<li><kbd>w</kbd>: Toggle overview mode</li>" +
+          "<li><kbd>t</kbd>: Toggle presenter mode (with notes)</li>" +
           "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
           "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
           "<li><strong>Not so useful:</strong>" +

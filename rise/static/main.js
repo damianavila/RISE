@@ -70,8 +70,8 @@ define([
       shortcuts: {
         'slideshow' : 'alt-r',
         'toggle-slide': 'shift-i',
-        'toggle-subslide': 'shift-u',
-        'toggle-fragment': 'shift-f',
+        'toggle-subslide': 'shift-b',
+        'toggle-fragment': 'shift-g',
         // this can be helpful
         'rise-nbconfigurator': 'shift-c',
         // unassigned by default
@@ -950,7 +950,7 @@ define([
                      "toggle-fragment", "RISE");
 
     actions.register({ help   : '(un)set current cell as a Note cell',
-                       handler: function() { toggle_slide_type('note'); }
+                       handler: function() { toggle_slide_type('notes'); }
                      },
                      "toggle-notes", "RISE");
 

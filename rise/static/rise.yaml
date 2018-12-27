@@ -124,11 +124,11 @@ Parameters:
 - name: rise.shortcuts.toggle-subslide
   description: <code>rise.shortcuts.toggle-subslide</code> shortcut to toggle the 'subslide' tag on current cell
   input_type: hotkey
-  default: shift-u
+  default: shift-b
 - name: rise.shortcuts.toggle-fragment
   description: <code>rise.shortcuts.toggle-fragment</code> shortcut to toggle the 'fragment' tag on current cell
   input_type: hotkey
-  default: shift-f
+  default: shift-g
 - name: rise.shortcuts.toggle-notes
   description: <code>rise.shortcuts.toggle-notes</code> shortcut to toggle the 'notes' tag on current cell
   input_type: hotkey

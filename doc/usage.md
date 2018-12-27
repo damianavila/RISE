@@ -26,7 +26,7 @@ You can choose between the following types:
   slide; it will not show up right away, you will need to press Space
   one more time to see it.
 
-* **skip**: this cell are ignored altogether in *reveal* mode,
+* **skip**: this cell is ignored altogether in *reveal* mode,
 it will not appear either in the main view, nor in the speaker view.
 
 * **notes**: similarly, this cell is marked to be discarded from
@@ -46,8 +46,8 @@ according to your needs:
 
 -   `Alt-r`, \"Enter/Exit Live Reveal Slideshow\"
 -   `Shift-i`, Toggle slide
--   `Shift-u`, Toggle subslide
--   `Shift-f`, Toggle fragment
+-   `Shift-b`, Toggle subslide
+-   `Shift-g`, Toggle fragment
 
 ## Running a slideshow
 

@@ -414,9 +414,9 @@ Here are the Jupyter actions registered by RISE:
     RISE:slideshow            alt-r  enter/exit RISE Slideshow
     RISE:smart-exec                  execute cell, move to the next if on same slide
     RISE:toggle-slide        shift-i (un)set current cell as a Slide cell
-    RISE:toggle-subslide     shift-u (un)set current cell as a Sub-slide cell
-    RISE:toggle-fragment     shift-f (un)set current cell as a Fragment cell
-    RISE:toggle-notes                (un)set current cell as a Note cell
+    RISE:toggle-subslide     shift-b (un)set current cell as a Sub-slide cell
+    RISE:toggle-fragment     shift-g (un)set current cell as a Fragment cell
+    RISE:toggle-notes                (un)set current cell as a Notes cell
     RISE:toggle-skip                 (un)set current cell as a Skip cell
     RISE:render-all-cells            render all cells (all cells go to command mode)
     RISE:edit-all-cells              edit all cells (all cells go to edit mode)

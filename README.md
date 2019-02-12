@@ -53,28 +53,17 @@ Conda.add("rise")
 pip install RISE
 ```
 
-and then one more step to install the JS and CSS in the proper places:
-
-```
-jupyter-nbextension install rise --py --sys-prefix
-```
-
-As of version 5.3.0, it is **no longer required** to explicitly enable
-the nbextension, which you would do with
-
-```
-jupyter-nbextension enable rise --py --sys-prefix
-```
-
 ### Option 3 - The old way (are sure sure you want to go this path?):
 
 To install this nbextension, simply run ``python setup.py install`` from the
 *RISE* repository (please use the latest tag available or try master if you want).
 
-And then the same step as described in the pip-based installation:
+And then two more steps to install the JS and CSS in the proper places
+and enable the extension:
 
 ```
 jupyter-nbextension install rise --py --sys-prefix
+jupyter-nbextension enable rise --py --sys-prefix
 ```
 
 ### Conclusion

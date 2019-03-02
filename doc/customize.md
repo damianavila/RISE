@@ -271,9 +271,14 @@ RISE can be customized in a lot of ways. As of RISE version 5.3, you can:
 
 ### The configurator
 
-You may need to install a separate module:
+You may need to install and enable additional modules, refer to [this github
+repo](https://github.com/ipython-contrib/jupyter_contrib_nbextensions) for more
+details on Jupyter notebook extensions.
 
-    pip3 install jupyter-nbextensions-configurator
+In a nutshell:
+
+    pip3 install jupyter_contrib_nbextensions
+    jupyter contrib nbextension install
 
 or
 

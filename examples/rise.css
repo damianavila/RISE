@@ -1,12 +1,57 @@
-/*
- * this is loaded only because it's named rise.css in the current directory
+/* this goes with my global default setting
+ * that has rise use reveal's theme sky
  */
+.reveal {
+    font-family: "Quicksand", sans-serif;
+}
 
- /* ***** just a stupid setting that you cannot miss ***** */
- div.cell.code_cell.rendered {
-     border-radius: 0px 0px 30px 0px;
- }
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+    text-transform: initial;   /* sky.css says uppercase */
+    letter-spacing: initial ;  /* sky.css says -0.08em */
+}
 
-div.input_area {
-    border-radius: 0px 0px 25px 0px;
+body.rise-enabled .reveal ol, body.rise-enabled .reveal dl, body.rise-enabled .reveal ul {
+    margin-left: 0.1em;
+    margin-top: 0.2em;
+}
+
+.reveal .rendered_html h1:first-child,
+.reveal .rendered_html h2:first-child,
+.reveal .rendered_html h3:first-child,
+.reveal .rendered_html h4:first-child,
+.reveal .rendered_html h5:first-child {
+    margin-top: 0.2em;
+}
+
+h1.plan, h2.plan, h3.plan {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+ul.plan>li>span.plan-bold {
+    font-size: 110%;
+    padding: 4px;
+    font-weight: bold;
+    background-color: #eee;
+}
+
+ul.plan>li>ul.subplan>li>span.plan-bold {
+    font-weight: bold;
+}
+
+.plan-strike {
+    opacity: 0.4;
+/*    text-decoration: line-through; */
+}
+
+div.plan-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+/* something big and stupid again just to outline
+   that this file is actually loaded */
+
+div.cell.code_cell.rendered, div.input_area {
+    border-width: 10px;
 }

@@ -1085,7 +1085,7 @@ define([
   function setup() {
     // load css first
     $('<link/>')
-      .attr({rel: " stylesheet",
+      .attr({rel: "stylesheet",
              href: require.toUrl("./main.css"),
              id: 'maincss',
             })

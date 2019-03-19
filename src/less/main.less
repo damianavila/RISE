@@ -7,8 +7,13 @@
   transition-timing-function: ease;
 }
 
-.rise-enabled {
+/* do not apply this on the <body> tag */
+:not(body).rise-enabled {
   background-color: #fff;
+}
+
+
+.rise-enabled {
   .transition-all;
 
   /* Reveal-specific */

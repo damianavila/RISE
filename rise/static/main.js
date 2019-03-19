@@ -477,11 +477,20 @@ define([
      * should be redefinable in the config
      */
     if (window.location.pathname.endsWith('.ipynb')) {
+      // typically examples/README.ipynb
+      let path = Jupyter.notebook.notebook_path;
+      // typically README.ipynb
+      let name = Jupyter.notebook.notebook_name;
+      // asscosiated css
+      let name_css = name.replace(".ipynb", ".css");
+      // typically /files/examples/
+      let prefix = `/files/${path.replace(name, '')}`;
       // Attempt to load rise.css
-      $('head').append(`<link rel="stylesheet" href="./rise.css" id="rise-custom-css" />`);
-      // Attempt to load CSS with the same path as the .ipynb but with .css extension instead
-      let notebook_css = window.location.pathname.replace(/\.ipynb$/,'.css');
-      $('head').append(`<link rel="stylesheet" href="${notebook_css}" id="notebook-custom-css" />`);
+      $('head').append(
+          `<link rel="stylesheet" href="${prefix}rise.css" id="rise-custom-css" />`);
+      // Attempt to load css with the same path as notebook
+      $('head').append(
+          `<link rel="stylesheet" href="${prefix}${name_css}" id="notebook-custom-css" />`);
 
     }
 

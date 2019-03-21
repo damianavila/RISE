@@ -927,15 +927,15 @@ define([
     let actions = Jupyter.notebook.keyboard_manager.actions;
 
     // register main action
-    actions.register({ help    : 'Enter/Exit RISE Slideshow',
-                       handler : revealMode,
-                     },
-                     "slideshow", "RISE");
+    actions.register(
+        {help:    "Enter/Exit RISE Slideshow",
+         handler: revealMode},
+        "slideshow", "RISE");
 
-    actions.register({ help: "execute cell, and move to the next if on the same slide",
-                       handler: smartExec,
-                     },
-                     "smart-exec", "RISE");
+    actions.register(
+        {help:    "execute cell, and move to the next if on the same slide",
+         handler: smartExec},
+        "smart-exec", "RISE");
 
     // helpers for toggling slide_type
     function init_metadata_slideshow(optional_cell) {
@@ -954,49 +954,43 @@ define([
       Jupyter.CellToolbar.rebuild_all();
     }
 
-    actions.register({ help   : '(un)set current cell as a Slide cell',
-                       handler: function() { toggle_slide_type('slide'); }
-                     },
-                     "toggle-slide", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Slide cell',
+         handler: () => toggle_slide_type('slide')},
+        "toggle-slide", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Sub-slide cell',
-                       handler: function() { toggle_slide_type('subslide'); }
-                     },
-                     "toggle-subslide", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Sub-slide cell',
+         handler: () => toggle_slide_type('subslide')},
+        "toggle-subslide", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Fragment cell',
-                       handler: function() { toggle_slide_type('fragment'); }
-                     },
-                     "toggle-fragment", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Fragment cell',
+         handler: () => toggle_slide_type('fragment')},
+        "toggle-fragment", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Note cell',
-                       handler: function() { toggle_slide_type('notes'); }
-                     },
-                     "toggle-notes", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Note cell',
+         handler: () => toggle_slide_type('notes')},
+        "toggle-notes", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Skip cell',
-                       handler: function() { toggle_slide_type('skip'); }
-                     },
-                     "toggle-skip", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Skip cell',
+         handler: () => toggle_slide_type('skip')},
+        "toggle-skip", "RISE");
 
 
-    actions.register({ help   : 'render all cells (all cells go to command mode)',
-                       handler: function() {
-                         Jupyter.notebook.get_cells().forEach(function(cell){
-	                   cell.render();
-                         })
-                       }
-                     },
-                     "render-all-cells", "RISE");
+    actions.register(
+        {help   : 'render all cells (all cells go to command mode)',
+         handler: function() {
+             Jupyter.notebook.get_cells().forEach(cell => cell.render())}},
+        "render-all-cells", "RISE");
 
-    actions.register({ help   : 'edit all cells (all cells go to edit mode)',
-                       handler: function() {
-                         Jupyter.notebook.get_cells().forEach(function(cell){
-	                   cell.unrender();
-                         })
-                       }
-                     },
-                     "edit-all-cells", "RISE");
+    actions.register(
+        {help   : 'edit all cells (all cells go to edit mode)',
+        handler: function() {
+            Jupyter.notebook.get_cells().forEach(cell => cell.unrender())}},
+        "edit-all-cells", "RISE");
 
     // because the `Edit Keyboard Shortcuts` utility does not mention the
     // actions prefix (i.e. 'RISE' in our case), we choose to make these two
@@ -1008,14 +1002,16 @@ define([
       window.open(url, '_blank');
     }
 
-    actions.register({ help: 'open the nbconfigurator page for RISE',
-                       handler: nbconfigurator},
-                     "rise-nbconfigurator", "RISE");
+    actions.register(
+        {help: 'open the nbconfigurator page for RISE',
+         handler: nbconfigurator},
+        "rise-nbconfigurator", "RISE");
 
     // mostly for debug / information
-    actions.register({ help   : 'output RISE configuration in console, for debugging mostly',
-                       handler: showConfig},
-                     "rise-dump-config", "RISE");
+    actions.register(
+        {help   : 'output RISE configuration in console, for debugging mostly',
+         handler: showConfig},
+        "rise-dump-config", "RISE");
 
   }
 

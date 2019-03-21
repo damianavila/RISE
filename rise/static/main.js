@@ -44,14 +44,14 @@ define([
    * waiting for any asyncronous code to complete
    */
 
-  var complete_config = {};
+  let complete_config = {};
 
   // returns a promise; you can do 'then()' on this promise
   // to do stuff *after* the configuration is completely loaded
   function configLoaded() {
 
     // see rise.yaml for more details
-    var hardwired_config = {
+    let hardwired_config = {
 
       // behaviour
       autolaunch: false,
@@ -179,7 +179,7 @@ define([
    * also sometimes slide_type is set to '-' by the toolbar
    */
   function get_slide_type(cell) {
-    var slide_type = (cell.metadata.slideshow || {}).slide_type;
+    let slide_type = (cell.metadata.slideshow || {}).slide_type;
     return ( (slide_type === undefined) || (slide_type == '-')) ? '' : slide_type;
   }
 
@@ -205,8 +205,8 @@ define([
    */
   function markupSlides(container) {
     // Machinery to create slide/subslide <section>s and give them IDs
-    var slide_counter = -1, subslide_counter = -1;
-    var slide_section, subslide_section;
+    let slide_counter = -1, subslide_counter = -1;
+    let slide_section, subslide_section;
     function new_slide() {
       slide_counter++;
       subslide_counter = -1;
@@ -221,10 +221,10 @@ define([
     // Containers for the first slide.
     slide_section = new_slide();
     subslide_section = new_subslide();
-    var current_fragment = subslide_section;
+    let current_fragment = subslide_section;
 
-    var selected_cell_idx = Jupyter.notebook.get_selected_index();
-    var selected_cell_slide = [0, 0];
+    let selected_cell_idx = Jupyter.notebook.get_selected_index();
+    let selected_cell_slide = [0, 0];
 
     /* Special handling for the first slide: it will work even if the user
      * doesn't start with a 'Slide' cell. But if the user does explicitly
@@ -232,13 +232,13 @@ define([
      * don't create a new slide/subslide until there is visible content on
      * the first slide.
      */
-    var content_on_slide1 = false;
+    let content_on_slide1 = false;
 
-    var cells = Jupyter.notebook.get_cells();
+    let cells = Jupyter.notebook.get_cells();
 
-    for (var i=0; i < cells.length; i++) {
-      var cell = cells[i];
-      var slide_type = get_slide_type(cell);
+    for (let i=0; i < cells.length; i++) {
+      let cell = cells[i];
+      let slide_type = get_slide_type(cell);
 
       if (content_on_slide1) {
         if (slide_type === 'slide') {
@@ -292,13 +292,13 @@ define([
      * corresponding to the (usually immediately) next cell
      * that is a fragment cell
      */
-    for (var i=0; i < cells.length; i++) {
-      var cell = cells[i];
+    for (let i=0; i < cells.length; i++) {
+      let cell = cells[i];
       // default is 'pinned' because this applies to the last cell
-      var tag = 'smart_exec_slide';
-      for (var j = i+1; j < cells.length; j++) {
-        var next_cell = cells[j];
-        var next_type = get_slide_type(next_cell);
+      let tag = 'smart_exec_slide';
+      for (let j = i+1; j < cells.length; j++) {
+        let next_cell = cells[j];
+        let next_type = get_slide_type(next_cell);
         if ((next_type == 'slide') || (next_type) == 'subslide') {
           tag = 'smart_exec_slide';
           break;
@@ -331,7 +331,7 @@ define([
    */
   function setStartingSlide(selected) {
 
-    var start_slideshow = complete_config.start_slideshow_at;
+    let start_slideshow = complete_config.start_slideshow_at;
     if (start_slideshow === 'selected') {
       // Start from the selected cell
       Reveal.slide(selected[0], selected[1]);
@@ -347,9 +347,9 @@ define([
    */
   function setScrollingSlide() {
 
-    var scroll = complete_config.scroll;
+    let scroll = complete_config.scroll;
     if (scroll === true) {
-      var h = $('.reveal').height() * 0.95;
+      let h = $('.reveal').height() * 0.95;
       $('section.present').find('section')
         .filter(function() {
           return $(this).height() > h;
@@ -375,10 +375,10 @@ define([
     }
 
     // Ref: https://stackoverflow.com/a/7739035
-    var url = (window.location != window.parent.location)
+    let url = (window.location != window.parent.location)
             ? document.referrer
             : document.location.href;
-    var lastPart = url.substr(url.lastIndexOf('/') + 1);
+    let lastPart = url.substr(url.lastIndexOf('/') + 1);
 
     if (lastPart === "notes.html") {
       revealMode();
@@ -388,7 +388,7 @@ define([
   /* Setup a MutationObserver to call Reveal.sync when an output is generated.
    * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
    */
-  var outputObserver = null;
+  let outputObserver = null;
   function setupOutputObserver() {
     function mutationHandler(mutationRecords) {
       mutationRecords.forEach(function(mutation) {
@@ -399,11 +399,11 @@ define([
       });
     }
 
-    var $output = $(".output");
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+    let $output = $(".output");
+    let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     outputObserver = new MutationObserver(mutationHandler);
 
-    var observerOptions = { childList: true,
+    let observerOptions = { childList: true,
                            characterData: false,
                            attributes: false,
                            subtree: false
@@ -464,7 +464,7 @@ define([
 
     // Header
     // Available themes are in static/css/theme
-    var theme = complete_config.theme;
+    let theme = complete_config.theme;
     $('head')
       .prepend('<link rel="stylesheet" href='
                + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
@@ -513,7 +513,7 @@ define([
               let inherited = ['controls', 'progress', 'history', 'width', 'height', 'margin',
                                'minScale', 'transition', 'slideNumber', 'center', 'help'];
 
-              var options = {
+              let options = {
 
                 //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
                 //parallaxBackgroundSize: '2560px 1600px',
@@ -537,7 +537,7 @@ define([
                   80: null, // p, up disabled
                   // 84: RevealNotes.open, // t, modified in the custom notes plugin.
                   87: Reveal.toggleOverview, // w, toggle overview
-                  188: function() {$('#help_b,#exit_b').fadeToggle();},
+                  188: () => $('#help_b,#exit_b').fadeToggle(), // comma
                 },
 
                 dependencies: [
@@ -560,7 +560,7 @@ define([
               }
 
               ////////// set up the leap motion integration if configured
-              var enable_leap_motion = complete_config.enable_leap_motion;
+              let enable_leap_motion = complete_config.enable_leap_motion;
               if (enable_leap_motion) {
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
                 options.leap = enable_leap_motion;
@@ -573,15 +573,16 @@ define([
                 // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach
                 // could hopefully avoid conflicting behaviours in case of overlaps
-                $.extend(options.keyboard,
-                         {
+                $.extend(options.keyboard, {
                            // for chalkboard; also bind uppercases just in case
-                           63:  KeysMessager,                                        // '?' show our help
-                           187:  function() { RevealChalkboard.reset() },             // '=' reset chalkboard data on current slide
-                           189:  function() { RevealChalkboard.clear() },             // '-' clear full size chalkboard
-                           219:  function() { RevealChalkboard.toggleChalkboard() },  // '[' toggle full size chalkboard
-                           221:  function() { RevealChalkboard.toggleNotesCanvas() }, // ']' toggle notes (slide-local)
-                           220:  function() { RevealChalkboard.download() },          // '\' download recorded chalkboard drawing
+                           63:  KeysMessager,                               // '?' show our help
+                           // can't use just RevealChalkboard.reset directly here
+                           // because RevealChalkboard is not yet loaded at that time
+                           187: () => RevealChalkboard.reset(),             // '=' reset chalkboard data on current slide
+                           189: () => RevealChalkboard.clear(),             // '-' clear full size chalkboard
+                           219: () => RevealChalkboard.toggleChalkboard(),  // '[' toggle full size chalkboard
+                           221: () => RevealChalkboard.toggleNotesCanvas(), // ']' toggle notes (slide-local)
+                           220: () => RevealChalkboard.download(),          // '\' download recorded chalkboard drawing
                          });
               }
 
@@ -595,24 +596,24 @@ define([
                 //console.log("Reveal initialized");
               }
 
-              Reveal.addEventListener( 'ready', function( event ) {
+              Reveal.addEventListener('ready', function(event) {
                 Unselecter();
                 // check and set the scrolling slide when you start the whole thing
                 setScrollingSlide();
                 autoSelectHook();
               });
 
-              Reveal.addEventListener( 'slidechanged', function( event ) {
+              Reveal.addEventListener('slidechanged', function(event) {
                 Unselecter();
                 // check and set the scrolling slide every time the slide change
                 setScrollingSlide();
                 autoSelectHook();
               });
 
-              Reveal.addEventListener( 'fragmentshown', function( event ) {
+              Reveal.addEventListener('fragmentshown', function(event) {
                 autoSelectHook();
               });
-              Reveal.addEventListener( 'fragmenthidden', function( event ) {
+              Reveal.addEventListener('fragmenthidden', function(event) {
                 autoSelectHook();
               });
 
@@ -627,23 +628,21 @@ define([
   }
 
   function Unselecter(){
-    var cells = Jupyter.notebook.get_cells();
-    for(var i in cells){
-      var cell = cells[i];
+    let cells = Jupyter.notebook.get_cells();
+    for (let cell of cells){
       cell.unselect();
     }
   }
 
   function fixCellHeight(){
     // Let's start with all the cell unselected, the unselect the current selected one
-    var scell = Jupyter.notebook.get_selected_cell()
-    scell.unselect()
+    let scell = Jupyter.notebook.get_selected_cell();
+    scell.unselect();
     // This select/unselect code cell triggers the "correct" heigth in the codemirror instance
-    var cells = Jupyter.notebook.get_cells();
-    for(var i in cells){
-      var cell = cells[i];
+    let cells = Jupyter.notebook.get_cells();
+    for (let cell of cells){
       if (cell.cell_type === "code") {
-        cell.select()
+        cell.select();
         cell.unselect();
       }
     }
@@ -655,14 +654,14 @@ define([
    */
   function smartExec() {
     // is it really the selected cell that matters ?
-    var smart_exec = Jupyter.notebook.get_selected_cell().smart_exec;
+    let smart_exec = Jupyter.notebook.get_selected_cell().smart_exec;
     if (smart_exec == 'smart_exec_slide') {
       Jupyter.notebook.execute_selected_cells();
     } else if (smart_exec == "smart_exec_fragment") {
       // let's see if the next fragment is visible or not
-      var cell = Jupyter.notebook.get_selected_cell();
-      var fragment_div = cell.smart_exec_next_fragment;
-      var visible = $(fragment_div).hasClass('visible');
+      let cell = Jupyter.notebook.get_selected_cell();
+      let fragment_div = cell.smart_exec_next_fragment;
+      let visible = $(fragment_div).hasClass('visible');
       if (visible) {
         Jupyter.notebook.execute_cell_and_select_below();
       } else {
@@ -690,7 +689,7 @@ define([
   }
 
   function KeysMessager() {
-    var message = $('<div/>').append(
+    let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
           "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
@@ -732,7 +731,7 @@ define([
   }
 
   function buttonHelp() {
-    var help_button = $('<i/>')
+    let help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
         .addClass('fa-question fa-4x fa')
@@ -742,7 +741,7 @@ define([
   }
 
   function buttonExit() {
-    var exit_button = $('<i/>')
+    let exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','Exit RISE')
         .addClass('fa-times-circle fa-4x fa')
@@ -752,7 +751,7 @@ define([
   }
 
   function fullscreenHelp() {
-    var message = $('<div/>').append(
+    let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<b>Entering Fullscreen mode from inside RISE is disabled.</b>" +
           "<br>" +
@@ -803,8 +802,8 @@ define([
     $('.pause-overlay').hide();
     $('div#aria-status-div').hide();
 
-    var cells = Jupyter.notebook.get_cells();
-    for(var i in cells){
+    let cells = Jupyter.notebook.get_cells();
+    for(let i in cells){
       $('.cell:nth('+i+')').removeClass('reveal-skip');
       $('div#notebook-container').append(cells[i].element);
     }
@@ -940,7 +939,7 @@ define([
     // helpers for toggling slide_type
     function init_metadata_slideshow(optional_cell) {
       // use selected cell if not specified
-      var cell = optional_cell || Jupyter.notebook.get_selected_cell();
+      let cell = optional_cell || Jupyter.notebook.get_selected_cell();
       let metadata = cell.metadata;
       if (metadata.slideshow === undefined)
         metadata.slideshow = {};
@@ -982,14 +981,14 @@ define([
 
     actions.register(
         {help   : 'render all cells (all cells go to command mode)',
-         handler: function() {
-             Jupyter.notebook.get_cells().forEach(cell => cell.render())}},
+         handler: () => Jupyter.notebook.get_cells().forEach(
+             cell => cell.render())},
         "render-all-cells", "RISE");
 
     actions.register(
         {help   : 'edit all cells (all cells go to edit mode)',
-        handler: function() {
-            Jupyter.notebook.get_cells().forEach(cell => cell.unrender())}},
+         handler: () => Jupyter.notebook.get_cells().forEach(
+            cell => cell.unrender())},
         "edit-all-cells", "RISE");
 
     // because the `Edit Keyboard Shortcuts` utility does not mention the
@@ -1019,11 +1018,11 @@ define([
   function revealMode() {
     // We search for a class tag in the maintoolbar to check if reveal mode is "on".
     // If the tag exits, we exit. Otherwise, we enter the reveal mode.
-    var tag = $('#maintoolbar').hasClass('reveal_tagging');
+    let tag = $('#maintoolbar').hasClass('reveal_tagging');
 
     if (!tag) {
       // Preparing the new reveal-compatible structure
-      var selected_slide = markupSlides($('div#notebook-container'));
+      let selected_slide = markupSlides($('div#notebook-container'));
       // Adding the reveal stuff
       Revealer(selected_slide);
       // Minor modifications for usability
@@ -1032,7 +1031,7 @@ define([
       buttonHelp();
       $('#maintoolbar').addClass('reveal_tagging');
     } else {
-      var current_cell_index = reveal_cell_index(Jupyter.notebook);
+      let current_cell_index = reveal_cell_index(Jupyter.notebook);
       Remover();
       setupKeys("notebook_mode");
       $('#exit_b').remove();
@@ -1043,15 +1042,15 @@ define([
       // select and focus on current cell
       Jupyter.notebook.select(current_cell_index);
       // Need to delay the action a little bit so it actually focus the selected slide
-      setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 500);
+      setTimeout(() => Jupyter.notebook.get_selected_cell().ensure_focused(), 500);
     }
   }
 
   let autoSelectTimeout = 250;
 
   function autoSelectHook() {
-    var auto_select = complete_config.auto_select;
-    var cell_type =
+    let auto_select = complete_config.auto_select;
+    let cell_type =
         (auto_select == "code") ? 'code'
 	: (auto_select == "first") ? null
 	: undefined;
@@ -1061,9 +1060,10 @@ define([
       return;
     }
 
-    var auto_select_fragment = complete_config.auto_select_fragment;
+    let auto_select_fragment = complete_config.auto_select_fragment;
     setTimeout(function(){
-      var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type, auto_select_fragment);
+      let current_cell_index = reveal_cell_index(
+          Jupyter.notebook, cell_type, auto_select_fragment);
       // select and focus on current cell
       Jupyter.notebook.select(current_cell_index)
     }, autoSelectTimeout);

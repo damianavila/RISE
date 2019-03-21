@@ -1014,6 +1014,11 @@ define([
 
   }
 
+  // could maybe become configurable
+  let restoreTimeout = 500;
+  // when going too short, like 250, I can see selection behaving oddly
+  let autoSelectTimeout = 500;
+
   // the entrypoint - call this to enter or exit reveal mode
   function revealMode() {
     // We search for a class tag in the maintoolbar to check if reveal mode is "on".
@@ -1046,11 +1051,10 @@ define([
       // select and focus on current cell
       Jupyter.notebook.select(current_cell_index);
       // Need to delay the action a little bit so it actually focus the selected slide
-      setTimeout(() => Jupyter.notebook.get_selected_cell().ensure_focused(), 500);
+      setTimeout(() => Jupyter.notebook.get_selected_cell().ensure_focused(),
+                 restoreTimeout);
     }
   }
-
-  let autoSelectTimeout = 250;
 
   function autoSelectHook() {
     let auto_select = complete_config.auto_select;

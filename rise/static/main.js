@@ -1069,7 +1069,8 @@ define([
       let current_cell_index = reveal_cell_index(
           Jupyter.notebook, cell_type, auto_select_fragment);
       // select and focus on current cell
-      Jupyter.notebook.select(current_cell_index)
+      if (current_cell_index)
+        Jupyter.notebook.select(current_cell_index);
     }, autoSelectTimeout);
   }
 

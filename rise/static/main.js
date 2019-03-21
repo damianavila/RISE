@@ -186,6 +186,8 @@ define([
   function is_slide(cell)    {return get_slide_type(cell) == 'slide';}
   function is_subslide(cell) {return get_slide_type(cell) == 'subslide';}
   function is_fragment(cell) {return get_slide_type(cell) == 'fragment';}
+  function is_skip(cell)     {return get_slide_type(cell) == 'skip';}
+  function is_notes(cell)    {return get_slide_type(cell) == 'notes';}
   function is_regular(cell)  {return get_slide_type(cell) == '';}
 
   /* Use the slideshow metadata to rearrange cell DOM elements into the
@@ -586,11 +588,11 @@ define([
               if (Reveal.initialized) {
                 //delete options["dependencies"];
                 Reveal.configure(options);
-                console.log("Reveal is already initialized and is being configured");
+                //console.log("Reveal is already initialized and is being configured");
               } else {
                 Reveal.initialize(options);
                 Reveal["initialized"] = true;
-                console.log("Reveal initialized");
+                //console.log("Reveal initialized");
               }
 
               Reveal.addEventListener( 'ready', function( event ) {
@@ -866,47 +868,56 @@ define([
    * returns null if no match is found
    */
   function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false) {
-    var [slide, subslide, fragment] = reveal_current_position();
-
-    /* just scan all cells until we find one at that address
-     * except that we need to start at -1 or 0 depending on
-     * whether the first slide has a slide tag or not
+    /* scan all cells until we find one that matches current reveal location
+     * need to deal carefully with beginning of that process because
+     * (.) we do not impose a starting 'slide', and
+     * (.) the first cell(s) might be of type 'skip'
+     *     which then must not be counted
      */
-    var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
-    var subslide_counter = 0;
-    var fragment_counter = 0;
-    var result = null;
+    let [slide, subslide, fragment] = reveal_current_position();
 
-    notebook.get_cells().forEach(function (cell, index) {
-      if (result) {
-        // keep it short: skip if we found already
-        return;
-      }
-      if (is_slide(cell)) {
-        slide_counter += 1;
-        subslide_counter = 0;
-      } else if (is_subslide(cell)) {
-        subslide_counter += 1;
-      }
+    // start at slide -1 because we don't impose a starting 'slide'
+    let [slide_counter, subslide_counter, fragment_counter] = [-1, 0, 0];
+    let result = null;
+
+    let cells = notebook.get_cells();
+    for (let index in cells) {
+        let cell = cells[index];
+        // ignore skip cells no matter what
+        if (is_skip(cell) || is_notes(cell))
+          continue;
+        // a slide always increments, even at the start, since we begin at -1
+        if (is_slide(cell)) {
+            slide_counter += 1;
+            subslide_counter = 0;
+        }
+        // if we see anything else then we're on a visible slide
+        // that has to be at least 0
+        slide_counter = Math.max(slide_counter, 0);
+        if (is_subslide(cell)) {
+            subslide_counter += 1;
+        }
+
       if ((slide_counter == slide) && (subslide_counter == subslide)) {
         // keep count of fragments but only on current slide
         if (is_fragment(cell)) {
-	  fragment_counter += 1;
+          fragment_counter += 1;
         }
         /* we're on the right slide
          * now: do we need to also worry about focusing on the right fragment ?
          * if auto_select_fragment is true, we only consider cells in the fragment
          * otherwise, the whole (sub)slide is considered valid
          */
-        var fragment_match = (auto_select_fragment) ? (fragment_counter == fragment) : true;
+        let fragment_match = (auto_select_fragment) ? (fragment_counter == fragment) : true;
         // we still need to match cell types
         if ( fragment_match &&
-	     ((cell_type === null) || (cell.cell_type == cell_type))) {
-	  result = index;
+	         ((cell_type === null) || (cell.cell_type == cell_type))) {
+	      return index;
         }
       }
-    })
-    return result;
+    }
+    // for consistency with previous implementations
+    return null;
   }
 
   function registerJupyterActions() {

@@ -584,7 +584,7 @@ define([
                 // could hopefully avoid conflicting behaviours in case of overlaps
                 $.extend(options.keyboard, {
                            // for chalkboard; also bind uppercases just in case
-                           63:  KeysMessager,                               // '?' show our help
+                           63:  riseHelp,                               // '?' show our help
                            // can't use just RevealChalkboard.reset directly here
                            // because RevealChalkboard is not yet loaded at that time
                            187: () => RevealChalkboard.reset(),             // '=' reset chalkboard data on current slide
@@ -697,27 +697,28 @@ define([
     }
   }
 
-  function KeysMessager() {
+  function riseHelp() {
     let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
-          "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
-          "<li><kbd>Space</kbd>: Next</li>" +
-          "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: Previous</li>" +
-          "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: Eval and select next cell if visible</li>" +
-          "<li><kbd>Home</kbd>: First slide</li>" +
-          "<li><kbd>End</kbd>: Last slide</li>" +
-          "<li><kbd>w</kbd>: Toggle overview mode</li>" +
-          "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
-          "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
-          "<li><strong>Not so useful:</strong>" +
+          "<li><kbd>Alt</kbd>+<kbd>r</kbd>: enter/exit RISE</li>" +
+          "<li><kbd>Space</kbd>: next</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: previous</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: eval and select next cell if visible</li>" +
+          "<li><kbd>Home</kbd>: first slide</li>" +
+          "<li><kbd>End</kbd>: last slide</li>" +
+          "<li><kbd>w</kbd>: toggle overview mode</li>" +
+          "<li><kbd>t</kbd>: toggle notes</li>" +
+          "<li><kbd>,</kbd>: toggle help and exit buttons</li>" +
+          "<li><kbd>/</kbd>: black screen</li>" +
+          "<li><strong>less useful:</strong>" +
             "<ul>" +
-            "<li><kbd>PgUp</kbd>: Up</li>" +
-            "<li><kbd>PgDn</kbd>: Down</li>" +
-            "<li><kbd>Left Arrow</kbd>: Left <em>(note: Space preferred)</em></li>" +
-            "<li><kbd>Right Arrow</kbd>: Right <em>(note: Shift Space preferred)</em></li>" +
+            "<li><kbd>PgUp</kbd>: up</li>" +
+            "<li><kbd>PgDn</kbd>: down</li>" +
+            "<li><kbd>Left Arrow</kbd>: left <em>(note: Space preferred)</em></li>" +
+            "<li><kbd>Right Arrow</kbd>: right <em>(note: Shift Space preferred)</em></li>" +
             "</ul>" +
-          "<li><strong>With chalkboard enabled:</strong>" +
+          "<li><strong>with chalkboard enabled:</strong>" +
             "<ul>" +
             "<li><kbd>[</kbd> toggle fullscreen chalkboard</li>" +
             "<li><kbd>]</kbd> toggle slide-local canvas</li>" +
@@ -726,7 +727,7 @@ define([
             "<li><kbd>-</kbd> delete fullscreen chalkboard</li>" +
             "</ul>" +
           "</ul>" +
-          "<b>NOTE: You have to use these shortcuts in command mode.</b>"
+          "<b>NOTE</b>: of course you have to use these shortcuts <b>in command mode.</b>"
       )
     );
 
@@ -745,7 +746,7 @@ define([
         .attr('title','Reveal Shortcuts Help')
         .addClass('fa-question fa-4x fa')
         .addClass('my-main-tool-bar')
-        .click(KeysMessager);
+        .click(riseHelp);
     $('.reveal').after(help_button);
   }
 

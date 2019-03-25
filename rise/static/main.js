@@ -65,6 +65,11 @@ define([
       backimage: undefined,
       overlay: undefined,
 
+      // timeouts
+      restore_timeout: 500,
+      // when going too short, like 250, size of selected cell get odd
+      auto_select_timeout: 500,
+
       // UI
       toolbar_icon: 'fa-bar-chart',
       shortcuts: {
@@ -1018,10 +1023,6 @@ define([
 
   }
 
-  // could maybe become configurable
-  let restoreTimeout = 500;
-  // when going too short, like 250, I can see selection behaving oddly
-  let autoSelectTimeout = 500;
 
   // the entrypoint - call this to enter or exit reveal mode
   function revealMode() {
@@ -1056,7 +1057,7 @@ define([
       Jupyter.notebook.select(current_cell_index);
       // Need to delay the action a little bit so it actually focus the selected slide
       setTimeout(() => Jupyter.notebook.get_selected_cell().ensure_focused(),
-                 restoreTimeout);
+                 complete_config.restore_timeout);
     }
   }
 
@@ -1079,7 +1080,7 @@ define([
       // select and focus on current cell
       if (current_cell_index)
         Jupyter.notebook.select(current_cell_index);
-    }, autoSelectTimeout);
+    }, complete_config.auto_select_timeout);
   }
 
   function addButtonsAndShortcuts() {

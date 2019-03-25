@@ -186,7 +186,7 @@ Parameters:
 #
 - name: rise.transition
   description: >
-    <code>transition</code>: at least available: none - fade - slide - convex - concave - zoom - cube - linear
+    <code>transition</code>: at least available: none - fade - slide - convex - concave - zoom - cube - linear; see also <code>reveal.js</code>.
   input_type: string
   default: 'linear'
 #

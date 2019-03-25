@@ -496,6 +496,10 @@ define([
 
     }
 
+    function toggleAllRiseButtons() {
+        $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
+    }
+
     // Tailer
     require([
       './reveal.js/lib/js/head.min.js',
@@ -537,7 +541,7 @@ define([
                   80: null, // p, up disabled
                   // 84: RevealNotes.open, // t, modified in the custom notes plugin.
                   87: Reveal.toggleOverview, // w, toggle overview
-                  188: () => $('#help_b,#exit_b').fadeToggle(), // comma
+                  188: toggleAllRiseButtons, // comma
                 },
 
                 dependencies: [

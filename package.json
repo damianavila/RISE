@@ -8,7 +8,7 @@
     "less": "~2.7.2",
     "less-plugin-autoprefix": "~1.4.2",
     "less-plugin-clean-css": "~1.5.0",
-    "reveal.js": "~3.7.0",
+    "reveal.js": "~3.5.0",
     "reveal.js-chalkboard": "~1.0.0",
     "notes_rise": "~1.0.0",
     "watch": "~0.16.0"

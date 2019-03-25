@@ -30,7 +30,7 @@ Essentially you will need:
 **Notes**:
 
 * this is all that is needed at that stage
-* later on you might want to take a look at `package.json` that has finer-grained targets, that the `build` target groups for your conevnience
+* later on you might want to take a look at `package.json` that has finer-grained targets, that the `build` target groups for your convenience
 * in particular, if you only need to redo css, you can do `npm run build-css`
 * also note that you can remove `reveal.js` from the static folder with `npm run clean-reveal`.
 

@@ -49,7 +49,7 @@ div.plan-container {
     grid-template-columns: 50% 50%;
 }
 
-/* something big and stupid again just to outline
+/* something big and obvious again just to outline
    that this file is actually loaded */
 
 div.cell.code_cell.rendered, div.input_area {

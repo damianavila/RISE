@@ -44,14 +44,14 @@ define([
    * waiting for any asyncronous code to complete
    */
 
-  var complete_config = {};
+  let complete_config = {};
 
   // returns a promise; you can do 'then()' on this promise
   // to do stuff *after* the configuration is completely loaded
   function configLoaded() {
 
     // see rise.yaml for more details
-    var hardwired_config = {
+    let hardwired_config = {
 
       // behaviour
       autolaunch: false,
@@ -65,13 +65,18 @@ define([
       backimage: undefined,
       overlay: undefined,
 
+      // timeouts
+      restore_timeout: 500,
+      // when going too short, like 250, size of selected cell get odd
+      auto_select_timeout: 500,
+
       // UI
       toolbar_icon: 'fa-bar-chart',
       shortcuts: {
         'slideshow' : 'alt-r',
         'toggle-slide': 'shift-i',
-        'toggle-subslide': 'shift-u',
-        'toggle-fragment': 'shift-f',
+        'toggle-subslide': 'shift-b',
+        'toggle-fragment': 'shift-g',
         // this can be helpful
         'rise-nbconfigurator': 'shift-c',
         // unassigned by default
@@ -179,13 +184,15 @@ define([
    * also sometimes slide_type is set to '-' by the toolbar
    */
   function get_slide_type(cell) {
-    var slide_type = (cell.metadata.slideshow || {}).slide_type;
+    let slide_type = (cell.metadata.slideshow || {}).slide_type;
     return ( (slide_type === undefined) || (slide_type == '-')) ? '' : slide_type;
   }
 
   function is_slide(cell)    {return get_slide_type(cell) == 'slide';}
   function is_subslide(cell) {return get_slide_type(cell) == 'subslide';}
   function is_fragment(cell) {return get_slide_type(cell) == 'fragment';}
+  function is_skip(cell)     {return get_slide_type(cell) == 'skip';}
+  function is_notes(cell)    {return get_slide_type(cell) == 'notes';}
   function is_regular(cell)  {return get_slide_type(cell) == '';}
 
   /* Use the slideshow metadata to rearrange cell DOM elements into the
@@ -203,8 +210,8 @@ define([
    */
   function markupSlides(container) {
     // Machinery to create slide/subslide <section>s and give them IDs
-    var slide_counter = -1, subslide_counter = -1;
-    var slide_section, subslide_section;
+    let slide_counter = -1, subslide_counter = -1;
+    let slide_section, subslide_section;
     function new_slide() {
       slide_counter++;
       subslide_counter = -1;
@@ -219,10 +226,10 @@ define([
     // Containers for the first slide.
     slide_section = new_slide();
     subslide_section = new_subslide();
-    var current_fragment = subslide_section;
+    let current_fragment = subslide_section;
 
-    var selected_cell_idx = Jupyter.notebook.get_selected_index();
-    var selected_cell_slide = [0, 0];
+    let selected_cell_idx = Jupyter.notebook.get_selected_index();
+    let selected_cell_slide = [0, 0];
 
     /* Special handling for the first slide: it will work even if the user
      * doesn't start with a 'Slide' cell. But if the user does explicitly
@@ -230,13 +237,13 @@ define([
      * don't create a new slide/subslide until there is visible content on
      * the first slide.
      */
-    var content_on_slide1 = false;
+    let content_on_slide1 = false;
 
-    var cells = Jupyter.notebook.get_cells();
+    let cells = Jupyter.notebook.get_cells();
 
-    for (var i=0; i < cells.length; i++) {
-      var cell = cells[i];
-      var slide_type = get_slide_type(cell);
+    for (let i=0; i < cells.length; i++) {
+      let cell = cells[i];
+      let slide_type = get_slide_type(cell);
 
       if (content_on_slide1) {
         if (slide_type === 'slide') {
@@ -290,13 +297,13 @@ define([
      * corresponding to the (usually immediately) next cell
      * that is a fragment cell
      */
-    for (var i=0; i < cells.length; i++) {
-      var cell = cells[i];
+    for (let i=0; i < cells.length; i++) {
+      let cell = cells[i];
       // default is 'pinned' because this applies to the last cell
-      var tag = 'smart_exec_slide';
-      for (var j = i+1; j < cells.length; j++) {
-        var next_cell = cells[j];
-        var next_type = get_slide_type(next_cell);
+      let tag = 'smart_exec_slide';
+      for (let j = i+1; j < cells.length; j++) {
+        let next_cell = cells[j];
+        let next_type = get_slide_type(next_cell);
         if ((next_type == 'slide') || (next_type) == 'subslide') {
           tag = 'smart_exec_slide';
           break;
@@ -329,7 +336,7 @@ define([
    */
   function setStartingSlide(selected) {
 
-    var start_slideshow = complete_config.start_slideshow_at;
+    let start_slideshow = complete_config.start_slideshow_at;
     if (start_slideshow === 'selected') {
       // Start from the selected cell
       Reveal.slide(selected[0], selected[1]);
@@ -345,9 +352,9 @@ define([
    */
   function setScrollingSlide() {
 
-    var scroll = complete_config.scroll;
+    let scroll = complete_config.scroll;
     if (scroll === true) {
-      var h = $('.reveal').height() * 0.95;
+      let h = $('.reveal').height() * 0.95;
       $('section.present').find('section')
         .filter(function() {
           return $(this).height() > h;
@@ -373,10 +380,10 @@ define([
     }
 
     // Ref: https://stackoverflow.com/a/7739035
-    var url = (window.location != window.parent.location)
+    let url = (window.location != window.parent.location)
             ? document.referrer
             : document.location.href;
-    var lastPart = url.substr(url.lastIndexOf('/') + 1);
+    let lastPart = url.substr(url.lastIndexOf('/') + 1);
 
     if (lastPart === "notes.html") {
       revealMode();
@@ -386,7 +393,7 @@ define([
   /* Setup a MutationObserver to call Reveal.sync when an output is generated.
    * This fixes issue #188: https://github.com/damianavila/RISE/issues/188
    */
-  var outputObserver = null;
+  let outputObserver = null;
   function setupOutputObserver() {
     function mutationHandler(mutationRecords) {
       mutationRecords.forEach(function(mutation) {
@@ -397,11 +404,11 @@ define([
       });
     }
 
-    var $output = $(".output");
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+    let $output = $(".output");
+    let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     outputObserver = new MutationObserver(mutationHandler);
 
-    var observerOptions = { childList: true,
+    let observerOptions = { childList: true,
                            characterData: false,
                            attributes: false,
                            subtree: false
@@ -462,7 +469,7 @@ define([
 
     // Header
     // Available themes are in static/css/theme
-    var theme = complete_config.theme;
+    let theme = complete_config.theme;
     $('head')
       .prepend('<link rel="stylesheet" href='
                + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
@@ -477,12 +484,25 @@ define([
      * should be redefinable in the config
      */
     if (window.location.pathname.endsWith('.ipynb')) {
+      // typically examples/README.ipynb
+      let path = Jupyter.notebook.notebook_path;
+      // typically README.ipynb
+      let name = Jupyter.notebook.notebook_name;
+      // asscosiated css
+      let name_css = name.replace(".ipynb", ".css");
+      // typically /files/examples/
+      let prefix = `/files/${path.replace(name, '')}`;
       // Attempt to load rise.css
-      $('head').append(`<link rel="stylesheet" href="./rise.css" id="rise-custom-css" />`);
-      // Attempt to load CSS with the same path as the .ipynb but with .css extension instead
-      let notebook_css = window.location.pathname.replace(/\.ipynb$/,'.css');
-      $('head').append(`<link rel="stylesheet" href="${notebook_css}" id="notebook-custom-css" />`);
+      $('head').append(
+          `<link rel="stylesheet" href="${prefix}rise.css" id="rise-custom-css" />`);
+      // Attempt to load css with the same path as notebook
+      $('head').append(
+          `<link rel="stylesheet" href="${prefix}${name_css}" id="notebook-custom-css" />`);
 
+    }
+
+    function toggleAllRiseButtons() {
+        $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
     }
 
     // Tailer
@@ -502,7 +522,7 @@ define([
               let inherited = ['controls', 'progress', 'history', 'width', 'height', 'margin',
                                'minScale', 'transition', 'slideNumber', 'center', 'help'];
 
-              var options = {
+              let options = {
 
                 //parallaxBackgroundImage: 'https://raw.github.com/damianavila/par_IPy_slides_example/gh-pages/figs/star_wars_stormtroopers_darth_vader.jpg',
                 //parallaxBackgroundSize: '2560px 1600px',
@@ -526,7 +546,7 @@ define([
                   80: null, // p, up disabled
                   // 84: RevealNotes.open, // t, modified in the custom notes plugin.
                   87: Reveal.toggleOverview, // w, toggle overview
-                  188: function() {$('#help_b,#exit_b').fadeToggle();},
+                  188: toggleAllRiseButtons, // comma
                 },
 
                 dependencies: [
@@ -549,7 +569,7 @@ define([
               }
 
               ////////// set up the leap motion integration if configured
-              var enable_leap_motion = complete_config.enable_leap_motion;
+              let enable_leap_motion = complete_config.enable_leap_motion;
               if (enable_leap_motion) {
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
                 options.leap = enable_leap_motion;
@@ -562,46 +582,47 @@ define([
                 // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach
                 // could hopefully avoid conflicting behaviours in case of overlaps
-                $.extend(options.keyboard,
-                         {
+                $.extend(options.keyboard, {
                            // for chalkboard; also bind uppercases just in case
-                           63:  KeysMessager,                                        // '?' show our help
-                           187:  function() { RevealChalkboard.reset() },             // '=' reset chalkboard data on current slide
-                           189:  function() { RevealChalkboard.clear() },             // '-' clear full size chalkboard
-                           219:  function() { RevealChalkboard.toggleChalkboard() },  // '[' toggle full size chalkboard
-                           221:  function() { RevealChalkboard.toggleNotesCanvas() }, // ']' toggle notes (slide-local)
-                           220:  function() { RevealChalkboard.download() },          // '\' download recorded chalkboard drawing
+                           63:  riseHelp,                               // '?' show our help
+                           // can't use just RevealChalkboard.reset directly here
+                           // because RevealChalkboard is not yet loaded at that time
+                           187: () => RevealChalkboard.reset(),             // '=' reset chalkboard data on current slide
+                           189: () => RevealChalkboard.clear(),             // '-' clear full size chalkboard
+                           219: () => RevealChalkboard.toggleChalkboard(),  // '[' toggle full size chalkboard
+                           221: () => RevealChalkboard.toggleNotesCanvas(), // ']' toggle notes (slide-local)
+                           220: () => RevealChalkboard.download(),          // '\' download recorded chalkboard drawing
                          });
               }
 
               if (Reveal.initialized) {
                 //delete options["dependencies"];
                 Reveal.configure(options);
-                console.log("Reveal is already initialized and is being configured");
+                //console.log("Reveal is already initialized and is being configured");
               } else {
                 Reveal.initialize(options);
                 Reveal["initialized"] = true;
-                console.log("Reveal initialized");
+                //console.log("Reveal initialized");
               }
 
-              Reveal.addEventListener( 'ready', function( event ) {
+              Reveal.addEventListener('ready', function(event) {
                 Unselecter();
                 // check and set the scrolling slide when you start the whole thing
                 setScrollingSlide();
                 autoSelectHook();
               });
 
-              Reveal.addEventListener( 'slidechanged', function( event ) {
+              Reveal.addEventListener('slidechanged', function(event) {
                 Unselecter();
                 // check and set the scrolling slide every time the slide change
                 setScrollingSlide();
                 autoSelectHook();
               });
 
-              Reveal.addEventListener( 'fragmentshown', function( event ) {
+              Reveal.addEventListener('fragmentshown', function(event) {
                 autoSelectHook();
               });
-              Reveal.addEventListener( 'fragmenthidden', function( event ) {
+              Reveal.addEventListener('fragmenthidden', function(event) {
                 autoSelectHook();
               });
 
@@ -616,23 +637,21 @@ define([
   }
 
   function Unselecter(){
-    var cells = Jupyter.notebook.get_cells();
-    for(var i in cells){
-      var cell = cells[i];
+    let cells = Jupyter.notebook.get_cells();
+    for (let cell of cells){
       cell.unselect();
     }
   }
 
   function fixCellHeight(){
     // Let's start with all the cell unselected, the unselect the current selected one
-    var scell = Jupyter.notebook.get_selected_cell()
-    scell.unselect()
+    let scell = Jupyter.notebook.get_selected_cell();
+    scell.unselect();
     // This select/unselect code cell triggers the "correct" heigth in the codemirror instance
-    var cells = Jupyter.notebook.get_cells();
-    for(var i in cells){
-      var cell = cells[i];
+    let cells = Jupyter.notebook.get_cells();
+    for (let cell of cells){
       if (cell.cell_type === "code") {
-        cell.select()
+        cell.select();
         cell.unselect();
       }
     }
@@ -644,14 +663,14 @@ define([
    */
   function smartExec() {
     // is it really the selected cell that matters ?
-    var smart_exec = Jupyter.notebook.get_selected_cell().smart_exec;
+    let smart_exec = Jupyter.notebook.get_selected_cell().smart_exec;
     if (smart_exec == 'smart_exec_slide') {
       Jupyter.notebook.execute_selected_cells();
     } else if (smart_exec == "smart_exec_fragment") {
       // let's see if the next fragment is visible or not
-      var cell = Jupyter.notebook.get_selected_cell();
-      var fragment_div = cell.smart_exec_next_fragment;
-      var visible = $(fragment_div).hasClass('visible');
+      let cell = Jupyter.notebook.get_selected_cell();
+      let fragment_div = cell.smart_exec_next_fragment;
+      let visible = $(fragment_div).hasClass('visible');
       if (visible) {
         Jupyter.notebook.execute_cell_and_select_below();
       } else {
@@ -678,27 +697,28 @@ define([
     }
   }
 
-  function KeysMessager() {
-    var message = $('<div/>').append(
+  function riseHelp() {
+    let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
-          "<li><kbd>Alt</kbd>+<kbd>r</kbd>: Enter/Exit RISE</li>" +
-          "<li><kbd>Space</kbd>: Next</li>" +
-          "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: Previous</li>" +
-          "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: Eval and select next cell if visible</li>" +
-          "<li><kbd>Home</kbd>: First slide</li>" +
-          "<li><kbd>End</kbd>: Last slide</li>" +
-          "<li><kbd>w</kbd>: Toggle overview mode</li>" +
-          "<li><kbd>,</kbd>: Toggle help and exit buttons</li>" +
-          "<li><kbd>.</kbd> or <kbd>/</kbd>: black screen</li>" +
-          "<li><strong>Not so useful:</strong>" +
+          "<li><kbd>Alt</kbd>+<kbd>r</kbd>: enter/exit RISE</li>" +
+          "<li><kbd>Space</kbd>: next</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: previous</li>" +
+          "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: eval and select next cell if visible</li>" +
+          "<li><kbd>Home</kbd>: first slide</li>" +
+          "<li><kbd>End</kbd>: last slide</li>" +
+          "<li><kbd>w</kbd>: toggle overview mode</li>" +
+          "<li><kbd>t</kbd>: toggle notes</li>" +
+          "<li><kbd>,</kbd>: toggle help and exit buttons</li>" +
+          "<li><kbd>/</kbd>: black screen</li>" +
+          "<li><strong>less useful:</strong>" +
             "<ul>" +
-            "<li><kbd>PgUp</kbd>: Up</li>" +
-            "<li><kbd>PgDn</kbd>: Down</li>" +
-            "<li><kbd>Left Arrow</kbd>: Left <em>(note: Space preferred)</em></li>" +
-            "<li><kbd>Right Arrow</kbd>: Right <em>(note: Shift Space preferred)</em></li>" +
+            "<li><kbd>PgUp</kbd>: up</li>" +
+            "<li><kbd>PgDn</kbd>: down</li>" +
+            "<li><kbd>Left Arrow</kbd>: left <em>(note: Space preferred)</em></li>" +
+            "<li><kbd>Right Arrow</kbd>: right <em>(note: Shift Space preferred)</em></li>" +
             "</ul>" +
-          "<li><strong>With chalkboard enabled:</strong>" +
+          "<li><strong>with chalkboard enabled:</strong>" +
             "<ul>" +
             "<li><kbd>[</kbd> toggle fullscreen chalkboard</li>" +
             "<li><kbd>]</kbd> toggle slide-local canvas</li>" +
@@ -707,7 +727,7 @@ define([
             "<li><kbd>-</kbd> delete fullscreen chalkboard</li>" +
             "</ul>" +
           "</ul>" +
-          "<b>NOTE: You have to use these shortcuts in command mode.</b>"
+          "<b>NOTE</b>: of course you have to use these shortcuts <b>in command mode.</b>"
       )
     );
 
@@ -721,17 +741,17 @@ define([
   }
 
   function buttonHelp() {
-    var help_button = $('<i/>')
+    let help_button = $('<i/>')
         .attr('id','help_b')
         .attr('title','Reveal Shortcuts Help')
         .addClass('fa-question fa-4x fa')
         .addClass('my-main-tool-bar')
-        .click(KeysMessager);
+        .click(riseHelp);
     $('.reveal').after(help_button);
   }
 
   function buttonExit() {
-    var exit_button = $('<i/>')
+    let exit_button = $('<i/>')
         .attr('id','exit_b')
         .attr('title','Exit RISE')
         .addClass('fa-times-circle fa-4x fa')
@@ -741,7 +761,7 @@ define([
   }
 
   function fullscreenHelp() {
-    var message = $('<div/>').append(
+    let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<b>Entering Fullscreen mode from inside RISE is disabled.</b>" +
           "<br>" +
@@ -792,8 +812,8 @@ define([
     $('.pause-overlay').hide();
     $('div#aria-status-div').hide();
 
-    var cells = Jupyter.notebook.get_cells();
-    for(var i in cells){
+    let cells = Jupyter.notebook.get_cells();
+    for(let i in cells){
       $('.cell:nth('+i+')').removeClass('reveal-skip');
       $('div#notebook-container').append(cells[i].element);
     }
@@ -857,47 +877,56 @@ define([
    * returns null if no match is found
    */
   function reveal_cell_index(notebook, cell_type=null, auto_select_fragment=false) {
-    var [slide, subslide, fragment] = reveal_current_position();
-
-    /* just scan all cells until we find one at that address
-     * except that we need to start at -1 or 0 depending on
-     * whether the first slide has a slide tag or not
+    /* scan all cells until we find one that matches current reveal location
+     * need to deal carefully with beginning of that process because
+     * (.) we do not impose a starting 'slide', and
+     * (.) the first cell(s) might be of type 'skip'
+     *     which then must not be counted
      */
-    var slide_counter = is_slide(notebook.get_cell(0)) ? -1 : 0;
-    var subslide_counter = 0;
-    var fragment_counter = 0;
-    var result = null;
+    let [slide, subslide, fragment] = reveal_current_position();
 
-    notebook.get_cells().forEach(function (cell, index) {
-      if (result) {
-        // keep it short: skip if we found already
-        return;
-      }
-      if (is_slide(cell)) {
-        slide_counter += 1;
-        subslide_counter = 0;
-      } else if (is_subslide(cell)) {
-        subslide_counter += 1;
-      }
+    // start at slide -1 because we don't impose a starting 'slide'
+    let [slide_counter, subslide_counter, fragment_counter] = [-1, 0, 0];
+    let result = null;
+
+    let cells = notebook.get_cells();
+    for (let index in cells) {
+        let cell = cells[index];
+        // ignore skip cells no matter what
+        if (is_skip(cell) || is_notes(cell))
+          continue;
+        // a slide always increments, even at the start, since we begin at -1
+        if (is_slide(cell)) {
+            slide_counter += 1;
+            subslide_counter = 0;
+        }
+        // if we see anything else then we're on a visible slide
+        // that has to be at least 0
+        slide_counter = Math.max(slide_counter, 0);
+        if (is_subslide(cell)) {
+            subslide_counter += 1;
+        }
+
       if ((slide_counter == slide) && (subslide_counter == subslide)) {
         // keep count of fragments but only on current slide
         if (is_fragment(cell)) {
-	  fragment_counter += 1;
+          fragment_counter += 1;
         }
         /* we're on the right slide
          * now: do we need to also worry about focusing on the right fragment ?
          * if auto_select_fragment is true, we only consider cells in the fragment
          * otherwise, the whole (sub)slide is considered valid
          */
-        var fragment_match = (auto_select_fragment) ? (fragment_counter == fragment) : true;
+        let fragment_match = (auto_select_fragment) ? (fragment_counter == fragment) : true;
         // we still need to match cell types
         if ( fragment_match &&
-	     ((cell_type === null) || (cell.cell_type == cell_type))) {
-	  result = index;
+	         ((cell_type === null) || (cell.cell_type == cell_type))) {
+	      return index;
         }
       }
-    })
-    return result;
+    }
+    // for consistency with previous implementations
+    return null;
   }
 
   function registerJupyterActions() {
@@ -907,20 +936,20 @@ define([
     let actions = Jupyter.notebook.keyboard_manager.actions;
 
     // register main action
-    actions.register({ help    : 'Enter/Exit RISE Slideshow',
-                       handler : revealMode,
-                     },
-                     "slideshow", "RISE");
+    actions.register(
+        {help:    "Enter/Exit RISE Slideshow",
+         handler: revealMode},
+        "slideshow", "RISE");
 
-    actions.register({ help: "execute cell, and move to the next if on the same slide",
-                       handler: smartExec,
-                     },
-                     "smart-exec", "RISE");
+    actions.register(
+        {help:    "execute cell, and move to the next if on the same slide",
+         handler: smartExec},
+        "smart-exec", "RISE");
 
     // helpers for toggling slide_type
     function init_metadata_slideshow(optional_cell) {
       // use selected cell if not specified
-      var cell = optional_cell || Jupyter.notebook.get_selected_cell();
+      let cell = optional_cell || Jupyter.notebook.get_selected_cell();
       let metadata = cell.metadata;
       if (metadata.slideshow === undefined)
         metadata.slideshow = {};
@@ -934,49 +963,43 @@ define([
       Jupyter.CellToolbar.rebuild_all();
     }
 
-    actions.register({ help   : '(un)set current cell as a Slide cell',
-                       handler: function() { toggle_slide_type('slide'); }
-                     },
-                     "toggle-slide", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Slide cell',
+         handler: () => toggle_slide_type('slide')},
+        "toggle-slide", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Sub-slide cell',
-                       handler: function() { toggle_slide_type('subslide'); }
-                     },
-                     "toggle-subslide", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Sub-slide cell',
+         handler: () => toggle_slide_type('subslide')},
+        "toggle-subslide", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Fragment cell',
-                       handler: function() { toggle_slide_type('fragment'); }
-                     },
-                     "toggle-fragment", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Fragment cell',
+         handler: () => toggle_slide_type('fragment')},
+        "toggle-fragment", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Note cell',
-                       handler: function() { toggle_slide_type('note'); }
-                     },
-                     "toggle-notes", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Note cell',
+         handler: () => toggle_slide_type('notes')},
+        "toggle-notes", "RISE");
 
-    actions.register({ help   : '(un)set current cell as a Skip cell',
-                       handler: function() { toggle_slide_type('skip'); }
-                     },
-                     "toggle-skip", "RISE");
+    actions.register(
+        {help   : '(un)set current cell as a Skip cell',
+         handler: () => toggle_slide_type('skip')},
+        "toggle-skip", "RISE");
 
 
-    actions.register({ help   : 'render all cells (all cells go to command mode)',
-                       handler: function() {
-                         Jupyter.notebook.get_cells().forEach(function(cell){
-	                   cell.render();
-                         })
-                       }
-                     },
-                     "render-all-cells", "RISE");
+    actions.register(
+        {help   : 'render all cells (all cells go to command mode)',
+         handler: () => Jupyter.notebook.get_cells().forEach(
+             cell => cell.render())},
+        "render-all-cells", "RISE");
 
-    actions.register({ help   : 'edit all cells (all cells go to edit mode)',
-                       handler: function() {
-                         Jupyter.notebook.get_cells().forEach(function(cell){
-	                   cell.unrender();
-                         })
-                       }
-                     },
-                     "edit-all-cells", "RISE");
+    actions.register(
+        {help   : 'edit all cells (all cells go to edit mode)',
+         handler: () => Jupyter.notebook.get_cells().forEach(
+            cell => cell.unrender())},
+        "edit-all-cells", "RISE");
 
     // because the `Edit Keyboard Shortcuts` utility does not mention the
     // actions prefix (i.e. 'RISE' in our case), we choose to make these two
@@ -988,26 +1011,29 @@ define([
       window.open(url, '_blank');
     }
 
-    actions.register({ help: 'open the nbconfigurator page for RISE',
-                       handler: nbconfigurator},
-                     "rise-nbconfigurator", "RISE");
+    actions.register(
+        {help: 'open the nbconfigurator page for RISE',
+         handler: nbconfigurator},
+        "rise-nbconfigurator", "RISE");
 
     // mostly for debug / information
-    actions.register({ help   : 'output RISE configuration in console, for debugging mostly',
-                       handler: showConfig},
-                     "rise-dump-config", "RISE");
+    actions.register(
+        {help   : 'output RISE configuration in console, for debugging mostly',
+         handler: showConfig},
+        "rise-dump-config", "RISE");
 
   }
+
 
   // the entrypoint - call this to enter or exit reveal mode
   function revealMode() {
     // We search for a class tag in the maintoolbar to check if reveal mode is "on".
     // If the tag exits, we exit. Otherwise, we enter the reveal mode.
-    var tag = $('#maintoolbar').hasClass('reveal_tagging');
+    let tag = $('#maintoolbar').hasClass('reveal_tagging');
 
     if (!tag) {
       // Preparing the new reveal-compatible structure
-      var selected_slide = markupSlides($('div#notebook-container'));
+      let selected_slide = markupSlides($('div#notebook-container'));
       // Adding the reveal stuff
       Revealer(selected_slide);
       // Minor modifications for usability
@@ -1016,7 +1042,11 @@ define([
       buttonHelp();
       $('#maintoolbar').addClass('reveal_tagging');
     } else {
-      var current_cell_index = reveal_cell_index(Jupyter.notebook);
+      let current_cell_index =
+         // first use current selection if relevant
+        Jupyter.notebook.get_selected_index()
+        // resort to first cell in visible slide otherwise
+        || reveal_cell_index(Jupyter.notebook);
       Remover();
       setupKeys("notebook_mode");
       $('#exit_b').remove();
@@ -1027,15 +1057,14 @@ define([
       // select and focus on current cell
       Jupyter.notebook.select(current_cell_index);
       // Need to delay the action a little bit so it actually focus the selected slide
-      setTimeout(function(){ Jupyter.notebook.get_selected_cell().ensure_focused(); }, 500);
+      setTimeout(() => Jupyter.notebook.get_selected_cell().ensure_focused(),
+                 complete_config.restore_timeout);
     }
   }
 
-  let autoSelectTimeout = 250;
-
   function autoSelectHook() {
-    var auto_select = complete_config.auto_select;
-    var cell_type =
+    let auto_select = complete_config.auto_select;
+    let cell_type =
         (auto_select == "code") ? 'code'
 	: (auto_select == "first") ? null
 	: undefined;
@@ -1045,12 +1074,14 @@ define([
       return;
     }
 
-    var auto_select_fragment = complete_config.auto_select_fragment;
+    let auto_select_fragment = complete_config.auto_select_fragment;
     setTimeout(function(){
-      var current_cell_index = reveal_cell_index(Jupyter.notebook, cell_type, auto_select_fragment);
+      let current_cell_index = reveal_cell_index(
+          Jupyter.notebook, cell_type, auto_select_fragment);
       // select and focus on current cell
-      Jupyter.notebook.select(current_cell_index)
-    }, autoSelectTimeout);
+      if (current_cell_index)
+        Jupyter.notebook.select(current_cell_index);
+    }, complete_config.auto_select_timeout);
   }
 
   function addButtonsAndShortcuts() {
@@ -1085,7 +1116,7 @@ define([
   function setup() {
     // load css first
     $('<link/>')
-      .attr({rel: " stylesheet",
+      .attr({rel: "stylesheet",
              href: require.toUrl("./main.css"),
              id: 'maincss',
             })

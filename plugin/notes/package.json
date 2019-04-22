@@ -1,7 +1,7 @@
 
 {
   "name": "notes_rise",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Customized notes reveal.js plugin used by RISE",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,6 @@
     "slides",
     "jupyter"
   ],
-  "author": "Damian Avila <info@oquanta.info> (http://www.damian.oquanta.info/)",
+  "author": "Damian Avila <damianavila82@yahoo.com.ar> (http://damianavila.github.io/blog/)",
   "license": "MIT"
 }

@@ -64,7 +64,7 @@ setup_args = dict(
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
     author="Damián Avila",
-    author_email="info@oquanta.info",
+    author_email="damianavila82@yahoo.com.ar",
     project_urls={
         'source': "http://github.com/damianavila/RISE",
         'documentation': "http://rise.readthedocs.io",

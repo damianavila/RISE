@@ -66,3 +66,16 @@ per-save automatic building of CSS, and for that you can use:
 
 which will update the `css` code from `less` each time a change
 happens on the disk. Kill with Control-C when you are done.
+
+### Plugins development
+
+We currently have a custom plugin for the notes: `notes_rise`
+If you need to modify this part of the codebase, after you are happy with your changes, you need to login to npm and push the package containing your changes (the package will be build and upload by the `npm publish` command):
+
+```
+cd /plugin/notes/
+npm login
+npm publish
+```
+
+Finally, you need to update the main package.json file at the root directory to grab the new version you just published.

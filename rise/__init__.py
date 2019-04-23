@@ -1,4 +1,3 @@
-# from .version import version_info, __version__
 import pkg_resources
 
 __version__ = pkg_resources.require("rise")[0].version

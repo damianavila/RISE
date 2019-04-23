@@ -23,7 +23,7 @@ Essentially you will need:
 
     npm install
 
-**Step 2.** Copy reveal into the static folder and reset reveal.js styling:
+**Step 2.** Copy reveal (plus others) into the static folder and reset reveal.js styling:
 
     npm run build
 
@@ -44,18 +44,13 @@ Second, let's install RISE in a editable form:
 **Notes**:
 
 * the `--symlink` argument is meant to allow you to modify the
-  JavaScript code in-place.
-
-* This feature however is probably not available in Win.
+  JavaScript code in-place. This feature however is probably not available in Win.
 
 * If you cannot use this *symlink* trick, you will need to
-  "re-install" the nbextension to actually see any changes you made.
+  "re-install" the nbextension to actually see any changes you made on th JS files.
 
 * Also please make sure to properly and thoroughly reload your page in the browser;
   using *Shift* when reloading is generally a good idea.
-
-* Finally, note that as of version 5.3.0, explicitly enabling the extension
-  should no longer be required.
 
 ### Convenience
 

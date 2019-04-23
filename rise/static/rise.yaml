@@ -124,11 +124,11 @@ Parameters:
 - name: rise.shortcuts.toggle-subslide
   description: <code>rise.shortcuts.toggle-subslide</code> shortcut to toggle the 'subslide' tag on current cell
   input_type: hotkey
-  default: shift-u
+  default: shift-b
 - name: rise.shortcuts.toggle-fragment
   description: <code>rise.shortcuts.toggle-fragment</code> shortcut to toggle the 'fragment' tag on current cell
   input_type: hotkey
-  default: shift-f
+  default: shift-g
 - name: rise.shortcuts.toggle-notes
   description: <code>rise.shortcuts.toggle-notes</code> shortcut to toggle the 'notes' tag on current cell
   input_type: hotkey
@@ -153,6 +153,23 @@ Parameters:
   default: shift-c
 
 #
+# mostly intended for developers
+#
+- name: rise.auto_select_timeout
+  description: >
+    timeout in milliseconds before auto-selecting; mostly
+    intended for developers.
+  input_type: number
+  default: 500
+
+- name: rise.restore_timeout
+  description: >
+    timeout in milliseconds before restoring focus to selected cell
+    when quitting slideshow mode; mostly intended for developers.
+  input_type: number
+  default: 500
+
+#
 # passed to reveal as-is
 #
 - name: rise.theme
@@ -169,7 +186,7 @@ Parameters:
 #
 - name: rise.transition
   description: >
-    <code>transition</code>: at least available: none - fade - slide - convex - concave - zoom - cube - linear
+    <code>transition</code>: at least available: none - fade - slide - convex - concave - zoom - cube - linear; see also <code>reveal.js</code>.
   input_type: string
   default: 'linear'
 #

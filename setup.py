@@ -15,8 +15,6 @@ Packaging
 import os
 from setuptools import setup, find_packages
 
-#from rise.version import __version__ as version
-
 NAME = "rise"
 
 INSTALL_REQUIRES = [

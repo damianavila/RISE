@@ -23,7 +23,7 @@ Detailed Contents
    usage.md
    resources.md 
    customize.md 
-   exportpdf.rst
+   exportpdf.md
    changelog.rst
    dev/index.rst
 

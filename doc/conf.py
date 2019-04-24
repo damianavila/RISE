@@ -69,7 +69,7 @@ release = rise_version
 
 # General information about the project.
 project = 'RISE ' + release
-copyright = '2013-2018, Damián Avila'
+copyright = '2013-2019, Damián Avila'
 author = 'Damian Avila'
 
 html_title = "RISE " + release

@@ -8,8 +8,8 @@ and back.
 ![Basic usage](https://media.giphy.com/media/3oxHQtTxAaZwMOHr9u/giphy.gif)
 
 ## Resources
-RISE stands for
-***Reveal.js - Jupyter/IPython Slideshow Extension***:
+
+RISE stands for ***Reveal.js - Jupyter/IPython Slideshow Extension***:
 
 * Demo notebook (no installation required)
   * [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2FREADME.ipynb)
@@ -19,10 +19,9 @@ RISE stands for
 
 * Documentation is hosted on readthedocs
   * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
-  * Note / check out another location here that is planned to be phased out: <https://damianavila.github.io/RISE/>
 
 * Chat room on gitter
-  * [![Gitter chat](https://badges.gitter.im/damianavila/RISE.png)](https://gitter.im/damianavila/RISE "Gitter chat")
+  * [![Gitter chat](https://badges.gitter.im/damianavila/RISE.png)](https://gitter.im/damianavila/RISE)
 
 * Videos on youtube
   * basic usage (4'30'')
@@ -32,47 +31,27 @@ RISE stands for
 
 ## Installation
 
-From the most simple to the most complex one, you have 3 options:
+You essentially have 2 options:
 
-### Option 1 - Using conda (recommended):
+### Option 1 - Using conda:
 
 ```
 conda install -c conda-forge rise
 ```
 
-If you are a Julia user, you can do this from the Julia REPL with
+**Note**: If you are a Julia user, you can also install it from the Julia REPL with:
+
 ```
 using Conda
 Conda.add_channel("conda-forge")
 Conda.add("rise")
 ```
 
-### Option 2 - Using pip (less recommended):
+### Option 2 - Using pip:
 
 ```
 pip install RISE
 ```
-
-### Option 3 - The old way (are sure sure you want to go this path?):
-
-To install this nbextension, simply run ``python setup.py install`` from the
-*RISE* repository (please use the latest tag available or try master if you want).
-
-And then two more steps to install the JS and CSS in the proper places
-and enable the extension:
-
-```
-jupyter-nbextension install rise --py --sys-prefix
-jupyter-nbextension enable rise --py --sys-prefix
-```
-
-### Conclusion
-
-If you use conda, life will be easy ;-)
-
-**NOTE**: in all the options available the `--sys-prefix` option will install and
-enable the extension in the current environment, if you want a `--user` based or a
-`--system` based installation just use those options instead in the above commands.
 
 ## Development
 
@@ -82,5 +61,4 @@ documentation.
 
 ## Feedback
 
-If you have any feedback, or find any bugs, please let me know just opening
-an issue.
+If you have any feedback, or find any bugs, please let us know just opening an issue.

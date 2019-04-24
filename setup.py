@@ -15,8 +15,6 @@ Packaging
 import os
 from setuptools import setup, find_packages
 
-from rise.version import __version__ as version
-
 NAME = "rise"
 
 INSTALL_REQUIRES = [
@@ -44,6 +42,14 @@ for (path, dirs, files) in os.walk(os.path.join("rise", "static")):
     dst = nbext + path.split(os.sep)[2:]
     DATA_FILES.append((os.path.join(*dst), srcfiles))
 
+# version string is extracted from toplevel package.json
+import json
+with open('package.json') as package_json:
+    content = package_json.read()
+version = json.loads(content)['version']
+# from npm server into python semver
+if "-dev." in version:
+    version = version.replace("-dev.", ".dev")
 
 setup_args = dict(
     name=NAME,
@@ -56,7 +62,7 @@ setup_args = dict(
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
     author="Damián Avila",
-    author_email="info@oquanta.info",
+    author_email="damianavila82@yahoo.com.ar",
     project_urls={
         'source': "http://github.com/damianavila/RISE",
         'documentation': "http://rise.readthedocs.io",

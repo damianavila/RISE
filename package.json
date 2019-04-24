@@ -10,7 +10,7 @@
     "less-plugin-clean-css": "~1.5.0",
     "reveal.js": "~3.5.0",
     "reveal.js-chalkboard": "~1.0.0",
-    "notes_rise": "~1.0.0",
+    "notes_rise": "~1.0.1",
     "watch": "~0.16.0"
   },
   "license": "BSD-3-Clause",
@@ -29,5 +29,5 @@
     "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less rise/static/main.css",
     "watch-less": "./node_modules/.bin/watch 'npm run less' src/less"
   },
-  "version": "5.4.1"
+  "version": "5.4.2-dev.0"
 }

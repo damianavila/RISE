@@ -39,14 +39,6 @@ You essentially have 2 options:
 conda install -c conda-forge rise
 ```
 
-**Note**: If you are a Julia user, you can also install it from the Julia REPL with:
-
-```
-using Conda
-Conda.add_channel("conda-forge")
-Conda.add("rise")
-```
-
 ### Option 2 - Using pip:
 
 ```

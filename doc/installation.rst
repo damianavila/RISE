@@ -6,40 +6,39 @@ Installation
    To install RISE in development mode, see
    the `Developer Documentation <dev/index.rst>`_.
 
-From the most simple to the most complex one, you have 3 options:
+You essentially have 2 options:
 
-1 - Using conda (recommended)::
+1 - Using conda ::
 
- conda install -c damianavila82 rise
-
-2 - Using pip (less recommended)::
-
- pip install RISE
-
-and then one more step to install the JS and CSS in the proper places::
-
- jupyter-nbextension install rise --py --sys-prefix
-
-3 - The old way (are sure sure you want to go this path?):
-
-To install this nbextension, simply run ``python setup.py install`` from the
-*RISE* repository (please use the latest tag available or try master if you want).
-
-And then the same two step described in the pip-based installation::
-
- jupyter-nbextension install rise --py --sys-prefix
-
-and::
-
- jupyter-nbextension enable rise --py --sys-prefix
-
-Conclusion: If you use conda, life will be easy ;-)
+ conda install -c conda-forge rise
 
 .. note::
 
-   In all the options available the ``--sys-prefix`` option will install and
-   enable the extension in the current environment, if you want a ``--user`` based or a
-   ``--system`` based installation just use those option instead in the above commands.
+   Previously, we provided packages in the `damianavila82` channel,
+   going forward please use the `conda-forge` channel because newest versions
+   will not be published in the `damianavila82` channel anymore.
+
+.. note::
+
+    If you are a Julia user, you can also install it from the Julia REPL with:
+
+    ```
+    using Conda
+    Conda.add_channel("conda-forge")
+    Conda.add("rise")
+    ```
+
+2 - Using pip ::
+
+ pip install RISE
+
+.. note::
+
+   Before RISE 5.4.2, it was necessary to perform one more step to install the JS and CSS in the proper places with ::
+
+     jupyter-nbextension install rise --py --sys-prefix
+
+   This is **no** needed anymore because those resources are installed automatically by the setup.py.
 
 
 Disable and Removal
@@ -53,6 +52,6 @@ If you want to remove it from your environment::
 
  jupyter-nbextension uninstall rise --py --sys-prefix
 
-Alternative, you can also remove it with conda (if you already installed it using conda)::
+Alternative, you can also remove it with conda (if you already installed it using conda) with::
 
  conda remove rise

@@ -10,7 +10,7 @@ You essentially have 2 options:
 
 1 - Using conda ::
 
- conda install -c conda-forge rise
+  conda install -c conda-forge rise
 
 .. note::
 
@@ -18,19 +18,15 @@ You essentially have 2 options:
    going forward please use the `conda-forge` channel because newest versions
    will not be published in the `damianavila82` channel anymore.
 
-.. note::
+If you are a Julia user, you can also install it from the Julia REPL with ::
 
-    If you are a Julia user, you can also install it from the Julia REPL with:
-
-    ```
-    using Conda
-    Conda.add_channel("conda-forge")
-    Conda.add("rise")
-    ```
+  using Conda
+  Conda.add_channel("conda-forge")
+  Conda.add("rise")
 
 2 - Using pip ::
 
- pip install RISE
+  pip install RISE
 
 .. note::
 
@@ -38,7 +34,7 @@ You essentially have 2 options:
 
      jupyter-nbextension install rise --py --sys-prefix
 
-   This is **no** needed anymore because those resources are installed automatically by the setup.py.
+   This is **not** needed anymore because those resources are installed automatically by the `setup.py` when you `pip install` the package.
 
 
 Disable and Removal
@@ -46,12 +42,12 @@ Disable and Removal
 
 You can disable RISE with::
 
- jupyter-nbextension disable rise --py --sys-prefix
+  jupyter-nbextension disable rise --py --sys-prefix
 
 If you want to remove it from your environment::
 
- jupyter-nbextension uninstall rise --py --sys-prefix
+  jupyter-nbextension uninstall rise --py --sys-prefix
 
 Alternative, you can also remove it with conda (if you already installed it using conda) with::
 
- conda remove rise
+  conda remove rise

@@ -19,6 +19,7 @@ compatible with previous IPython versions:
     *  5.2.0 tag compatible with `notebook` >= 5.0.0
     *  5.3.0 tag compatible with `notebook` >= 5.5.0
     *  5.4.1 tag compatible with `notebook` >= 5.5.0
+    *  5.5.0 tag compatible with `notebook` >= 5.5.0
 
 3. With **Jupyter** landing we will provide a conda and pip-installable packages too
 
@@ -43,8 +44,10 @@ Changes
   * Fix some typos and examples, add more docs, fix margin-bottom css (https://github.com/damianavila/RISE/pull/467)
   * Add redirection page in gh-pages pointing to the official docs (commit a161a65ea93062ebf7715a5fccc152b70c6f6262)
   * Create 5.4.2 conda packages on conda-forge (https://github.com/conda-forge/rise-feedstock/pull/21)
+  * Fix changelog formatting (https://github.com/damianavila/RISE/pull/470)
 
 * 5.4.1
+
   * Support chalkboard functionality (https://github.com/damianavila/RISE/pull/355)
   * Support speaker notes (https://github.com/damianavila/RISE/issues/174)
   * Use a version number that npm can understand (https://github.com/damianavila/RISE/pull/410)

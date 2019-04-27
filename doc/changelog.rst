@@ -27,6 +27,23 @@ compatible with previous IPython versions:
 Changes
 =======
 
+* 5.5.0
+
+  * Updates channel to conda-forge (https://github.com/damianavila/RISE/pull/422)
+  * New keys shortcuts to toggle slidetype, update examples, fix auto-select feature broken with an initial invisible 'skip' cell, make auto_select_timeout configurable, hide chalkboard buttons (https://github.com/damianavila/RISE/pull/436)
+  * Install the nbextension as part of "pip install" (https://github.com/damianavila/RISE/pull/444)
+  * Release docs updates (https://github.com/damianavila/RISE/pull/457)
+  * Remove duplicated text in notes view (https://github.com/damianavila/RISE/pull/458)
+  * Fix x-scrolling bar in markdown cells containing code (https://github.com/damianavila/RISE/pull/459)
+  * Upload author email and blog url, also bump notes_rise version (https://github.com/damianavila/RISE/pull/460)
+  * Migrate pdfexport docs from rst to md (https://github.com/damianavila/RISE/pull/461)
+  * Enhance docs, new versioning stuff, reference latest notes_rise and fix remaining old email (https://github.com/damianavila/RISE/pull/463)
+  * More docs updates towards the upcoming release (https://github.com/damianavila/RISE/pull/464)
+  * Fix formatting in installation.rst (https://github.com/damianavila/RISE/pull/465)
+  * Fix some typos and examples, add more docs, fix margin-bottom css (https://github.com/damianavila/RISE/pull/467)
+  * Add redirection page in gh-pages pointing to the official docs (commit a161a65ea93062ebf7715a5fccc152b70c6f6262)
+  * Create 5.4.2 conda packages on conda-forge (https://github.com/conda-forge/rise-feedstock/pull/21)
+
 * 5.4.1
   * Support chalkboard functionality (https://github.com/damianavila/RISE/pull/355)
   * Support speaker notes (https://github.com/damianavila/RISE/issues/174)

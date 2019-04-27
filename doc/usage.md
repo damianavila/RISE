@@ -112,7 +112,7 @@ slides by running a cell and because some problem arises when you inject
 new cells on the fly. When you exit the presentation mode, the behavior
 comes back to normal.
 
-## Speaker notes
+### Speaker notes
 
 Starting RISE 5.4.1, we support the `Reveal.js` speaker notes plugin.
 All the content you write on **notes** cells will be shown in this view (a separate browser window).

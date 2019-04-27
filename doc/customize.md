@@ -188,7 +188,7 @@ use the following configuration:
 ### Enable chalkboard capabilities
 
 Starting RISE 5.4.1, we provide some new chalkboard capabilities.
-To enable it, use the following configuration:
+To enable them, use the following configuration:
 
     {
      ...
@@ -196,8 +196,8 @@ To enable it, use the following configuration:
     }
 
 When enabled, this plugin adds two buttons next to the help button.
-The first one provides you a black board.
-The second one allows you to draw on **top** if the current slide.
+The first one provides you with a black board.
+The second one allows you to draw **on top** of the current slide.
 
 It also reacts to the following additional keyboard commands:
 * `[` to turn the whole space into an empty chalkboard

@@ -48,6 +48,6 @@ If you want to remove it from your environment::
 
   jupyter-nbextension uninstall rise --py --sys-prefix
 
-Alternative, you can also remove it with conda (if you already installed it using conda) with::
+Alternatively, you can also remove it with conda (if you already installed it using conda) with::
 
   conda remove rise

@@ -12,7 +12,6 @@ Instructions and notes for preparing and publishing a release.
 
     npm install
     npm run build
-    npm run build-css
 
 **Step 3.** Check for updated version numbers in
 

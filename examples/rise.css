@@ -55,3 +55,9 @@ div.plan-container {
 div.cell.code_cell.rendered, div.input_area {
     border-width: 10px;
 }
+
+/* this is only to check that rise.css properly gets
+ * ignored when quitting reveal mode */
+div.text_cell_render.rendered_html {
+    color: #5050b0;
+}

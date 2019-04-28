@@ -492,21 +492,13 @@ define([
       let name_css = name.replace(".ipynb", ".css");
       // typically /files/examples/
       let prefix = `/files/${path.replace(name, '')}`;
-      // rise.css stylesheet: either insert a <link> object,
-      // or enable it if present
-      if ($('#rise-custom-css').length == 0) {
-        $('head').append(
+      // Attempt to load rise.css
+      $('head').append(
           `<link rel="stylesheet" href="${prefix}rise.css" id="rise-custom-css" />`);
-      } else {
-        $('#rise-custom-css').prop('disabled', false);
-      }
-      // same with the stylesheet named after the notebook
-      if ($('#rise-notebook-css').length == 0) {
-        $('head').append(
+      // Attempt to load css with the same path as notebook
+      $('head').append(
           `<link rel="stylesheet" href="${prefix}${name_css}" id="rise-notebook-css" />`);
-        } else {
-          $('#rise-notebook-css').prop('disabled', false);
-        }
+
     }
 
     function toggleAllRiseButtons() {
@@ -811,8 +803,8 @@ define([
 
     $('#theme').remove();
     $('#revealcss').remove();
-    $('#rise-custom-css').prop('disabled', true);
-    $('#rise-notebook-css').prop('disabled', true);
+    $('#rise-custom-css').remove();
+    $('#rise-notebook-css').remove();
 
     $('.backgrounds').hide();
     $('.progress').hide();

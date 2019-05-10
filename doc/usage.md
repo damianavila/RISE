@@ -32,10 +32,6 @@ it will not appear either in the main view, nor in the speaker view.
 * **notes**: similarly, this cell is marked to be discarded from
   the main view, but is meant to appear in the speaker view.
 
-**Note** that as of RISE version 5.3, the support for speaker view is not
-  working, so the *notes* cells will not show up at all either
-  when in *reveal* mode.
-
 **Keyboard shortcuts**
 
 Starting with version 5.1.0 you can customize some keyboard shortcuts using
@@ -115,6 +111,13 @@ run the cell (same as `Ctrl-Enter`). This is intentional to not switch
 slides by running a cell and because some problem arises when you inject
 new cells on the fly. When you exit the presentation mode, the behavior
 comes back to normal.
+
+### Speaker notes
+
+Starting RISE 5.4.1, we support the `Reveal.js` speaker notes plugin.
+All the content you write on **notes** cells will be shown in this view (a separate browser window).
+That view also provides a timer and a preview of the next upcoming slide.
+You should press the `t` key to open the speaker notes view.
 
 ### JupyterLab
 

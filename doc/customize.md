@@ -15,6 +15,7 @@ details](#how-to-customize) on how to implement those settings.
 * [slide sizes](#change-the-width-and-height-of-slides)
 * [decoration (header/footer/background)](#decorating-all-slides)
 * [vertical scrollbar](#enable-a-right-scroll-bar)
+* [chalkboard capabilities](#enable-chalkboard-capabilities)
 * [using a leap motion controller](#usage-with-leap-motion)
 * [native `reveal.js` settings](#reveal-js-configuration-options)
 * [custom CSS](#adding-custom-css)
@@ -112,7 +113,7 @@ configuration:
               "height": "90%"}
     }
 
-**Important notes**
+**Notes**
 
 * remember that you can always use your browser's shortcuts to zoom
 in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`), and this way adjust the slide
@@ -183,6 +184,28 @@ use the following configuration:
      ...
      "rise": {"scroll": true}
     }
+
+### Enable chalkboard capabilities
+
+Starting RISE 5.4.1, we provide some new chalkboard capabilities.
+To enable them, use the following configuration:
+
+    {
+     ...
+     "rise": {"enable_chalkboard": true}
+    }
+
+When enabled, this plugin adds two buttons next to the help button.
+The first one provides you with a black board.
+The second one allows you to draw **on top** of the current slide.
+
+It also reacts to the following additional keyboard commands:
+* `[` to turn the whole space into an empty chalkboard
+* `]` to start adding free drawings to the current slide
+* `\` to download chalkboard drawing
+* `=` to reset chalkboard drawing on the current slide
+* `-` to clear the chalkboard
+
 
 ### Usage with Leap Motion
 

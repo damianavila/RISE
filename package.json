@@ -21,8 +21,9 @@
     "url": "https://github.com/damianavila/RISE.git"
   },
   "scripts": {
-    "build": "for target in build-css build-reveal reset-reveal; do npm run $target; done",
+    "build": "for target in build-css patch-themes build-reveal reset-reveal; do npm run $target; done",
     "build-css": "npm run less",
+    "patch-themes": "sed -i.patch 's|^body {|body.notebook_app.rise-enabled {|' node_modules/reveal.js/css/theme/*.css",
     "build-reveal": "for dep in reveal.js reveal.js-chalkboard notes_rise; do cp -r ./node_modules/$dep/ rise/static/$dep/; done",
     "reset-reveal": "sed -i.upstream '11 s_^_/*_' rise/static/reveal.js/css/reveal.css",
     "clean-reveal": "for dep in reveal.js reveal.js-chalkboard notes_rise; do rm -rf rise/static/$dep; done",

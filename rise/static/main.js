@@ -497,7 +497,7 @@ define([
           `<link rel="stylesheet" href="${prefix}rise.css" id="rise-custom-css" />`);
       // Attempt to load css with the same path as notebook
       $('head').append(
-          `<link rel="stylesheet" href="${prefix}${name_css}" id="notebook-custom-css" />`);
+          `<link rel="stylesheet" href="${prefix}${name_css}" id="rise-notebook-css" />`);
 
     }
 
@@ -803,6 +803,8 @@ define([
 
     $('#theme').remove();
     $('#revealcss').remove();
+    $('#rise-custom-css').remove();
+    $('#rise-notebook-css').remove();
 
     $('.backgrounds').hide();
     $('.progress').hide();

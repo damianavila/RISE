@@ -1,9 +1,9 @@
 /* this goes with my global default setting
  * that has rise use reveal's theme sky
  */
-.reveal {
+/*.reveal {
     font-family: "Quicksand", sans-serif;
-}
+}*/
 
 .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
     text-transform: initial;   /* sky.css says uppercase */

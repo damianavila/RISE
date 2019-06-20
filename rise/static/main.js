@@ -470,15 +470,13 @@ define([
     // Header
     // Available themes are in static/css/theme
     let theme = complete_config.theme;
-    $('head')
-      .prepend('<link rel="stylesheet" href='
-               + require.toUrl("./reveal.js/css/theme/" + theme + ".css")
-               + ' id="theme" />');
+    let theme_path = `./reveal.js/css/theme/${theme}.css`;
+    $('head').prepend(
+      `<link rel="stylesheet" href="${require.toUrl(theme_path)}" id="theme" />`);
     // Add reveal css
-    $('head')
-      .prepend('<link rel="stylesheet" href='
-               + require.toUrl("./reveal.js/css/reveal.css")
-               + ' id="revealcss" />');
+    let main_path = "./reveal.js/css/reveal.css";
+    $('head').prepend(
+      `<link rel="stylesheet" href="${require.toUrl(main_path)}" id="revealcss" />`);
 
     /* this policy of trying ./rise.css and then <notebook>.css
      * should be redefinable in the config

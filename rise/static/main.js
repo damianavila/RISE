@@ -470,6 +470,7 @@ define([
     // Header
     // Available themes are in static/css/theme
     let theme = complete_config.theme;
+    $('body').addClass(`theme-${theme}`);
     let theme_path = `./reveal.js/css/theme/${theme}.css`;
     $('head').prepend(
       `<link rel="stylesheet" href="${require.toUrl(theme_path)}" id="theme" />`);
@@ -791,6 +792,8 @@ define([
     Reveal.configure({minScale: 1.0});
     Reveal.removeEventListeners();
     $('body').removeClass("rise-enabled");
+    let theme = complete_config.theme;
+    $('body').removeClass(`theme-${theme}`);
     $('div#header').show();
 
     $('div#notebook').removeClass("reveal");

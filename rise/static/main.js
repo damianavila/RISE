@@ -507,7 +507,9 @@ define([
 
     // Tailer
     require([
-      './reveal.js/lib/js/head.min.js',
+      // no longer current
+      // https://github.com/hakimel/reveal.js/commit/29b0e86089eb3ec0d4bb5811c9b723dfcf36703c
+      // './reveal.js/lib/js/head.min.js',
       './reveal.js/js/reveal.js'
     ].map(require.toUrl),
             function(){

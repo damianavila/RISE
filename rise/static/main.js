@@ -490,7 +490,10 @@ define([
       // asscosiated css
       let name_css = name.replace(".ipynb", ".css");
       // typically /files/examples/
-      let prefix = `/files/${path.replace(name, '')}`;
+      if (typeof($('body').attr("data-base-url")) == 'undefined') {
+          $('body').attr("data-base-url", '/')
+      }
+      let prefix = $('body').attr("data-base-url") + `files/${path.replace(name, '')}`;
       // Attempt to load rise.css
       $('head').append(
           `<link rel="stylesheet" href="${prefix}rise.css" id="rise-custom-css" />`);

@@ -1,39 +1,46 @@
 {
+  "name": "rise",
+  "description": "Edit and Present Revealjs-based LIVE slides in the Jupyter Notebook",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "reveal.js",
+    "RISE",
+    "Jupyter",
+    "slideshow",
+    "slides"
+  ],
   "author": {
     "name": "Damián Avila",
     "url": "https://github.com/damianavila"
   },
   "contributors": [
-     { "name": "Thierry Parmentelat",
-       "url": "https://github.com/parmentelat"
-     }
+    {
+      "name": "Thierry Parmentelat",
+      "url": "https://github.com/parmentelat"
+    }
   ],
-  "description": "Edit and Present Revealjs-based LIVE slides in the Jupyter Notebook",
-  "devDependencies": {
-    "less": "~2.7.2",
-    "less-plugin-autoprefix": "~1.4.2",
-    "less-plugin-clean-css": "~1.5.0",
-    "reveal.js": "~3.8.0",
-    "reveal.js-chalkboard": "~1.0.0",
-    "notes_rise": "~1.0.1",
-    "watch": "~0.16.0"
-  },
-  "license": "BSD-3-Clause",
-  "main": "rise/static/main.js",
-  "name": "rise",
+  "homepage": "https://github.com/damianavila/RISE/tree/classic/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/damianavila/RISE"
   },
+  "bugs": {
+    "url": "https://github.com/damianavila/RISE/issues"
+  },
+  "main": "rise/static/main.js",
   "scripts": {
-    "build": "for target in build-css patch-themes build-reveal reset-reveal; do npm run $target; done",
-    "build-css": "npm run less",
-    "patch-themes": "bash patch-reveal/patch-reveal-themes.sh",
-    "build-reveal": "for dep in reveal.js reveal.js-chalkboard notes_rise; do cp -r ./node_modules/$dep/ rise/static/$dep/; done",
-    "reset-reveal": "sed -i.upstream '11 s_^_/*_' rise/static/reveal.js/css/reveal.css",
-    "clean-reveal": "for dep in reveal.js reveal.js-chalkboard notes_rise; do rm -rf rise/static/$dep; done",
+    "build": "for target in less install-rise-reveal; do npm run $target; done",
     "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less rise/static/main.css",
-    "watch-less": "./node_modules/.bin/watch 'npm run less' src/less"
+    "watch-less": "./node_modules/.bin/watch 'npm run less' src/less",
+    "install-rise-reveal": "cp -r node_modules/rise-reveal/export/ rise/static/",
+    "clean": "rm -rf rise/static/main.css node_modules rise/static/reveal.js*"
+  },
+  "devDependencies": {
+    "less": "~2.7.2",
+    "less-plugin-autoprefix": "~1.4.2",
+    "less-plugin-clean-css": "~1.5.0",
+    "watch": "~0.16.0",
+    "rise-reveal": "file:../rise-reveal/"
   },
   "version": "5.6.1-dev3"
 }

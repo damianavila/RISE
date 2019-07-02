@@ -1,0 +1,44 @@
+{
+  "name": "rise-reveal",
+  "description": "original reveal.js patched for use within the RISE Jupyter extension",
+  "license": "MIT",
+  "keywords": [
+    "reveal.js",
+    "RISE",
+    "Jupyter",
+    "slideshow",
+    "slides"
+  ],
+  "author": {
+    "name": "Damián Avila",
+    "url": "https://github.com/damianavila"
+  },
+  "contributors": [
+    {
+      "name": "Thierry Parmentelat",
+      "url": "https://github.com/parmentelat"
+    }
+  ],
+  "homepage": "https://github.com/damianavila/RISE/tree/rise-reveal/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damianavila/RISE"
+  },
+  "bugs": {
+    "url": "https://github.com/damianavila/RISE/issues"
+  },
+  "scripts": {
+    "build": "for target in copy patch; do npm run $target; done",
+    "copy": "mkdir export; for dep in reveal.js reveal.js-chalkboard; do cp -r ./node_modules/$dep/ ./export/$dep/; done",
+    "patch": "for target in patch-reveal-css patch-notes patch-themes ; do npm run $target; done",
+    "patch-reveal-css": "sed -i.upstream '11 s_^_/*_' export/reveal.js/css/reveal.css",
+    "patch-notes": "for file in notes.js notes.html; do cp notes/$file export/reveal.js/plugin/notes; done",
+    "patch-themes": "bash patch-reveal-themes.sh",
+    "clean": "rm -rf node_modules export"
+  },
+  "dependencies": {
+    "reveal.js": "^3.8.0",
+    "reveal.js-chalkboard": "~1.0.0"
+  },
+  "version": "380.1.0"
+}

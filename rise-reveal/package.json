@@ -29,7 +29,7 @@
   },
   "scripts": {
     "build": "for target in copy patch; do npm run $target; done",
-    "copy": "mkdir export; for dep in reveal.js reveal.js-chalkboard; do cp -r ./node_modules/$dep/ ./export/$dep/; done",
+    "copy": "mkdir -p export; for dep in reveal.js reveal.js-chalkboard; do cp -r ./node_modules/$dep/ ./export/$dep/; done",
     "patch": "for target in patch-reveal-css patch-notes patch-themes ; do npm run $target; done",
     "patch-reveal-css": "sed -i.upstream '11 s_^_/*_' export/reveal.js/css/reveal.css",
     "patch-notes": "bash patch-notes-plugin.sh",

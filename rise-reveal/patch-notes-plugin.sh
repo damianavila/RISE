@@ -1,7 +1,5 @@
 #!/bin/bash
 
-for file in notes.js notes.html; do cp notes/$file export/reveal.js/plugin/notes; done
-
 result_dir=export/reveal.js/plugin/notes
 
 ##### js file

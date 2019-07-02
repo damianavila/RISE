@@ -32,7 +32,7 @@
     "copy": "mkdir export; for dep in reveal.js reveal.js-chalkboard; do cp -r ./node_modules/$dep/ ./export/$dep/; done",
     "patch": "for target in patch-reveal-css patch-notes patch-themes ; do npm run $target; done",
     "patch-reveal-css": "sed -i.upstream '11 s_^_/*_' export/reveal.js/css/reveal.css",
-    "patch-notes": "for file in notes.js notes.html; do cp notes/$file export/reveal.js/plugin/notes; done",
+    "patch-notes": "bash patch-notes-plugin.sh",
     "patch-themes": "bash patch-reveal-themes.sh",
     "clean": "rm -rf node_modules export"
   },

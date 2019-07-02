@@ -27,7 +27,7 @@
     echo "$0: need to npm install first"
 }
 
-for theme in node_modules/reveal.js/css/theme/*.css; do
+for theme in export/reveal.js/css/theme/*.css; do
     # do those changes only once
     # there's no mention of rise-enabled in the stock reveal.js
     grep -q 'rise-enabled' $theme && { echo $theme already patched; continue; }

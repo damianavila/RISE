@@ -553,7 +553,7 @@ define([
                    *   async: true,
                    *  callback: function() { hljs.initHighlightingOnLoad(); } },
                    */
-                  { src: require.toUrl("./notes_rise/notes.js"),
+                  { src: require.toUrl("./reveal.js/plugin/notes/notes.js"),
                     async: true,
                   },
                 ],

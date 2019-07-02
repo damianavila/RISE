@@ -3,6 +3,11 @@
     "name": "Damián Avila",
     "url": "https://github.com/damianavila"
   },
+  "contributors": [
+     { "name": "Thierry Parmentelat",
+       "url": "https://github.com/parmentelat"
+     }
+  ],
   "description": "Edit and Present Revealjs-based LIVE slides in the Jupyter Notebook",
   "devDependencies": {
     "less": "~2.7.2",
@@ -18,7 +23,7 @@
   "name": "rise",
   "repository": {
     "type": "git",
-    "url": "https://github.com/damianavila/RISE.git"
+    "url": "https://github.com/damianavila/RISE"
   },
   "scripts": {
     "build": "for target in build-css patch-themes build-reveal reset-reveal; do npm run $target; done",

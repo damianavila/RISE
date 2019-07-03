@@ -1,5 +1,5 @@
 declare let require:(moduleId:string) => any;
-let Reveal = require('reveal.js');
+let Reveal = require('rise-reveal/export/reveal.js/js/reveal.js');
 
 import {
   IDisposable, DisposableDelegate
@@ -89,7 +89,7 @@ class RiseExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, 
       panel.content.addClass('slides');
 
       console.log("about to load unpatched Reveal css")
-      let revealCSS = require('reveal.js/css/reveal.css');
+      let revealCSS = require('rise-reveal/export/reveal.js/css/reveal.css');
       console.log(revealCSS);
       //let revealTheme = require('reveal.js/css/theme/simple.css');
 

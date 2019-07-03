@@ -28,9 +28,9 @@
   "bugs": {
     "url": "https://github.com/damianavila/RISE/issues"
   },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "style": "style/index.css",
+  "main": "lib/rise.js",
+  "types": "lib/rise.d.ts",
+  "style": "style/rise.css",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"

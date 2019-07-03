@@ -27,6 +27,10 @@
   "bugs": {
     "url": "https://github.com/damianavila/RISE/issues"
   },
+  "files": [
+      "export/reveal.js",
+      "export/reveal-chalkboard.js"
+  ],
   "scripts": {
     "build": "for target in copy patch; do npm run $target; done",
     "copy": "mkdir -p export; for dep in reveal.js reveal.js-chalkboard; do cp -r ./node_modules/$dep/ ./export/$dep/; done",
@@ -37,8 +41,8 @@
     "clean": "rm -rf node_modules export"
   },
   "dependencies": {
-    "reveal.js": "^3.8.0",
+    "reveal.js": "~3.8.0",
     "reveal.js-chalkboard": "~1.0.0"
   },
-  "version": "380.1.0"
+  "version": "380.0.2"
 }

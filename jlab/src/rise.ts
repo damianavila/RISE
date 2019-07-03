@@ -1,6 +1,8 @@
 declare let require:(moduleId:string) => any;
 let Reveal = require('rise-reveal/export/reveal.js/js/reveal.js');
 
+let $ = require('jquery');
+
 import {
   IDisposable, DisposableDelegate
 } from '@phosphor/disposable';
@@ -146,6 +148,7 @@ const extension: JupyterFrontEndPlugin<void> = {
 function activate(app: JupyterFrontEnd) {
   console.log('JupyterLab extension jupyterlab-rise #009 is activated!');
   app.docRegistry.addWidgetExtension('Notebook', new RiseExtension());
+  console.log('fake use of jquery global', $);
 }
 
 export default extension;

@@ -72,11 +72,11 @@ class RiseExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, 
               container.node.insertBefore(slide_section, prev_slide_section.nextSibling);
             }
             slide_counter++;
-            console.log("slide-separating cell", cell_index);
-            console.log(slide_section);
+            // console.log("slide-separating cell", cell_index);
+            // console.log(slide_section);
           } else {
             slide_section.appendChild(cell_node);
-            console.log("Nop cell", cell_index);
+            // console.log("Nop cell", cell_index);
           }
         }
       }

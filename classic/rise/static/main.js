@@ -683,13 +683,22 @@ define([
       Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "RISE:smart-exec");
       Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "RISE:smart-exec");
       // Save the f keyboard event for the Reveal fullscreen action
-      Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
-      Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
+      // see also #375
+      try {
+        Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("f");
+        Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-f", "jupyter-notebook:find-and-replace");
+      } catch(error) {
+        console.log(`entering RISE : could not remove shortcut 'f' - ignored`);
+      }
     } else if (mode === 'notebook_mode') {
       Jupyter.keyboard_manager.command_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
       Jupyter.keyboard_manager.edit_shortcuts.set_shortcut("shift-enter", "jupyter-notebook:run-cell-and-select-next");
-      Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("shift-f");
-      Jupyter.keyboard_manager.command_shortcuts.set_shortcut("f", "jupyter-notebook:find-and-replace");
+      try {      
+        Jupyter.keyboard_manager.command_shortcuts.remove_shortcut("shift-f");
+        Jupyter.keyboard_manager.command_shortcuts.set_shortcut("f", "jupyter-notebook:find-and-replace");
+      } catch(error) {
+        console.log(`exiting RISE : could not remove shortcut 'shift-f' - ignored`);
+      }
     }
   }
 

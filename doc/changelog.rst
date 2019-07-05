@@ -28,6 +28,13 @@ compatible with previous IPython versions:
 Changes
 =======
 
+* 5.6.0.dev4
+
+  * now relies on reveal.js-3.8.0 #474
+  * support for dark themes #435
+  * markdown tables show up at a more reasonable (larger) size - #425
+  * tentative fix for #462
+
 * 5.5.1
 
   * bugfix: a few users have reported broken initialisation phase, with the 2 icons '?' and 'X' not showing up; it appears that problem is linked to having undefined the 'f' Jupyter keyboard shortcut; this hotfix solves that issue.

@@ -85,7 +85,7 @@ define([
       },
 
       // reveal native settings passed as-is
-      // see also the 'inherited' variable below in Revealer below
+      // see also the 'inherited' variable below in Revealer
       theme: 'simple',
       transition: 'linear',
       // xxx there might be a need to tweak this one when set
@@ -484,7 +484,7 @@ define([
      */
     if (window.location.pathname.endsWith('.ipynb')) {
       let name = Jupyter.notebook.notebook_name;
-      // asscosiated css
+      // associated css
       let name_css = name.replace(".ipynb", ".css");
       // Attempt to load rise.css
       $('head').append(

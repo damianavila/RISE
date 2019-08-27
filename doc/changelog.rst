@@ -28,6 +28,11 @@ compatible with previous IPython versions:
 Changes
 =======
 
+* 5.6.0.dev5 - issued 2019 aug 27
+
+  * fix #504 - switching out and in of reveal resulted in contents being moved away
+  * fix #506 - pass chalkboard options to reveal - thanks Kurt Rinnert
+
 * 5.6.0.dev4
 
   * now relies on reveal.js-3.8.0 #474

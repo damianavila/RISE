@@ -66,9 +66,12 @@ define([
       overlay: undefined,
 
       // timeouts
+      // wait for that amont before calling ensure_focused on the
+      // selected cell
       restore_timeout: 500,
+      // wait for that amount before actually selected auto-selected fragment
       // when going too short, like 250, size of selected cell get odd
-      auto_select_timeout: 500,
+      auto_select_timeout: 450,
       // wait for that amount before calling sync() again
       // this is a workaround that fixes #504
       sync_timeout: 250,

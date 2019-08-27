@@ -69,6 +69,9 @@ define([
       restore_timeout: 500,
       // when going too short, like 250, size of selected cell get odd
       auto_select_timeout: 500,
+      // wait for that amount before calling sync() again
+      // this is a workaround that fixes #504
+      sync_timeout: 250,
 
       // UI
       toolbar_icon: 'fa-bar-chart',
@@ -345,6 +348,14 @@ define([
       Reveal.slide(0, 0);
     }
     setScrollingSlide();
+    // warkaround for #504
+    // when editing if you swap out of reveal, and then
+    // come back in, with 5.6 most of the time display 
+    // becomes empty or the contents is way too low
+    // this patch makes the situation much better,
+    // although it is clearly suboptimal to have 
+    // to resort to that sort of dirty patch
+    setTimeout(()=>Reveal.sync(), complete_config.sync_timeout);
   }
 
   /* Setup the scrolling in the current slide if the config option is activated

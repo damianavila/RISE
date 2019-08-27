@@ -169,6 +169,14 @@ Parameters:
   input_type: number
   default: 500
 
+- name: rise.aync_timeout
+  description: >
+    timeout in milliseconds before an extra call to Reveal.sync() is
+    made to ensure proper display in some problematic conditions;
+    like other timeout settings this is mostly targetting developers.
+  input_type: number
+  default: 250
+
 #
 # passed to reveal as-is
 #

@@ -91,8 +91,7 @@ corner.
 customization to make them work (not provided by default).
 
 * Markdown Images get left aligned by default. Enclose the image like
-`<center>![noimg](path/to/image.png)</center>` to center it.
-
+`<center><img src='blah.png'></center>` to center it.
 
 ###  Shift-Enter behaviour (historical note)
 

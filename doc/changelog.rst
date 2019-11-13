@@ -40,7 +40,7 @@ Changes
 
 * 5.5.1
 
-  * bugfix: a few users have reported broken initialisation phase, with the 2 icons '?' and 'X' not showing up; it appears that problem is linked to having undefined the 'f' Jupyter keyboard shortcut; this hotfix solves that issue.
+  * bugfix: a few users have reported broken initialization phase, with the 2 icons '?' and 'X' not showing up; it appears that problem is linked to having undefined the 'f' Jupyter keyboard shortcut; this hotfix solves that issue.
 
 * 5.5.0
 

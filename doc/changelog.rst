@@ -20,6 +20,7 @@ compatible with previous IPython versions:
     *  5.3.0 tag compatible with `notebook` >= 5.5.0
     *  5.4.1 tag compatible with `notebook` >= 5.5.0
     *  5.5.0 tag compatible with `notebook` >= 5.5.0
+    *  5.6.0 tag compatible with `notebook` >= 5.7.8
 
 3. With **Jupyter** landing we will provide a conda and pip-installable packages too
 
@@ -28,13 +29,10 @@ compatible with previous IPython versions:
 Changes
 =======
 
-* 5.6.0.dev5 - issued 2019 aug 27
+* 5.6.0
 
   * fix #504 - switching out and in of reveal resulted in contents being moved away
   * fix #506 - pass chalkboard options to reveal - thanks Kurt Rinnert
-
-* 5.6.0.dev4
-
   * now relies on reveal.js-3.8.0 #474
   * support for dark themes #435
   * markdown tables show up at a more reasonable (larger) size - #425

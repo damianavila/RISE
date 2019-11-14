@@ -31,12 +31,16 @@ Changes
 
 * 5.6.0
 
-  * fix #504 - switching out and in of reveal resulted in contents being moved away
-  * fix #506 - pass chalkboard options to reveal - thanks Kurt Rinnert
-  * now relies on reveal.js-3.8.0 #474
-  * support for dark themes #435
-  * markdown tables show up at a more reasonable (larger) size - #425
-  * tentative fix for #462
+  * Fix advise on centering images in Markdown (https://github.com/damianavila/RISE/pull/508)
+  * Pass chalkboard options to reveal (https://github.com/damianavila/RISE/pull/506)
+  * Fix switching out and in of slides resulted in contents being moved away (https://github.com/damianavila/RISE/commit/0cd7179e999ee213a801efdbcd173e9d013824e5)
+  * Load css through a relative url (https://github.com/damianavila/RISE/pull/482, https://github.com/damianavila/RISE/pull/487 was closed in favour of PR 482)
+  * Update link to the developer documentation (https://github.com/damianavila/RISE/pull/481)
+  * Support for dark themes (https://github.com/damianavila/RISE/issues/435, implemented in PR 475)
+  * Markdown tables show up at a more reasonable (larger) size (https://github.com/damianavila/RISE/commit/3d0e71c07f3fb83e1e0da7dfc0b67b7af1b8f36b, live in PR 475)
+  * RISE now relies on reveal.js 3.8.0 (https://github.com/damianavila/RISE/pull/475)
+  * Fix JS build process (https://github.com/damianavila/RISE/pull/473)
+  * CCS styling is not removed when we get into the notebook view (https://github.com/damianavila/RISE/pull/466)
 
 * 5.5.1
 

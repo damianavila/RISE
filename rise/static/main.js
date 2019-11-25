@@ -456,6 +456,46 @@ define([
     // we enter reveal again
     $('div#rise-overlay').remove();
   }
+  
+  /*
+   * Tries to get the keycodes for key shortcuts defined in 
+   * jupyter nbextension_configurator.
+   * Uses the VirtualKeyboardConstants of the KeyEvent interface (DOM Level 2)
+   * https://www.w3.org/TR/WD-DOM-Level-2/events.html#Events-KeyEvent
+   * 
+   * args: shortcut_str = string generator by nbextension_configurator for keyboard short cuts
+   * returns: list of dictionaries ('key': ..., 'code':...) for each identified key code
+   */
+  function getKeyCodes(shortcut_str) {
+   	
+   	var keycodes = [];
+   	var keycode;
+   	var key;
+
+	for (key of shortcut_str.split(",")){		//multiple keys may be defined for an action
+		//console.log('key=', key.toUpperCase());
+		// generate keycode from DOM_VK constants (implementation may vary on browsers)
+		// check for key combinations - which are uns
+    	if (key.split("").includes('+')){
+			console.log(`Found key combination ${key}.\n
+			Key combinations are not allowed - ignoring this config...`);
+		}
+    	else{
+    		keycode = KeyEvent[`DOM_VK_${key.toUpperCase()}`];
+		
+			// check if VK constant is implemented
+			if (typeof keycode === "undefined"){
+				console.log(`Could not assign key ${key}.\n
+				 KeyEvent.DOM_VK_${key.toUpperCase()} is not defined!`);
+			}
+			else{
+				//console.log(`Found key code ${keycode} for key ${key}`);
+				keycodes.push({'key': key, 'code': keycode});
+			}
+    	}
+	}
+	return keycodes;
+  }
 
   function Revealer(selected_slide) {
     $('body').addClass("rise-enabled");
@@ -498,6 +538,8 @@ define([
     function toggleAllRiseButtons() {
         $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
     }
+    
+    
 
     // Tailer
     require([
@@ -578,18 +620,88 @@ define([
                 // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach
                 // could hopefully avoid conflicting behaviours in case of overlaps
-                $.extend(options.keyboard, {
-                           // for chalkboard; also bind uppercases just in case
-                           63:  riseHelp,                               // '?' show our help
-                           // can't use just RevealChalkboard.reset directly here
-                           // because RevealChalkboard is not yet loaded at that time
-                           187: () => RevealChalkboard.reset(),             // '=' reset chalkboard data on current slide
-                           189: () => RevealChalkboard.clear(),             // '-' clear full size chalkboard
-                           219: () => RevealChalkboard.toggleChalkboard(),  // '[' toggle full size chalkboard
-                           221: () => RevealChalkboard.toggleNotesCanvas(), // ']' toggle notes (slide-local)
-                           220: () => RevealChalkboard.download(),          // '\' download recorded chalkboard drawing
-                         });
-              }
+                
+                // comment from thecker: 
+                // alternative keys can now be defined in nbextension_configurator and
+                // are converted to keyevent code by the getKeyCodes function
+                
+                // default chalkboard key codes as defined in nbextension_configurator (see rise.yaml)
+                var nbconfig_keys = {
+            		'riseHelp': {	// '?' show our help
+            			'keycodes': [63],
+            			'call': riseHelp
+            		},
+            		'clear': {	// '-' clear full size chalkboard
+            			'keycodes': [189],
+                		'call': () => RevealChalkboard.clear()
+                	},
+                	'reset': {	// '=' reset chalkboard data on current slide
+                		'keycodes': [187],
+                		'call': () => RevealChalkboard.reset()
+                	},
+                	'toggleChalkboard': {	// '[' toggle full size chalkboard
+                		'keycodes': [219],
+	            		'call': () => RevealChalkboard.toggleChalkboard()
+            		},
+            		'toggleNotesCanvas': {	// ']' toggle notes (slide-local)
+            			'keycodes': [221],
+                    	'call': () => RevealChalkboard.toggleNotesCanvas()
+            		},
+            		'download': {	// '\' download recorded chalkboard drawing
+            			'keycodes': [220],
+                    	'call': () => RevealChalkboard.download()
+            		}
+                };
+                
+                // add user defined keycodes, if defined via nbextensions_configurator
+                const cb_shortcuts = complete_config.cb_shortcuts;
+                var cb_shortcuts_keys;
+                if (typeof cb_shortcuts === 'undefined'){
+                	cb_shortcuts_keys = [];
+                }
+                else{
+                	cb_shortcuts_keys = Object.keys(cb_shortcuts);
+                }
+                //console.log("Chalkboard keys:", cb_shortcuts_keys);
+                
+                var key;
+                var keycode;
+                var keycodes;
+                var shortcut_keys;
+                var nbconf_name;
+                var cb_keycodes = {};
+                var keys_dict;
+
+                for (const nbconf_name of Object.keys(nbconfig_keys)){               	
+                	// if key code was redefined, it is in complete_config_keys
+                	// update nbconfig_keys in this case
+		        	if (cb_shortcuts_keys.includes(nbconf_name)){
+		        		shortcut_keys = cb_shortcuts[nbconf_name];
+		        		//console.log("Found action", nbconf_name, "bound to key", shortcut_keys);
+
+		        		
+		        		keys_dict = getKeyCodes(shortcut_keys);
+		        		//console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
+		        		keycodes = [];
+		        		for (const key_dict of keys_dict){
+		        			keycodes.push(key_dict['code']);
+		        		}
+		        		
+		        		// only update the keycodes,
+		        		if (keycodes.length >= 0){
+		        			nbconfig_keys[nbconf_name]['keycodes'] = keycodes;
+		        		}
+		            }
+		        	// assign keycodes to dictionary format for chalkboard key bindings
+		        	for (keycode of nbconfig_keys[nbconf_name]['keycodes']) {
+		        		//keycode = nbconfig_keys[nbconf_name]['keycode']; 
+		        		//console.log(`nbconf_name: ${nbconf_name}, keycode: ${keycode}`);
+		        		cb_keycodes[keycode] = nbconfig_keys[nbconf_name]['call'];
+		        	}
+                }
+                //console.log(`stats: ${JSON.stringify(cb_keycodes)}`);
+                $.extend(options.keyboard, cb_keycodes);
+               }
 
               if (Reveal.initialized) {
                 //delete options["dependencies"];
@@ -693,7 +805,61 @@ define([
     }
   }
 
+  /*
+   * Creates a string of the valid short cuts (i.e. the ones for which a key 
+   * code could be identified). If no key code could be identified the keys are
+   * still mapped to the default key code values (a string provided by
+   * the default_str argument will be used instead).
+   */
+  function createShortCutStr(shortcut_str, default_str){
+	
+	var keys_dict;
+	var keycodes = [];
+	//var keycode;
+	var key_str;
+	
+	if (typeof shortcut_str === 'undefined'){	// if no custom keys are defined
+		key_str = "<kbd>" + default_str + "</kbd>";
+	}
+	else{
+		keys_dict = getKeyCodes(shortcut_str);
+		//console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
+		
+		for (const key_dict of keys_dict){
+			keycodes.push(key_dict['key']);
+		}
+		
+		// create string
+		if (keycodes.length === 0){
+			key_str = "<kbd>" + default_str + "</kbd>";
+		}
+		else if (keycodes.length === 1){
+			key_str = "<kbd>" + keycodes[0] + "</kbd>";
+		}
+		else{	// multiple valid keys for one action
+			key_str = "";
+			for (const [index, key] of keycodes.entries()){
+				if (index > 0){
+					key_str += ",<kbd>" + key + "</kbd>";
+				}
+				else{
+					key_str += "<kbd>" + key + "</kbd>";
+				}
+			}
+		}
+	}
+	return key_str;
+  }
+  
   function riseHelp() {
+	var cb_keys = complete_config.cb_shortcuts;
+	if (typeof cb_keys === "undefined"){
+		cb_keys = {};
+	}
+	else{
+		cb_keys = complete_config.cb_shortcuts;
+	}
+	
     let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
@@ -716,11 +882,11 @@ define([
             "</ul>" +
           "<li><strong>with chalkboard enabled:</strong>" +
             "<ul>" +
-            "<li><kbd>[</kbd> toggle fullscreen chalkboard</li>" +
-            "<li><kbd>]</kbd> toggle slide-local canvas</li>" +
-            "<li><kbd>\\</kbd> download chalkboard drawing</li>" +
-            "<li><kbd>=</kbd> clear slide-local canvas</li>" +
-            "<li><kbd>-</kbd> delete fullscreen chalkboard</li>" +
+            `<li>${createShortCutStr(cb_keys.toggleChalkboard, '[')} toggle fullscreen chalkboard</li>` +
+            `<li>${createShortCutStr(cb_keys.toggleNotesCanvas, ']')} toggle slide-local canvas</li>` +
+            `<li>${createShortCutStr(cb_keys.download, '\\')} download chalkboard drawing</li>` +
+            `<li>${createShortCutStr(cb_keys.reset, '=')} clear slide-local canvas</li>` +
+            `<li>${createShortCutStr(cb_keys.clear, '-')} delete fullscreen chalkboard</li>` +
             "</ul>" +
           "</ul>" +
           "<b>NOTE</b>: of course you have to use these shortcuts <b>in command mode.</b>"
@@ -1021,7 +1187,6 @@ define([
         {help   : 'output RISE configuration in console, for debugging mostly',
          handler: showConfig},
         "rise-dump-config", "RISE");
-
   }
 
 

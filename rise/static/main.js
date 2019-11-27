@@ -628,8 +628,7 @@ define([
                 help: false,
 
                 // key bindings configurable by nbconfig  are defined below - 
-                // this shall only be used for hard wired bindings, which should 
-                // not be adjustable by user settings.
+                // this should only be used to unbind keys
                 keyboard: {
                   13: null, // Enter disabled
                   27: null, // ESC disabled
@@ -638,7 +637,7 @@ define([
                   38: null, // up arrow disabled
                   40: null, // down arrow disabled
                   66: null, // b, black pause disabled, use period or forward slash
-                  // 70: fullscreenHelp, // disable fullscreen inside the slideshow, makes codemirror unreliable
+                  70: null, // disable fullscreen inside the slideshow, makes codemirror unreliable
                   72: null, // h, left disabled
                   74: null, // j, down disabled
                   75: null, // k, up disabled
@@ -646,9 +645,9 @@ define([
                   78: null, // n, down disabled
                   79: null, // o disabled
                   80: null, // p, up disabled
-                  // 84: RevealNotes.open, // t, modified in the custom notes plugin.
-                  // 87: Reveal.toggleOverview, // w, toggle overview
-                  // 188: toggleAllRiseButtons, // comma
+                  84: null, // t, modified in the custom notes plugin.
+                  87: null, // w, toggle overview
+                  188: null, // comma
                 },
 
                 dependencies: [

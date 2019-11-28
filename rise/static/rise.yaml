@@ -39,81 +39,6 @@ Parameters:
     keys might not work in some browsers.
   input_type: checkbox
   default: false
-# using reveal_shortcuts for the reveal.js and chalkboard short cuts instead of 
-# shortcuts to avoid treating these as normal jupyter shortcuts
-- name: rise.reveal_shortcuts.chalkboard.reset
-  description: >
-    <code>rise.reveal_shortcuts.chalkboard.reset</code>: shortcut (in chalkboard mode) for resetting 
-    chalkboard data on current slide (<strong>key combinations are not supported
-    </strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.chalkboard.clear
-  description: >
-    <code>rise.reveal_shortcuts.chalkboard.clear</code>: shortcut (in chalkboard mode) for clearing 
-    full size chalkboard (<strong>key combinations are not supported</strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.chalkboard.toggleChalkboard
-  description: >
-    <code>rise.reveal_shortcuts.chalkboard.toggleChalkboard</code>: shortcut (in chalkboard mode) for 
-    toggling full size chalkboard (<strong>key combinations are not supported
-    </strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.chalkboard.toggleNotesCanvas
-  description: >
-    <code>rise.reveal_shortcuts.chalkboard.toggleNotesCanvas</code>: shortcut (in chalkboard mode) 
-    for toggling notes (slide-local) (<strong>key combinations are not supported
-    </strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.chalkboard.download
-  description: >
-    <code>rise.reveal_shortcuts.chalkboard.download</code>: shortcut (in chalkboard mode) for 
-    downloading recorded chalkboard drawing (<strong>key combinations are not 
-    supported</strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.main.riseHelp
-  description: >
-    <code>rise.reveal_shortcuts.main.riseHelp</code>: shortcut for showing 
-    help (<strong>key combinations are not supported</strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.main.firstSlide
-  description: >
-    <code>rise.reveal_shortcuts.main.firstSlide</code>: shortcut for jump to first 
-    slide (<strong>key combinations are not supported</strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.main.lastSlide
-  description: >
-    <code>rise.reveal_shortcuts.main.lastSlide</code>: shortcut for jump to last 
-    slide (<strong>key combinations are not supported</strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.main.toggleOverview
-  description: >
-    <code>rise.reveal_shortcuts.main.toggleOverview</code>: shortcut for slides 
-    overview (<strong>key combinations are not supported</strong>)
-  input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.main.toggleAllRiseButtons
-  description: >
-    <code>rise.reveal_shortcuts.main.toggleAllRiseButtons</code>: shortcut 
-    show/hide RISE buttons (<strong>key combinations are not supported</strong>)
-  input_type: hotkey
-  default: none
 #
 - name: rise.enable_leap_motion
   description: >
@@ -229,6 +154,81 @@ Parameters:
     pane for the RISE extension in a new tab (or window, depending on your browser config).
   input_type: hotkey
   default: shift-c
+# using reveal_shortcuts for the reveal.js and chalkboard short cuts instead of 
+# shortcuts to avoid treating these as normal jupyter shortcuts
+- name: rise.reveal_shortcuts.chalkboard.reset
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.reset</code>: shortcut (in chalkboard mode) for resetting 
+    chalkboard data on current slide (<strong>key combinations are not supported
+    </strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.chalkboard.clear
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.clear</code>: shortcut (in chalkboard mode) for clearing 
+    full size chalkboard (<strong>key combinations are not supported</strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.chalkboard.toggleChalkboard
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.toggleChalkboard</code>: shortcut (in chalkboard mode) for 
+    toggling full size chalkboard (<strong>key combinations are not supported
+    </strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.chalkboard.toggleNotesCanvas
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.toggleNotesCanvas</code>: shortcut (in chalkboard mode) 
+    for toggling notes (slide-local) (<strong>key combinations are not supported
+    </strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.chalkboard.download
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.download</code>: shortcut (in chalkboard mode) for 
+    downloading recorded chalkboard drawing (<strong>key combinations are not 
+    supported</strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.main.riseHelp
+  description: >
+    <code>rise.reveal_shortcuts.main.riseHelp</code>: shortcut for showing 
+    help (<strong>key combinations are not supported</strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.main.firstSlide
+  description: >
+    <code>rise.reveal_shortcuts.main.firstSlide</code>: shortcut for jump to first 
+    slide (<strong>key combinations are not supported</strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.main.lastSlide
+  description: >
+    <code>rise.reveal_shortcuts.main.lastSlide</code>: shortcut for jump to last 
+    slide (<strong>key combinations are not supported</strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.main.toggleOverview
+  description: >
+    <code>rise.reveal_shortcuts.main.toggleOverview</code>: shortcut for slides 
+    overview (<strong>key combinations are not supported</strong>)
+  input_type: hotkey
+  default: none
+#
+- name: rise.reveal_shortcuts.main.toggleAllRiseButtons
+  description: >
+    <code>rise.reveal_shortcuts.main.toggleAllRiseButtons</code>: shortcut 
+    show/hide RISE buttons (<strong>key combinations are not supported</strong>)
+  input_type: hotkey
+  default: none
 
 #
 # passed to reveal as-is

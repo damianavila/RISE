@@ -470,7 +470,47 @@ define([
     // we enter reveal again
     $('div#rise-overlay').remove();
   }
+  
+  /*
+   * Tries to get the keycodes for key shortcuts defined in 
+   * jupyter nbextension_configurator.
+   * Uses the VirtualKeyboardConstants of the KeyEvent interface (DOM Level 2)
+   * https://www.w3.org/TR/WD-DOM-Level-2/events.html#Events-KeyEvent
+   * 
+   * args: shortcut_str = string generator by nbextension_configurator for keyboard short cuts
+   * returns: list of dictionaries ('key': ..., 'code':...) for each identified key code
+   */
+  function getKeyCodes(shortcut_str) {
+   	
+   	var keycodes = [];
+   	var keycode;
+   	var key;
 
+	for (key of shortcut_str.split(",")){		//multiple keys may be defined for an action
+		//console.log('key=', key.toUpperCase());
+		// generate keycode from DOM_VK constants (implementation may vary on browsers)
+		// check for key combinations - which are uns
+    	if (key.split("").includes('+')){
+			console.log(`Found key combination ${key}.\n
+			Key combinations are not allowed - ignoring this config...`);
+		}
+    	else{
+    		keycode = KeyEvent[`DOM_VK_${key.toUpperCase()}`];
+		
+			// check if VK constant is implemented
+			if (typeof keycode === "undefined"){
+				console.log(`Could not assign key ${key}.\n
+				 KeyEvent.DOM_VK_${key.toUpperCase()} is not defined!`);
+			}
+			else{
+				//console.log(`Found key code ${keycode} for key ${key}`);
+				keycodes.push({'key': key, 'code': keycode});
+			}
+    	}
+	}
+	return keycodes;
+  }
+  
   function Revealer(selected_slide) {
     $('body').addClass("rise-enabled");
     // Prepare the DOM to start the slideshow
@@ -512,6 +552,67 @@ define([
     function toggleAllRiseButtons() {
         $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
     }
+    
+    /*
+     * Creates a dictionary with keyboard bindings (keycode: Action) for 
+     * reveal.js and its plug-ins (e.g. RevealChalkboard).
+     */
+    function createKeyBindingsDict(default_bindings, custom_shortcuts){
+    	
+        var custom_shortcuts_keys;
+        
+        if (typeof custom_shortcuts === 'undefined'){
+        	custom_shortcuts_keys = [];
+        }
+        else{
+        	custom_shortcuts_keys = Object.keys(custom_shortcuts);
+        }
+        //console.log("Chalkboard keys:", cb_shortcuts_keys);
+        
+        var key;
+        var keycode;
+        var keycodes;
+        var shortcut_keys;
+        var nbconf_name;
+        var reveal_bindings = {};
+        var keys_dict;
+        
+        // check if custom binding are defined and in case overwrite default
+        for (const key_binding of custom_shortcuts_keys){
+        	if (Object.keys(default_bindings).includes(key_binding)){
+        		shortcut_keys = custom_shortcuts[key_binding];
+        		//console.log("Found action", key_binding, "bound to key", shortcut_keys);
+        		keys_dict = getKeyCodes(shortcut_keys);
+        		//console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
+        		keycodes = [];
+        		for (const key_dict of keys_dict){
+        			keycodes.push(key_dict['code']);
+        		}
+        		// only update the default dict, if valid key codes were found
+        		if (keycodes.length >= 0){
+        			default_bindings[key_binding]['keycodes'] = keycodes;
+        		}
+        	}
+        	else{	// if the key binding is not defined in the default bindings ignore it
+        		console.log(`Unkown key binding \"${key_binding}\" found. Will be ignored!`);
+        		// if we would add the API actions in nbconfig, we could provide access
+        		// to the complete API of reveal.js and its plug-ins. This would 
+        		// however be a bit of a challenge to manage with nbextensions_configurator
+        	}
+        }
+        
+        // iterate through (update default_bindings) and export to keyboard binding dict for reveal.js
+        for (const key_binding of Object.keys(default_bindings)){ 
+        	// for each key code (if multiple keys assigned to same binding)
+			for (keycode of default_bindings[key_binding]['keycodes']) {
+	    		//keycode = nbconfig_keys[nbconf_name]['keycode']; 
+	    		//console.log(`nbconf_name: ${nbconf_name}, keycode: ${keycode}`);
+	    		reveal_bindings[keycode] = default_bindings[key_binding]['call'];
+	    	}
+        }
+        //console.log(`reveal_bindings: ${JSON.stringify(reveal_bindings)}`);
+		return reveal_bindings;
+    }
 
     // Tailer
     require([
@@ -540,13 +641,17 @@ define([
                 // turn off reveal native help
                 help: false,
 
+                // key bindings configurable by nbconfig  are defined below - 
+                // this should only be used to unbind keys
                 keyboard: {
                   13: null, // Enter disabled
                   27: null, // ESC disabled
+                  35: null, // End - last slide disabled (will be set in custom keys)
+                  36: null, // Home - first slide disabled (will be set in custom keys)
                   38: null, // up arrow disabled
                   40: null, // down arrow disabled
                   66: null, // b, black pause disabled, use period or forward slash
-                  70: fullscreenHelp, // disable fullscreen inside the slideshow, makes codemirror unreliable
+                  70: null, // disable fullscreen inside the slideshow, makes codemirror unreliable
                   72: null, // h, left disabled
                   74: null, // j, down disabled
                   75: null, // k, up disabled
@@ -554,9 +659,9 @@ define([
                   78: null, // n, down disabled
                   79: null, // o disabled
                   80: null, // p, up disabled
-                  // 84: RevealNotes.open, // t, modified in the custom notes plugin.
-                  87: Reveal.toggleOverview, // w, toggle overview
-                  188: toggleAllRiseButtons, // comma
+                  84: null, // t, modified in the custom notes plugin.
+                  87: null, // w, toggle overview
+                  188: null, // comma
                 },
 
                 dependencies: [
@@ -584,7 +689,47 @@ define([
                 options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
                 options.leap = enable_leap_motion;
               }
-
+              
+              ////////// extend reveal.js with custom key bindings to reveal.js and RISE API
+              var default_reveal_bindings = 
+              {
+            	'firstSlide': {	// jump to first slide
+	      		    'keycodes': [36],	// defaults to home key
+	    			'call': () => Reveal.slide(0)
+	    		},
+	    		'lastSlide': {	// jump to last slide
+	    			'keycodes': [35],	// defaults to end key
+	    			'call': () => Reveal.slide( Number.MAX_VALUE )
+	    		},
+	    		'toggleOverview': {	// toggle overview
+	    			'keycodes': [87],	// defaults to w
+	    			'call': () => Reveal.toggleOverview()
+	    		},
+	    		'toggleAllRiseButtons': {	// show/hide buttons
+	    			'keycodes': [188],	// defaults to ,
+	    			'call': toggleAllRiseButtons
+	    		},
+	    		'fullscreenHelp': {	// show fullscreen help
+	    			'keycodes': [70],	// defaults to f
+	    			'call': fullscreenHelp
+	    		},
+	    		'riseHelp': {	// '?' show our help
+        			'keycodes': [63],
+        			'call': riseHelp
+        		},
+	    	  }
+              // check if custom reveal shortcuts are defined at all
+              var custom_reveal_shortcuts;
+              if (typeof complete_config.reveal_shortcuts === 'undefined'){
+            	  custom_reveal_shortcuts = undefined;
+              }
+              else{
+            	  custom_reveal_shortcuts = complete_config.reveal_shortcuts.main;
+              }
+              var reveal_bindings = createKeyBindingsDict(default_reveal_bindings,
+            		  custom_reveal_shortcuts);
+              $.extend(options.keyboard, reveal_bindings);
+	    	  
               ////////// set up chalkboard if configured
               let enable_chalkboard = complete_config.enable_chalkboard;
               if (enable_chalkboard) {
@@ -595,17 +740,48 @@ define([
                 // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach
                 // could hopefully avoid conflicting behaviours in case of overlaps
-                $.extend(options.keyboard, {
-                           // for chalkboard; also bind uppercases just in case
-                           63:  riseHelp,                               // '?' show our help
-                           // can't use just RevealChalkboard.reset directly here
-                           // because RevealChalkboard is not yet loaded at that time
-                           187: () => RevealChalkboard.reset(),             // '=' reset chalkboard data on current slide
-                           189: () => RevealChalkboard.clear(),             // '-' clear full size chalkboard
-                           219: () => RevealChalkboard.toggleChalkboard(),  // '[' toggle full size chalkboard
-                           221: () => RevealChalkboard.toggleNotesCanvas(), // ']' toggle notes (slide-local)
-                           220: () => RevealChalkboard.download(),          // '\' download recorded chalkboard drawing
-                         });
+                
+                // comment from thecker: 
+                // alternative keys can now be defined in nbextension_configurator and
+                // are converted to keyevent code by the getKeyCodes function
+                
+                ///// add custom key bindings to RevealChalkboard API
+                // default chalkboard key codes as defined in nbextension_configurator (see rise.yaml)
+                var default_cb_bindings = {
+            		'clear': {	// '-' clear full size chalkboard
+            			'keycodes': [189],
+                		'call': () => RevealChalkboard.clear()
+                	},
+                	'reset': {	// '=' reset chalkboard data on current slide
+                		'keycodes': [187],
+                		'call': () => RevealChalkboard.reset()
+                	},
+                	'toggleChalkboard': {	// '[' toggle full size chalkboard
+                		'keycodes': [219],
+	            		'call': () => RevealChalkboard.toggleChalkboard()
+            		},
+            		'toggleNotesCanvas': {	// ']' toggle notes (slide-local)
+            			'keycodes': [221],
+                    	'call': () => RevealChalkboard.toggleNotesCanvas()
+            		},
+            		'download': {	// '\' download recorded chalkboard drawing
+            			'keycodes': [220],
+                    	'call': () => RevealChalkboard.download()
+            		}
+                };
+                
+                // add user defined keycodes, if defined via nbextensions_configurator
+                // check if custom reveal shortcuts are defined at all
+                var custom_cb_shortcuts;
+                if (typeof complete_config.reveal_shortcuts === 'undefined'){
+              	  custom_cb_shortcuts = undefined;
+                }
+                else{
+              	  custom_cb_shortcuts = complete_config.reveal_shortcuts.chalkboard;
+                }
+                var cb_bindings = createKeyBindingsDict(default_cb_bindings,
+              		  custom_cb_shortcuts);
+                $.extend(options.keyboard, cb_bindings);
               }
 
               if (Reveal.initialized) {
@@ -719,19 +895,107 @@ define([
     }
   }
 
+  /*
+   * Creates a string of the valid short cuts (i.e. the ones for which a key 
+   * code could be identified). If no key code could be identified the keys are
+   * still mapped to the default key code values (a string provided by
+   * the default_str argument will be used instead).
+   */
+  function createShortCutStr(shortcut_str, default_str){
+	
+	var keys_dict;
+	var keycodes = [];
+	//var keycode;
+	var key_str;
+	
+	if (typeof shortcut_str === 'undefined'){	// if no custom keys are defined
+		key_str = "<kbd>" + default_str + "</kbd>";
+	}
+	else{
+		keys_dict = getKeyCodes(shortcut_str);
+		//console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
+		
+		for (const key_dict of keys_dict){
+			keycodes.push(key_dict['key']);
+		}
+		
+		// create string
+		if (keycodes.length === 0){
+			key_str = "<kbd>" + default_str + "</kbd>";
+		}
+		else if (keycodes.length === 1){
+			key_str = "<kbd>" + keycodes[0] + "</kbd>";
+		}
+		else{	// multiple valid keys for one action
+			key_str = "";
+			for (const [index, key] of keycodes.entries()){
+				if (index > 0){
+					key_str += ",<kbd>" + key + "</kbd>";
+				}
+				else{
+					key_str += "<kbd>" + key + "</kbd>";
+				}
+			}
+		}
+	}
+	return key_str;
+  }
+  
+  /*
+   * Creates a list item string for help dialog
+   * 
+   * Args:
+   * shortcut_str = string representation of keyboard shortcut(s)
+   * default_str = default (fall back) string for key
+   * help_str = help text to be shown for item
+   */
+  function createListItemStr(shortcut_str, default_str, help_str){
+	  var item_str;
+	  
+	  var item_key_str = createShortCutStr(shortcut_str, default_str);
+	  
+	  item_str = "<li>" + item_key_str + ": " + help_str + "</li>"
+	  
+	  return item_str
+  }
+   
   function riseHelp() {
+	var reveal_keys;
+	var cb_keys;
+	
+	//check if custom key bindings for reveal & chalkboard are defined  
+	if (typeof complete_config.reveal_shortcuts !== 'undefined'){
+		if (typeof complete_config.reveal_shortcuts.main !== 'undefined'){
+			reveal_keys = complete_config.reveal_shortcuts.main;
+		}
+		else{
+			reveal_keys = {};
+		}
+		if (typeof complete_config.reveal_shortcuts.chalkboard !== 'undefined'){
+			cb_keys = complete_config.reveal_shortcuts.chalkboard;
+		}
+		else{
+			cb_keys = {};
+		}
+	}
+	else{
+		reveal_keys = {};
+		cb_keys = {};
+	}
+		
     let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
+          createListItemStr(reveal_keys.riseHelp, '?', 'Show this help dialog') +
           "<li><kbd>Alt</kbd>+<kbd>r</kbd>: enter/exit RISE</li>" +
           "<li><kbd>Space</kbd>: next</li>" +
           "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: previous</li>" +
           "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: eval and select next cell if visible</li>" +
-          "<li><kbd>Home</kbd>: first slide</li>" +
-          "<li><kbd>End</kbd>: last slide</li>" +
-          "<li><kbd>w</kbd>: toggle overview mode</li>" +
+          createListItemStr(reveal_keys.firstSlide, 'Home', 'first slide') +
+          createListItemStr(reveal_keys.lastSlide, 'End', 'last slide') +
+          createListItemStr(reveal_keys.toggleOverview, 'w', 'toggle overview mode') +
           "<li><kbd>t</kbd>: toggle notes</li>" +
-          "<li><kbd>,</kbd>: toggle help and exit buttons</li>" +
+          createListItemStr(reveal_keys.toggleAllRiseButtons, ',', 'show/hide help and exit buttons') +
           "<li><kbd>/</kbd>: black screen</li>" +
           "<li><strong>less useful:</strong>" +
             "<ul>" +
@@ -742,11 +1006,11 @@ define([
             "</ul>" +
           "<li><strong>with chalkboard enabled:</strong>" +
             "<ul>" +
-            "<li><kbd>[</kbd> toggle fullscreen chalkboard</li>" +
-            "<li><kbd>]</kbd> toggle slide-local canvas</li>" +
-            "<li><kbd>\\</kbd> download chalkboard drawing</li>" +
-            "<li><kbd>=</kbd> clear slide-local canvas</li>" +
-            "<li><kbd>-</kbd> delete fullscreen chalkboard</li>" +
+            createListItemStr(cb_keys.toggleChalkboard, '[', 'toggle fullscreen chalkboard') +
+            createListItemStr(cb_keys.toggleNotesCanvas, ']', 'toggle slide-local canvas') +
+            createListItemStr(cb_keys.download, '\\', 'download chalkboard drawing') +
+            createListItemStr(cb_keys.reset, '=', 'clear slide-local canvas') +
+            createListItemStr(cb_keys.clear, '-', 'delete fullscreen chalkboard') +
             "</ul>" +
           "</ul>" +
           "<b>NOTE</b>: of course you have to use these shortcuts <b>in command mode.</b>"
@@ -1047,7 +1311,6 @@ define([
         {help   : 'output RISE configuration in console, for debugging mostly',
          handler: showConfig},
         "rise-dump-config", "RISE");
-
   }
 
 

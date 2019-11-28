@@ -137,23 +137,23 @@ define([
       config_section.loaded,
       nbext_configurator.loaded,
     ]).then(
-        // and now we can compute the layered config
-        function() {
-          // 1) initialize with hardwired defaults
-          $.extend(true, complete_config, hardwired_config);
-          // 2a) and 2b)
-          $.extend(true, complete_config, config_section_legacy.data);
-          $.extend(true, complete_config, config_section.data);
-          // 3)
-          $.extend(true, complete_config, nbext_configurator.data.rise);
-          // 4a) from the notebook metadata
-          let metadata_legacy = Jupyter.notebook.metadata.livereveal;
-          $.extend(true, complete_config, metadata_legacy);
-          // 4b) ditto
-          let metadata = Jupyter.notebook.metadata.rise;
-          $.extend(true, complete_config, metadata);
-          // console.log("complete_config is OK");
-        });
+      // and now we can compute the layered config
+      function() {
+        // 1) initialize with hardwired defaults
+        $.extend(true, complete_config, hardwired_config);
+        // 2a) and 2b)
+        $.extend(true, complete_config, config_section_legacy.data);
+        $.extend(true, complete_config, config_section.data);
+        // 3)
+        $.extend(true, complete_config, nbext_configurator.data.rise);
+        // 4a) from the notebook metadata
+        let metadata_legacy = Jupyter.notebook.metadata.livereveal;
+        $.extend(true, complete_config, metadata_legacy);
+        // 4b) ditto
+        let metadata = Jupyter.notebook.metadata.rise;
+        $.extend(true, complete_config, metadata);
+        // console.log("complete_config is OK");
+      });
   }
 
   /*
@@ -395,8 +395,8 @@ define([
 
     // Ref: https://stackoverflow.com/a/7739035
     let url = (window.location != window.parent.location)
-            ? document.referrer
-            : document.location.href;
+        ? document.referrer
+        : document.location.href;
     let lastPart = url.substr(url.lastIndexOf('/') + 1);
 
     if (lastPart === "notes.html") {
@@ -423,10 +423,10 @@ define([
     outputObserver = new MutationObserver(mutationHandler);
 
     let observerOptions = { childList: true,
-                           characterData: false,
-                           attributes: false,
-                           subtree: false
-                         };
+                            characterData: false,
+                            attributes: false,
+                            subtree: false
+                          };
     $output.each(function () {
       outputObserver.observe(this, observerOptions);
     });
@@ -481,34 +481,32 @@ define([
    * returns: list of dictionaries ('key': ..., 'code':...) for each identified key code
    */
   function getKeyCodes(shortcut_str) {
-   	
-   	var keycodes = [];
-   	var keycode;
-   	var key;
+    
+    var keycodes = [];
+    var keycode;
+    var key;
 
-	for (key of shortcut_str.split(",")){		//multiple keys may be defined for an action
-		//console.log('key=', key.toUpperCase());
-		// generate keycode from DOM_VK constants (implementation may vary on browsers)
-		// check for key combinations - which are uns
-    	if (key.split("").includes('+')){
-			console.log(`Found key combination ${key}.\n
-			Key combinations are not allowed - ignoring this config...`);
-		}
-    	else{
-    		keycode = KeyEvent[`DOM_VK_${key.toUpperCase()}`];
-		
-			// check if VK constant is implemented
-			if (typeof keycode === "undefined"){
-				console.log(`Could not assign key ${key}.\n
-				 KeyEvent.DOM_VK_${key.toUpperCase()} is not defined!`);
-			}
-			else{
-				//console.log(`Found key code ${keycode} for key ${key}`);
-				keycodes.push({'key': key, 'code': keycode});
-			}
-    	}
+    for (key of shortcut_str.split(",")){		//multiple keys may be defined for an action
+      //console.log('key=', key.toUpperCase());
+      // generate keycode from DOM_VK constants (implementation may vary on browsers)
+      // check for key combinations - which are uns
+      if (key.split("").includes('+')){
+	console.log(`Found key combination ${key}.\n`
+		    +`Key combinations are not allowed - ignoring this config...`);
+      } else {
+    	keycode = KeyEvent[`DOM_VK_${key.toUpperCase()}`];
+	
+	// check if VK constant is implemented
+	if (typeof keycode === "undefined"){
+	  console.log(`Could not assign key ${key}.\n`
+		      +`KeyEvent.DOM_VK_${key.toUpperCase()} is not defined!`);
+	} else {
+	  //console.log(`Found key code ${keycode} for key ${key}`);
+	  keycodes.push({'key': key, 'code': keycode});
 	}
-	return keycodes;
+      }
+    }
+    return keycodes;
   }
   
   function Revealer(selected_slide) {
@@ -542,15 +540,15 @@ define([
       let name_css = name.replace(".ipynb", ".css");
       // Attempt to load rise.css
       $('head').append(
-          `<link rel="stylesheet" href="rise.css" id="rise-custom-css" />`);
+        `<link rel="stylesheet" href="rise.css" id="rise-custom-css" />`);
       // Attempt to load css with the same path as notebook
       $('head').append(
-          `<link rel="stylesheet" href="${name_css}" id="rise-notebook-css" />`);
+        `<link rel="stylesheet" href="${name_css}" id="rise-notebook-css" />`);
 
     }
 
     function toggleAllRiseButtons() {
-        $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
+      $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
     }
     
     /*
@@ -558,60 +556,59 @@ define([
      * reveal.js and its plug-ins (e.g. RevealChalkboard).
      */
     function createKeyBindingsDict(default_bindings, custom_shortcuts){
-    	
-        var custom_shortcuts_keys;
-        
-        if (typeof custom_shortcuts === 'undefined'){
-        	custom_shortcuts_keys = [];
+      
+      var custom_shortcuts_keys;
+      
+      if (typeof custom_shortcuts === 'undefined'){
+        custom_shortcuts_keys = [];
+      } else {
+        custom_shortcuts_keys = Object.keys(custom_shortcuts);
+      }
+      //console.log("Chalkboard keys:", cb_shortcuts_keys);
+      
+      var key;
+      var keycode;
+      var keycodes;
+      var shortcut_keys;
+      var nbconf_name;
+      var reveal_bindings = {};
+      var keys_dict;
+      
+      // check if custom binding are defined and in case overwrite default
+      for (const key_binding of custom_shortcuts_keys){
+        if (Object.keys(default_bindings).includes(key_binding)){
+          shortcut_keys = custom_shortcuts[key_binding];
+          //console.log("Found action", key_binding, "bound to key", shortcut_keys);
+          keys_dict = getKeyCodes(shortcut_keys);
+          //console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
+          keycodes = [];
+          for (const key_dict of keys_dict){
+            keycodes.push(key_dict['code']);
+          }
+          // only update the default dict, if valid key codes were found
+          if (keycodes.length >= 0){
+            default_bindings[key_binding]['keycodes'] = keycodes;
+          }
+        } else {
+	  // if the key binding is not defined in the default bindings ignore it
+          console.log(`Unkown key binding \"${key_binding}\" found. Will be ignored!`);
+          // if we would add the API actions in nbconfig, we could provide access
+          // to the complete API of reveal.js and its plug-ins. This would 
+          // however be a bit of a challenge to manage with nbextensions_configurator
         }
-        else{
-        	custom_shortcuts_keys = Object.keys(custom_shortcuts);
-        }
-        //console.log("Chalkboard keys:", cb_shortcuts_keys);
-        
-        var key;
-        var keycode;
-        var keycodes;
-        var shortcut_keys;
-        var nbconf_name;
-        var reveal_bindings = {};
-        var keys_dict;
-        
-        // check if custom binding are defined and in case overwrite default
-        for (const key_binding of custom_shortcuts_keys){
-        	if (Object.keys(default_bindings).includes(key_binding)){
-        		shortcut_keys = custom_shortcuts[key_binding];
-        		//console.log("Found action", key_binding, "bound to key", shortcut_keys);
-        		keys_dict = getKeyCodes(shortcut_keys);
-        		//console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
-        		keycodes = [];
-        		for (const key_dict of keys_dict){
-        			keycodes.push(key_dict['code']);
-        		}
-        		// only update the default dict, if valid key codes were found
-        		if (keycodes.length >= 0){
-        			default_bindings[key_binding]['keycodes'] = keycodes;
-        		}
-        	}
-        	else{	// if the key binding is not defined in the default bindings ignore it
-        		console.log(`Unkown key binding \"${key_binding}\" found. Will be ignored!`);
-        		// if we would add the API actions in nbconfig, we could provide access
-        		// to the complete API of reveal.js and its plug-ins. This would 
-        		// however be a bit of a challenge to manage with nbextensions_configurator
-        	}
-        }
-        
-        // iterate through (update default_bindings) and export to keyboard binding dict for reveal.js
-        for (const key_binding of Object.keys(default_bindings)){ 
-        	// for each key code (if multiple keys assigned to same binding)
-			for (keycode of default_bindings[key_binding]['keycodes']) {
-	    		//keycode = nbconfig_keys[nbconf_name]['keycode']; 
-	    		//console.log(`nbconf_name: ${nbconf_name}, keycode: ${keycode}`);
-	    		reveal_bindings[keycode] = default_bindings[key_binding]['call'];
-	    	}
-        }
-        //console.log(`reveal_bindings: ${JSON.stringify(reveal_bindings)}`);
-		return reveal_bindings;
+      }
+      
+      // iterate through (update default_bindings) and export to keyboard binding dict for reveal.js
+      for (const key_binding of Object.keys(default_bindings)){ 
+        // for each key code (if multiple keys assigned to same binding)
+	for (keycode of default_bindings[key_binding]['keycodes']) {
+	  //keycode = nbconfig_keys[nbconf_name]['keycode']; 
+	  //console.log(`nbconf_name: ${nbconf_name}, keycode: ${keycode}`);
+	  reveal_bindings[keycode] = default_bindings[key_binding]['call'];
+	}
+      }
+      //console.log(`reveal_bindings: ${JSON.stringify(reveal_bindings)}`);
+      return reveal_bindings;
     }
 
     // Tailer
@@ -686,57 +683,58 @@ define([
               ////////// set up the leap motion integration if configured
               let enable_leap_motion = complete_config.enable_leap_motion;
               if (enable_leap_motion) {
-                options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'), async: true });
+                options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/leap/leap.js'),
+                                            async: true });
                 options.leap = enable_leap_motion;
               }
               
               ////////// extend reveal.js with custom key bindings to reveal.js and RISE API
               var default_reveal_bindings = 
-              {
-            	'firstSlide': {	// jump to first slide
-	      		    'keycodes': [36],	// defaults to home key
-	    			'call': () => Reveal.slide(0)
-	    		},
-	    		'lastSlide': {	// jump to last slide
-	    			'keycodes': [35],	// defaults to end key
-	    			'call': () => Reveal.slide( Number.MAX_VALUE )
-	    		},
-	    		'toggleOverview': {	// toggle overview
-	    			'keycodes': [87],	// defaults to w
-	    			'call': () => Reveal.toggleOverview()
-	    		},
-	    		'toggleAllRiseButtons': {	// show/hide buttons
-	    			'keycodes': [188],	// defaults to ,
-	    			'call': toggleAllRiseButtons
-	    		},
-	    		'fullscreenHelp': {	// show fullscreen help
-	    			'keycodes': [70],	// defaults to f
-	    			'call': fullscreenHelp
-	    		},
-	    		'riseHelp': {	// '?' show our help
-        			'keycodes': [63],
-        			'call': riseHelp
-        		},
+                  {
+            	    'firstSlide': {	// jump to first slide
+	      	      'keycodes': [36],	// defaults to home key
+	    	      'call': () => Reveal.slide(0)
+	    	    },
+	    	    'lastSlide': {	// jump to last slide
+	    	      'keycodes': [35],	// defaults to end key
+	    	      'call': () => Reveal.slide( Number.MAX_VALUE )
+	    	    },
+	    	    'toggleOverview': {	// toggle overview
+	    	      'keycodes': [87],	// defaults to w
+	    	      'call': () => Reveal.toggleOverview()
+	    	    },
+	    	    'toggleAllRiseButtons': {	// show/hide buttons
+	    	      'keycodes': [188],	// defaults to ,
+	    	      'call': toggleAllRiseButtons
+	    	    },
+	    	    'fullscreenHelp': {	// show fullscreen help
+	    	      'keycodes': [70],	// defaults to f
+	    	      'call': fullscreenHelp
+	    	    },
+	    	    'riseHelp': {	// '?' show our help
+        	      'keycodes': [63],
+        	      'call': riseHelp
+        	    },
 	    	  }
               // check if custom reveal shortcuts are defined at all
               var custom_reveal_shortcuts;
               if (typeof complete_config.reveal_shortcuts === 'undefined'){
-            	  custom_reveal_shortcuts = undefined;
-              }
-              else{
-            	  custom_reveal_shortcuts = complete_config.reveal_shortcuts.main;
+            	custom_reveal_shortcuts = undefined;
+              } else {
+            	custom_reveal_shortcuts = complete_config.reveal_shortcuts.main;
               }
               var reveal_bindings = createKeyBindingsDict(default_reveal_bindings,
-            		  custom_reveal_shortcuts);
+            		                                  custom_reveal_shortcuts);
               $.extend(options.keyboard, reveal_bindings);
-	    	  
+	      
               ////////// set up chalkboard if configured
               let enable_chalkboard = complete_config.enable_chalkboard;
               if (enable_chalkboard) {
                 if ("chalkboard" in complete_config) {
                   options["chalkboard"] = complete_config["chalkboard"];
                 }
-                options.dependencies.push({ src: require.toUrl('./reveal.js-chalkboard/chalkboard.js'), async: true });
+                options.dependencies.push({ src: require.toUrl('./reveal.js-chalkboard/chalkboard.js'),
+                                            async: true });
                 // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach
                 // could hopefully avoid conflicting behaviours in case of overlaps
@@ -748,26 +746,26 @@ define([
                 ///// add custom key bindings to RevealChalkboard API
                 // default chalkboard key codes as defined in nbextension_configurator (see rise.yaml)
                 var default_cb_bindings = {
-            		'clear': {	// '-' clear full size chalkboard
-            			'keycodes': [189],
-                		'call': () => RevealChalkboard.clear()
-                	},
-                	'reset': {	// '=' reset chalkboard data on current slide
-                		'keycodes': [187],
-                		'call': () => RevealChalkboard.reset()
-                	},
-                	'toggleChalkboard': {	// '[' toggle full size chalkboard
-                		'keycodes': [219],
-	            		'call': () => RevealChalkboard.toggleChalkboard()
-            		},
-            		'toggleNotesCanvas': {	// ']' toggle notes (slide-local)
-            			'keycodes': [221],
-                    	'call': () => RevealChalkboard.toggleNotesCanvas()
-            		},
-            		'download': {	// '\' download recorded chalkboard drawing
-            			'keycodes': [220],
-                    	'call': () => RevealChalkboard.download()
-            		}
+            	  'clear': {	// '-' clear full size chalkboard
+            	    'keycodes': [189],
+                    'call': () => RevealChalkboard.clear()
+                  },
+                  'reset': {	// '=' reset chalkboard data on current slide
+                    'keycodes': [187],
+                    'call': () => RevealChalkboard.reset()
+                  },
+                  'toggleChalkboard': {	// '[' toggle full size chalkboard
+                    'keycodes': [219],
+	            'call': () => RevealChalkboard.toggleChalkboard()
+            	  },
+            	  'toggleNotesCanvas': {	// ']' toggle notes (slide-local)
+            	    'keycodes': [221],
+                    'call': () => RevealChalkboard.toggleNotesCanvas()
+            	  },
+            	  'download': {	// '\' download recorded chalkboard drawing
+            	    'keycodes': [220],
+                    'call': () => RevealChalkboard.download()
+            	  }
                 };
                 
                 // add user defined keycodes, if defined via nbextensions_configurator
@@ -775,12 +773,11 @@ define([
                 var custom_cb_shortcuts;
                 if (typeof complete_config.reveal_shortcuts === 'undefined'){
               	  custom_cb_shortcuts = undefined;
-                }
-                else{
+                } else {
               	  custom_cb_shortcuts = complete_config.reveal_shortcuts.chalkboard;
                 }
                 var cb_bindings = createKeyBindingsDict(default_cb_bindings,
-              		  custom_cb_shortcuts);
+              		                                custom_cb_shortcuts);
                 $.extend(options.keyboard, cb_bindings);
               }
 
@@ -902,43 +899,41 @@ define([
    * the default_str argument will be used instead).
    */
   function createShortCutStr(shortcut_str, default_str){
-	
-	var keys_dict;
-	var keycodes = [];
-	//var keycode;
-	var key_str;
-	
-	if (typeof shortcut_str === 'undefined'){	// if no custom keys are defined
-		key_str = "<kbd>" + default_str + "</kbd>";
+    
+    var keys_dict;
+    var keycodes = [];
+    //var keycode;
+    var key_str;
+    
+    if (typeof shortcut_str === 'undefined'){	// if no custom keys are defined
+      key_str = "<kbd>" + default_str + "</kbd>";
+    } else {
+      keys_dict = getKeyCodes(shortcut_str);
+      //console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
+      
+      for (const key_dict of keys_dict){
+	keycodes.push(key_dict['key']);
+      }
+      
+      // create string
+      if (keycodes.length === 0){
+	key_str = "<kbd>" + default_str + "</kbd>";
+      }
+      else if (keycodes.length === 1){
+	key_str = "<kbd>" + keycodes[0] + "</kbd>";
+      } else {
+	// multiple valid keys for one action
+	key_str = "";
+	for (const [index, key] of keycodes.entries()){
+	  if (index > 0){
+	    key_str += ",<kbd>" + key + "</kbd>";
+	  } else {
+	    key_str += "<kbd>" + key + "</kbd>";
+	  }
 	}
-	else{
-		keys_dict = getKeyCodes(shortcut_str);
-		//console.log(`keys_dict: ${JSON.stringify(keys_dict)}`);
-		
-		for (const key_dict of keys_dict){
-			keycodes.push(key_dict['key']);
-		}
-		
-		// create string
-		if (keycodes.length === 0){
-			key_str = "<kbd>" + default_str + "</kbd>";
-		}
-		else if (keycodes.length === 1){
-			key_str = "<kbd>" + keycodes[0] + "</kbd>";
-		}
-		else{	// multiple valid keys for one action
-			key_str = "";
-			for (const [index, key] of keycodes.entries()){
-				if (index > 0){
-					key_str += ",<kbd>" + key + "</kbd>";
-				}
-				else{
-					key_str += "<kbd>" + key + "</kbd>";
-				}
-			}
-		}
-	}
-	return key_str;
+      }
+    }
+    return key_str;
   }
   
   /*
@@ -950,39 +945,36 @@ define([
    * help_str = help text to be shown for item
    */
   function createListItemStr(shortcut_str, default_str, help_str){
-	  var item_str;
-	  
-	  var item_key_str = createShortCutStr(shortcut_str, default_str);
-	  
-	  item_str = "<li>" + item_key_str + ": " + help_str + "</li>"
-	  
-	  return item_str
+    var item_str;
+    
+    var item_key_str = createShortCutStr(shortcut_str, default_str);
+    
+    item_str = "<li>" + item_key_str + ": " + help_str + "</li>";
+    
+    return item_str
   }
-   
+  
   function riseHelp() {
-	var reveal_keys;
-	var cb_keys;
-	
-	//check if custom key bindings for reveal & chalkboard are defined  
-	if (typeof complete_config.reveal_shortcuts !== 'undefined'){
-		if (typeof complete_config.reveal_shortcuts.main !== 'undefined'){
-			reveal_keys = complete_config.reveal_shortcuts.main;
-		}
-		else{
-			reveal_keys = {};
-		}
-		if (typeof complete_config.reveal_shortcuts.chalkboard !== 'undefined'){
-			cb_keys = complete_config.reveal_shortcuts.chalkboard;
-		}
-		else{
-			cb_keys = {};
-		}
-	}
-	else{
-		reveal_keys = {};
-		cb_keys = {};
-	}
-		
+    var reveal_keys;
+    var cb_keys;
+    
+    //check if custom key bindings for reveal & chalkboard are defined  
+    if (typeof complete_config.reveal_shortcuts !== 'undefined'){
+      if (typeof complete_config.reveal_shortcuts.main !== 'undefined'){
+	reveal_keys = complete_config.reveal_shortcuts.main;
+      } else {
+	reveal_keys = {};
+      }
+      if (typeof complete_config.reveal_shortcuts.chalkboard !== 'undefined'){
+	cb_keys = complete_config.reveal_shortcuts.chalkboard;
+      } else {
+	cb_keys = {};
+      }
+    } else {
+      reveal_keys = {};
+      cb_keys = {};
+    }
+    
     let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
@@ -998,20 +990,20 @@ define([
           createListItemStr(reveal_keys.toggleAllRiseButtons, ',', 'show/hide help and exit buttons') +
           "<li><kbd>/</kbd>: black screen</li>" +
           "<li><strong>less useful:</strong>" +
-            "<ul>" +
-            "<li><kbd>PgUp</kbd>: up</li>" +
-            "<li><kbd>PgDn</kbd>: down</li>" +
-            "<li><kbd>Left Arrow</kbd>: left <em>(note: Space preferred)</em></li>" +
-            "<li><kbd>Right Arrow</kbd>: right <em>(note: Shift Space preferred)</em></li>" +
-            "</ul>" +
+          "<ul>" +
+          "<li><kbd>PgUp</kbd>: up</li>" +
+          "<li><kbd>PgDn</kbd>: down</li>" +
+          "<li><kbd>Left Arrow</kbd>: left <em>(note: Space preferred)</em></li>" +
+          "<li><kbd>Right Arrow</kbd>: right <em>(note: Shift Space preferred)</em></li>" +
+          "</ul>" +
           "<li><strong>with chalkboard enabled:</strong>" +
-            "<ul>" +
-            createListItemStr(cb_keys.toggleChalkboard, '[', 'toggle fullscreen chalkboard') +
-            createListItemStr(cb_keys.toggleNotesCanvas, ']', 'toggle slide-local canvas') +
-            createListItemStr(cb_keys.download, '\\', 'download chalkboard drawing') +
-            createListItemStr(cb_keys.reset, '=', 'clear slide-local canvas') +
-            createListItemStr(cb_keys.clear, '-', 'delete fullscreen chalkboard') +
-            "</ul>" +
+          "<ul>" +
+          createListItemStr(cb_keys.toggleChalkboard, '[', 'toggle fullscreen chalkboard') +
+          createListItemStr(cb_keys.toggleNotesCanvas, ']', 'toggle slide-local canvas') +
+          createListItemStr(cb_keys.download, '\\', 'download chalkboard drawing') +
+          createListItemStr(cb_keys.reset, '=', 'clear slide-local canvas') +
+          createListItemStr(cb_keys.clear, '-', 'delete fullscreen chalkboard') +
+          "</ul>" +
           "</ul>" +
           "<b>NOTE</b>: of course you have to use these shortcuts <b>in command mode.</b>"
       )
@@ -1061,9 +1053,9 @@ define([
     Jupyter.dialog.modal({
       title : "Fullscreen Help",
       body : message,
-    buttons : {
+      buttons : {
         OK : {class: "btn-danger"}
-    }
+      }
     });
 
   }
@@ -1181,21 +1173,21 @@ define([
 
     let cells = notebook.get_cells();
     for (let index in cells) {
-        let cell = cells[index];
-        // ignore skip cells no matter what
-        if (is_skip(cell) || is_notes(cell))
-          continue;
-        // a slide always increments, even at the start, since we begin at -1
-        if (is_slide(cell)) {
-            slide_counter += 1;
-            subslide_counter = 0;
-        }
-        // if we see anything else then we're on a visible slide
-        // that has to be at least 0
-        slide_counter = Math.max(slide_counter, 0);
-        if (is_subslide(cell)) {
-            subslide_counter += 1;
-        }
+      let cell = cells[index];
+      // ignore skip cells no matter what
+      if (is_skip(cell) || is_notes(cell))
+        continue;
+      // a slide always increments, even at the start, since we begin at -1
+      if (is_slide(cell)) {
+        slide_counter += 1;
+        subslide_counter = 0;
+      }
+      // if we see anything else then we're on a visible slide
+      // that has to be at least 0
+      slide_counter = Math.max(slide_counter, 0);
+      if (is_subslide(cell)) {
+        subslide_counter += 1;
+      }
 
       if ((slide_counter == slide) && (subslide_counter == subslide)) {
         // keep count of fragments but only on current slide
@@ -1210,8 +1202,8 @@ define([
         let fragment_match = (auto_select_fragment) ? (fragment_counter == fragment) : true;
         // we still need to match cell types
         if ( fragment_match &&
-	         ((cell_type === null) || (cell.cell_type == cell_type))) {
-	      return index;
+	     ((cell_type === null) || (cell.cell_type == cell_type))) {
+	  return index;
         }
       }
     }
@@ -1227,14 +1219,14 @@ define([
 
     // register main action
     actions.register(
-        {help:    "Enter/Exit RISE Slideshow",
-         handler: revealMode},
-        "slideshow", "RISE");
+      {help:    "Enter/Exit RISE Slideshow",
+       handler: revealMode},
+      "slideshow", "RISE");
 
     actions.register(
-        {help:    "execute cell, and move to the next if on the same slide",
-         handler: smartExec},
-        "smart-exec", "RISE");
+      {help:    "execute cell, and move to the next if on the same slide",
+       handler: smartExec},
+      "smart-exec", "RISE");
 
     // helpers for toggling slide_type
     function init_metadata_slideshow(optional_cell) {
@@ -1254,42 +1246,42 @@ define([
     }
 
     actions.register(
-        {help   : '(un)set current cell as a Slide cell',
-         handler: () => toggle_slide_type('slide')},
-        "toggle-slide", "RISE");
+      {help   : '(un)set current cell as a Slide cell',
+       handler: () => toggle_slide_type('slide')},
+      "toggle-slide", "RISE");
 
     actions.register(
-        {help   : '(un)set current cell as a Sub-slide cell',
-         handler: () => toggle_slide_type('subslide')},
-        "toggle-subslide", "RISE");
+      {help   : '(un)set current cell as a Sub-slide cell',
+       handler: () => toggle_slide_type('subslide')},
+      "toggle-subslide", "RISE");
 
     actions.register(
-        {help   : '(un)set current cell as a Fragment cell',
-         handler: () => toggle_slide_type('fragment')},
-        "toggle-fragment", "RISE");
+      {help   : '(un)set current cell as a Fragment cell',
+       handler: () => toggle_slide_type('fragment')},
+      "toggle-fragment", "RISE");
 
     actions.register(
-        {help   : '(un)set current cell as a Note cell',
-         handler: () => toggle_slide_type('notes')},
-        "toggle-notes", "RISE");
+      {help   : '(un)set current cell as a Note cell',
+       handler: () => toggle_slide_type('notes')},
+      "toggle-notes", "RISE");
 
     actions.register(
-        {help   : '(un)set current cell as a Skip cell',
-         handler: () => toggle_slide_type('skip')},
-        "toggle-skip", "RISE");
+      {help   : '(un)set current cell as a Skip cell',
+       handler: () => toggle_slide_type('skip')},
+      "toggle-skip", "RISE");
 
 
     actions.register(
-        {help   : 'render all cells (all cells go to command mode)',
-         handler: () => Jupyter.notebook.get_cells().forEach(
-             cell => cell.render())},
-        "render-all-cells", "RISE");
+      {help   : 'render all cells (all cells go to command mode)',
+       handler: () => Jupyter.notebook.get_cells().forEach(
+         cell => cell.render())},
+      "render-all-cells", "RISE");
 
     actions.register(
-        {help   : 'edit all cells (all cells go to edit mode)',
-         handler: () => Jupyter.notebook.get_cells().forEach(
-            cell => cell.unrender())},
-        "edit-all-cells", "RISE");
+      {help   : 'edit all cells (all cells go to edit mode)',
+       handler: () => Jupyter.notebook.get_cells().forEach(
+         cell => cell.unrender())},
+      "edit-all-cells", "RISE");
 
     // because the `Edit Keyboard Shortcuts` utility does not mention the
     // actions prefix (i.e. 'RISE' in our case), we choose to make these two
@@ -1302,15 +1294,15 @@ define([
     }
 
     actions.register(
-        {help: 'open the nbconfigurator page for RISE',
-         handler: nbconfigurator},
-        "rise-nbconfigurator", "RISE");
+      {help: 'open the nbconfigurator page for RISE',
+       handler: nbconfigurator},
+      "rise-nbconfigurator", "RISE");
 
     // mostly for debug / information
     actions.register(
-        {help   : 'output RISE configuration in console, for debugging mostly',
-         handler: showConfig},
-        "rise-dump-config", "RISE");
+      {help   : 'output RISE configuration in console, for debugging mostly',
+       handler: showConfig},
+      "rise-dump-config", "RISE");
   }
 
 
@@ -1332,10 +1324,10 @@ define([
       $('#maintoolbar').addClass('reveal_tagging');
     } else {
       let current_cell_index =
-         // first use current selection if relevant
-        Jupyter.notebook.get_selected_index()
-        // resort to first cell in visible slide otherwise
-        || reveal_cell_index(Jupyter.notebook);
+          // first use current selection if relevant
+          Jupyter.notebook.get_selected_index()
+      // resort to first cell in visible slide otherwise
+          || reveal_cell_index(Jupyter.notebook);
       Remover();
       setupKeys("notebook_mode");
       $('#exit_b').remove();
@@ -1366,7 +1358,7 @@ define([
     let auto_select_fragment = complete_config.auto_select_fragment;
     setTimeout(function(){
       let current_cell_index = reveal_cell_index(
-          Jupyter.notebook, cell_type, auto_select_fragment);
+        Jupyter.notebook, cell_type, auto_select_fragment);
       // select and focus on current cell
       if (current_cell_index)
         Jupyter.notebook.select(current_cell_index);
@@ -1388,7 +1380,7 @@ define([
       let shortcut = shortcuts[action_name];
       // ignore if shortcut is set to an empty string
       if (shortcut) {
-//        console.log(`RISE: adding shortcut ${shortcut} for ${action_name}`)
+        //        console.log(`RISE: adding shortcut ${shortcut} for ${action_name}`)
         Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut(
           shortcut, `RISE:${action_name}`)
       }
@@ -1412,7 +1404,7 @@ define([
       .appendTo('head');
 
     configLoaded()
-//      .then(showConfig)
+    //      .then(showConfig)
       .then(registerJupyterActions)
       .then(addButtonsAndShortcuts)
       .then(autoLaunch)

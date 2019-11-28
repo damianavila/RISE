@@ -499,3 +499,57 @@ Note that with this approach, you will end up with the
 The actions exposed to Jupyter are also present in Jupyter's
 mainstream keyboard shortcuts editor, that you can use to (un)define
 your custom shortcuts.
+
+### Native keyboard shortcuts for reveal.js and reveal.js plug-ins 
+
+Some custom keyboard shortcuts may be defined in RISE to override the default 
+keyboard shortcuts of `reveal.js` and/or its plug-ins.
+
+The key bindings can be defined via the `nbextensions_configurator` or directly 
+in JSON.
+
+The table below shows the avaialble key bindings:
+
+	module      action               default key  behaviour
+    ---------------------------------------------------------
+    main        firstSlide           home         jump to first slide
+    main        lastSlide            end          jump to last slide
+    main        toggleOverview       w            toggles slide overview
+    main        toggleAllRiseButtons ,            show/hide buttons
+    main        fullscreenHelp       f            show fullscreen help
+    main        riseHelp             ?            show the RISE help
+    chalkboard  clear                -            clear full size chalkboard
+    chalkboard  reset                =            reset chalkboard data on current slide
+    chalkboard  toggleChalkboard     [            toggle full size chalkboard
+    chalkboard  toggleNotesCanvas    ]            toggle notes (slide-local)
+    chalkboard  download             \            download recorded chalkboard drawing
+
+In JSON the native reveal.js keyboard shortcuts can be defined as shown in the 
+example below:
+
+    {
+     ...
+     "rise": {
+         "reveal_shortcuts": {
+             "main": {
+                "toggleOverview": "tab"
+             },
+             "chalkboard": {
+                "clear": "delete,c"
+             }
+         }
+    }
+
+Note, that it is not possible to define key combinations (e.g. `Alt-C`) for 
+the native reveal.js short cuts.
+
+Also note, that some key bindings may not be supported depending on your OS, 
+browser and/or keyboard layout.
+
+Unlike in the typical jupyter notebook logic - multiple keys seperated by a 
+comma (e.g. `"delete,c"`) do not represent a succession of keys, that needs to 
+be pressed.
+Instead they define alternative key bindings for the same action - e.g. in the 
+example above the action to clear the chalkboard would be bound to both 
+the `delete`- as well as the `c`-key. 
+

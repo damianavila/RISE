@@ -515,7 +515,6 @@ The table below shows the avaialble key bindings:
     main        firstSlide           home         jump to first slide
     main        lastSlide            end          jump to last slide
     main        toggleOverview       w            toggles slide overview
-    main        toggleAllRiseButtons ,            show/hide buttons
     main        fullscreenHelp       f            show fullscreen help
     main        riseHelp             ?            show the RISE help
     chalkboard  clear                -            clear full size chalkboard
@@ -535,21 +534,9 @@ example below:
                 "toggleOverview": "tab"
              },
              "chalkboard": {
-                "clear": "delete,c"
+                "clear": "ctrl-k"
              }
          }
     }
 
-Note, that it is not possible to define key combinations (e.g. `Alt-C`) for 
-the native reveal.js short cuts.
-
-Also note, that some key bindings may not be supported depending on your OS, 
-browser and/or keyboard layout.
-
-Unlike in the typical jupyter notebook logic - multiple keys seperated by a 
-comma (e.g. `"delete,c"`) do not represent a succession of keys, that needs to 
-be pressed.
-Instead they define alternative key bindings for the same action - e.g. in the 
-example above the action to clear the chalkboard would be bound to both 
-the `delete`- as well as the `c`-key. 
 

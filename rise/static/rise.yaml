@@ -135,7 +135,7 @@ Parameters:
 - name: rise.shortcuts.toggle-notes
   description: <code>rise.shortcuts.toggle-notes</code> shortcut to toggle the 'notes' tag on current cell
   input_type: hotkey
-  default: none
+  default: t
 - name: rise.shortcuts.toggle-skip
   description: <code>rise.shortcuts.toggle-skip</code> shortcut to toggle the 'skip' tag on current cell
   input_type: hotkey
@@ -159,76 +159,74 @@ Parameters:
 - name: rise.reveal_shortcuts.main.riseHelp
   description: >
     <code>rise.reveal_shortcuts.main.riseHelp</code>: shortcut for showing 
-    help (<strong>key combinations are not supported</strong>)
+    help
   input_type: hotkey
-  default: none
+  default: "?"
 #
 - name: rise.reveal_shortcuts.main.firstSlide
   description: >
     <code>rise.reveal_shortcuts.main.firstSlide</code>: shortcut for jump to first 
-    slide (<strong>key combinations are not supported</strong>)
+    slide
   input_type: hotkey
-  default: none
+  default: home
 #
 - name: rise.reveal_shortcuts.main.lastSlide
   description: >
     <code>rise.reveal_shortcuts.main.lastSlide</code>: shortcut for jump to last 
-    slide (<strong>key combinations are not supported</strong>)
+    slide
   input_type: hotkey
-  default: none
+  default: end
 #
 - name: rise.reveal_shortcuts.main.toggleOverview
   description: >
     <code>rise.reveal_shortcuts.main.toggleOverview</code>: shortcut for slides 
-    overview (<strong>key combinations are not supported</strong>)
+    overview
   input_type: hotkey
-  default: none
-#
-- name: rise.reveal_shortcuts.main.toggleAllRiseButtons
-  description: >
-    <code>rise.reveal_shortcuts.main.toggleAllRiseButtons</code>: shortcut 
-    show/hide RISE buttons (<strong>key combinations are not supported</strong>)
-  input_type: hotkey
-  default: none
+  default: w
+# unfortunately jupyter does not allow to assign any keybinding to "," (comma)
+# and the function is not as easily accessable as the other functions
+# so "," is currently the only hard-wired keybind to reveal.js
+# - name: rise.reveal_shortcuts.main.toggleAllRiseButtons
+#   description: >
+#    <code>rise.reveal_shortcuts.main.toggleAllRiseButtons</code>: shortcut 
+#    show/hide RISE buttons
+#  input_type: hotkey
+#  default: m
 #
 - name: rise.reveal_shortcuts.chalkboard.reset
   description: >
     <code>rise.reveal_shortcuts.chalkboard.reset</code>: shortcut (in chalkboard mode) for resetting 
-    chalkboard data on current slide (<strong>key combinations are not supported
-    </strong>)
+    chalkboard data on current slide
   input_type: hotkey
-  default: none
+  default: minus
 #
 - name: rise.reveal_shortcuts.chalkboard.clear
   description: >
     <code>rise.reveal_shortcuts.chalkboard.clear</code>: shortcut (in chalkboard mode) for clearing 
-    full size chalkboard (<strong>key combinations are not supported</strong>)
+    full size chalkboard
   input_type: hotkey
-  default: none
+  default: "="
 #
 - name: rise.reveal_shortcuts.chalkboard.toggleChalkboard
   description: >
     <code>rise.reveal_shortcuts.chalkboard.toggleChalkboard</code>: shortcut (in chalkboard mode) for 
-    toggling full size chalkboard (<strong>key combinations are not supported
-    </strong>)
+    toggling full size chalkboard
   input_type: hotkey
-  default: none
+  default: "["
 #
 - name: rise.reveal_shortcuts.chalkboard.toggleNotesCanvas
   description: >
     <code>rise.reveal_shortcuts.chalkboard.toggleNotesCanvas</code>: shortcut (in chalkboard mode) 
-    for toggling notes (slide-local) (<strong>key combinations are not supported
-    </strong>)
+    for toggling notes (slide-local)
   input_type: hotkey
-  default: none
+  default: "]"
 #
 - name: rise.reveal_shortcuts.chalkboard.download
   description: >
     <code>rise.reveal_shortcuts.chalkboard.download</code>: shortcut (in chalkboard mode) for 
-    downloading recorded chalkboard drawing (<strong>key combinations are not 
-    supported</strong>)
+    downloading recorded chalkboard drawing
   input_type: hotkey
-  default: none
+  default: \
 
 #
 # passed to reveal as-is

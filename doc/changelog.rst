@@ -29,6 +29,11 @@ compatible with previous IPython versions:
 Changes
 =======
 
+* 5.6.1-dev0
+  * experimental feature - to allow users to change the keyboard shortcuts
+    attached to internal reveal functions - pr #525 and #526
+    - thanks thies.hecker@gmx.de 
+
 * 5.6.0
 
   * Fix advise on centering images in Markdown (https://github.com/damianavila/RISE/pull/508)

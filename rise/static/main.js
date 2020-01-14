@@ -769,7 +769,7 @@ define([
     let custom_shortcuts = complete_config.reveal_shortcuts;
     console.log(`custom_shortcuts in updateRevealBindings`, custom_shortcuts);
     
-    if (custom_shortcuts !== null){
+    if (custom_shortcuts) {
       for (const module of Object.keys(custom_shortcuts)){
         for (const action of Object.keys(custom_shortcuts[module])){
            default_bindings[module][action] = custom_shortcuts[module][action];

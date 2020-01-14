@@ -499,18 +499,19 @@ define([
     /* this policy of trying ./rise.css and then <notebook>.css
      * should be redefinable in the config
      */
-    if (window.location.pathname.endsWith('.ipynb')) {
-      let name = Jupyter.notebook.notebook_name;
-      // associated css
-      let name_css = name.replace(".ipynb", ".css");
-      // Attempt to load rise.css
-      $('head').append(
-        `<link rel="stylesheet" href="rise.css" id="rise-custom-css" />`);
-      // Attempt to load css with the same path as notebook
-      $('head').append(
-        `<link rel="stylesheet" href="${name_css}" id="rise-notebook-css" />`);
-
-    }
+    // https://github.com/damianavila/RISE/issues/509
+    let name = Jupyter.notebook.notebook_name;
+    // remove extension if any
+    let dot_index = name.lastIndexOf('.');
+    let stem = (dot_index == -1) ? name : name.substr(0, dot_index);
+    // associated css
+    let name_css = `${stem}.css`;
+    // Attempt to load rise.css
+    $('head').append(
+      `<link rel="stylesheet" href="rise.css" id="rise-custom-css" />`);
+    // Attempt to load css with the same path as notebook
+    $('head').append(
+      `<link rel="stylesheet" href="${name_css}" id="rise-notebook-css" />`);
 
     function toggleAllRiseButtons() {
       $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()

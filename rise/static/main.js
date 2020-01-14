@@ -41,7 +41,7 @@ define([
    * setup waits for the config to be loaded before it actually enables keyboard shortcuts
    * and other menu items; so this means that the bulk of the code can assume that the config
    * is already loaded and does not need to worry about using promises, or
-   * waiting for any asyncronous code to complete
+   * waiting for any asynchronous code to complete
    */
 
   let complete_config = {};
@@ -765,9 +765,9 @@ define([
   // update reveal bindings with custom key codes
   function updateRevealBindings(default_bindings){
     
-    console.log(`complete_config in updateRevealBindings: ${JSON.stringify(complete_config)}`);
-    var custom_shortcuts = complete_config.reveal_shortcuts;
-    console.log(`custom_shortcuts in updateRevealBindings: ${JSON.stringify(custom_shortcuts)}`);
+    console.log(`complete_config in updateRevealBindings`, complete_config);
+    let custom_shortcuts = complete_config.reveal_shortcuts;
+    console.log(`custom_shortcuts in updateRevealBindings`, custom_shortcuts);
     
     if (custom_shortcuts !== null){
       for (const module of Object.keys(custom_shortcuts)){

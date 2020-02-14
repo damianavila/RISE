@@ -29,7 +29,7 @@
   },
   "files": [
       "export/reveal.js",
-      "export/reveal-chalkboard.js"
+      "export/reveal.js-chalkboard"
   ],
   "scripts": {
     "build": "for target in copy patch; do npm run $target; done",

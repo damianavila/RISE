@@ -1,5 +1,16 @@
 ## Development
 
+****
+
+***Warning*** this page needs to be updated for 5.7 that has a new directory layout; 
+in a nutshell, 5.7 comes with a clear separation between 
+* what is inherited from `reveal.js` with our minor adaptations (the `rise-reveal` subdir),
+* the RISE extension for the classic notbeook (the `classic` subdir),
+* opening the space for a future `jlab` subdir that will host the jupyterlab extension.
+
+****
+
+
 You can install RISE in development mode in this way:
 
 ### Requirements

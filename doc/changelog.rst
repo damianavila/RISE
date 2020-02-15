@@ -29,9 +29,14 @@ compatible with previous IPython versions:
 Changes
 =======
 
+* 5.6.1-dev3
+  * remove accent in setup.py that was occasionally breaking installation (https://github.com/damianavila/RISE/issues/514)
+  * properly load companion css when running with jupytext enabled (https://github.com/damianavila/RISE/issues/509)
+  * bugfix about the keyboard-binding feature from 5.6.1-dev0
+
 * 5.6.1-dev0
-  * experimental feature - to allow users to change the keyboard shortcuts
-    attached to internal reveal functions - pr #525 and #526
+  * experimental feature - to allow users to change the keyboard shortcuts attached to internal reveal functions 
+    - PRs https://github.com/damianavila/RISE/pull/525 and https://github.com/damianavila/RISE/pull/526
     - thanks thies.hecker@gmx.de 
 
 * 5.6.0

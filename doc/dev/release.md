@@ -11,10 +11,10 @@ git clean -fdx
 ROOT=$(pwd)
 ```
 
-**Step 1.** Build rise-reveal
+**Step 1.** Build rise-reveal (new step in release 5.7)
 ```bash
 cd $ROOT/rise-reveal
-npm run install
+npm install
 npm run build
 ```
     
@@ -53,6 +53,14 @@ python setup.py bdist_wheel
 ```bash
 cd $ROOT/classic
 twine upload dist/*
+```
+
+**NOTE** when checking the RISE packaging, it can come in handy to publish onto `test.pypi.org` so as to not pollute the official index; for that purpose do 
+```bash
+# to publish on test.pypi.org
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+# to install from that location
+pip install --index https://test.pypi.org/simple --upgrade --pre rise
 ```
 
 **Step 7.** Push changes to conda-forge:

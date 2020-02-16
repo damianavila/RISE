@@ -765,9 +765,9 @@ define([
   // update reveal bindings with custom key codes
   function updateRevealBindings(default_bindings){
     
-    console.log(`complete_config in updateRevealBindings`, complete_config);
+    // console.log(`complete_config in updateRevealBindings`, complete_config);
     let custom_shortcuts = complete_config.reveal_shortcuts;
-    console.log(`custom_shortcuts in updateRevealBindings`, custom_shortcuts);
+    // console.log(`custom_shortcuts in updateRevealBindings`, custom_shortcuts);
     
     if (custom_shortcuts) {
       for (const module of Object.keys(custom_shortcuts)){
@@ -782,8 +782,8 @@ define([
 
   function setupKeys(mode){
     
-    var key_str;
-    var reveal_bindings = updateRevealBindings(reveal_default_bindings);
+    let key_str;
+    let reveal_bindings = updateRevealBindings(reveal_default_bindings);
     
     // Lets setup some specific keys for the reveal_mode
     if (mode === 'reveal_mode') {
@@ -792,14 +792,14 @@ define([
       // Save the f keyboard event for the Reveal fullscreen action
       // see also #375
       // reveal.js and chalkboard key bindings
-      console.log(`complete_config in setupKeys: ${JSON.stringify(complete_config)}`);
+      // console.log(`complete_config in setupKeys: ${JSON.stringify(complete_config)}`);
       
       // add all reveal.js bindings to jupyter
       for (const module of Object.keys(reveal_bindings)){
         for (const action of Object.keys(reveal_bindings[module])){
           key_str = reveal_bindings[module][action];
           Jupyter.keyboard_manager.command_shortcuts.set_shortcut(key_str, `RISE:${action}`);
-          console.log(`Setup jupyter keybinding: ${key_str}, RISE:${action}.`);
+          // console.log(`Setup jupyter keybinding: ${key_str}, RISE:${action}.`);
         }
       }
       try {
@@ -821,15 +821,15 @@ define([
   }
 
   /*
-   * Creates a string of the valid short cuts (i.e. the ones for which a key 
+   * Creates a string of the valid shortcuts (i.e. the ones for which a key 
    * code could be identified). If no key code could be identified the keys are
    * still mapped to the default key code values (a string provided by
    * the default_str argument will be used instead).
    */
-  function createShortCutStr(shortcuts){
+  function shortcutRepr(shortcuts){
     
-    var key_str = "";
-    var first_entry = true;
+    let key_str = "";
+    let first_entry = true;
     
     if (shortcuts.length > 0){
       for (const key of shortcuts.split(",")){
@@ -856,20 +856,14 @@ define([
    * default_str = default (fall back) string for key
    * help_str = help text to be shown for item
    */
-  function createListItemStr(shortcut_str, help_str){
-    var item_str;
-    
-    var item_key_str = createShortCutStr(shortcut_str);
-    
-    item_str = "<li>" + item_key_str + ": " + help_str + "</li>";
-    
-    return item_str
+  function helpListItem(shortcut_str, help_str){
+    return `<li>${shortcutRepr(shortcut_str)} : ${help_str}</li>`;
   }
   
   function riseHelp() {
-    var jupyter_keys;
-    var reveal_keys;
-    var cb_keys;
+    let jupyter_keys;
+    let reveal_keys;
+    let cb_keys;
     
     //check if custom bindings for registered jupyter calls are defined
     if (typeof complete_config.shortcuts !== 'undefined'){
@@ -879,27 +873,27 @@ define([
       jupyter_keys = {};
     }
 
-    var updated_keybindings = updateRevealBindings(reveal_default_bindings);
+    let updated_keybindings = updateRevealBindings(reveal_default_bindings);
     
     //console.log(`updated bindings: ${JSON.stringify(updated_keybindings)}`);
     
     reveal_keys = updated_keybindings['main'];
     cb_keys = updated_keybindings['chalkboard'];
-    var reveal_help = reveal_helpstr['main'];
-    var cb_help = reveal_helpstr['chalkboard'];
+    let reveal_help = reveal_helpstr['main'];
+    let cb_help = reveal_helpstr['chalkboard'];
     
     let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
         "<ul>" +
-          createListItemStr(reveal_keys.riseHelp, reveal_help.riseHelp) +
+          helpListItem(reveal_keys.riseHelp, reveal_help.riseHelp) +
           "<li><kbd>Alt</kbd>+<kbd>r</kbd>: enter/exit RISE</li>" +
           "<li><kbd>Space</kbd>: next</li>" +
           "<li><kbd>Shift</kbd>+<kbd>Space</kbd>: previous</li>" +
           "<li><kbd>Shift</kbd>+<kbd>Enter</kbd>: eval and select next cell if visible</li>" +
-          createListItemStr(reveal_keys.firstSlide, reveal_help.firstSlide) +
-          createListItemStr(reveal_keys.lastSlide, reveal_help.lastSlide) +
-          createListItemStr(reveal_keys.toggleOverview, reveal_help.toggleOverview) +
-          createListItemStr('t', 'toggle notes') +
+          helpListItem(reveal_keys.firstSlide, reveal_help.firstSlide) +
+          helpListItem(reveal_keys.lastSlide, reveal_help.lastSlide) +
+          helpListItem(reveal_keys.toggleOverview, reveal_help.toggleOverview) +
+          helpListItem('t', 'toggle notes') +
           `<li><kbd>,</kbd>: ${reveal_help.toggleAllRiseButtons}</li>` +
           "<li><kbd>/</kbd>: black screen</li>" +
           "<li><strong>less useful:</strong>" +
@@ -911,11 +905,11 @@ define([
           "</ul>" +
           "<li><strong>with chalkboard enabled:</strong>" +
           "<ul>" +
-          createListItemStr(cb_keys.toggleChalkboard, cb_help.toggleChalkboard) +
-          createListItemStr(cb_keys.toggleNotesCanvas, cb_help.toggleNotesCanvaas) +
-          createListItemStr(cb_keys.download, cb_help.download) +
-          createListItemStr(cb_keys.reset, cb_help.reset) +
-          createListItemStr(cb_keys.clear, cb_help.clear) +
+          helpListItem(cb_keys.toggleChalkboard, cb_help.toggleChalkboard) +
+          helpListItem(cb_keys.toggleNotesCanvas, cb_help.toggleNotesCanvaas) +
+          helpListItem(cb_keys.download, cb_help.download) +
+          helpListItem(cb_keys.reset, cb_help.reset) +
+          helpListItem(cb_keys.clear, cb_help.clear) +
           "</ul>" +
           "</ul>" +
           "<b>NOTE</b>: of course you have to use these shortcuts <b>in command mode.</b>"
@@ -1217,19 +1211,16 @@ define([
        handler: showConfig},
       "rise-dump-config", "RISE");
     
-    // actions for keyboard bindings of reveal.js and its plug-ins
-    var api_call;
-    
-    var reveal_bindings = updateRevealBindings(reveal_default_bindings);
+    let reveal_bindings = updateRevealBindings(reveal_default_bindings);
     // register all reveal.js actions for keyboard bindings
     for (const module of Object.keys(reveal_bindings)){
       for (const action of Object.keys(reveal_bindings[module])){
-        api_call = reveal_actions[module][action];
+        let api_call = reveal_actions[module][action];
         actions.register({
           help: reveal_helpstr[module][action], 
           handler: api_call},
           action, "RISE");
-        console.log(`Registered jupyter action \"${action}\" to API call: ${api_call}`);
+        // console.log(`Registered jupyter action \"${action}\" to API call: ${api_call}`);
       }
     }
     
@@ -1310,9 +1301,9 @@ define([
       let shortcut = shortcuts[action_name];
       // ignore if shortcut is set to an empty string
       if (shortcut) {
-        //        console.log(`RISE: adding shortcut ${shortcut} for ${action_name}`)
+        // console.log(`RISE: adding shortcut ${shortcut} for RISE:${action_name}`);
         Jupyter.notebook.keyboard_manager.command_shortcuts.add_shortcut(
-          shortcut, `RISE:${action_name}`)
+          shortcut, `RISE:${action_name}`);
       }
     }
   }

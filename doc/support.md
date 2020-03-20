@@ -13,7 +13,7 @@ At [https://ko-fi.com/damianavila](https://ko-fi.com/damianavila) you can either
 
 We **highly** encourage you to choose one of the **RISE**-related available commissions.
 
-Press the [![Commission Me](../examples/commission.png)](https://ko-fi.com/damianavila/commissions) button for more details on each commission.
+Press the [![](../examples/commission.png)](https://ko-fi.com/damianavila/commissions) button for more details on each commission.
 
 Currently, most of Damian's commissions are associated with **RISE** support and ongoing development.
 These are just a **one-time** commissions, so if you want to support us in a **continuous/recurrent** way, you can buy us a higher commission/tier (not monthly subscription available)!

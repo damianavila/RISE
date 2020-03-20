@@ -26,6 +26,7 @@ Detailed Contents
    exportpdf.md
    changelog.rst
    dev/index.rst
+   support.md
 
 Feedback
 --------

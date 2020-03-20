@@ -54,3 +54,7 @@ documentation.
 ## Feedback
 
 If you have any feedback, or find any bugs, please let us know just opening an issue.
+
+## Support us
+
+Please visit this page for more information: https://rise.readthedocs.io/en/stable/support.html

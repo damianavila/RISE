@@ -2,6 +2,11 @@
 
 Instructions and notes for preparing and publishing a release.
 
+**NOTE** as part of release 5.7 or RISE, the sources repo layout has changed and the code
+for the classic notebook extension has moved under the `classic` subdir; at this point the
+`jlab` area is not ready for shipping, and so these instructions are **only about the
+classic extension**. 
+
 ### Pre-Release check
 
 **Step 0.** Clean your local repo copy:

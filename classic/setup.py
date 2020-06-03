@@ -61,6 +61,7 @@ setup_args = dict(
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
+    long_description_content_type='text/markdown',
     author="Damian Avila",
     author_email="damianavila82@yahoo.com.ar",
     project_urls={

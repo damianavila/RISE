@@ -48,8 +48,8 @@ with open('package.json') as package_json:
     content = package_json.read()
 version = json.loads(content)['version']
 # from npm server into python semver
-if "-dev." in version:
-    version = version.replace("-dev.", ".dev")
+if "-dev" in version:
+    version = version.replace("-dev", ".dev")
 
 setup_args = dict(
     name=NAME,

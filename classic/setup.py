@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 NAME = "rise"
 
 INSTALL_REQUIRES = [
-    'notebook>=5.5.0',
+    'notebook>=6.0',
 ]
 
 with open('README.md') as readme:

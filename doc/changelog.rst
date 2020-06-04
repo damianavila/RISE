@@ -29,12 +29,14 @@ compatible with previous IPython versions:
 Changes
 =======
 
-* 5.6.1-dev3
+* 5.7.0-dev4
+  * new sources layout, in anticipation for a future jlab extension; sources are now split
+    between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 
+    for aour needs, and ``classic`` that contains the actual code for the RISE classic extension
+
+* 5.6.1
   * remove accent in setup.py that was occasionally breaking installation (https://github.com/damianavila/RISE/issues/514)
   * properly load companion css when running with jupytext enabled (https://github.com/damianavila/RISE/issues/509)
-  * bugfix about the keyboard-binding feature from 5.6.1-dev0
-
-* 5.6.1-dev0
   * experimental feature - to allow users to change the keyboard shortcuts attached to internal reveal functions 
     - PRs https://github.com/damianavila/RISE/pull/525 and https://github.com/damianavila/RISE/pull/526
     - thanks thies.hecker@gmx.de 

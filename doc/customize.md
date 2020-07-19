@@ -377,6 +377,8 @@ You can edit notebook metadata as follows
 
 ![](../examples/metadata.png)
 
+If settings do not take effect, try refreshing the page of the web browser.
+
 ### Note on legacy naming
 
 For the remaining of this section, let us forget about custom CSS for

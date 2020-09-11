@@ -29,6 +29,9 @@ compatible with previous IPython versions:
 Changes
 =======
 
+* 5.7.0-dev5
+  * new setting rise.show_buttons_on_startup (#561)
+
 * 5.7.0-dev4
   * new sources layout, in anticipation for a future jlab extension; sources are now split
     between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 

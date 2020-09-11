@@ -42,5 +42,5 @@
     "watch": "~0.16.0",
     "rise-reveal": "file:../rise-reveal/"
   },
-  "version": "5.7.0-dev4"
+  "version": "5.7.0-dev5"
 }

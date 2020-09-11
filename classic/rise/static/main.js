@@ -25,7 +25,7 @@ define([
    * 2) add settings configured in python; these typically can be
    *   2a) either in a legacy file named `livereveal.json`
    *   2b) or, with the official name, in `rise.json`
-   * 3) add the settings from nbextensions_configurator (i.e. .jupyter/nbconfig/notebook.json)
+   * 3) add the settings from nbext_configurator (i.e. .jupyter/nbconfig/notebook.json)
    *    they should all belong in the 'rise' category
    *    the configurator came after the shift from 'livereveal' to 'rise'
    *    so no need to consider 'livereveal' here
@@ -743,22 +743,22 @@ define([
       }
   }
   
-  //need to check, if we can fetch the default bindings from rise.yaml (nbconfig)
+  // need to check, if we can fetch the default bindings from rise.yaml (nbconfig)
   let reveal_default_bindings = {
       'main': {
         'firstSlide': 'home',
-        'lastSlide': 'end', // keycode 35
-        'toggleOverview': 'w',  // keycode 87
-        //'toggleAllRiseButtons': 'm',  //keycode 188 (",") is not allowed in jupyter! using m instead
-        'fullscreenHelp': 'f',  // keycode 70
-        'riseHelp': '?',  // keycode 63
+        'lastSlide': 'end',             // keycode 35
+        'toggleOverview': 'w',          // keycode 87
+        //'toggleAllRiseButtons': 'm',  // keycode 188 (",") is not allowed in jupyter! using m instead
+        'fullscreenHelp': 'f',          // keycode 70
+        'riseHelp': '?',                // keycode 63
       },
       'chalkboard': {
-        'clear': 'minus', // keycode 189 (and 173 on firefox)
-        'reset': '=', // keycode 187 (and 61 on firefox)
-        'toggleChalkboard': '[',  // keyode 219
-        'toggleNotesCanvas': ']', // keycode 221
-        'download': '\\'  // keycode 220
+        'clear': 'minus',               // keycode 189 (and 173 on firefox)
+        'reset': '=',                   // keycode 187 (and 61 on firefox)
+        'toggleChalkboard': '[',        // keycode 219
+        'toggleNotesCanvas': ']',       // keycode 221
+        'download': '\\'                // keycode 220
       }
   }
   

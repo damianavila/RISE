@@ -78,6 +78,13 @@ Parameters:
     the whole slide. Probably safe to keep as true.
   input_type: checkbox
   default: true
+
+- name: rise.show_buttons_on_startup
+  description: >
+    <code>show_buttons_on_startup</code> uncheck if you want your presentation to start without the exit and help buttons; 
+    this applies also to the chalkboard buttons, if enabled
+  input_type: checkbox
+  default: true
 #
 # headers and footer and background image
 #

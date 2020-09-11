@@ -656,6 +656,10 @@ define([
               setStartingSlide(selected_slide);
               addHeaderFooterOverlay();
 
+              if (! complete_config.show_buttons_on_startup) {
+                /* safer, and nicer too, to wait for reveal extensions to start */
+                setTimeout(toggleAllRiseButtons, 2000);
+              }
             });
   }
 

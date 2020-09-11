@@ -471,6 +471,10 @@ define([
     $('div#rise-overlay').remove();
   }
    
+  function toggleAllRiseButtons() {
+    $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
+  }
+  
   function Revealer(selected_slide) {
     
     // console.log(`complete_config: ${JSON.stringify(complete_config)}`);
@@ -513,10 +517,6 @@ define([
     $('head').append(
       `<link rel="stylesheet" href="${name_css}" id="rise-notebook-css" />`);
 
-    function toggleAllRiseButtons() {
-      $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
-    }
-    
 
     // Tailer
     require([
@@ -525,7 +525,7 @@ define([
       // './reveal.js/lib/js/head.min.js',
       './reveal.js/js/reveal.js'
     ].map(require.toUrl),
-            function(){
+            function() {
               // Full list of configuration options available here:
               // https://github.com/hakimel/reveal.js#configuration
 
@@ -712,7 +712,7 @@ define([
         'firstSlide': () => Reveal.slide(0), // jump to first slide
         'lastSlide': () => Reveal.slide( Number.MAX_VALUE ),  // jump to last slide
         'toggleOverview': () => Reveal.toggleOverview(),  // toggle overview
-        //'toggleAllRiseButtons': () => toggleAllRiseButtons(),  // show/hide buttons
+        'toggleAllRiseButtons': toggleAllRiseButtons,  // show/hide buttons
         'fullscreenHelp': fullscreenHelp,  // show fullscreen help
         'riseHelp': riseHelp,  // '?' show our help
       },

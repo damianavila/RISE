@@ -725,6 +725,8 @@ define([
         'reset': () => RevealChalkboard.reset(), // reset chalkboard data on current slide
         'toggleChalkboard': () => RevealChalkboard.toggleChalkboard(),  // toggle full size chalkboard
         'toggleNotesCanvas': () => RevealChalkboard.toggleNotesCanvas(), // toggle notes (slide-local)
+        'colorNext': () => RevealChalkboard.colorNext(), // next color
+        'colorPrev': () => RevealChalkboard.colorPrev(), // previous color
         'download': () => RevealChalkboard.download()  //  download recorded chalkboard drawing
       }
   }
@@ -743,6 +745,8 @@ define([
         'reset': 'reset chalkboard data on current slide',
         'toggleChalkboard': 'toggle full size chalkboard',
         'toggleNotesCanvas': 'toggle notes (slide-local)',
+        'colorNext': 'cycle to next pen color',
+        'colorPrev': 'cycle to previous pen color',
         'download': 'download recorded chalkboard drawing'
       }
   }
@@ -762,6 +766,8 @@ define([
         'reset': '=',                   // keycode 187 (and 61 on firefox)
         'toggleChalkboard': '[',        // keycode 219
         'toggleNotesCanvas': ']',       // keycode 221
+        'colorPrev': 'q',               // keycode 81
+        'colorNext': 's',               // kecode 83
         'download': '\\'                // keycode 220
       }
   }

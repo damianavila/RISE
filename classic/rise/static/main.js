@@ -753,7 +753,7 @@ define([
         'download': 'download recorded chalkboard drawing'
       },
       'notes': { // API calls for RevealNotes plug-in
-          'openNotes' : 'open speaker notes windows'
+          'openNotes' : 'open speaker notes window'
       },
   }
   

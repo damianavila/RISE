@@ -29,13 +29,11 @@ compatible with previous IPython versions:
 Changes
 =======
 
-* 5.7.0-dev5
+* 5.7.0 (oct 2020)
   * new setting rise.show_buttons_on_startup (#561)
-
-* 5.7.0-dev4
   * new sources layout, in anticipation for a future jlab extension; sources are now split
     between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 
-    for aour needs, and ``classic`` that contains the actual code for the RISE classic extension
+    for our needs, and ``classic`` that contains the actual code for the RISE classic extension
 
 * 5.6.1
   * remove accent in setup.py that was occasionally breaking installation (https://github.com/damianavila/RISE/issues/514)

@@ -5,7 +5,7 @@ Instructions and notes for preparing and publishing a release.
 **NOTE** as part of release 5.7 or RISE, the sources repo layout has changed and the code
 for the classic notebook extension has moved under the `classic` subdir; at this point the
 `jlab` area is not ready for shipping, and so these instructions are **only about the
-classic extension**. 
+classic extension**.
 
 ### Pre-Release check
 
@@ -22,7 +22,7 @@ cd $ROOT/rise-reveal
 npm install
 npm run build
 ```
-    
+
 
 **Step 2.** Build the JS and CSS:
 
@@ -45,7 +45,7 @@ git tag -a release_tag -m "Release msg"
 git push origin release_tag
 ```
 
-**Step 5.** Build sdist and wheels packages:    
+**Step 5.** Build sdist and wheels packages:
 
 ```bash
 cd $ROOT/classic
@@ -60,7 +60,7 @@ cd $ROOT/classic
 twine upload dist/*
 ```
 
-**NOTE** when checking the RISE packaging, it can come in handy to publish onto `test.pypi.org` so as to not pollute the official index; for that purpose do 
+**NOTE** when checking the RISE packaging, it can come in handy to publish onto `test.pypi.org` so as to not pollute the official index; for that purpose do
 ```bash
 # to publish on test.pypi.org
 twine upload --repository-url https://test.pypi.org/legacy/ dist/*

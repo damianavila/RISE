@@ -728,7 +728,10 @@ define([
         'colorNext': () => RevealChalkboard.colorNext(), // next color
         'colorPrev': () => RevealChalkboard.colorPrev(), // previous color
         'download': () => RevealChalkboard.download()  //  download recorded chalkboard drawing
-      }
+      },
+      'notes': { // API calls for RevealNotes plug-in
+          'openNotes' : () => RevealNotes.open(), // open speaker notes window
+      },
   }
   
   let reveal_helpstr = {
@@ -748,7 +751,10 @@ define([
         'colorNext': 'cycle to next pen color',
         'colorPrev': 'cycle to previous pen color',
         'download': 'download recorded chalkboard drawing'
-      }
+      },
+      'notes': { // API calls for RevealNotes plug-in
+          'openNotes' : 'open speaker notes windows'
+      },
   }
   
   // need to check, if we can fetch the default bindings from rise.yaml (nbconfig)
@@ -769,7 +775,10 @@ define([
         'colorPrev': 'q',               // keycode 81
         'colorNext': 's',               // kecode 83
         'download': '\\'                // keycode 220
-      }
+      },
+      'notes': { // API calls for RevealNotes plug-in
+          'openNotes' : 't'             // keycode 84
+      },
   }
   
   // update reveal bindings with custom key codes
@@ -874,6 +883,7 @@ define([
     let jupyter_keys;
     let reveal_keys;
     let cb_keys;
+    let no_keys;
     
     //check if custom bindings for registered jupyter calls are defined
     if (typeof complete_config.shortcuts !== 'undefined'){
@@ -889,8 +899,10 @@ define([
     
     reveal_keys = updated_keybindings['main'];
     cb_keys = updated_keybindings['chalkboard'];
+    no_keys = updated_keybindings['notes'];
     let reveal_help = reveal_helpstr['main'];
     let cb_help = reveal_helpstr['chalkboard'];
+    let no_help= reveal_helpstr['notes'];
     
     let message = $('<div/>').append(
       $("<p/></p>").addClass('dialog').html(
@@ -903,7 +915,7 @@ define([
           helpListItem(reveal_keys.firstSlide, reveal_help.firstSlide) +
           helpListItem(reveal_keys.lastSlide, reveal_help.lastSlide) +
           helpListItem(reveal_keys.toggleOverview, reveal_help.toggleOverview) +
-          helpListItem('t', 'toggle notes') +
+          helpListItem(no_keys.openNotes, no_help.openNotes) +
           `<li><kbd>,</kbd>: ${reveal_help.toggleAllRiseButtons}</li>` +
           "<li><kbd>/</kbd>: black screen</li>" +
           "<li><strong>less useful:</strong>" +
@@ -917,6 +929,8 @@ define([
           "<ul>" +
           helpListItem(cb_keys.toggleChalkboard, cb_help.toggleChalkboard) +
           helpListItem(cb_keys.toggleNotesCanvas, cb_help.toggleNotesCanvaas) +
+          helpListItem(cb_keys.colorNext, cb_help.colorNext) +
+          helpListItem(cb_keys.colorPrev, cb_help.colorPrev) +
           helpListItem(cb_keys.download, cb_help.download) +
           helpListItem(cb_keys.reset, cb_help.reset) +
           helpListItem(cb_keys.clear, cb_help.clear) +

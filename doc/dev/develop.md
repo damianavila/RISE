@@ -2,10 +2,10 @@
 
 ****
 
-***Warning*** this page needs to be updated for 5.7 that has a new directory layout;
+***Note*** this page is up-to-date for 5.7 that has a new directory layout;
 in a nutshell, 5.7 comes with a clear separation between
 * what is inherited from `reveal.js` with our minor adaptations (the `rise-reveal` subdir),
-* the RISE extension for the classic notbeook (the `classic` subdir),
+* the RISE extension for the classic notebook (the `classic` subdir),
 * opening the space for a future `jlab` subdir that will host the jupyterlab extension.
 
 ****
@@ -19,8 +19,8 @@ Essentially you will need:
 
 * `git`,
 * `npm` and `nodejs`,
-* and of course `jupyter`;
-* `sphinx` comes in handy to produce the documentation.
+* and of course `jupyter`,
+* finally `sphinx` comes in handy to produce the documentation.
 
 ### Clone the git repo
 
@@ -30,36 +30,26 @@ Essentially you will need:
 
 ### build `rise-reveal`
 
-**Step 0.** go into to the `rise-reveal` subdir
+fetch and patch the source code for `reveal.js`
 
     cd $ROOT/rise-reveal
-
-**Step 1.** fetch dependencies
-
     npm install
-
-**Step 2.** build
-
     npm run build
 
 ### build the clasic extension
 
-**Step 0.** go into to the `classic` subdir
+among others, here we pull the code for `reveal.js` from `rise-reveal` 
+into the static folder
 
     cd $ROOT/classic
-
-**Step 1.** Install the JS dependencies:
-
     npm install
-
-**Step 2.** Copy reveal (plus others) into the static folder and reset reveal.js styling:
-
     npm run build
 
 **Notes**:
 
 * this is all that is needed at that stage
-* later on you might want to take a look at `package.json` that has finer-grained targets, that the `build` target groups for your convenience
+* later on you might want to take a look at `package.json` that has finer-grained targets,
+  that the `build` target groups for your convenience
 * in particular, if you only need to redo css, you can do `npm run build-css`
 * also note that you can remove `reveal.js` from the static folder with `npm run clean-reveal`.
 

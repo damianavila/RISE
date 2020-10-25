@@ -142,7 +142,7 @@ Parameters:
 - name: rise.shortcuts.toggle-notes
   description: <code>rise.shortcuts.toggle-notes</code> shortcut to toggle the 'notes' tag on current cell
   input_type: hotkey
-  default: t
+  default: none
 - name: rise.shortcuts.toggle-skip
   description: <code>rise.shortcuts.toggle-skip</code> shortcut to toggle the 'skip' tag on current cell
   input_type: hotkey

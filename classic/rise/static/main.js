@@ -58,6 +58,7 @@ define([
       start_slideshow_at: 'selected',
       auto_select: 'code',
       auto_select_fragment: true,
+      show_buttons_on_startup: true,
 
       // aspect
       header: undefined,
@@ -112,6 +113,7 @@ define([
 
       // plugins
       enable_chalkboard: false,
+      enable_leap_motion: false,
     };
 
     // honour the 2 names: 'livereveal' and 'rise'

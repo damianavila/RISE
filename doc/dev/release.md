@@ -9,10 +9,11 @@ classic extension**.
 
 ### Pre-Release check
 
-**Step 0.** Clean your local repo copy:
+**Step 0.** Clean your local repo copy at your top level directory and then `cd` into the `classic` subdir:
 
 ```bash
 git clean -fdx
+cd classic
 ROOT=$(pwd)
 ```
 

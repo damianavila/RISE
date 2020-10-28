@@ -18,7 +18,9 @@ ROOT=$(pwd)
 
 **Step 1.** Check for updated version numbers in
 
-* `package.json`
+```
+$ROOT/classic/package.json
+```
 
 **Step 2.** Build rise-reveal (new step in release 5.7)
 ```bash

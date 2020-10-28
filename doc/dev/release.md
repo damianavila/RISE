@@ -16,25 +16,24 @@ git clean -fdx
 ROOT=$(pwd)
 ```
 
-**Step 1.** Build rise-reveal (new step in release 5.7)
+**Step 1.** Check for updated version numbers in
+
+* `package.json`
+
+**Step 2.** Build rise-reveal (new step in release 5.7)
 ```bash
 cd $ROOT/rise-reveal
 npm install
 npm run build
 ```
 
-
-**Step 2.** Build the JS and CSS:
+**Step 3.** Build the JS and CSS:
 
 ```bash
 cd $ROOT/classic
 npm install
 npm run build
 ```
-
-**Step 3.** Check for updated version numbers in
-
-* `package.json`
 
 ### Release
 

@@ -6,7 +6,7 @@ Versions
 
 1. **RISE** master branch is our cutting edge development branch. We will make our best to keep that one working most of time, but no promises ;-)
 
-2. There is just ONE maintenance branch because we only maintain the latest released version.
+2. There is just ONE maintenance `stable` branch because we only maintain the latest released version.
 
 3. There is, additionally, multiple other branches supporting bug fixing, maintenance tasks and development of new features.
 
@@ -25,17 +25,36 @@ Versions
     *  5.5.0 tag compatible with `notebook` >= 5.5.0
     *  5.6.0 tag compatible with `notebook` >= 5.7.8
     *  5.6.1 tag compatible with `notebook` >= 6.0.0
+    *  5.7.0 tag compatible with `notebook` >= 6.0.0
+    *  5.7.1 tag compatible with `notebook` >= 6.0.0
 
 You will also find tags for "development" releases (mostly beta and rc we release before the "official" releases).
 
 Changes
 =======
 
+* 5.7.1
+  * Adding color support to the chalkboard (https://github.com/damianavila/RISE/pull/567)
+    - Upload to reveal.js 3.9.2
+  * Align rise.yaml with the code default for the notes shortcut (fix not working notes shortcut) (ref: dd3fe1e)
+  * Add defaults for show_buttons_on_startup (fix button disappearance)(ref: 0aee102)
+  * Minor changes in the develop doc (ref: 6c9869b)
+
 * 5.7.0
-  * new setting rise.show_buttons_on_startup (#561)
-  * new sources layout, in anticipation for a future jlab extension; sources are now split
+  * New setting rise.show_buttons_on_startup (#561)
+  * New sources layout, in anticipation for a future jlab extension; sources are now split
     between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 
     for our needs, and ``classic`` that contains the actual code for the RISE classic extension
+    (more details at https://github.com/damianavila/RISE/issues/491)
+  * Cleaner way to deal with toggleAllRiseButtons (ref: 6b08f30)
+  * Mark compatibility with notebook 6.x on rise.yaml (ref: c92d271)
+  * Enforce notebook >= 6.0 (ref: 66f2b67)
+  * Address a harmless warning during pip install (ref: 72eb40b)
+  * Fix broken packaging because of symlinks (ref: dc8974b)
+  * Add .readthedocs.yml file (ref: ea7387d)
+  * Add a new support page in the documentation (ref: 3261282)
+  * Adding pygments dependency for the RTD build (ref: deb584f)
+  * Properly show README as markdown at PyPI (ref: 7dfb854)
 
 * 5.6.1
 

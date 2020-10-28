@@ -4,10 +4,13 @@ Changelog
 Versions
 ========
 
-1. **RISE** master branch will be following the **Jupyter** codebase.
+1. **RISE** master branch is our cutting edge development branch. We will make our best to keep that one working most of time, but no promises ;-)
 
-2. There is also "released" tagged [branches](https://github.com/damianavila/RISE/releases)
-compatible with previous IPython versions:
+2. There is just ONE maintenance branch because we only maintain the latest released version.
+
+3. There is, additionally, multiple other branches supporting bug fixing, maintenance tasks and development of new features.
+
+4. There is also "released" tagged [branches](https://github.com/damianavila/RISE/releases) compatible with previous IPython/Jupyter versions:
 
     *  1.x tag compatible with **IPython** 1.x series
     *  2.x tag compatible with **IPython** 2.x series
@@ -21,26 +24,28 @@ compatible with previous IPython versions:
     *  5.4.1 tag compatible with `notebook` >= 5.5.0
     *  5.5.0 tag compatible with `notebook` >= 5.5.0
     *  5.6.0 tag compatible with `notebook` >= 5.7.8
+    *  5.6.1 tag compatible with `notebook` >= 6.0.0
 
-3. With **Jupyter** landing we will provide a conda and pip-installable packages too
-
-**NOTE**: We will only maintain the latest released version.
+You will also find tags for "development" releases (mostly beta and rc we release before the "official" releases).
 
 Changes
 =======
 
-* 5.7.0 (oct 2020)
+* 5.7.0
   * new setting rise.show_buttons_on_startup (#561)
   * new sources layout, in anticipation for a future jlab extension; sources are now split
     between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 
     for our needs, and ``classic`` that contains the actual code for the RISE classic extension
 
 * 5.6.1
-  * remove accent in setup.py that was occasionally breaking installation (https://github.com/damianavila/RISE/issues/514)
-  * properly load companion css when running with jupytext enabled (https://github.com/damianavila/RISE/issues/509)
-  * experimental feature - to allow users to change the keyboard shortcuts attached to internal reveal functions 
+
+  * Remove accent in setup.py that was occasionally breaking installation (https://github.com/damianavila/RISE/issues/514)
+  * Properly load companion css when running with Jupytext enabled (https://github.com/damianavila/RISE/issues/509)
+    - Also add some Jupytext notebook examples (refs: bfbf723 and 144a9bb)
+  * Bugfix about the keyboard-binding feature from 5.6.1-dev0 (refs: 760136f, 086c9c9 and 1e5be45)
+  * Experimental feature to allow users to change the keyboard shortcuts attached to internal reveal functions
     - PRs https://github.com/damianavila/RISE/pull/525 and https://github.com/damianavila/RISE/pull/526
-    - thanks thies.hecker@gmx.de 
+    - thanks thies.hecker@gmx.de
 
 * 5.6.0
 

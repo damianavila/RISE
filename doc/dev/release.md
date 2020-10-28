@@ -2,16 +2,35 @@
 
 Instructions and notes for preparing and publishing a release.
 
+**NOTE** as part of release 5.7 or RISE, the sources repo layout has changed and the code
+for the classic notebook extension has moved under the `classic` subdir; at this point the
+`jlab` area is not ready for shipping, and so these instructions are **only about the
+classic extension**.
+
 ### Pre-Release check
 
-**Step 1.** Clean your local repo copy:
+**Step 0.** Clean your local repo copy:
 
-    git clean -fdx
+```bash
+git clean -fdx
+ROOT=$(pwd)
+```
+
+**Step 1.** Build rise-reveal (new step in release 5.7)
+```bash
+cd $ROOT/rise-reveal
+npm install
+npm run build
+```
+
 
 **Step 2.** Build the JS and CSS:
 
-    npm install
-    npm run build
+```bash
+cd $ROOT/classic
+npm install
+npm run build
+```
 
 **Step 3.** Check for updated version numbers in
 
@@ -21,17 +40,33 @@ Instructions and notes for preparing and publishing a release.
 
 **Step 4.** Tag the repo with:
 
-    git tag -a release_tag -m "Release msg"
-    git push origin release_tag
+```bash
+git tag -a release_tag -m "Release msg"
+git push origin release_tag
+```
 
 **Step 5.** Build sdist and wheels packages:
 
-    python setup.py sdist
-    python setup.py bdist_wheel
+```bash
+cd $ROOT/classic
+python setup.py sdist
+python setup.py bdist_wheel
+```
 
 **Step 6.** Upload *sdist* and *wheels* to PyPI:
 
-    twine upload dist/*
+```bash
+cd $ROOT/classic
+twine upload dist/*
+```
+
+**NOTE** when checking the RISE packaging, it can come in handy to publish onto `test.pypi.org` so as to not pollute the official index; for that purpose do
+```bash
+# to publish on test.pypi.org
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+# to install from that location
+pip install --index https://test.pypi.org/simple --upgrade --pre rise
+```
 
 **Step 7.** Push changes to conda-forge:
 

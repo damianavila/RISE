@@ -25,7 +25,7 @@ define([
    * 2) add settings configured in python; these typically can be
    *   2a) either in a legacy file named `livereveal.json`
    *   2b) or, with the official name, in `rise.json`
-   * 3) add the settings from nbextensions_configurator (i.e. .jupyter/nbconfig/notebook.json)
+   * 3) add the settings from nbext_configurator (i.e. .jupyter/nbconfig/notebook.json)
    *    they should all belong in the 'rise' category
    *    the configurator came after the shift from 'livereveal' to 'rise'
    *    so no need to consider 'livereveal' here
@@ -471,6 +471,10 @@ define([
     $('div#rise-overlay').remove();
   }
    
+  function toggleAllRiseButtons() {
+    $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
+  }
+  
   function Revealer(selected_slide) {
     
     // console.log(`complete_config: ${JSON.stringify(complete_config)}`);
@@ -513,10 +517,6 @@ define([
     $('head').append(
       `<link rel="stylesheet" href="${name_css}" id="rise-notebook-css" />`);
 
-    function toggleAllRiseButtons() {
-      $('#help_b,#exit_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
-    }
-    
 
     // Tailer
     require([
@@ -525,7 +525,7 @@ define([
       // './reveal.js/lib/js/head.min.js',
       './reveal.js/js/reveal.js'
     ].map(require.toUrl),
-            function(){
+            function() {
               // Full list of configuration options available here:
               // https://github.com/hakimel/reveal.js#configuration
 
@@ -578,7 +578,7 @@ define([
                    *   async: true,
                    *  callback: function() { hljs.initHighlightingOnLoad(); } },
                    */
-                  { src: require.toUrl("./notes_rise/notes.js"),
+                  { src: require.toUrl("./reveal.js/plugin/notes/notes.js"),
                     async: true,
                   },
                 ],
@@ -656,6 +656,10 @@ define([
               setStartingSlide(selected_slide);
               addHeaderFooterOverlay();
 
+              if (! complete_config.show_buttons_on_startup) {
+                /* safer, and nicer too, to wait for reveal extensions to start */
+                setTimeout(toggleAllRiseButtons, 2000);
+              }
             });
   }
 
@@ -712,7 +716,7 @@ define([
         'firstSlide': () => Reveal.slide(0), // jump to first slide
         'lastSlide': () => Reveal.slide( Number.MAX_VALUE ),  // jump to last slide
         'toggleOverview': () => Reveal.toggleOverview(),  // toggle overview
-        //'toggleAllRiseButtons': () => toggleAllRiseButtons(),  // show/hide buttons
+        'toggleAllRiseButtons': toggleAllRiseButtons,  // show/hide buttons
         'fullscreenHelp': fullscreenHelp,  // show fullscreen help
         'riseHelp': riseHelp,  // '?' show our help
       },
@@ -743,22 +747,22 @@ define([
       }
   }
   
-  //need to check, if we can fetch the default bindings from rise.yaml (nbconfig)
+  // need to check, if we can fetch the default bindings from rise.yaml (nbconfig)
   let reveal_default_bindings = {
       'main': {
         'firstSlide': 'home',
-        'lastSlide': 'end', // keycode 35
-        'toggleOverview': 'w',  // keycode 87
-        //'toggleAllRiseButtons': 'm',  //keycode 188 (",") is not allowed in jupyter! using m instead
-        'fullscreenHelp': 'f',  // keycode 70
-        'riseHelp': '?',  // keycode 63
+        'lastSlide': 'end',             // keycode 35
+        'toggleOverview': 'w',          // keycode 87
+        //'toggleAllRiseButtons': 'm',  // keycode 188 (",") is not allowed in jupyter! using m instead
+        'fullscreenHelp': 'f',          // keycode 70
+        'riseHelp': '?',                // keycode 63
       },
       'chalkboard': {
-        'clear': 'minus', // keycode 189 (and 173 on firefox)
-        'reset': '=', // keycode 187 (and 61 on firefox)
-        'toggleChalkboard': '[',  // keyode 219
-        'toggleNotesCanvas': ']', // keycode 221
-        'download': '\\'  // keycode 220
+        'clear': 'minus',               // keycode 189 (and 173 on firefox)
+        'reset': '=',                   // keycode 187 (and 61 on firefox)
+        'toggleChalkboard': '[',        // keycode 219
+        'toggleNotesCanvas': ']',       // keycode 221
+        'download': '\\'                // keycode 220
       }
   }
   

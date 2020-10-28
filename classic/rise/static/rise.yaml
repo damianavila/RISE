@@ -4,7 +4,7 @@
 # that they reflect the defaults that are hardwired in main.js
 #
 Type: Jupyter Notebook Extension
-Compatibility: 5.x
+Compatibility: 5.x, 6.x
 Name: RISE
 Main: main.js
 Description: "Turn your Jupyter Notebooks into a live presentation (slideshow)"
@@ -76,6 +76,13 @@ Parameters:
     <code>auto_select_fragment</code>: when auto_select is not <code>none</code>, this boolean
     says if auto selection focuses on the current fragment or considers
     the whole slide. Probably safe to keep as true.
+  input_type: checkbox
+  default: true
+
+- name: rise.show_buttons_on_startup
+  description: >
+    <code>show_buttons_on_startup</code> uncheck if you want your presentation to start without the exit and help buttons; 
+    this applies also to the chalkboard buttons, if enabled
   input_type: checkbox
   default: true
 #

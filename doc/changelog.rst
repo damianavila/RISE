@@ -31,15 +31,21 @@ You will also find tags for "development" releases (mostly beta and rc we releas
 Changes
 =======
 
+* 5.7.0
+  * new setting rise.show_buttons_on_startup (#561)
+  * new sources layout, in anticipation for a future jlab extension; sources are now split
+    between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 
+    for our needs, and ``classic`` that contains the actual code for the RISE classic extension
+
 * 5.6.1
 
   * Remove accent in setup.py that was occasionally breaking installation (https://github.com/damianavila/RISE/issues/514)
   * Properly load companion css when running with Jupytext enabled (https://github.com/damianavila/RISE/issues/509)
     - Also add some Jupytext notebook examples (refs: bfbf723 and 144a9bb)
   * Bugfix about the keyboard-binding feature from 5.6.1-dev0 (refs: 760136f, 086c9c9 and 1e5be45)
-  * Experimental feature to allow users to change the keyboard shortcuts attached to internal reveal functions 
+  * Experimental feature to allow users to change the keyboard shortcuts attached to internal reveal functions
     - PRs https://github.com/damianavila/RISE/pull/525 and https://github.com/damianavila/RISE/pull/526
-    - thanks thies.hecker@gmx.de 
+    - thanks thies.hecker@gmx.de
 
 * 5.6.0
 

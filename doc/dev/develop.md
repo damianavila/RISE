@@ -1,5 +1,15 @@
 ## Development
 
+****
+
+***Warning*** this page needs to be updated for 5.7 that has a new directory layout;
+in a nutshell, 5.7 comes with a clear separation between
+* what is inherited from `reveal.js` with our minor adaptations (the `rise-reveal` subdir),
+* the RISE extension for the classic notbeook (the `classic` subdir),
+* opening the space for a future `jlab` subdir that will host the jupyterlab extension.
+
+****
+
 You can install RISE in development mode in this way:
 
 ### Requirements
@@ -16,8 +26,27 @@ Essentially you will need:
 
     git clone https://github.com/damianavila/RISE.git
     cd RISE
+    ROOT=$(pwd)
 
-### Prepare a development tree
+### build `rise-reveal`
+
+**Step 0.** go into to the `rise-reveal` subdir
+
+    cd $ROOT/rise-reveal
+
+**Step 1.** fetch dependencies
+
+    npm install
+
+**Step 2.** build
+
+    npm run build
+
+### build the clasic extension
+
+**Step 0.** go into to the `classic` subdir
+
+    cd $ROOT/classic
 
 **Step 1.** Install the JS dependencies:
 

@@ -1,0 +1,62 @@
+{
+  "name": "jupyterlab-rise",
+  "license": "BSD-3-Clause",
+  "description": "A JupyterLab extension to turn your Jupyter Notebooks into a live slideshow",
+  "keywords": [
+    "Jupyter",
+    "JupyterLab",
+    "reveal.js",
+    "RISE",
+    "slideshow",
+    "slides"
+  ],
+  "author": {
+    "name": "Damián Avila",
+    "url": "https://github.com/damianavila"
+  },
+  "contributors": [
+    {
+      "name": "Thierry Parmentelat",
+      "url": "https://github.com/parmentelat"
+    }
+  ],
+  "homepage": "https://github.com/damianavila/RISE/tree/jlab/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damianavila/RISE"
+  },
+  "bugs": {
+    "url": "https://github.com/damianavila/RISE/issues"
+  },
+  "main": "lib/rise.js",
+  "types": "lib/rise.d.ts",
+  "style": "style/rise.css",
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+  ],
+  "jupyterlab": {
+    "extension": true
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib && rimraf tsconfig.tsbuildinfo",
+    "prepare": "npm run clean && npm run build",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^1.0.0-rc.0",
+    "@jupyterlab/apputils": "^1.0.0",
+    "@jupyterlab/docregistry": "^1.0.0",
+    "@jupyterlab/notebook": "^1.0.0",
+    "@phosphor/coreutils": "^1.3.1",
+    "@phosphor/disposable": "^1.2.0",
+    "jquery": "3.4.1",
+    "rise-reveal": "~380.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "typescript": "~3.5.2"
+  },
+  "version": "0.1.0"
+}

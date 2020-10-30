@@ -34,6 +34,7 @@ Changes
 =======
 
 * 5.7.1
+
   * Adding color support to the chalkboard (https://github.com/damianavila/RISE/pull/567)
     - Upload to reveal.js 3.9.2
   * Align rise.yaml with the code default for the notes shortcut (fix not working notes shortcut) (ref: dd3fe1e)
@@ -41,6 +42,7 @@ Changes
   * Minor changes in the develop doc (ref: 6c9869b)
 
 * 5.7.0
+
   * New setting rise.show_buttons_on_startup (#561)
   * New sources layout, in anticipation for a future jlab extension; sources are now split
     between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 

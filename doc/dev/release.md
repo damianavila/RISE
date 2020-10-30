@@ -71,6 +71,8 @@ pip install --index https://test.pypi.org/simple --upgrade --pre rise
 
 **Step 7.** Push changes to conda-forge:
 
+**NOTE** this is performed automatically by some conda-forge bot around one hour after we release on PyPI; but in case you need detailed information about the manual process, please see below
+
 The conda recipe to build the RISE package is maintained in a separate github repo at https://github.com/conda-forge/rise-feedstock.
 
 * First read this section: https://github.com/conda-forge/rise-feedstock#updating-rise-feedstock

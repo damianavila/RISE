@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 NAME = "rise"
 
 INSTALL_REQUIRES = [
-    'notebook>=5.5.0',
+    'notebook>=6.0',
 ]
 
 with open('README.md') as readme:
@@ -48,8 +48,8 @@ with open('package.json') as package_json:
     content = package_json.read()
 version = json.loads(content)['version']
 # from npm server into python semver
-if "-dev." in version:
-    version = version.replace("-dev.", ".dev")
+if "-dev" in version:
+    version = version.replace("-dev", ".dev")
 
 setup_args = dict(
     name=NAME,
@@ -61,7 +61,8 @@ setup_args = dict(
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
-    author="Damián Avila",
+    long_description_content_type='text/markdown',
+    author="Damian Avila",
     author_email="damianavila82@yahoo.com.ar",
     project_urls={
         'source': "http://github.com/damianavila/RISE",

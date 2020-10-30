@@ -2,38 +2,76 @@
 
 Instructions and notes for preparing and publishing a release.
 
+**NOTE** as part of release 5.7 or RISE, the sources repo layout has changed and the code
+for the classic notebook extension has moved under the `classic` subdir; at this point the
+`jlab` area is not ready for shipping, and so these instructions are **only about the
+classic extension**.
+
 ### Pre-Release check
 
-**Step 1.** Clean your local repo copy:
+**Step 0.** Clean your local repo copy at your top level (ROOT) directory:
 
-    git clean -fdx
+```bash
+git clean -fdx
+ROOT=$(pwd)
+```
 
-**Step 2.** Build the JS and CSS:
+**Step 1.** Check for updated version numbers in
 
-    npm install
-    npm run build
+```
+$ROOT/classic/package.json
+```
 
-**Step 3.** Check for updated version numbers in
+**Step 2.** Build rise-reveal (new step in release 5.7)
+```bash
+cd $ROOT/rise-reveal
+npm install
+npm run build
+```
 
-* `package.json`
+**Step 3.** Build the JS and CSS:
+
+```bash
+cd $ROOT/classic
+npm install
+npm run build
+```
 
 ### Release
 
 **Step 4.** Tag the repo with:
 
-    git tag -a release_tag -m "Release msg"
-    git push origin release_tag
+```bash
+git tag -a release_tag -m "Release msg"
+git push origin release_tag
+```
 
 **Step 5.** Build sdist and wheels packages:
 
-    python setup.py sdist
-    python setup.py bdist_wheel
+```bash
+cd $ROOT/classic
+python setup.py sdist
+python setup.py bdist_wheel
+```
 
 **Step 6.** Upload *sdist* and *wheels* to PyPI:
 
-    twine upload dist/*
+```bash
+cd $ROOT/classic
+twine upload dist/*
+```
+
+**NOTE** when checking the RISE packaging, it can come in handy to publish onto `test.pypi.org` so as to not pollute the official index; for that purpose do
+```bash
+# to publish on test.pypi.org
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+# to install from that location
+pip install --index https://test.pypi.org/simple --upgrade --pre rise
+```
 
 **Step 7.** Push changes to conda-forge:
+
+**NOTE** this is performed automatically by some conda-forge bot around one hour after we release on PyPI; but in case you need detailed information about the manual process, please see below
 
 The conda recipe to build the RISE package is maintained in a separate github repo at https://github.com/conda-forge/rise-feedstock.
 

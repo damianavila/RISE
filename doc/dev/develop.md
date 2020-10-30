@@ -1,5 +1,15 @@
 ## Development
 
+****
+
+***Note*** this page is up-to-date for 5.7 that has a new directory layout;
+in a nutshell, 5.7 comes with a clear separation between
+* what is inherited from `reveal.js` with our minor adaptations (the `rise-reveal` subdir),
+* the RISE extension for the classic notebook (the `classic` subdir),
+* opening the space for a future `jlab` subdir that will host the jupyterlab extension.
+
+****
+
 You can install RISE in development mode in this way:
 
 ### Requirements
@@ -9,28 +19,37 @@ Essentially you will need:
 
 * `git`,
 * `npm` and `nodejs`,
-* and of course `jupyter`;
-* `sphinx` comes in handy to produce the documentation.
+* and of course `jupyter`,
+* finally `sphinx` comes in handy to produce the documentation.
 
 ### Clone the git repo
 
     git clone https://github.com/damianavila/RISE.git
     cd RISE
+    ROOT=$(pwd)
 
-### Prepare a development tree
+### build `rise-reveal`
 
-**Step 1.** Install the JS dependencies:
+fetch and patch the source code for `reveal.js`
 
+    cd $ROOT/rise-reveal
     npm install
+    npm run build
 
-**Step 2.** Copy reveal (plus others) into the static folder and reset reveal.js styling:
+### build the clasic extension
 
+among others, here we pull the code for `reveal.js` from `rise-reveal` 
+into the static folder
+
+    cd $ROOT/classic
+    npm install
     npm run build
 
 **Notes**:
 
 * this is all that is needed at that stage
-* later on you might want to take a look at `package.json` that has finer-grained targets, that the `build` target groups for your convenience
+* later on you might want to take a look at `package.json` that has finer-grained targets,
+  that the `build` target groups for your convenience
 * in particular, if you only need to redo css, you can do `npm run build-css`
 * also note that you can remove `reveal.js` from the static folder with `npm run clean-reveal`.
 

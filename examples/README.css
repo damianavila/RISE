@@ -1,0 +1,13 @@
+/*
+ * this is loaded together with README.ipynb
+ * because it's named the same with css extension
+ */
+
+/* not very useful, but an OBVIOUS setting that you cannot miss */
+div.cell.code_cell.rendered {
+    border-radius: 0px 0px 30px 0px;
+}
+
+div.input_area {
+    border-radius: 0px 0px 25px 0px;
+}

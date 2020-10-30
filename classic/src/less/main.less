@@ -7,8 +7,13 @@
   transition-timing-function: ease;
 }
 
-.rise-enabled {
+/* do not apply this on the <body> tag */
+:not(body).rise-enabled {
   background-color: #fff;
+}
+
+
+.rise-enabled {
   .transition-all;
 
   /* Reveal-specific */
@@ -38,6 +43,8 @@
       p:first-child, p:last-child { display: inherit; }
     }
 
+    a { color: @some-grey; } &:hover { color: @some-grey; }
+
     .slides {
       .transition-all;
       text-align: left;
@@ -48,8 +55,10 @@
       .transition-all;
       right: 3.3em;
       bottom: 3.9em;
+    /* more harmful than helpful with reveal 3.8.0
       font-size: 100%;
-      color: #727272;
+    */
+      color: @some-grey;
       background-color: transparent;
     }
 
@@ -123,7 +132,10 @@
 
     .prompt { display: none; }
 
-    &.rendered .rendered_html { overflow-y: hidden; }
+    &.rendered .rendered_html {
+      overflow-x: hidden;
+      overflow-y: hidden;
+    }
   }
 
   .prompt {
@@ -144,6 +156,7 @@
   .CodeMirror {
     .transition-all;
     font-size: 100%;
+    margin-bottom: 1ex;
     //max-width: 960px !important;  /* fix for firefox issue in IPython, 1240px */
   }
 
@@ -194,6 +207,54 @@
     background: #727272 !important;
   }
 
+  /* chalkboard plugin and RISE buttons */
+  #notescanvas { position: absolute; top: 0; }
+
+  /* button toolbar */
+  #help_b,
+  #exit_b,
+  .chalkboard-button {
+    color: @some-grey;
+    position: fixed !important;
+    z-index: 30;
+    cursor: pointer;
+  }
+
+  #exit_b {
+    top: 0.55em;
+    left: 0.5em;
+  }
+
+  #help_b {
+    left: 0.6em ;
+    bottom: 0.55em;
+  }
+
+  /* use !important to override stuff that
+    would normally be configured through
+    chalkboard options */
+  .chalkboard-button i {
+    display: block !important;
+    bottom: 1em !important;
+    font-size: 1.8em !important;
+    color: @some-grey !important;
+  }
+
+  #toggle-chalkboard.chalkboard-button {
+    left: 4em !important;
+  }
+  #toggle-notes {
+    left: 7em !important;
+  }
+
+  #notescanvas {
+    display: block !important;
+  }
+
+  #chalkboard {
+    display: block !important;
+  }
+
 } //.reveal-enabled
 
 #header {
@@ -209,3 +270,54 @@
 #notebook {
   .transition-all;
 }
+
+.chalkboard-button i {
+  display: none;
+}
+
+#notescanvas {
+  display: none;
+}
+
+#chalkboard {
+  display: none;
+}
+
+/* fix for issue #425 */
+.rise-enabled .rendered_html table {
+  font-size: 75%;
+}
+
+/* fix for reveal dark themes */
+body.rise-enabled.theme-black div.rendered_html tbody tr:nth-child(even),
+body.rise-enabled.theme-black div.rendered_html thead th,
+body.rise-enabled.theme-black div.input_prompt,
+body.rise-enabled.theme-black div.output_text>pre,
+body.rise-enabled.theme-black div.rendered_html,
+body.rise-enabled.theme-black div.text_cell_render { color: white; }
+
+body.rise-enabled.theme-blood div.rendered_html tbody tr:nth-child(even),
+body.rise-enabled.theme-blood div.rendered_html thead th,
+body.rise-enabled.theme-blood div.input_prompt,
+body.rise-enabled.theme-blood div.output_text>pre,
+body.rise-enabled.theme-blood div.rendered_html,
+body.rise-enabled.theme-blood div.text_cell_render,
+body.rise-enabled.theme-league div.rendered_html tbody tr:nth-child(even),
+body.rise-enabled.theme-league div.rendered_html thead th,
+body.rise-enabled.theme-league div.input_prompt,
+body.rise-enabled.theme-league div.output_text>pre,
+body.rise-enabled.theme-league div.rendered_html,
+body.rise-enabled.theme-league div.text_cell_render,
+body.rise-enabled.theme-night div.rendered_html tbody tr:nth-child(even),
+body.rise-enabled.theme-night div.rendered_html thead th,
+body.rise-enabled.theme-night div.input_prompt,
+body.rise-enabled.theme-night div.output_text>pre,  
+body.rise-enabled.theme-night div.rendered_html,
+body.rise-enabled.theme-night div.text_cell_render { color: rgb(238, 238, 238); }
+
+body.rise-enabled.theme-moon div.rendered_html tbody tr:nth-child(even),
+body.rise-enabled.theme-moon div.rendered_html thead th,
+body.rise-enabled.theme-moon div.input_prompt,
+body.rise-enabled.theme-moon div.output_text>pre,
+body.rise-enabled.theme-moon div.rendered_html,
+body.rise-enabled.theme-moon div.text_cell_render  { color: rgb(238, 232, 213); }

@@ -1,5 +1,6 @@
 include LICENSE.md
 include README.md
+include package.json
 include rise/static/main.js
 include rise/static/main.css
 include rise/static/rise.png
@@ -7,3 +8,4 @@ include rise/static/rise.yaml
 include rise/static/README.md
 recursive-include jupyter-config *.json
 recursive-include rise/static/reveal.js *
+recursive-include rise/static/reveal.js-chalkboard *

@@ -15,6 +15,7 @@ details](#how-to-customize) on how to implement those settings.
 * [slide sizes](#change-the-width-and-height-of-slides)
 * [decoration (header/footer/background)](#decorating-all-slides)
 * [vertical scrollbar](#enable-a-right-scroll-bar)
+* [chalkboard capabilities](#enable-chalkboard-capabilities)
 * [using a leap motion controller](#usage-with-leap-motion)
 * [native `reveal.js` settings](#reveal-js-configuration-options)
 * [custom CSS](#adding-custom-css)
@@ -112,7 +113,7 @@ configuration:
               "height": "90%"}
     }
 
-**Important notes**
+**Notes**
 
 * remember that you can always use your browser's shortcuts to zoom
 in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`), and this way adjust the slide
@@ -170,8 +171,8 @@ is still responsible for cosmetic styling:
 You can see some examples using these options at
 `RISE/examples/overlay.ipynb` and
 `RISE/examples/header-footer.ipynb``, or in binder respectively
-[![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2Foverlay.ipynb)
-[![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/parmentelat/RISE.git/doc2?filepath=examples%2Fheader-footer.ipynb)
+[![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2Foverlay.ipynb)
+[![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2Fheader-footer.ipynb)
 
 
 ### Enable a right scroll bar
@@ -183,6 +184,28 @@ use the following configuration:
      ...
      "rise": {"scroll": true}
     }
+
+### Enable chalkboard capabilities
+
+Starting RISE 5.4.1, we provide some new chalkboard capabilities.
+To enable them, use the following configuration:
+
+    {
+     ...
+     "rise": {"enable_chalkboard": true}
+    }
+
+When enabled, this plugin adds two buttons next to the help button.
+The first one provides you with a black board.
+The second one allows you to draw **on top** of the current slide.
+
+It also reacts to the following additional keyboard commands:
+* `[` to turn the whole space into an empty chalkboard
+* `]` to start adding free drawings to the current slide
+* `\` to download chalkboard drawing
+* `=` to reset chalkboard drawing on the current slide
+* `-` to clear the chalkboard
+
 
 ### Usage with Leap Motion
 
@@ -271,9 +294,14 @@ RISE can be customized in a lot of ways. As of RISE version 5.3, you can:
 
 ### The configurator
 
-You may need to install a separate module:
+You may need to install and enable additional modules, refer to [this github
+repo](https://github.com/ipython-contrib/jupyter_contrib_nbextensions) for more
+details on Jupyter notebook extensions.
 
-    pip3 install jupyter-nbextensions-configurator
+In a nutshell:
+
+    pip3 install jupyter_contrib_nbextensions
+    jupyter contrib nbextension install
 
 or
 
@@ -414,9 +442,9 @@ Here are the Jupyter actions registered by RISE:
     RISE:slideshow            alt-r  enter/exit RISE Slideshow
     RISE:smart-exec                  execute cell, move to the next if on same slide
     RISE:toggle-slide        shift-i (un)set current cell as a Slide cell
-    RISE:toggle-subslide     shift-u (un)set current cell as a Sub-slide cell
-    RISE:toggle-fragment     shift-f (un)set current cell as a Fragment cell
-    RISE:toggle-notes                (un)set current cell as a Note cell
+    RISE:toggle-subslide     shift-b (un)set current cell as a Sub-slide cell
+    RISE:toggle-fragment     shift-g (un)set current cell as a Fragment cell
+    RISE:toggle-notes                (un)set current cell as a Notes cell
     RISE:toggle-skip                 (un)set current cell as a Skip cell
     RISE:render-all-cells            render all cells (all cells go to command mode)
     RISE:edit-all-cells              edit all cells (all cells go to edit mode)
@@ -471,3 +499,44 @@ Note that with this approach, you will end up with the
 The actions exposed to Jupyter are also present in Jupyter's
 mainstream keyboard shortcuts editor, that you can use to (un)define
 your custom shortcuts.
+
+### Native keyboard shortcuts for reveal.js and reveal.js plug-ins 
+
+Some custom keyboard shortcuts may be defined in RISE to override the default 
+keyboard shortcuts of `reveal.js` and/or its plug-ins.
+
+The key bindings can be defined via the `nbextensions_configurator` or directly 
+in JSON.
+
+The table below shows the avaialble key bindings:
+
+	module      action               default key  behaviour
+    ---------------------------------------------------------
+    main        firstSlide           home         jump to first slide
+    main        lastSlide            end          jump to last slide
+    main        toggleOverview       w            toggles slide overview
+    main        fullscreenHelp       f            show fullscreen help
+    main        riseHelp             ?            show the RISE help
+    chalkboard  clear                -            clear full size chalkboard
+    chalkboard  reset                =            reset chalkboard data on current slide
+    chalkboard  toggleChalkboard     [            toggle full size chalkboard
+    chalkboard  toggleNotesCanvas    ]            toggle notes (slide-local)
+    chalkboard  download             \            download recorded chalkboard drawing
+
+In JSON the native reveal.js keyboard shortcuts can be defined as shown in the 
+example below:
+
+    {
+     ...
+     "rise": {
+         "reveal_shortcuts": {
+             "main": {
+                "toggleOverview": "tab"
+             },
+             "chalkboard": {
+                "clear": "ctrl-k"
+             }
+         }
+    }
+
+

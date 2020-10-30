@@ -1,0 +1,49 @@
+{
+  "name": "rise-reveal",
+  "description": "original reveal.js patched for use within the RISE Jupyter extension",
+  "license": "MIT",
+  "keywords": [
+    "reveal.js",
+    "RISE",
+    "Jupyter",
+    "slideshow",
+    "slides"
+  ],
+  "author": {
+    "name": "Damián Avila",
+    "url": "https://github.com/damianavila"
+  },
+  "contributors": [
+    {
+      "name": "Thierry Parmentelat",
+      "url": "https://github.com/parmentelat"
+    }
+  ],
+  "homepage": "https://github.com/damianavila/RISE/tree/rise-reveal/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damianavila/RISE"
+  },
+  "bugs": {
+    "url": "https://github.com/damianavila/RISE/issues"
+  },
+  "files": [
+    "export/reveal.js",
+    "export/reveal.js-chalkboard"
+  ],
+  "scripts": {
+    "build": "for target in copy patch; do npm run $target; done",
+    "copy": "mkdir -p export; cp -r ./node_modules/reveal.js/ ./export/reveal.js/; cp -r ./node_modules/reveal.js-plugins/chalkboard ./export/reveal.js-chalkboard/",
+    "patch": "for target in patch-reveal-css patch-notes patch-themes patch-chalkboard ; do npm run $target; done",
+    "patch-reveal-css": "sed -i.upstream '11 s_^_/*_' export/reveal.js/css/reveal.css",
+    "patch-notes": "bash patch-notes-plugin.sh",
+    "patch-themes": "bash patch-reveal-themes.sh",
+    "patch-chalkboard": "bash patch-chalkboard.sh",
+    "clean": "rm -rf node_modules export"
+  },
+  "dependencies": {
+    "reveal.js": "~3.9.2",
+    "reveal.js-plugins": "rajgoel/reveal.js-plugins#3.9.0"
+  },
+  "version": "390.0.1"
+}

@@ -15,27 +15,41 @@ Packaging
 import os
 from setuptools import setup, find_packages
 
-from rise._version import __version__ as version
-
 NAME = "rise"
 
 INSTALL_REQUIRES = [
-    'notebook>=5.5.0',
+    'notebook>=6.0',
 ]
 
-with open('./README.md') as readme:
+with open('README.md') as readme:
     README = readme.read()
 
+# Enable the nbextension (like jupyter nbextension enable --sys-prefix)
 DATA_FILES = [
-    # like `jupyter nbextension install --sys-prefix`
-    ("share/jupyter/nbextensions/rise", [
-        "rise/static/main.js",
-    ]),
-    # like `jupyter nbextension enable --sys-prefix`
     ("etc/jupyter/nbconfig/notebook.d", [
         "jupyter-config/nbconfig/notebook.d/rise.json"
     ]),
 ]
+
+# Install the nbextension (like jupyter nbextension install --sys-prefix).
+# More precisely, everything in the rise/static directory and its
+# subdirectories should be installed
+nbext = ["share", "jupyter", "nbextensions", NAME]
+for (path, dirs, files) in os.walk(os.path.join("rise", "static")):
+    # Files to install
+    srcfiles = [os.path.join(path, f) for f in files]
+    # Installation path components, removing rise/static from "path"
+    dst = nbext + path.split(os.sep)[2:]
+    DATA_FILES.append((os.path.join(*dst), srcfiles))
+
+# version string is extracted from toplevel package.json
+import json
+with open('package.json') as package_json:
+    content = package_json.read()
+version = json.loads(content)['version']
+# from npm server into python semver
+if "-dev" in version:
+    version = version.replace("-dev", ".dev")
 
 setup_args = dict(
     name=NAME,
@@ -44,11 +58,12 @@ setup_args = dict(
     data_files=DATA_FILES,
     include_package_data=True,
     install_requires=INSTALL_REQUIRES,
-    python_requires='>=2.7,>=3.4',
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
-    author="Damián Avila",
-    author_email="info@oquanta.info",
+    long_description_content_type='text/markdown',
+    author="Damian Avila",
+    author_email="damianavila82@yahoo.com.ar",
     project_urls={
         'source': "http://github.com/damianavila/RISE",
         'documentation': "http://rise.readthedocs.io",

@@ -4,7 +4,7 @@
 # that they reflect the defaults that are hardwired in main.js
 #
 Type: Jupyter Notebook Extension
-Compatibility: jupyter-4.3, jupyter-notebook-5.4
+Compatibility: 5.x, 6.x
 Name: RISE
 Main: main.js
 Description: "Turn your Jupyter Notebooks into a live presentation (slideshow)"
@@ -21,9 +21,28 @@ Parameters:
   input_type: checkbox
   default: false
 #
+- name: rise.enable_chalkboard
+  description: >
+    <code>enable_chalkboard</code>: if set, turn on the <code>chalkboard</code>
+    plugin to <code>reveal</code>. <br/>When enabled, this plugin adds two buttons
+    next to the help button. It also reacts to the following additional
+    keyboard commands:
+    <ul>
+    <li><code>[</code> to turn the whole space into an empty chalkboard;</li>
+    <li><code>]</code> to start adding free drawings to the current slide;</li>
+    <li><code>\</code> to download chalkboard drawing;</li>
+    <li><code>=</code>to reset chalkboard drawing on the current slide;</li>
+    <li><code>-</code> to clear the chalkboard.</li>
+    </ul>
+    You can define alternative short cuts using the 
+    <code>rise.reveal_shortcuts.chalkboard.*</code> parameters below. Note, that some 
+    keys might not work in some browsers.
+  input_type: checkbox
+  default: false
+#
 - name: rise.enable_leap_motion
   description: >
-    <code>leap_motion</code>: to use the leap motion device. xxx this needs more details.
+    <code>enable_leap_motion</code>: to use the leap motion device. xxx this needs more details.
   input_type: checkbox
   default: false
 #
@@ -57,6 +76,13 @@ Parameters:
     <code>auto_select_fragment</code>: when auto_select is not <code>none</code>, this boolean
     says if auto selection focuses on the current fragment or considers
     the whole slide. Probably safe to keep as true.
+  input_type: checkbox
+  default: true
+
+- name: rise.show_buttons_on_startup
+  description: >
+    <code>show_buttons_on_startup</code> uncheck if you want your presentation to start without the exit and help buttons; 
+    this applies also to the chalkboard buttons, if enabled
   input_type: checkbox
   default: true
 #
@@ -108,11 +134,11 @@ Parameters:
 - name: rise.shortcuts.toggle-subslide
   description: <code>rise.shortcuts.toggle-subslide</code> shortcut to toggle the 'subslide' tag on current cell
   input_type: hotkey
-  default: shift-u
+  default: shift-b
 - name: rise.shortcuts.toggle-fragment
   description: <code>rise.shortcuts.toggle-fragment</code> shortcut to toggle the 'fragment' tag on current cell
   input_type: hotkey
-  default: shift-f
+  default: shift-g
 - name: rise.shortcuts.toggle-notes
   description: <code>rise.shortcuts.toggle-notes</code> shortcut to toggle the 'notes' tag on current cell
   input_type: hotkey
@@ -135,13 +161,86 @@ Parameters:
     pane for the RISE extension in a new tab (or window, depending on your browser config).
   input_type: hotkey
   default: shift-c
+# using reveal_shortcuts for the reveal.js and chalkboard short cuts instead of 
+# shortcuts to avoid treating these as normal jupyter shortcuts
+- name: rise.reveal_shortcuts.main.riseHelp
+  description: >
+    <code>rise.reveal_shortcuts.main.riseHelp</code>: shortcut for showing 
+    help
+  input_type: hotkey
+  default: "?"
+#
+- name: rise.reveal_shortcuts.main.firstSlide
+  description: >
+    <code>rise.reveal_shortcuts.main.firstSlide</code>: shortcut for jump to first 
+    slide
+  input_type: hotkey
+  default: home
+#
+- name: rise.reveal_shortcuts.main.lastSlide
+  description: >
+    <code>rise.reveal_shortcuts.main.lastSlide</code>: shortcut for jump to last 
+    slide
+  input_type: hotkey
+  default: end
+#
+- name: rise.reveal_shortcuts.main.toggleOverview
+  description: >
+    <code>rise.reveal_shortcuts.main.toggleOverview</code>: shortcut for slides 
+    overview
+  input_type: hotkey
+  default: w
+# unfortunately jupyter does not allow to assign any keybinding to "," (comma)
+# and the function is not as easily accessable as the other functions
+# so "," is currently the only hard-wired keybind to reveal.js
+# - name: rise.reveal_shortcuts.main.toggleAllRiseButtons
+#   description: >
+#    <code>rise.reveal_shortcuts.main.toggleAllRiseButtons</code>: shortcut 
+#    show/hide RISE buttons
+#  input_type: hotkey
+#  default: m
+#
+- name: rise.reveal_shortcuts.chalkboard.reset
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.reset</code>: shortcut (in chalkboard mode) for resetting 
+    chalkboard data on current slide
+  input_type: hotkey
+  default: minus
+#
+- name: rise.reveal_shortcuts.chalkboard.clear
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.clear</code>: shortcut (in chalkboard mode) for clearing 
+    full size chalkboard
+  input_type: hotkey
+  default: "="
+#
+- name: rise.reveal_shortcuts.chalkboard.toggleChalkboard
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.toggleChalkboard</code>: shortcut (in chalkboard mode) for 
+    toggling full size chalkboard
+  input_type: hotkey
+  default: "["
+#
+- name: rise.reveal_shortcuts.chalkboard.toggleNotesCanvas
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.toggleNotesCanvas</code>: shortcut (in chalkboard mode) 
+    for toggling notes (slide-local)
+  input_type: hotkey
+  default: "]"
+#
+- name: rise.reveal_shortcuts.chalkboard.download
+  description: >
+    <code>rise.reveal_shortcuts.chalkboard.download</code>: shortcut (in chalkboard mode) for 
+    downloading recorded chalkboard drawing
+  input_type: hotkey
+  default: \
 
 #
 # passed to reveal as-is
 #
 - name: rise.theme
   description: >
-    <code>theme</code>: <strong>This setting, like all the ones below,
+    <code>theme</code>: <strong>This setting, like the ones below,
     is passed directly to <a href="https://github.com/hakimel/reveal.js">
     <code>reveal.js</code> see this doc</a></strong>.
     <br/> theme: <a href="https://github.com/hakimel/reveal.js#theming">
@@ -153,7 +252,7 @@ Parameters:
 #
 - name: rise.transition
   description: >
-    <code>transition</code>: at least available: none - fade - slide - convex - concave - zoom - cube - linear
+    <code>transition</code>: at least available: none - fade - slide - convex - concave - zoom - cube - linear; see also <code>reveal.js</code>.
   input_type: string
   default: 'linear'
 #
@@ -224,3 +323,27 @@ Parameters:
 #   input_type: float
 #   default: 1.0
 #
+#
+# mostly intended for developers
+#
+- name: rise.auto_select_timeout
+  description: >
+    timeout in milliseconds before auto-selecting; all the timeout
+    settings are mostly intended for developers.
+  input_type: number
+  default: 450
+#
+- name: rise.restore_timeout
+  description: >
+    timeout in milliseconds before restoring focus to selected cell
+    when quitting slideshow mode; mostly intended for developers.
+  input_type: number
+  default: 500
+#
+- name: rise.aync_timeout
+  description: >
+    timeout in milliseconds before an extra call to Reveal.sync() is
+    made to ensure proper display in some problematic conditions;
+    like other timeout settings this is mostly targetting developers.
+  input_type: number
+  default: 250

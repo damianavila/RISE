@@ -2,82 +2,84 @@
 
 Instructions and notes for preparing and publishing a release.
 
+**NOTE** as part of release 5.7 or RISE, the sources repo layout has changed and the code
+for the classic notebook extension has moved under the `classic` subdir; at this point the
+`jlab` area is not ready for shipping, and so these instructions are **only about the
+classic extension**.
+
 ### Pre-Release check
 
-**Step 1.** Clean your local repo copy:
+**Step 0.** Clean your local repo copy at your top level (ROOT) directory:
 
-    git clean -fdx
+```bash
+git clean -fdx
+ROOT=$(pwd)
+```
 
-**Step 2.** Build the JS and CSS:
+**Step 1.** Check for updated version numbers in
 
-    npm install
-    npm run build
+```
+$ROOT/classic/package.json
+```
 
-**Step 3.** Check for updated version numbers in
+**Step 2.** Build rise-reveal (new step in release 5.7)
+```bash
+cd $ROOT/rise-reveal
+npm install
+npm run build
+```
 
-* `package.json`
-* `rise/_version.py`
-* `conda.recipe/meta.yaml`
-* `doc/conf.py`
+**Step 3.** Build the JS and CSS:
+
+```bash
+cd $ROOT/classic
+npm install
+npm run build
+```
 
 ### Release
 
 **Step 4.** Tag the repo with:
 
-    git tag -a release_tag -m "Release msg"
-    git push origin release_tag
+```bash
+git tag -a release_tag -m "Release msg"
+git push origin release_tag
+```
 
 **Step 5.** Build sdist and wheels packages:
 
-    python setup.py sdist
-    python setup.py bdist_wheel
+```bash
+cd $ROOT/classic
+python setup.py sdist
+python setup.py bdist_wheel
+```
 
-**Step 6.** Build the conda packages
+**Step 6.** Upload *sdist* and *wheels* to PyPI:
 
-**For linux and OSX packages**:
+```bash
+cd $ROOT/classic
+twine upload dist/*
+```
 
-    RISE_RELEASE=1 conda build conda.recipe --python=3.6
-    RISE_RELEASE=1 conda build conda.recipe --python=3.5
-    RISE_RELEASE=1 conda build conda.recipe --python=2.7
+**NOTE** when checking the RISE packaging, it can come in handy to publish onto `test.pypi.org` so as to not pollute the official index; for that purpose do
+```bash
+# to publish on test.pypi.org
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+# to install from that location
+pip install --index https://test.pypi.org/simple --upgrade --pre rise
+```
 
-and:
+**Step 7.** Push changes to conda-forge:
 
-    conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py36_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
-    conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py35_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
-    conda convert /path/to/conda-bld/linux-64/rise-<version_number>-py27_0.tar.bz2 -p linux-32 -p linux-64 -p osx-64 -o conda_dist
+**NOTE** this is performed automatically by some conda-forge bot around one hour after we release on PyPI; but in case you need detailed information about the manual process, please see below
 
+The conda recipe to build the RISE package is maintained in a separate github repo at https://github.com/conda-forge/rise-feedstock.
 
-**For Windows packages**, you need to build in a Win VM (shared folders will make
-you things easier):
+* First read this section: https://github.com/conda-forge/rise-feedstock#updating-rise-feedstock
+* You need to update the version number here: https://github.com/conda-forge/rise-feedstock/blob/master/recipe/meta.yaml#L1
+* You need to update the sha number here: https://github.com/conda-forge/rise-feedstock/blob/master/recipe/meta.yaml#L9
+* (Optional) You need to update any dependencies if you have new ones or remove old ones.
+* (Optional) You may want to update the recipe, for instance, eventually, we will get rid of the post-link steps (see, https://github.com/damianavila/RISE/pull/444).
+* (Optional) You may need to rerender the feedstock, eventually.
 
-    set RISE_RELEASE=1
-    conda build conda.recipe --python=3.6
-    conda build conda.recipe --python=3.5
-    conda build conda.recipe --python=2.7
-
-If the build hangs, there is probably a permission error, try to run
-again with `--croot %TEMP%`
-
-then, convert them in the same Win VM:
-
-    conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py36_0.tar.bz2 -p win-64 -p win-32 -o conda_dist
-    conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py35_0.tar.bz2 -p win-64 -p win-32 -o conda_dist
-    conda convert C:\path\to\conda-bld\win-64\rise-<version_number>-py27_0.tar.bz2 -p win-64 -p win-32 -o conda_dist
-
-**Note:**
-
-* You can increment the build number with the `RISE_BUILD_NUMBER`
-  environment variable.
-
-**Step 7.** Upload *sdist* and *wheels* to PyPI:
-
-    twine upload dist/*
-
-**Step 8.** Upload conda packages to anaconda.org/damianavila82
-   (5 platforms x 3 pythons):
-
-    anaconda upload -u damianavila82 conda_dist/linux-32/*
-    anaconda upload -u damianavila82 conda_dist/linux-64/*
-    anaconda upload -u damianavila82 conda_dist/osx-64/*
-    anaconda upload -u damianavila82 conda_dist/win-32/*
-    anaconda upload -u damianavila82 conda_dist/win-64/*
+Open a PR with those changes and when the PR is merged, several CI runs will be triggered and the packages will be generated and uploaded to https://anaconda.org/conda-forge/rise/files.

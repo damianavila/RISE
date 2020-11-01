@@ -1,5 +1,6 @@
 declare let require:(moduleId:string) => any;
-let Reveal = require('reveal.js');
+//let Reveal = require('reveal.js');
+import Reveal from 'rise-reveal/export/reveal.js';
 
 import {
   JupyterFrontEnd, JupyterFrontEndPlugin

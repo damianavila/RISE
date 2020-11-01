@@ -107,7 +107,7 @@ class RiseExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, 
       notebook_container.classList.add("slides");
       //console.log("notebook_container");
 
-      let revealCSS = require('reveal_rise/reveal.css');
+      let revealCSS = require('../../rise-reveal/export/reveal.js/css/reveal.css');
       console.log(revealCSS);
       let customCSS = require('../style/rise.css');
       console.log(customCSS);

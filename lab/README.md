@@ -1,18 +1,15 @@
-# rise-lab
-
-![Github Actions Status](https://github.com/damianavila/RISE/workflows/Build/badge.svg)
+# rise-jupyterlab
 
 A JupyterLab extension to turn your Jupyter Notebooks into a live presentation
 
-
 ## Requirements
 
-* JupyterLab >= 1.0
+* JupyterLab >= 2.0
 
 ## Install
 
 ```bash
-jupyter labextension install rise-lab
+jupyter labextension install rise-jupyterlab
 ```
 
 ## Contributing
@@ -24,14 +21,18 @@ The `jlpm` command is JupyterLab's pinned version of
 `yarn` or `npm` in lieu of `jlpm` below.
 
 ```bash
-# Clone the repo to your local environment
-# Move to rise-lab directory
+# Clone the RISE repo to your local environment
+# Move to lab directory
 # Install dependencies
 jlpm
 # Build Typescript source
 jlpm build
+# Install the local rise-reveal patched stuff
+jupyter labextension link ../rise-reveal
 # Link your development version of the extension with JupyterLab
 jupyter labextension link .
+# Build JupyterLab
+jupyter lab build
 # Rebuild Typescript source after making changes
 jlpm build
 # Rebuild JupyterLab after making any changes
@@ -50,6 +51,6 @@ jupyter lab --watch
 ### Uninstall
 
 ```bash
-jupyter labextension uninstall rise-lab
+jupyter labextension uninstall rise-jupyterlab
 ```
 

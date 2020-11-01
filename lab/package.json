@@ -1,0 +1,50 @@
+{
+  "name": "rise-lab",
+  "version": "0.1.0",
+  "description": "A JupyterLab extension to turn your Jupyter Notebooks into a live presentation",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "homepage": "https://github.com/damianavila/RISE",
+  "bugs": {
+    "url": "https://github.com/damianavila/RISE/issues"
+  },
+  "license": "BSD-3-Clause",
+  "author": "Damian Avila",
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
+    "src/custom.d.ts"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "style": "style/index.css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damianavila/RISE.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib tsconfig.tsbuildinfo",
+    "prepare": "jlpm run clean && jlpm run build",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^2.0.0",
+    "@jupyterlab/notebook": "^2.0.0",
+    "reveal.js": "^3.6.0",
+    "reveal_rise": "^1.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "typescript": "~3.7.0"
+  },
+  "sideEffects": [
+    "style/*.css"
+  ],
+  "jupyterlab": {
+    "extension": true
+  }
+}

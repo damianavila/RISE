@@ -135,7 +135,12 @@ class RiseExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, 
       tooltip: 'RISE me'
     });
 
-    panel.toolbar.insertItem(10,'rise', button);
+    // Getting the index iteratively is less resource consuming, but this is far more readable
+    // and we only need to get the index at the loading of the extension...
+    let cellTypeButton = panel.toolbar.node.getElementsByClassName("jp-Notebook-toolbarCellType")[0]
+    let index = Array.from(cellTypeButton.parentNode.children).indexOf(cellTypeButton)
+
+    panel.toolbar.insertItem(index + 1,'rise', button);
     return new DisposableDelegate(() => {
       button.dispose();
     });

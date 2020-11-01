@@ -1,7 +1,11 @@
+classic/rise/static/main.css
+classic/rise/static/reveal.js/
+classic/rise/static/reveal.js-chalkboard/
+classic/build/
+classic/dist/
+classic/rise.egg-info/
+classic/rise/__pycache__/
+rise-reveal/export/
+doc/_build/
 .ipynb_checkpoints/
 node_modules
-rise.egg-info/
-rise/__pycache__/
-rise/static/main.css
-rise/static/reveal.js/
-doc/_build/

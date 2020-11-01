@@ -135,7 +135,7 @@ class RiseExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, 
       tooltip: 'RISE me'
     });
 
-    panel.toolbar.addItem('rise', button);
+    panel.toolbar.insertItem(10,'rise', button);
     return new DisposableDelegate(() => {
       button.dispose();
     });

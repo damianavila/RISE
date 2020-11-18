@@ -114,7 +114,7 @@ comes back to normal.
 ### Speaker notes
 
 Starting RISE 5.4.1, we support the `Reveal.js` speaker notes plugin.
-All the content you write on **notes** cells will be shown in this view (a separate browser window).
+All the content you write on **notes** cells (there is a Slide Type called **Notes**) will be shown in this view (a separate browser window).
 That view also provides a timer and a preview of the next upcoming slide.
 You should press the `t` key to open the speaker notes view.
 

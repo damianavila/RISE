@@ -1,5 +1,7 @@
 @some-grey: #727272;
 @some-other-grey: #dfdfdf;
+@some-blue: #2980B9;
+@some-other-blue: #50a0ff;
 
 .transition-all {
   transition-property: all;
@@ -43,7 +45,7 @@
       p:first-child, p:last-child { display: inherit; }
     }
 
-    a { color: @some-grey; } &:hover { color: @some-grey; }
+    a { color: @some-blue; } a:hover { color: @some-other-blue; }
 
     .slides {
       .transition-all;
@@ -311,7 +313,7 @@ body.rise-enabled.theme-league div.text_cell_render,
 body.rise-enabled.theme-night div.rendered_html tbody tr:nth-child(even),
 body.rise-enabled.theme-night div.rendered_html thead th,
 body.rise-enabled.theme-night div.input_prompt,
-body.rise-enabled.theme-night div.output_text>pre,  
+body.rise-enabled.theme-night div.output_text>pre,
 body.rise-enabled.theme-night div.rendered_html,
 body.rise-enabled.theme-night div.text_cell_render { color: rgb(238, 238, 238); }
 

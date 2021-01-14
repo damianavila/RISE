@@ -32,14 +32,14 @@
     "export/reveal.js-chalkboard"
   ],
   "scripts": {
-    "build": "for target in copy patch; do npm run $target; done",
-    "copy": "mkdir -p export; cp -r ./node_modules/reveal.js/ ./export/reveal.js/; cp -r ./node_modules/reveal.js-plugins/chalkboard ./export/reveal.js-chalkboard/",
-    "patch": "for target in patch-reveal-css patch-notes patch-themes patch-chalkboard ; do npm run $target; done",
-    "patch-reveal-css": "sed -i.upstream '11 s_^_/*_' export/reveal.js/css/reveal.css",
+    "build": "bash -c 'for target in copy patch; do npm run $target; done'",
+    "copy": "bash -c 'mkdir -p export; cp -r ./node_modules/reveal.js/ ./export/reveal.js/; cp -r ./node_modules/reveal.js-plugins/chalkboard ./export/reveal.js-chalkboard/'",
+    "patch": "bash -c 'for target in patch-reveal-css patch-notes patch-themes patch-chalkboard ; do npm run $target; done'",
+    "patch-reveal-css": "bash patch-reveal-css.sh",
     "patch-notes": "bash patch-notes-plugin.sh",
     "patch-themes": "bash patch-reveal-themes.sh",
     "patch-chalkboard": "bash patch-chalkboard.sh",
-    "clean": "rm -rf node_modules export"
+    "clean": "bash -c 'rm -rf node_modules export'"
   },
   "dependencies": {
     "reveal.js": "~3.9.2",

@@ -169,8 +169,8 @@ is still responsible for cosmetic styling:
     }
 
 You can see some examples using these options at
-`RISE/examples/overlay.ipynb` and
-`RISE/examples/header-footer.ipynb``, or in binder respectively
+`RISE/examples/overlay.ipynb` and `RISE/examples/header-footer.ipynb`,
+or in binder respectively
 [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2Foverlay.ipynb)
 [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2Fheader-footer.ipynb)
 

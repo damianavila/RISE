@@ -249,7 +249,22 @@ category, RISE will pass through the following settings:
   numbers. Set to boolean `false` to turn off, [see `reveal.js`'s doc
   for more details](https://github.com/hakimel/reveal.js#slide-number)
 
-* as well as `history`.
+* `history` to push each slide change to the browser history
+
+* `width` and `height` set the "normal" size of the presentation.  The aspect
+  ratio will be preserved when the presentation is scaled to fit different
+  resolutions. Can be specified using percentage units.
+
+* `margin` is the factor of the display size that should remain empty around
+  the content
+
+* `minScale` bounds the smallest possible scale to apply to content
+
+* `transition` changes the type of animation when changing slides
+
+* `center` to center slides vertically
+
+* `help` to show a help overlay when the question-mark key is pressed
 
 ### Adding custom CSS
 

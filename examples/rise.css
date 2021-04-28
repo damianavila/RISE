@@ -61,3 +61,13 @@ div.cell.code_cell.rendered, div.input_area {
 div.text_cell_render.rendered_html {
     color: #5050b0;
 }
+
+/*
+ * this is to void xarray's html output to show the fallback textual representation
+ * see also
+   * xarray.md and 
+   * https://github.com/damianavila/RISE/issues/594
+ */
+.reveal pre.xr-text-repr-fallback {
+    display: none;
+}

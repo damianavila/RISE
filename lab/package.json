@@ -45,8 +45,8 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@jupyterlab/application": "^2.0.0",
-    "@jupyterlab/notebook": "^2.0.0",
+    "@jupyterlab/application": "^3.0.0",
+    "@jupyterlab/notebook": "^3.0.0",
     "rise-reveal": "../rise-reveal"
   },
   "devDependencies": {

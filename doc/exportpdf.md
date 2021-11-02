@@ -23,6 +23,10 @@ You can export your RISE presentation to PDF using the following procedures:
   + Enable the Background graphics option.
   + Click Save.
 
+The last step can also be done from the command line:
+
+`google-chrome --headless --print-to-pdf=your_talk.pdf http://127.0.0.1:8000/your_talk.slides.html?print-pdf`
+
 ### Note about Javascript dependencies
 
  that if you are using JavaScript-based packages [like e.g.

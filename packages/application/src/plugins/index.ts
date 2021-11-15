@@ -61,8 +61,9 @@ function startReveal(panel: NotebookPanel): void {
   const notebook = panel.content;
   markupSlides(notebook);
 
-  const panel_container =
-    document.getElementsByClassName('jp-NotebookPanel')[0];
+  const panel_container = document.getElementsByClassName(
+    'jp-NotebookPanel'
+  )[0];
   panel_container.classList.add('reveal');
   //console.log("panel_container");
 

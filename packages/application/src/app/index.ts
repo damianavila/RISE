@@ -93,7 +93,7 @@ export class RiseShell extends Widget implements JupyterFrontEnd.IShell {
    */
   protected onUpdateRequest(msg: Message): void {
     super.onUpdateRequest(msg);
-    this._updated.emit()
+    this._updated.emit();
   }
 
   private _currentWidget: Widget | null;

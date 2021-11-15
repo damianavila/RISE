@@ -43,8 +43,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const trans = translator.load('rise');
 
     commands.addCommand(CommandIDs.openRise, {
-      label: args =>
-        !!args.toolbar ? '' : trans.__('Open as Reveal Slideshow'),
+      label: args => (args.toolbar ? '' : trans.__('Open as Reveal Slideshow')),
       caption: trans.__('Open the current notebook as an RevealJS slideshow.'),
       icon: RISEIcon,
       execute: () => {

@@ -79,8 +79,8 @@ class RiseHandler(
     @web.authenticated
     def get(self, path: str = None):
         nb_path = Path(path)
-        if nb_path.suffix != '.ipynb':
-            raise web.HTTPError(404, f"Only notebook files can be opened with RISE; got {path}")
+        if nb_path.is_dir(): # TODO is it enough to support Jupytext? or should we filter the `suffix`
+            raise web.HTTPError(404, f"Only files can be opened with RISE; got {path}")
 
         return self.write(
             self.render_template(
@@ -100,6 +100,7 @@ class RiseApp(LabServerApp):
     app_version = version
     extension_url = "/rise"
     default_url = "/rise"
+    file_url_prefix = "/rise"
     load_other_extensions = True
     app_dir = app_dir
     app_settings_dir = pjoin(app_dir, "settings")

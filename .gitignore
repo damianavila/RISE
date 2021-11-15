@@ -1,10 +1,12 @@
-classic/rise/static/
-rise-reveal/export/
 doc/_build/
-lab/rise/labextension/
-lab/rise/schemas/
-lab/rise/static/*
-lab/rise/static/favicons
+rise/labextension/
+rise/nbextension/main.css
+rise/nbextension/reveal*
+rise/schemas/
+rise/static/*
+rise/static/favicons
+packages/rise-reveal/export/
+packages/rise-reveal/package-lock.json
 
 *.bundle.*
 lib/
@@ -117,5 +119,3 @@ dmypy.json
 
 # OSX files
 .DS_Store
-rise-reveal/yarn.lock
-classic/package-lock.json

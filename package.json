@@ -8,8 +8,7 @@
   "workspaces": {
     "packages": [
       "app",
-      "packages/application",
-      "packages/extension"
+      "packages/*"
     ]
   },
   "author": {
@@ -29,15 +28,14 @@
   "scripts": {
     "build": "lerna run build",
     "build:prod": "lerna run build:prod",
-    "build:test": "lerna run build:test",
     "clean": "lerna run clean",
     "eslint": "eslint . --ext .ts,.tsx --fix",
     "eslint:check": "eslint . --ext .ts,.tsx",
     "develop": "jupyter labextension develop . --overwrite",
+    "preinstall": "cd packages/rise-reveal && npm run build",
     "install": "lerna bootstrap",
     "prettier": "prettier --write \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
     "prettier:check": "prettier --list-different \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
-    "test": "lerna run test",
     "update:dependency": "node ./node_modules/@jupyterlab/buildutils/lib/update-dependency.js --lerna"
   },
   "husky": {

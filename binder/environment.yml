@@ -6,6 +6,10 @@ dependencies:
   - matplotlib
   - pandas
   - bokeh
-  - rise
+  # - rise
+  - notebook
+  - jupyterlab
+  - nodejs
+  - yarn
   - pip:
     - jupyter-contrib-nbextensions

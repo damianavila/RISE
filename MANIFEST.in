@@ -1,17 +1,19 @@
-include *.md
+include LICENSE.md
+include README.md
 include pyproject.toml
-recursive-include jupyter-config *.json
-
 include package.json
 include install.json
 include ts*.json
 include yarn.lock
 
-graft rise_jupyterlab/labextension
+recursive-include jupyter-config *.json
+
+graft rise/labextension
+graft rise/nbextension
 
 # Javascript files
-graft src
-graft style
+graft app
+graft packages
 prune **/node_modules
 prune lib
 prune binder

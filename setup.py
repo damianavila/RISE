@@ -13,12 +13,27 @@ Packaging
 # http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Distributing%20Jupyter%20Extensions%20as%20Python%20Packages.html#Example---Server-extension-and-nbextension
 
 import os
+from pathlib import Path
+
 from setuptools import setup, find_packages
 
-NAME = "rise"
+HERE = Path(__file__).parent.resolve()
+
+name = "rise"
+
+lab_path = (HERE / name.replace("-", "_") / "labextension")
+
+# Representative files that should exist after a successful build
+ensured_targets = [
+    str(lab_path / "package.json"),
+    str(lab_path / "static/style.js")
+]
+
+labext_name = "rise-jupyterlab"
 
 INSTALL_REQUIRES = [
-    'notebook>=6.0',
+    "jupyter_server>=1.6,<2"
+    "jupyterlab>=3,<4"
 ]
 
 with open('README.md') as readme:
@@ -29,12 +44,14 @@ DATA_FILES = [
     ("etc/jupyter/nbconfig/notebook.d", [
         "jupyter-config/nbconfig/notebook.d/rise.json"
     ]),
+    ("share/jupyter/labextensions/%s" % labext_name, str(lab_path.relative_to(HERE)), "**"),
+    ("share/jupyter/labextensions/%s" % labext_name, str("."), "install.json"),
 ]
 
 # Install the nbextension (like jupyter nbextension install --sys-prefix).
 # More precisely, everything in the rise/static directory and its
 # subdirectories should be installed
-nbext = ["share", "jupyter", "nbextensions", NAME]
+nbext = ["share", "jupyter", "nbextensions", name]
 for (path, dirs, files) in os.walk(os.path.join("rise", "nbextension")):
     # Files to install
     srcfiles = [os.path.join(path, f) for f in files]
@@ -52,13 +69,13 @@ if "-dev" in version:
     version = version.replace("-dev", ".dev")
 
 setup_args = dict(
-    name=NAME,
+    name=name,
     version=version,
     packages=find_packages(),
     data_files=DATA_FILES,
     include_package_data=True,
     install_requires=INSTALL_REQUIRES,
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
+    python_requires='>=3.6, <4',
     description="Reveal.js - Jupyter/IPython Slideshow Extension",
     long_description=README,
     long_description_content_type='text/markdown',
@@ -78,15 +95,38 @@ setup_args = dict(
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Framework :: Jupyter",
+        "Framework :: Jupyter :: JupyterLab",
+        "Framework :: Jupyter :: JupyterLab :: 3",
+        "Framework :: Jupyter :: JupyterLab :: Extensions",
+        "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
     ],
     zip_safe=False,
 )
+
+# FIXME & add pyproject.toml
+# try:
+#     from jupyter_packaging import (
+#         wrap_installers,
+#         npm_builder,
+#         get_data_files
+#     )
+#     post_develop = npm_builder(
+#         build_cmd="install:extension", source_dir="src", build_dir=lab_path
+#     )
+#     setup_args["cmdclass"] = wrap_installers(post_develop=post_develop, ensured_targets=ensured_targets)
+#     setup_args["data_files"] = get_data_files(data_files_spec)
+# except ImportError as e:
+#     import logging
+#     logging.basicConfig(format="%(levelname)s: %(message)s")
+#     logging.warning("Build tool `jupyter-packaging` is missing. Install it with pip or conda.")
+#     if not ("--name" in sys.argv or "--version" in sys.argv):
+#         raise e
 
 if __name__ == '__main__':
     setup(**setup_args)

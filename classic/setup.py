@@ -35,7 +35,7 @@ DATA_FILES = [
 # More precisely, everything in the rise/static directory and its
 # subdirectories should be installed
 nbext = ["share", "jupyter", "nbextensions", NAME]
-for (path, dirs, files) in os.walk(os.path.join("rise", "static")):
+for (path, dirs, files) in os.walk(os.path.join("rise", "nbextension")):
     # Files to install
     srcfiles = [os.path.join(path, f) for f in files]
     # Installation path components, removing rise/static from "path"

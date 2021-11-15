@@ -1,11 +1,11 @@
 include LICENSE.md
 include README.md
 include package.json
-include rise/static/main.js
-include rise/static/main.css
-include rise/static/rise.png
-include rise/static/rise.yaml
-include rise/static/README.md
+include rise/nbextension/main.js
+include rise/nbextension/main.css
+include rise/nbextension/rise.png
+include rise/nbextension/rise.yaml
+include rise/nbextension/README.md
 recursive-include jupyter-config *.json
-recursive-include rise/static/reveal.js *
-recursive-include rise/static/reveal.js-chalkboard *
+recursive-include rise/nbextension/reveal.js *
+recursive-include rise/nbextension/reveal.js-chalkboard *

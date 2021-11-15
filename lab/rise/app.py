@@ -1,8 +1,10 @@
 import os
 from os.path import join as pjoin
+from pathlib import Path
+from typing import Optional
 
 
-from jupyter_server.base.handlers import JupyterHandler
+from jupyter_server.base.handlers import JupyterHandler, path_regex
 from jupyter_server.extension.handler import (
     ExtensionHandlerJinjaMixin,
     ExtensionHandlerMixin,
@@ -25,7 +27,7 @@ version = __version__
 class RiseHandler(
     ExtensionHandlerJinjaMixin, ExtensionHandlerMixin, JupyterHandler
 ):
-    def get_page_config(self):
+    def get_page_config(self, notebook_path: Optional[str] = None):
         config = LabConfig()
         app = self.extensionapp
         base_url = self.settings.get("base_url")
@@ -37,7 +39,7 @@ class RiseHandler(
             "token": self.settings["token"],
             "fullStaticUrl": ujoin(self.base_url, "static", self.name),
             "frontendUrl": ujoin(self.base_url, "rise/"),
-            'notebookPath': 'test.ipynb',
+            'notebookPath': notebook_path,
         }
 
         mathjax_config = self.settings.get("mathjax_config", "TeX-AMS_HTML-full,Safe")
@@ -75,14 +77,18 @@ class RiseHandler(
         return page_config
 
     @web.authenticated
-    def get(self):
+    def get(self, path: str = None):
+        nb_path = Path(path)
+        if nb_path.suffix != '.ipynb':
+            raise web.HTTPError(404, f"Only notebook files can be opened with RISE; got {path}")
+
         return self.write(
             self.render_template(
                 "index.html",
                 static=self.static_url,
                 base_url=self.base_url,
                 token=self.settings["token"],
-                page_config=self.get_page_config()
+                page_config=self.get_page_config(path)
             )
         )
 
@@ -104,7 +110,7 @@ class RiseApp(LabServerApp):
     subcommands = {}
 
     def initialize_handlers(self):
-        self.handlers.append(("/rise", RiseHandler))
+        self.handlers.append((f"/rise{path_regex}", RiseHandler))
         super().initialize_handlers()
 
     def initialize_templates(self):

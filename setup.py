@@ -44,8 +44,7 @@ DATA_FILES = [
     ("etc/jupyter/nbconfig/notebook.d", [
         "jupyter-config/nbconfig/notebook.d/rise.json"
     ]),
-    ("share/jupyter/labextensions/%s" % labext_name, str(lab_path.relative_to(HERE)), "**"),
-    ("share/jupyter/labextensions/%s" % labext_name, str("."), "install.json"),
+    ("share/jupyter/labextensions/%s" % labext_name, ["install.json"]),
 ]
 
 # Install the nbextension (like jupyter nbextension install --sys-prefix).
@@ -57,6 +56,14 @@ for (path, dirs, files) in os.walk(os.path.join("rise", "nbextension")):
     srcfiles = [os.path.join(path, f) for f in files]
     # Installation path components, removing rise/static from "path"
     dst = nbext + path.split(os.sep)[2:]
+    DATA_FILES.append((os.path.join(*dst), srcfiles))
+
+labext = ["share", "jupyter", "labextensions", labext_name]
+for (path, dirs, files) in os.walk(os.path.join("rise", "labextension")):
+    # Files to install
+    srcfiles = [os.path.join(path, f) for f in files]
+    # Installation path components, removing rise/static from "path"
+    dst = labext + path.split(os.sep)[2:]
     DATA_FILES.append((os.path.join(*dst), srcfiles))
 
 # version string is extracted from toplevel package.json

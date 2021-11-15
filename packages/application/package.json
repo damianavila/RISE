@@ -2,6 +2,7 @@
   "name": "rise-application",
   "version": "0.1.0",
   "description": "Rise Application based on JupyterLab modules.",
+  "private": true,
   "keywords": [
     "jupyter",
     "jupyterlab",

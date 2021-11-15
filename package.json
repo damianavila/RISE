@@ -1,7 +1,7 @@
 {
   "name": "rise-jupyterlab-root",
   "description": "Edit and Present Revealjs-based LIVE slides in the Jupyter Notebook",
-  "version": "0.1.0",
+  "version": "5.8.0",
   "license": "BSD-3-Clause",
   "homepage": "https://github.com/damianavila/RISE",
   "private": true,

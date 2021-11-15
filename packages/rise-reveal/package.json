@@ -2,6 +2,7 @@
   "name": "rise-reveal",
   "description": "original reveal.js patched for use within the RISE Jupyter extension",
   "license": "MIT",
+  "private": true,
   "keywords": [
     "reveal.js",
     "RISE",

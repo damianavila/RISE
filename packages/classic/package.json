@@ -2,6 +2,7 @@
   "name": "rise",
   "description": "Edit and Present Revealjs-based LIVE slides in the Jupyter Notebook",
   "license": "BSD-3-Clause",
+  "private": true,
   "keywords": [
     "reveal.js",
     "RISE",

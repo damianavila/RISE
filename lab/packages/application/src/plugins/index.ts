@@ -5,8 +5,9 @@ import {
 import { IChangedArgs, PageConfig } from '@jupyterlab/coreutils';
 import { IDocumentManager } from '@jupyterlab/docmanager';
 import { INotebookModel, NotebookPanel } from '@jupyterlab/notebook';
+import { Signal } from '@lumino/signaling';
 import Reveal from 'rise-reveal';
-import { RiseApp } from '../app';
+import { RiseApp, RiseShell } from '../app';
 
 // TODO should we define our own factory?
 
@@ -60,9 +61,8 @@ function startReveal(panel: NotebookPanel): void {
   const notebook = panel.content;
   markupSlides(notebook);
 
-  const panel_container = document.getElementsByClassName(
-    'jp-NotebookPanel'
-  )[0];
+  const panel_container =
+    document.getElementsByClassName('jp-NotebookPanel')[0];
   panel_container.classList.add('reveal');
   //console.log("panel_container");
 
@@ -104,6 +104,11 @@ const opener: JupyterFrontEndPlugin<void> = {
         if (change.name === 'dirty' && change.newValue === false) {
           notebookPanel.model?.stateChanged.disconnect(initializeReveal, this);
           startReveal(notebookPanel);
+
+          Signal.disconnectAll(this);
+          (app.shell as RiseShell).updated.connect(() => {
+            Reveal.layout();
+          });
         }
       };
       notebookPanel.model?.stateChanged.connect(initializeReveal, this);

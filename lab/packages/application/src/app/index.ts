@@ -8,6 +8,8 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { IIterator, iter } from '@lumino/algorithm';
 import { Token } from '@lumino/coreutils';
+import { Message } from '@lumino/messaging';
+import { Signal, ISignal } from '@lumino/signaling';
 import { BoxLayout, Widget } from '@lumino/widgets';
 
 /**
@@ -18,10 +20,19 @@ export const IRetroShell = new Token<RiseShell>('rise-application:IRiseShell');
 export class RiseShell extends Widget implements JupyterFrontEnd.IShell {
   constructor() {
     super();
+    this._updated = new Signal(this);
     this.layout = new BoxLayout();
     this.id = 'main';
     this._currentWidget = null;
   }
+
+  /**
+   * Signal emitted when the shell is updated.
+   */
+  get updated(): ISignal<RiseShell, void> {
+    return this._updated;
+  }
+
   /**
    * Activates a widget inside the application shell.
    *
@@ -74,7 +85,19 @@ export class RiseShell extends Widget implements JupyterFrontEnd.IShell {
     return iter((this.layout as BoxLayout).widgets);
   }
 
+  /**
+   * A message handler invoked on an `'update-request'` message.
+   *
+   * #### Notes
+   * The default implementation of this handler is a no-op.
+   */
+  protected onUpdateRequest(msg: Message): void {
+    super.onUpdateRequest(msg);
+    this._updated.emit()
+  }
+
   private _currentWidget: Widget | null;
+  private _updated: Signal<RiseShell, void>;
 }
 
 export class RiseApp extends JupyterFrontEnd<JupyterFrontEnd.IShell> {

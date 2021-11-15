@@ -118,3 +118,4 @@ dmypy.json
 # OSX files
 .DS_Store
 rise-reveal/yarn.lock
+classic/package-lock.json

@@ -3,7 +3,7 @@ channels:
 dependencies:
   - python=3.9
   - numpy
-  - matplotlib
+  - matplotlib-base
   - pandas
   - bokeh
   - ipywidgets

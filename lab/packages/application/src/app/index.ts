@@ -1,0 +1,198 @@
+import {
+  JupyterFrontEnd,
+  JupyterFrontEndPlugin
+} from '@jupyterlab/application';
+import { createRendermimePlugins } from '@jupyterlab/application/lib/mimerenderers';
+import { PageConfig } from '@jupyterlab/coreutils';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
+import { IIterator, iter } from '@lumino/algorithm';
+import { Token } from '@lumino/coreutils';
+import { BoxLayout, Widget } from '@lumino/widgets';
+
+/**
+ * The Rise application shell token.
+ */
+export const IRetroShell = new Token<RiseShell>('rise-application:IRiseShell');
+
+export class RiseShell extends Widget implements JupyterFrontEnd.IShell {
+  constructor() {
+    super();
+    this.layout = new BoxLayout();
+    this.id = 'main';
+    this._currentWidget = null;
+  }
+  /**
+   * Activates a widget inside the application shell.
+   *
+   * @param id - The ID of the widget being activated.
+   */
+  activateById(id: string): void {
+    // pass no-op
+  }
+
+  /**
+   * Add a widget to the application shell.
+   *
+   * @param widget - The widget being added.
+   *
+   * @param area - Optional region in the shell into which the widget should
+   * be added.
+   *
+   * @param options - Optional flags the shell might use when opening the
+   * widget, as defined in the `DocumentRegistry`.
+   */
+  add(
+    widget: Widget,
+    area?: string,
+    options?: DocumentRegistry.IOpenOptions
+  ): void {
+    if ((this.layout as BoxLayout).widgets.length > 0) {
+      // pass no-op
+    }
+    BoxLayout.setStretch(widget, 1);
+    (this.layout as BoxLayout).addWidget(widget);
+    this._currentWidget = widget;
+  }
+  /**
+   * The focused widget in the application shell.
+   *
+   * #### Notes
+   * Different shell implementations have latitude to decide what "current"
+   * or "focused" mean, depending on their user interface characteristics.
+   */
+  get currentWidget(): Widget | null {
+    return this._currentWidget;
+  }
+
+  /**
+   * Returns an iterator for the widgets inside the application shell.
+   *
+   * @param area - Optional regions in the shell whose widgets are iterated.
+   */
+  widgets(area?: string): IIterator<Widget> {
+    return iter((this.layout as BoxLayout).widgets);
+  }
+
+  private _currentWidget: Widget | null;
+}
+
+export class RiseApp extends JupyterFrontEnd<JupyterFrontEnd.IShell> {
+  /**
+   * Construct a new RetroApp object.
+   *
+   * @param options The instantiation options for an application.
+   */
+  constructor(options: Partial<RiseApp.IOptions> = {}) {
+    super({ ...options, shell: options.shell ?? new RiseShell() });
+    if (options.mimeExtensions) {
+      for (const plugin of createRendermimePlugins(options.mimeExtensions)) {
+        this.registerPlugin(plugin);
+      }
+    }
+  }
+
+  /**
+   * The name of the application.
+   */
+  readonly name = 'Rise';
+
+  /**
+   * A namespace/prefix plugins may use to denote their provenance.
+   */
+  readonly namespace = this.name;
+
+  /**
+   * The version of the application.
+   */
+  readonly version = PageConfig.getOption('appVersion') ?? 'unknown';
+
+  /**
+   * The JupyterLab application paths dictionary.
+   */
+  get paths(): JupyterFrontEnd.IPaths {
+    return {
+      urls: {
+        base: PageConfig.getOption('baseUrl'),
+        notFound: PageConfig.getOption('notFoundUrl'),
+        app: PageConfig.getOption('appUrl'),
+        static: PageConfig.getOption('staticUrl'),
+        settings: PageConfig.getOption('settingsUrl'),
+        themes: PageConfig.getOption('themesUrl'),
+        doc: PageConfig.getOption('docUrl'),
+        translations: PageConfig.getOption('translationsApiUrl')
+      },
+      directories: {
+        appSettings: PageConfig.getOption('appSettingsDir'),
+        schemas: PageConfig.getOption('schemasDir'),
+        static: PageConfig.getOption('staticDir'),
+        templates: PageConfig.getOption('templatesDir'),
+        themes: PageConfig.getOption('themesDir'),
+        userSettings: PageConfig.getOption('userSettingsDir'),
+        serverRoot: PageConfig.getOption('serverRoot'),
+        workspaces: PageConfig.getOption('workspacesDir')
+      }
+    };
+  }
+
+  /**
+   * Register plugins from a plugin module.
+   *
+   * @param mod - The plugin module to register.
+   */
+  registerPluginModule(mod: RiseApp.IPluginModule): void {
+    let data = mod.default;
+    // Handle commonjs exports.
+    if (!Object.prototype.hasOwnProperty.call(mod, '__esModule')) {
+      data = mod as any;
+    }
+    if (!Array.isArray(data)) {
+      data = [data];
+    }
+    data.forEach(item => {
+      try {
+        this.registerPlugin(item);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+
+  /**
+   * Register the plugins from multiple plugin modules.
+   *
+   * @param mods - The plugin modules to register.
+   */
+  registerPluginModules(mods: RiseApp.IPluginModule[]): void {
+    mods.forEach(mod => {
+      this.registerPluginModule(mod);
+    });
+  }
+}
+
+export namespace RiseApp {
+  export interface IOptions
+    extends JupyterFrontEnd.IOptions<JupyterFrontEnd.IShell>,
+      Partial<IInfo> {}
+
+  /**
+   * The information about a RetroLab application.
+   */
+  export interface IInfo {
+    /**
+     * The mime renderer extensions.
+     */
+    readonly mimeExtensions: IRenderMime.IExtensionModule[];
+  }
+
+  /**
+   * The interface for a module that exports a plugin or plugins as
+   * the default value.
+   */
+  export interface IPluginModule {
+    /**
+     * The default export.
+     */
+    default: JupyterFrontEndPlugin<any> | JupyterFrontEndPlugin<any>[];
+  }
+}

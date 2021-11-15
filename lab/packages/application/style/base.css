@@ -1,0 +1,12 @@
+@import url('~rise-reveal/css/reveal.css');
+@import url('~rise-reveal/css/theme/simple.css');
+
+#main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+

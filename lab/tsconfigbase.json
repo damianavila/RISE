@@ -14,12 +14,10 @@
     "noUnusedLocals": true,
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
-    "sourceMap": true,
+    "strict": true,
+    "skipLibCheck": true,
     "strictNullChecks": true,
     "target": "es2017",
-    "types": [],
-    "outDir": "lib",
-    "rootDir": "src"
-  },
-  "include": ["src/*"]
+    "types": []
+  }
 }

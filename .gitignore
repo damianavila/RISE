@@ -1,7 +1,10 @@
 classic/rise/static/
 rise-reveal/export/
 doc/_build/
-lab/packages/extension/rise_jupyterlab/labextension
+lab/rise/labextension/
+lab/rise/schemas/
+lab/rise/static/*
+lab/rise/static/favicons
 
 *.bundle.*
 lib/
@@ -114,3 +117,4 @@ dmypy.json
 
 # OSX files
 .DS_Store
+rise-reveal/yarn.lock

@@ -90,45 +90,40 @@ async function main() {
         '@jupyterlab/application-extension:context-menu'
       ].includes(id)
     ),
-    require('@jupyterlab/apputils-extension'),
-    // .default.filter(({ id }) =>
-    //   [
-    //     '@jupyterlab/apputils-extension:palette',
-    //     '@jupyterlab/apputils-extension:settings',
-    //     '@jupyterlab/apputils-extension:state',
-    //     '@jupyterlab/apputils-extension:themes',
-    //     '@jupyterlab/apputils-extension:themes-palette-menu'
-    //   ].includes(id)
-    // ),
-    require('@jupyterlab/codemirror-extension'),
-    // .default.filter(({ id }) =>
-    //   [
-    //     '@jupyterlab/codemirror-extension:services',
-    //     '@jupyterlab/codemirror-extension:codemirror'
-    //   ].includes(id)
-    // ),
-    require('@jupyterlab/docmanager-extension'),
-    // .default.filter(({ id }) =>
-    //   [
-    //     '@jupyterlab/docmanager-extension:plugin',
-    //     '@jupyterlab/docmanager-extension:download'
-    //   ].includes(id)
-    // ),
+    require('@jupyterlab/apputils-extension').default.filter(({ id }) =>
+      [
+        '@jupyter/apputils-extension:sanitizer',
+        '@jupyterlab/apputils-extension:settings',
+        '@jupyterlab/apputils-extension:splash',
+        '@jupyterlab/apputils-extension:sessionDialogs',
+        '@jupyterlab/apputils-extension:themes'
+      ].includes(id)
+    ),
+    require('@jupyterlab/codemirror-extension').default.filter(({ id }) =>
+      [
+        '@jupyterlab/codemirror-extension:services',
+        '@jupyterlab/codemirror-extension:codemirror'
+      ].includes(id)
+    ),
+    require('@jupyterlab/docmanager-extension').default.filter(({ id }) =>
+      ['@jupyterlab/docmanager-extension:plugin'].includes(id)
+    ),
     require('@jupyterlab/docprovider-extension'),
     require('@jupyterlab/mathjax2-extension'),
-    require('@jupyterlab/notebook-extension'),
-    // .default.filter(({ id }) =>
-    //   [
-    //     '@jupyterlab/notebook-extension:factory',
-    //     '@jupyterlab/notebook-extension:tracker',
-    //     '@jupyterlab/notebook-extension:widget-factory'
-    //   ].includes(id)
-    // ),
+    require('@jupyterlab/notebook-extension').default.filter(({ id }) =>
+      [
+        '@jupyterlab/notebook-extension:factory',
+        '@jupyterlab/notebook-extension:tracker',
+        '@jupyterlab/notebook-extension:widget-factory'
+      ].includes(id)
+    ),
     require('@jupyterlab/rendermime-extension'),
     require('@jupyterlab/shortcuts-extension'),
     require('@jupyterlab/theme-light-extension'),
     require('@jupyterlab/theme-dark-extension'),
-    require('@jupyterlab/translation-extension')
+    require('@jupyterlab/translation-extension').default.filter(({ id }) =>
+      ['@jupyterlab/translation:translator'].includes(id)
+    )
   ];
 
   /**

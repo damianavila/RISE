@@ -131,11 +131,22 @@ function createShared(packageData) {
     }
   }
 
+  const missingPkgs = [];
   // Add singleton package information
   for (let pkg of packageData.jupyterlab.singletonPackages) {
     if (shared[pkg]) {
       shared[pkg].singleton = true;
+    } else {
+      missingPkgs.push(pkg);
     }
+  }
+
+  if (missingPkgs.length > 0) {
+    // If a package is set as singleton but absent of the shared list,
+    // recommend adding it to resolution and fail.
+    throw new Error(
+      `Singleton packages must have a resolved version number; these do not: ${missingPkgs.join(', ')} Please add them to packages.json#resolutions section.`
+    );
   }
 
   return shared;

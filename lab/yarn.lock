@@ -1131,7 +1131,7 @@
     "@lumino/signaling" "^1.4.3"
     "@lumino/widgets" "^1.19.0"
 
-"@jupyterlab/mainmenu@^3.2.3":
+"@jupyterlab/mainmenu@^3.2.0", "@jupyterlab/mainmenu@^3.2.3":
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/@jupyterlab/mainmenu/-/mainmenu-3.2.3.tgz#621eb93ad2131332cd531a6f4fb95389ee82aca8"
   integrity sha512-OvbqhnX2OVabSoQAwlhar63EwTsLT5MkwGnlHXpuLTk58Ihrb1QNnzvI8Nhoau7OnGazsJNjevD7taviyY2nNw==
@@ -1443,7 +1443,7 @@
     "@jupyterlab/settingregistry" "^3.2.3"
     "@jupyterlab/translation" "^3.2.3"
 
-"@jupyterlab/translation@^3.2.3":
+"@jupyterlab/translation@^3.2.0", "@jupyterlab/translation@^3.2.3":
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/@jupyterlab/translation/-/translation-3.2.3.tgz#d50c97eb3c5dd9c4896b46158669f8fbc958d007"
   integrity sha512-1pjLSbKhfAK0pZwd0iSCpMgJO4RB7wvrbpw8RC3vwhXYoRV5YTmqwIt4e3n/O1FUzG8UxD+XWeZqlBCbpAsQ3Q==
@@ -1453,7 +1453,7 @@
     "@jupyterlab/statedb" "^3.2.3"
     "@lumino/coreutils" "^1.5.3"
 
-"@jupyterlab/ui-components@^3.2.3":
+"@jupyterlab/ui-components@^3.2.0", "@jupyterlab/ui-components@^3.2.3":
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/@jupyterlab/ui-components/-/ui-components-3.2.3.tgz#2af6d66466dd72f4f0c2ada6b0e66cae94ffd367"
   integrity sha512-DWS/kasCoWzE9tK/GJtIO3F9nZGkZOCAA+YiZwJbHqwZhHcpVP/RrzSYFQdQSOpTd2yPumprDhjID4Wcsgk6Fw==
@@ -2190,7 +2190,7 @@
   dependencies:
     "@lumino/algorithm" "^1.9.1"
 
-"@lumino/commands@^1.12.0", "@lumino/commands@^1.17.0", "@lumino/commands@^1.19.0":
+"@lumino/commands@^1.12.0", "@lumino/commands@^1.15.0", "@lumino/commands@^1.17.0", "@lumino/commands@^1.19.0":
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/@lumino/commands/-/commands-1.19.0.tgz#9349c34b900653ac9d654e47831e7204e0c3476f"
   integrity sha512-DMX5TTvgmRAIhQpsSRgctYrnTNpIWgwmvmEjX37L+uKwUgZpBQUrprjfVblqv3kpwUugY2bQWy9Uza/P4muo1Q==
@@ -2208,7 +2208,7 @@
   resolved "https://registry.yarnpkg.com/@lumino/coreutils/-/coreutils-1.11.1.tgz#6d89c6325d7adb5f2179dfe3660f0aec8f3c4546"
   integrity sha512-TbXeYnUChSMN8SmuOwT+bADS3kMhsVaQC0sZie0ZeGaLYxVqvd7NEDRZATDtjdw7QGHK0TwH5+XzuSdNkAXpFw==
 
-"@lumino/disposable@^1.10.1", "@lumino/disposable@^1.4.3":
+"@lumino/disposable@^1.10.1", "@lumino/disposable@^1.4.3", "@lumino/disposable@^1.7.0":
   version "1.10.1"
   resolved "https://registry.yarnpkg.com/@lumino/disposable/-/disposable-1.10.1.tgz#58fddc619cf89335802d168564b76ff5315d5a84"
   integrity sha512-mZQILc8sVGZC7mJNOGVmehDRO9/u3sIRdjZ+pCYjDgXKcINLd6HoPhZDquKCWiRBfHTL1B3tOHjnBhahBc2N/Q==

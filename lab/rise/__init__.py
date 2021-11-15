@@ -15,8 +15,8 @@ def _jupyter_server_extension_points():
     return [{"module": "rise", "app": RiseApp}]
 
 
-# def _jupyter_labextension_paths():
-#     return [{
-#         'src': 'labextension',
-#         'dest': '@retrolab/lab-extension'
-#     }]
+def _jupyter_labextension_paths():
+    return [{
+        'src': 'labextension',
+        'dest': 'rise-jupyterlab'
+    }]

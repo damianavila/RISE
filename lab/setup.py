@@ -22,15 +22,10 @@ ensured_targets = [
 
 labext_name = "rise-jupyterlab"
 
-# data_files_spec = [
-#     ("share/jupyter/labextensions/%s" % labext_name, str(lab_path.relative_to(HERE)), "**"),
-#     ("share/jupyter/labextensions/%s" % labext_name, str("."), "install.json"),
-#     ("etc/jupyter/jupyter_server_config.d",
-#      "jupyter-config/server-config", "rise_jupyterlab.json"),
-#     # For backward compatibility with notebook server
-#     ("etc/jupyter/jupyter_notebook_config.d",
-#      "jupyter-config/nb-config", "rise_jupyterlab.json"),
-# ]
+data_files_spec = [
+    ("share/jupyter/labextensions/%s" % labext_name, str(lab_path.relative_to(HERE)), "**"),
+    ("share/jupyter/labextensions/%s" % labext_name, str("."), "install.json"),
+]
 
 long_description = (HERE / "README.md").read_text()
 

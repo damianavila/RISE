@@ -81,7 +81,6 @@ async function main() {
   let baseMods = [
     // rise plugins
     rise.default,
-    require('rise-jupyterlab'),
 
     // @jupyterlab plugins
     require('@jupyterlab/application-extension').default.filter(({ id }) =>

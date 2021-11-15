@@ -1,0 +1,21 @@
+{
+  "title": "RISE",
+  "description": "RISE settings.",
+  "jupyter.lab.setting-icon-label": "RISE slideshow",
+  "jupyter.lab.menus": {
+    "main": [
+      {
+        "id": "jp-mainmenu-view",
+        "items": [
+          { "type": "separator" },
+          {
+            "command": "rise-jupyterlab:open"
+          },
+          { "type": "separator" }
+        ]
+      }
+    ]
+  },
+  "type": "object",
+  "additionalProperties": false
+}

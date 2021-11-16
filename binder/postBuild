@@ -30,6 +30,8 @@ _(sys.executable, "-m", "pip", "check")
 _("yarn", "install")
 _("yarn", "run", "build")
 _(sys.executable, "-m", "pip", "install", "-e", ".")
+_(sys.executable, "-m", "jupyter", "server", "extension", "enable", "rise")
+_(sys.executable, "-m", "jupyter", "serverextension", "enable", "rise")
 _(sys.executable, "-m", "jupyter", "labextension", "develop", "--overwrite", ".")
 _(sys.executable, "-m", "jupyter", "nbextension", "install", "rise", "--py", "--sys-prefix", "--symlink")
 _(sys.executable, "-m", "jupyter", "nbextension", "enable", "rise", "--py", "--sys-prefix")
@@ -39,6 +41,7 @@ _(sys.executable, "-m", "pip", "check")
 
 # list the extensions
 _("jupyter", "server", "extension", "list")
+_("jupyter", "serverextension", "list")
 
 # initially list installed extensions to determine if there are any surprises
 _("jupyter", "labextension", "list")

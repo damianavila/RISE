@@ -69,8 +69,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
             args: { toolbar: true }
           })
         );
-        await panel.context.ready;
-        commands.notifyCommandChanged();
       }
     );
 

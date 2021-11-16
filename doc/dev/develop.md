@@ -55,6 +55,8 @@ Internally this will
 Second, let's install RISE in a editable form:
 
     pip install -e .
+    jupyter serverextension enable rise
+    jupyter labextension develop --overwrite .
     jupyter-nbextension install rise --py --sys-prefix --symlink
     jupyter-nbextension enable rise --py --sys-prefix
 

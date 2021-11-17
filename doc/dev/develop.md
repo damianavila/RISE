@@ -55,6 +55,7 @@ Internally this will
 Second, let's install RISE in a editable form:
 
     pip install -e .
+    jupyter server extension enable rise
     jupyter serverextension enable rise
     jupyter labextension develop --overwrite .
     jupyter-nbextension install rise --py --sys-prefix --symlink
@@ -93,3 +94,22 @@ npm publish
 ```
 
 Finally, you need to update the main package.json file at the root directory to grab the new version you just published.
+
+### Folder structure
+
+The package is now an unique Python package `rise` (at the folder root) that will distribute the frontend for the 
+classical notebook (in `rise/nbextension`) and JupyterLab (in `rise/labextension`).
+
+The development of the frontend code is mainly in packages (development version that needs to be transpiled before
+being distributed within the Python package):
+
+- *Classical notebook* extension:
+  - Javascript file is `rise/nbextension/main.js`
+  - CSS file is `packages/classic/src/less/main.less`  
+    It will be transpiled to `rise/nbextension/main.css`
+- *JupyterLab* extension - i.e. notebook toolbar button:
+  - This is the folder `packages/lab`
+- *Standalone application* (based on JupyterLab) - the place where Reveal is used to modify the DOM:
+  - Definition of the application (what needs to be brought from JupyterLab base packages) is in the folder `app`
+  - Customization of the application for RISE is in the folder `packages/application`
+    - In particular the entry point for opening the notebook with Reveal is in `packages/application/src/plugins/index.ts#opener`. And in particular the conversion of the notebook is done by `RevealUtils.startReveal`.

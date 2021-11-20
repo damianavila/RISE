@@ -9,6 +9,9 @@
         "items": [
           { "type": "separator" },
           {
+            "command": "rise-jupyterlab:preview"
+          },
+          {
             "command": "rise-jupyterlab:open"
           },
           { "type": "separator" }

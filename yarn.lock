@@ -2225,7 +2225,7 @@
     "@lumino/signaling" "^1.10.1"
     "@lumino/virtualdom" "^1.14.1"
 
-"@lumino/coreutils@^1.11.1", "@lumino/coreutils@^1.5.3":
+"@lumino/coreutils@^1.11.0", "@lumino/coreutils@^1.11.1", "@lumino/coreutils@^1.5.3":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@lumino/coreutils/-/coreutils-1.11.1.tgz#6d89c6325d7adb5f2179dfe3660f0aec8f3c4546"
   integrity sha512-TbXeYnUChSMN8SmuOwT+bADS3kMhsVaQC0sZie0ZeGaLYxVqvd7NEDRZATDtjdw7QGHK0TwH5+XzuSdNkAXpFw==

@@ -10,8 +10,6 @@ For starters we target the classic notebook, in a next phase we plan on addressi
 
 What is currently handled here is
 
-* main `reveal.css`
-* themes-dependant CSS files
-* the notes plugin
-
-
+- main `reveal.css`
+- themes-dependant CSS files
+- the notes plugin

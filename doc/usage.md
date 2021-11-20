@@ -1,5 +1,4 @@
-Usage
-=====
+# Usage
 
 You can see [in this youtube video](https://youtu.be/sXyFa_r1nxA) a very
 short session on how to use RISE to create and run a slideshow.
@@ -8,28 +7,28 @@ Let us emphasize the key points here.
 
 ## Creating a slideshow
 
-In the notebook menu, the *"View"* option contains a *"Cell Toolbar"*
+In the notebook menu, the _"View"_ option contains a _"Cell Toolbar"_
 sub-menu that gives you access to the metadata for each cell. If you
-select the *"Slideshow"* preset, you will see in the right corner of each
+select the _"Slideshow"_ preset, you will see in the right corner of each
 cell a little box where you can select the cell type.
 
 You can choose between the following types:
 
-* **slide**: this cell is the beginning of a new slide
+- **slide**: this cell is the beginning of a new slide
 
-* **subslide**: this cell is the beginning of a new subslide; that is
-  to say, a new slide, but that `reveal.js` will display *below* the
+- **subslide**: this cell is the beginning of a new subslide; that is
+  to say, a new slide, but that `reveal.js` will display _below_ the
   previous one instead of on the right;
 
-* **fragment**: this is to split the contents of one slide into
+- **fragment**: this is to split the contents of one slide into
   pieces; a cell marked as a fragment will create a break inside the
   slide; it will not show up right away, you will need to press Space
   one more time to see it.
 
-* **skip**: this cell is ignored altogether in *reveal* mode,
-it will not appear either in the main view, nor in the speaker view.
+- **skip**: this cell is ignored altogether in _reveal_ mode,
+  it will not appear either in the main view, nor in the speaker view.
 
-* **notes**: similarly, this cell is marked to be discarded from
+- **notes**: similarly, this cell is marked to be discarded from
   the main view, but is meant to appear in the speaker view.
 
 **Keyboard shortcuts**
@@ -40,10 +39,10 @@ the keyboard shortcut editor from the notebook UI.
 We have defined 4 main shortcuts by default that you can change
 according to your needs:
 
--   `Alt-r`, \"Enter/Exit Live Reveal Slideshow\"
--   `Shift-i`, Toggle slide
--   `Shift-b`, Toggle subslide
--   `Shift-g`, Toggle fragment
+- `Alt-r`, \"Enter/Exit Live Reveal Slideshow\"
+- `Shift-i`, Toggle slide
+- `Shift-b`, Toggle subslide
+- `Shift-g`, Toggle fragment
 
 ## Running a slideshow
 
@@ -57,7 +56,7 @@ icon on the upper right corner of each slide.
 
 ### Navigation
 
-It is *highly recommended* to use mainly **`SpaceBar`** to go forward,
+It is _highly recommended_ to use mainly **`SpaceBar`** to go forward,
 and **`Shift-SpaceBar`** to go backward (or the visual controller in
 the slideshow right bottom corner). This will follow the course of the
 presentation no matter what the detailed structure is (slides,
@@ -83,17 +82,17 @@ as appropriate.
 
 ### Other notes
 
-* In presentation mode, you can know more about the reveal-specific
-shortcuts just pressing the help button at the slideshow left bottom
-corner.
+- In presentation mode, you can know more about the reveal-specific
+  shortcuts just pressing the help button at the slideshow left bottom
+  corner.
 
-* Darkish themes have css conflict with the notebook css, so it need
-customization to make them work (not provided by default).
+- Darkish themes have css conflict with the notebook css, so it need
+  customization to make them work (not provided by default).
 
-* Markdown Images get left aligned by default. Enclose the image like
-`<center><img src='blah.png'></center>` to center it.
+- Markdown Images get left aligned by default. Enclose the image like
+  `<center><img src='blah.png'></center>` to center it.
 
-###  Shift-Enter behaviour (historical note)
+### Shift-Enter behaviour (historical note)
 
 Starting version 5.1.0: We have developed a `smart exec` functionality
 which essentially it is bound to the Shift-Enter keyboard shortcut and

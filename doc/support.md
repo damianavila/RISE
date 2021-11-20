@@ -8,8 +8,8 @@ Basically, you have 2-3 ways to fund **RISE** support and development:
 
 At [https://ko-fi.com/damianavila](https://ko-fi.com/damianavila) you can either:
 
-* Buy Damian's some stars as general support (and you will be listed on his blog support page)
-* Buy a "commission" to support the accomplishment of diverse **RISE**-related goals (see each specific **RISE**-related commission for more details)
+- Buy Damian's some stars as general support (and you will be listed on his blog support page)
+- Buy a "commission" to support the accomplishment of diverse **RISE**-related goals (see each specific **RISE**-related commission for more details)
 
 We **highly** encourage you to choose one of the **RISE**-related available commissions.
 

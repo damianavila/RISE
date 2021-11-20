@@ -2,32 +2,36 @@
 
 RISE allows you to instantly turn your Jupyter Notebooks into a
 slideshow. No out-of-band conversion is needed, switch from jupyter
-notebook to a live *reveal.js*-based slideshow in a single keystroke,
+notebook to a live _reveal.js_-based slideshow in a single keystroke,
 and back.
 
 ![Basic usage](https://media.giphy.com/media/3oxHQtTxAaZwMOHr9u/giphy.gif)
 
 ## Resources
 
-RISE stands for ***Reveal.js - Jupyter/IPython Slideshow Extension***:
+RISE stands for **_Reveal.js - Jupyter/IPython Slideshow Extension_**:
 
-* Demo notebook (no installation required)
-  * [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2FREADME.ipynb)
+- Demo notebook (no installation required)
 
-* Source code is on github <https://github.com/damianavila/RISE>
-  * [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
+  - [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2FREADME.ipynb)
 
-* Documentation is hosted on readthedocs
-  * [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
+- Source code is on github <https://github.com/damianavila/RISE>
 
-* Chat room on gitter
-  * [![Gitter chat](https://badges.gitter.im/damianavila/RISE.png)](https://gitter.im/damianavila/RISE)
+  - [![Issues](http://img.shields.io/github/issues/damianavila/RISE.svg)](https://github.com/damianavila/RISE/issues)
 
-* Videos on youtube
-  * basic usage (4'30'')
+- Documentation is hosted on readthedocs
+
+  - [![doc status](https://readthedocs.org/projects/rise/badge)](http://rise.readthedocs.io/)
+
+- Chat room on gitter
+
+  - [![Gitter chat](https://badges.gitter.im/damianavila/RISE.png)](https://gitter.im/damianavila/RISE)
+
+- Videos on youtube
+
+  - basic usage (4'30'')
 
     <https://youtu.be/sXyFa_r1nxA>
-
 
 ## Installation
 

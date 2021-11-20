@@ -9,4 +9,3 @@ make html
 ```
 
 but you need to install `make`, `sphinx` and `recommonmark`.
-

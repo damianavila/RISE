@@ -1,25 +1,23 @@
 # Customizing RISE
 
-
-
 ## What to configure
 
 Here's a list of things that can be customized. [See below for more
 details](#how-to-customize) on how to implement those settings.
 
-* [presentation theme](#choosing-a-theme)
-* [transiton between slides ](#choosing-a-transition)
-* [auto-launch presentation mode](#automatically-launch-rise)
-* [where to start the presentation](#choosing-where-the-slideshow-begins)
-* [automatic selection of cells](#select-cells-based-on-the-current-slide)
-* [slide sizes](#change-the-width-and-height-of-slides)
-* [decoration (header/footer/background)](#decorating-all-slides)
-* [vertical scrollbar](#enable-a-right-scroll-bar)
-* [chalkboard capabilities](#enable-chalkboard-capabilities)
-* [using a leap motion controller](#usage-with-leap-motion)
-* [native `reveal.js` settings](#reveal-js-configuration-options)
-* [custom CSS](#adding-custom-css)
-* [keyboard shortcuts](#keyboard-shortcuts-and-jupyter-actions)
+- [presentation theme](#choosing-a-theme)
+- [transiton between slides ](#choosing-a-transition)
+- [auto-launch presentation mode](#automatically-launch-rise)
+- [where to start the presentation](#choosing-where-the-slideshow-begins)
+- [automatic selection of cells](#select-cells-based-on-the-current-slide)
+- [slide sizes](#change-the-width-and-height-of-slides)
+- [decoration (header/footer/background)](#decorating-all-slides)
+- [vertical scrollbar](#enable-a-right-scroll-bar)
+- [chalkboard capabilities](#enable-chalkboard-capabilities)
+- [using a leap motion controller](#usage-with-leap-motion)
+- [native `reveal.js` settings](#reveal-js-configuration-options)
+- [custom CSS](#adding-custom-css)
+- [keyboard shortcuts](#keyboard-shortcuts-and-jupyter-actions)
 
 ### Choosing a theme
 
@@ -47,12 +45,10 @@ view using the `autolaunch` config option. This typically is very
 helpful if you plan on publishing slideshows through something like
 `mybinder.org`:
 
-
     {
      ...
      "rise": {"autolaunch": true}
     }
-
 
 ### Choosing where the slideshow begins
 
@@ -83,9 +79,9 @@ behaves, here are their default values:
 
 `auto_select` can be any of:
 
--   `code` (the first code cell is auto-selected)
--   `none` (no auto-selection)
--   `first` (the first cell is auto-selected)
+- `code` (the first code cell is auto-selected)
+- `none` (no auto-selection)
+- `first` (the first cell is auto-selected)
 
 `auto_select_fragment` is a boolean that states whether auto-selection
 should select cells based on the current slide as a whole (when set to
@@ -115,34 +111,33 @@ configuration:
 
 **Notes**
 
-* remember that you can always use your browser's shortcuts to zoom
-in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`), and this way adjust the slide
-content to your screen/projector size.
+- remember that you can always use your browser's shortcuts to zoom
+  in/out (`Cmd/Ctrl +` and `Cmd/Ctrl -`), and this way adjust the slide
+  content to your screen/projector size.
 
-* this method is *often preferable* than setting sizes. In particular
+- this method is _often preferable_ than setting sizes. In particular
   it is dangerous to set sizes in pixels, as most often you cannot
   rehearse with the actual projector. We recommend setting relative
   sizes (in percents) rather than absolute ones (in `px` or `cm`).
 
-* in any case you may want to increase the slide height to ensure that
-cell outputs fit within a single slide; keep in mind that cell
-contents tend to take more space as you run your code.
+- in any case you may want to increase the slide height to ensure that
+  cell outputs fit within a single slide; keep in mind that cell
+  contents tend to take more space as you run your code.
 
 ### Decorating all slides
 
 RISE offers two levels for inserting a static background. You can either
 
-* define `overlay`, in which case you take full control,
-* **or** you can define `header`, `footer` and `backimage`.
+- define `overlay`, in which case you take full control,
+- **or** you can define `header`, `footer` and `backimage`.
 
 So if you define `overlay`, the 3 latter options will be ignored.
-
 
 #### `overlay`
 
 It is possible to add the config option `overlay` to build a constant
-background.  It is wrapped in a`<div>`, so it can be text or html.  In
-this case, the user is entirely responsible for styling.  For example:
+background. It is wrapped in a`<div>`, so it can be text or html. In
+this case, the user is entirely responsible for styling. For example:
 
     {
      ...
@@ -174,7 +169,6 @@ or in binder respectively
 [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2Foverlay.ipynb)
 [![](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/damianavila/RISE/master?filepath=examples%2Fheader-footer.ipynb)
 
-
 ### Enable a right scroll bar
 
 To enable a right scroll bar when your content exceeds the slide vertical height,
@@ -200,12 +194,12 @@ The first one provides you with a black board.
 The second one allows you to draw **on top** of the current slide.
 
 It also reacts to the following additional keyboard commands:
-* `[` to turn the whole space into an empty chalkboard
-* `]` to start adding free drawings to the current slide
-* `\` to download chalkboard drawing
-* `=` to reset chalkboard drawing on the current slide
-* `-` to clear the chalkboard
 
+- `[` to turn the whole space into an empty chalkboard
+- `]` to start adding free drawings to the current slide
+- `\` to download chalkboard drawing
+- `=` to reset chalkboard drawing on the current slide
+- `-` to clear the chalkboard
 
 ### Usage with Leap Motion
 
@@ -240,30 +234,30 @@ To disable it:
 `reveal.js`'s documentation](https://github.com/hakimel/reveal.js). Out of this
 category, RISE will pass through the following settings:
 
-* `controls` to enable or disable the lower right navigation arrows
+- `controls` to enable or disable the lower right navigation arrows
 
-* `progress` to enable or disable the thin progress bar at the bottom
+- `progress` to enable or disable the thin progress bar at the bottom
   of the slideshow
 
-* `slideNumber` that allows you to turn off, or customize, slide
+- `slideNumber` that allows you to turn off, or customize, slide
   numbers. Set to boolean `false` to turn off, [see `reveal.js`'s doc
   for more details](https://github.com/hakimel/reveal.js#slide-number)
 
-* as well as `history`.
+- as well as `history`.
 
 ### Adding custom CSS
 
 RISE looks for two css files to apply CSS changes on top of the
 slideshow view:
 
-* First, it attemps to load `rise.css`, and hence this will be
-applied to all notebooks in the current directory;
+- First, it attemps to load `rise.css`, and hence this will be
+  applied to all notebooks in the current directory;
 
-* Second, it attempts to load `the_notebook_name.css` and so this will
-hence be only applied to `the_notebook_name.ipynb`.
+- Second, it attempts to load `the_notebook_name.css` and so this will
+  hence be only applied to `the_notebook_name.ipynb`.
 
 Both files need to be placed alongside with the notebook of interest,
-i.e. in the same directory.  You can see some examples using this
+i.e. in the same directory. You can see some examples using this
 customization with `RISE/examples/showflow.ipynb`.
 
 **NOTE.** The implementation of this feature is rather rough, both css
@@ -273,10 +267,9 @@ about `No such file or directory`. These messages can be safely
 ignored. See also <https://github.com/damianavila/RISE/issues/353> about
 this.
 
-***
+---
 
 ## How to customize
-
 
 RISE can be customized in a lot of ways. As of RISE version 5.3, you can:
 
@@ -314,7 +307,6 @@ depicted below. Settings are stored in JSON format, typically in
 
 ![](../examples/configurator.png)
 
-
 ### Using python
 
 As an alternative way, you can tweak your local user's settings with a
@@ -340,22 +332,20 @@ cm.update(
 
 **Notes:**
 
-* the `config_dir` parameter should point at where the `nbconfig` is
+- the `config_dir` parameter should point at where the `nbconfig` is
   located. This will vary depending on your setup, and specifically on
   where you "installed" and "enabled" the nbextension.
 
-* running the example above would result in the creation (or
+- running the example above would result in the creation (or
   modification) of a file named `~/.jupyter/rise.json`, which is
   generally the right place to store user preferences,
 
-* to adjust this path to your own setup, you can use `jupyter
-  --paths`, and specifically the `config` section, to see the path
+- to adjust this path to your own setup, you can use `jupyter --paths`, and specifically the `config` section, to see the path
   locations that are applicable.
 
-* for more information, see these docs:
-  * <http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
-  * <http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
-
+- for more information, see these docs:
+  - <http://jupyter.readthedocs.io/en/latest/projects/jupyter-directories.html>
+  - <http://jupyter-notebook.readthedocs.io/en/latest/frontend_config.html>.
 
 ### Notebook metadata
 
@@ -373,6 +363,7 @@ this:
         },
         ...
     }
+
 You can edit notebook metadata as follows
 
 ![](../examples/metadata.png)
@@ -397,14 +388,14 @@ You are encouraged to always use the `rise` naming as much as possible.
 The order of precedence between these 3 sources of configuration is as
 follows:
 
-* a setting defined in the notebook's metadata is always valid; among
+- a setting defined in the notebook's metadata is always valid; among
   these, as described above, settings in the `rise` category will
   override those defined in `livereveal` if both entries apply;
 
-* if still undefined, a setting defined in the configurator will be valid;
-Finally, the following priorities apply:
+- if still undefined, a setting defined in the configurator will be valid;
+  Finally, the following priorities apply:
 
-* if still undefined, a setting defined in any of the JSON files
+- if still undefined, a setting defined in any of the JSON files
   considered by your jupyter server will be taken into account. Here
   again, `rise.json` supersedes `livereveal.json` in case of an overlap.
 
@@ -413,25 +404,20 @@ various channels (configurator, JSON and metadata) is
 identical, so it is possible to use the configurator as some sort of
 an online reference manual, as it describes each and every setting.
 
-
 ### Local setting vs hosted infrastructure
 
 At this point you need to be aware that:
 
-* settings changed through the configurator or JSON files - are stored
+- settings changed through the configurator or JSON files - are stored
   on your own file system, typically in your home directory, and so
   are only be applicable to people using this notebook server;
   generally it is used for user preferences or such.
 
-* *a contrario* settings embedded in a specific notebook's metadata
-   will be applicable to all users that get their hands on that notebook,
-   even if they end up in a mybinder instance via github.
+- _a contrario_ settings embedded in a specific notebook's metadata
+  will be applicable to all users that get their hands on that notebook,
+  even if they end up in a mybinder instance via github.
 
-
-
-
-****
-
+---
 
 ## Keyboard shortcuts and Jupyter actions
 
@@ -478,21 +464,16 @@ typically your `~/.jupyter/custom/custom.js`. Here is an example that
 will attach one of these actions to a custom keyboard shortcut:
 
 ```javascript
-    define(
-        ['base/js/namespace'],
-        function(Jupyter) {
+define(['base/js/namespace'], function(Jupyter) {
+  let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
 
-            let command_shortcuts = Jupyter.keyboard_manager.command_shortcuts;
-
-            // set / unset the 'Slide' tag in slideshow metadata
-            command_shortcuts.set_shortcut(
-                'alt-a', 'RISE:slideshow');
-        })
+  // set / unset the 'Slide' tag in slideshow metadata
+  command_shortcuts.set_shortcut('alt-a', 'RISE:slideshow');
+});
 ```
 
 Note that with this approach, you will end up with the
 `RISE:slideshow` action bound to **both** `Alt-R` and `Alt-A`.
-
 
 ### Keyboard shortcut editors
 
@@ -500,17 +481,17 @@ The actions exposed to Jupyter are also present in Jupyter's
 mainstream keyboard shortcuts editor, that you can use to (un)define
 your custom shortcuts.
 
-### Native keyboard shortcuts for reveal.js and reveal.js plug-ins 
+### Native keyboard shortcuts for reveal.js and reveal.js plug-ins
 
-Some custom keyboard shortcuts may be defined in RISE to override the default 
+Some custom keyboard shortcuts may be defined in RISE to override the default
 keyboard shortcuts of `reveal.js` and/or its plug-ins.
 
-The key bindings can be defined via the `nbextensions_configurator` or directly 
+The key bindings can be defined via the `nbextensions_configurator` or directly
 in JSON.
 
 The table below shows the avaialble key bindings:
 
-	module      action               default key  behaviour
+    module      action               default key  behaviour
     ---------------------------------------------------------
     main        firstSlide           home         jump to first slide
     main        lastSlide            end          jump to last slide
@@ -523,7 +504,7 @@ The table below shows the avaialble key bindings:
     chalkboard  toggleNotesCanvas    ]            toggle notes (slide-local)
     chalkboard  download             \            download recorded chalkboard drawing
 
-In JSON the native reveal.js keyboard shortcuts can be defined as shown in the 
+In JSON the native reveal.js keyboard shortcuts can be defined as shown in the
 example below:
 
     {
@@ -538,5 +519,3 @@ example below:
              }
          }
     }
-
-

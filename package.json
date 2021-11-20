@@ -53,7 +53,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "extra-watch-webpack-plugin": "^1.0.3",
-    "husky": "^3",
+    "husky": "^4.2.5",
     "jest": "^26.4.2",
     "jest-junit": "^11.1.0",
     "jest-raw-loader": "^1.0.1",

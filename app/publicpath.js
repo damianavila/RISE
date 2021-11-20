@@ -20,7 +20,7 @@
  * configuration as valid JSON.  In order to support the classic Notebook,
  * we fall back on checking for `body` data of the given `name`.
  */
- function getOption(name) {
+function getOption(name) {
   let configData = Object.create(null);
   // Use script tag if available.
   if (typeof document !== 'undefined' && document) {

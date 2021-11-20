@@ -3,3 +3,13 @@ dist
 coverage
 **/*.d.ts
 tests
+
+node_modules
+**/build
+**/lib
+**/node_modules
+**/static
+packages/rise-reveal/export
+
+.eslintrc.js
+lint-staged.config.js

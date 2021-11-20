@@ -2,4 +2,7 @@ node_modules
 **/node_modules
 **/lib
 **/package.json
-rise_jupyterlab
+rise/
+app/webpack.config.js
+packages/rise-reveal/export
+examples

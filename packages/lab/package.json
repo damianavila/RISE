@@ -51,7 +51,6 @@
     "@jupyterlab/ui-components": "^3.2.0",
     "@lumino/commands": "^1.15.0",
     "@lumino/disposable": "^1.7.0"
-
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.2.0",

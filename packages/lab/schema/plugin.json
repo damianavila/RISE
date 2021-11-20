@@ -17,5 +17,88 @@
     ]
   },
   "type": "object",
-  "additionalProperties": false
+  "additionalProperties": false,
+  "properties": {
+    "theme": {
+      "title": "Reveal Theme",
+      "description": "This setting, like the ones below, is passed directly to [`reveal.js` see this doc](https://github.com/hakimel/reveal.js).\ntheme: [see a list of reveal's available native themes](https://github.com/hakimel/reveal.js#theming). Note that dark themes from reveal do not work well with RISE, at least not without additional and manual tweaks.",
+      "enum": [
+        "black",
+        "white",
+        "league",
+        "beige",
+        "sky",
+        "night",
+        "serif",
+        "simple",
+        "solarized",
+        "blood",
+        "moon"
+      ],
+      "default": "simple"
+    },
+    "transition": {
+      "title": "Reveal Transition",
+      "description": "at least available: none - fade - slide - convex - concave - zoom - cube - linear; see also `reveal.js`.",
+      "enum": [
+        "none",
+        "fade",
+        "slide",
+        "convex",
+        "concave",
+        "zoom",
+        "cube",
+        "linear"
+      ],
+      "default": "linear"
+    },
+    "slideNumber": {
+      "title": "Reveal Slide Number",
+      "description": "A string to specify if and how to number slides; [see reveal's explanations](https://github.com/hakimel/reveal.js#slide-number).",
+      "oneOf": [{"type": "boolean"}, {"enum": ["h.v", "h/v", "c", "c/t"]}],
+      "default": false
+    },
+    "width": {
+      "title": "Reveal Width",
+      "description": "A css width attribute, like `1920px` or `10cm` or `100%`. **Remember that you can always zoom in and out** with you browser's native keyboard shortcuts like typically `Command +` or `Command -`.",
+      "type": "string",
+      "default": "100%"
+    },
+    "height": {
+      "title": "Reveal Height",
+      "description": "ditto for slide height.",
+      "type": "string",
+      "default": "100%"
+    },
+    "controls": {
+      "title": "Reveal Controls",
+      "description": "Add buttons to exit and get help",
+      "type": "boolean",
+      "default": true
+    },
+    "progress": {
+      "title": "Reveal Progress",
+      "description": "Show progress as a line at the bottom",
+      "type": "boolean",
+      "default": true
+    },
+    "history": {
+      "title": "Reveal History",
+      "description": "Push each slide change to the browser history",
+      "type": "boolean",
+      "default": true
+    },
+    "scroll": {
+      "title": "Reveal Scroll",
+      "description": "See reveal documentation",
+      "type": "boolean",
+      "default": false
+    },
+    "center": {
+      "title": "Reveal center",
+      "description": "See reveal documentation",
+      "type": "boolean",
+      "default": true
+    }
+  }
 }

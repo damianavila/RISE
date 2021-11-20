@@ -6,7 +6,8 @@ import {
 import { ICellModel } from '@jupyterlab/cells';
 import { IChangedArgs, PageConfig } from '@jupyterlab/coreutils';
 import { IDocumentManager } from '@jupyterlab/docmanager';
-import { INotebookModel, Notebook, NotebookPanel } from '@jupyterlab/notebook';
+import { Notebook, NotebookPanel } from '@jupyterlab/notebook';
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Signal } from '@lumino/signaling';
 import Reveal from 'rise-reveal';
 import { RiseApp, RiseShell } from '../app';
@@ -20,20 +21,35 @@ const opener: JupyterFrontEndPlugin<void> = {
   id: 'rise-extension:opener',
   autoStart: true,
   requires: [IDocumentManager],
-  activate: (app: JupyterFrontEnd, documentManager: IDocumentManager) => {
-    Promise.all([app.started, app.restored]).then(() => {
+  optional: [ISettingRegistry],
+  activate: (
+    app: JupyterFrontEnd,
+    documentManager: IDocumentManager,
+    settingRegistry: ISettingRegistry
+  ) => {
+    Promise.all([
+      // Load settings of the JupyterLab extension - so the settings can be edited in JLab.
+      settingRegistry?.load('rise-jupyterlab:plugin') ?? Promise.resolve(null),
+      app.started,
+      app.restored
+    ]).then(([settings]) => {
+      let rendered: boolean | null = null;
       const notebookPath = PageConfig.getOption('notebookPath');
       const notebookPanel = documentManager.open(notebookPath) as NotebookPanel;
 
-      app.shell.add(notebookPanel);
-
       const initializeReveal = (
-        _: INotebookModel,
+        _: any,
         change: IChangedArgs<any, any, string>
       ) => {
-        if (change.name === 'dirty' && change.newValue === false) {
+        if (
+          change.name === 'dirty' &&
+          change.newValue === false &&
+          // rendered = null || true
+          !!rendered
+        ) {
+          notebookPanel.content.fullyRendered.disconnect(setRendered, this);
           notebookPanel.model?.stateChanged.disconnect(initializeReveal, this);
-          RevealUtils.startReveal(notebookPanel);
+          RevealUtils.startReveal(notebookPanel, settings);
 
           Signal.disconnectAll(this);
           (app.shell as RiseShell).updated.connect(() => {
@@ -41,7 +57,27 @@ const opener: JupyterFrontEndPlugin<void> = {
           });
         }
       };
+
+      const setRendered = (notebook: Notebook, fullyRendered: boolean) => {
+        rendered = fullyRendered;
+        if (rendered) {
+          initializeReveal(null, {
+            name: 'dirty',
+            newValue: notebook.model?.dirty ?? true,
+            oldValue: true
+          });
+        }
+      };
+
+      // Deal with virtual rendering
+      notebookPanel.content.fullyRendered.connect(setRendered, this);
+
       notebookPanel.model?.stateChanged.connect(initializeReveal, this);
+
+      // Remove the toolbar
+      notebookPanel.toolbar.dispose();
+
+      app.shell.add(notebookPanel);
     });
   }
 };
@@ -64,6 +100,121 @@ const paths: JupyterFrontEndPlugin<JupyterFrontEnd.IPaths> = {
 export default [opener, paths];
 
 namespace RevealUtils {
+  interface IConfig {
+    // behaviour
+    autolaunch: boolean;
+    start_slideshow_at: string;
+    auto_select: string;
+    auto_select_fragment: boolean;
+    show_buttons_on_startup: boolean;
+
+    // aspect
+    header?: string;
+    footer?: string;
+    backimage?: string;
+    overlay?: string;
+
+    // timeouts
+    // wait for that amont before calling ensure_focused on the
+    // selected cell
+    restore_timeout: number;
+    // wait for that amount before actually selected auto-selected fragment
+    // when going too short, like 250, size of selected cell get odd
+    auto_select_timeout: number;
+    // wait for that amount before calling sync() again
+    // this is a workaround that fixes #504
+    sync_timeout: number;
+
+    // reveal native settings passed as-is
+    // see also the 'inherited' variable below in Revealer
+    theme: string;
+    transition: string;
+    // xxx there might be a need to tweak this one when set
+    // by the configurator, as e.g. 'false' or 'true' will result
+    // in a string and not a boolean
+    slideNumber: boolean | string;
+    width: string;
+    height: string;
+    controls: boolean;
+    progress: boolean;
+    history: boolean;
+    scroll: boolean;
+    center: boolean;
+    margin: number;
+    minScale: number; // we need this for codemirror to work right
+    // turn off reveal's help overlay that is by default bound to question mark / ?
+    help: boolean;
+
+    // plugins
+    enable_chalkboard: boolean;
+    enable_leap_motion: boolean;
+  }
+
+  // see packages/lab/schema/plugin.json
+  const HARDWIRED_CONFIG: IConfig = {
+    // behaviour
+    autolaunch: false,
+    start_slideshow_at: 'selected',
+    auto_select: 'code',
+    auto_select_fragment: true,
+    show_buttons_on_startup: true,
+
+    // aspect
+    header: undefined,
+    footer: undefined,
+    backimage: undefined,
+    overlay: undefined,
+
+    // timeouts
+    // wait for that amont before calling ensure_focused on the
+    // selected cell
+    restore_timeout: 500,
+    // wait for that amount before actually selected auto-selected fragment
+    // when going too short, like 250, size of selected cell get odd
+    auto_select_timeout: 450,
+    // wait for that amount before calling sync() again
+    // this is a workaround that fixes #504
+    sync_timeout: 250,
+
+    // UI - TODO
+    // toolbar_icon: 'fa-bar-chart',
+    // shortcuts: {
+    //   slideshow: 'alt-r',
+    //   'toggle-slide': 'shift-i',
+    //   'toggle-subslide': 'shift-b',
+    //   'toggle-fragment': 'shift-g',
+    //   // this can be helpful
+    //   'rise-nbconfigurator': 'shift-c',
+    //   // unassigned by default
+    //   'toggle-notes': '',
+    //   'toggle-skip': ''
+    // },
+
+    // reveal native settings passed as-is
+    // see also the 'inherited' variable below in Revealer
+    theme: 'simple',
+    transition: 'linear',
+    // xxx there might be a need to tweak this one when set
+    // by the configurator, as e.g. 'false' or 'true' will result
+    // in a string and not a boolean
+    slideNumber: true,
+    width: '100%',
+    height: '100%',
+    controls: true,
+    progress: true,
+    history: true,
+    scroll: false,
+    center: true,
+    margin: 0.1,
+    minScale: 1.0, // we need this for codemirror to work right
+    // turn off reveal's help overlay that is by default bound to question mark / ?
+    help: false,
+
+    // plugins
+    enable_chalkboard: false,
+    enable_leap_motion: false
+  };
+
   function get_slide_type(cell: ICellModel): string {
     const slideshow = cell.metadata.get('slideshow') || {};
     const slide_type = (slideshow as any)['slide_type'];
@@ -140,23 +291,23 @@ namespace RevealUtils {
     }
   }
 
-  export function startReveal(panel: NotebookPanel): void {
+  export function startReveal(
+    panel: NotebookPanel,
+    settings: ISettingRegistry.ISettings | null
+  ): void {
     const notebook = panel.content;
     panel.addClass('reveal');
     notebook.addClass('slides');
 
     markupSlides(notebook);
 
-    Reveal.initialize({
-      controls: true,
-      progress: true,
-      history: true,
-      center: true,
+    const applicationSettings = settings?.composite ?? {};
 
-      transition: 'slide', // none/fade/slide/convex/concave/zoom
-      //make codemirror works as expected
-      minScale: 1.0,
-      maxScale: 1.0
-    });
+    const finalSettings = {
+      ...HARDWIRED_CONFIG,
+      ...applicationSettings
+    } as IConfig;
+
+    Reveal.initialize(finalSettings);
   }
 }

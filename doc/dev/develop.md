@@ -74,12 +74,13 @@ Second, let's install RISE in a editable form:
 
 ### Convenience
 
-If you change the `less` source often, it can be convenient to enable
-per-save automatic building of CSS, and for that you can use:
+If you change the JupyterLab extension, the stand alone application or
+the `less` source often, it can be convenient to enable
+post-save automatic building of frontend assets, and for that you can use (in the root folder):
 
-    npm run watch-less
+    yarn run watch
 
-which will update the `css` code from `less` each time a change
+which will update the `css` and `javascript` code each time a change
 happens on the disk. Kill with Control-C when you are done.
 
 ### Plugins development
@@ -103,13 +104,15 @@ classical notebook (in `rise/nbextension`) and JupyterLab (in `rise/labextension
 The development of the frontend code is mainly in packages (development version that needs to be transpiled before
 being distributed within the Python package):
 
-- _Classical notebook_ extension:
+- _Classical notebook_ extension: It contains the extension for the classical notebook.
   - Javascript file is `rise/nbextension/main.js`
   - CSS file is `packages/classic/src/less/main.less`  
     It will be transpiled to `rise/nbextension/main.css`
-- _JupyterLab_ extension - i.e. notebook toolbar button:
+- _JupyterLab_ extension: It contains the extension for JupyterLab (settings, keyboard shortcuts, toolbar button and preview panel)
   - This is the folder `packages/lab`
 - _Standalone application_ (based on JupyterLab) - the place where Reveal is used to modify the DOM:
-  - Definition of the application (what needs to be brought from JupyterLab base packages) is in the folder `app`
+  - Definition of the application (what and how to load JupyterLab base packages) is in the folder `app`
   - Customization of the application for RISE is in the folder `packages/application`
     - In particular the entry point for opening the notebook with Reveal is in `packages/application/src/plugins/index.ts#opener`. And in particular the conversion of the notebook is done by `RevealUtils.startReveal`.
+    - The other important file is `packages/application/src/app/index.ts`in which the main application object
+    (including the shell) is defined.

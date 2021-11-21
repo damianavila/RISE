@@ -44,9 +44,10 @@ const opener: JupyterFrontEndPlugin<void> = {
         if (
           change.name === 'dirty' &&
           change.newValue === false &&
-          // rendered = null || true
+          // if rendered = null || true
           !!rendered
         ) {
+          console.log(`Convert notebook ${notebookPath} to slideshow.`);
           notebookPanel.content.fullyRendered.disconnect(setRendered, this);
           notebookPanel.model?.stateChanged.disconnect(initializeReveal, this);
           RevealUtils.startReveal(notebookPanel, settings);

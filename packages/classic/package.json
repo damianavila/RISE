@@ -32,6 +32,7 @@
   "scripts": {
     "build": "for target in less install-rise-reveal; do npm run $target; done",
     "less": "PATH=./node_modules/.bin:$PATH lessc --autoprefix src/less/main.less ../../rise/nbextension/main.css",
+    "watch": "npm run watch-less",
     "watch-less": "./node_modules/.bin/watch 'npm run less' src/less",
     "install-rise-reveal": "cp -r ../../node_modules/rise-reveal/export/* ../../rise/nbextension/",
     "clean": "rm -rf ../../rise/nbextension/main.css ../../rise/nbextension/reveal.js*"

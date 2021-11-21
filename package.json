@@ -36,7 +36,10 @@
     "install": "lerna bootstrap",
     "prettier": "prettier --write \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
     "prettier:check": "prettier --list-different \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
-    "update:dependency": "node ./node_modules/@jupyterlab/buildutils/lib/update-dependency.js --lerna"
+    "update:dependency": "node ./node_modules/@jupyterlab/buildutils/lib/update-dependency.js --lerna",
+    "watch": "run-p watch:lib watch:app",
+    "watch:app": "lerna exec --stream --scope \"rise-app\" yarn watch",
+    "watch:lib": "lerna exec --stream --scope rise --scope \"rise-application\" --scope \"rise-jupyterlab\" yarn watch"
   },
   "husky": {
     "hooks": {

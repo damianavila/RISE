@@ -2,12 +2,8 @@
 
 ---
 
-**_Note_** this page is up-to-date for 5.7 that has a new directory layout;
-in a nutshell, 5.7 comes with a clear separation between
-
-- what is inherited from `reveal.js` with our minor adaptations (the `rise-reveal` subdir),
-- the RISE extension for the classic notebook (the `classic` subdir),
-- opening the space for a future `jlab` subdir that will host the jupyterlab extension.
+**_Note_** this page is up-to-date for the jlab3 branch that has a new directory
+layout; see the _Folder structure_ section below
 
 ---
 
@@ -67,7 +63,7 @@ Second, let's install RISE in a editable form:
   JavaScript code in-place. This feature however is probably not available in Win.
 
 - If you cannot use this _symlink_ trick, you will need to
-  "re-install" the nbextension to actually see any changes you made on th JS files.
+  "re-install" the nbextension to actually see any changes you made on the JS files.
 
 - Also please make sure to properly and thoroughly reload your page in the browser;
   using _Shift_ when reloading is generally a good idea.
@@ -85,8 +81,10 @@ happens on the disk. Kill with Control-C when you are done.
 
 ### Plugins development
 
-We currently have a custom plugin for the notes: `notes_rise`
-If you need to modify this part of the codebase, after you are happy with your changes, you need to login to npm and push the package containing your changes (the package will be build and upload by the `npm publish` command):
+We currently have a custom plugin for the notes: `notes_rise` If you need to
+modify this part of the codebase, after you are happy with your changes, you
+need to login to npm and push the package containing your changes (the package
+will be build and upload by the `npm publish` command):
 
 ```
 cd /plugin/notes/
@@ -94,15 +92,17 @@ npm login
 npm publish
 ```
 
-Finally, you need to update the main package.json file at the root directory to grab the new version you just published.
+Finally, you need to update the main package.json file at the root directory to
+grab the new version you just published.
 
 ### Folder structure
 
-The package is now an unique Python package `rise` (at the folder root) that will distribute the frontend for the
-classical notebook (in `rise/nbextension`) and JupyterLab (in `rise/labextension`).
+The package is now a unique Python package `rise` (at the folder root) that
+will distribute the frontend for the classical notebook (in `rise/nbextension`)
+and JupyterLab (in `rise/labextension`).
 
-The development of the frontend code is mainly in packages (development version that needs to be transpiled before
-being distributed within the Python package):
+The development of the frontend code is mainly in packages (development version
+that needs to be transpiled before being distributed within the Python package):
 
 - _Classical notebook_ extension: It contains the extension for the classical notebook.
   - Javascript file is `rise/nbextension/main.js`

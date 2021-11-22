@@ -254,40 +254,89 @@ namespace RevealUtils {
      if next cell is a fragment
      * 'smart_exec_next' : do the usual exec + select next like in classic notebook
      */
-  function markupSlides(container: Notebook) {
-    if (!container.model) {
+  function markupSlides(notebook: Notebook) {
+    if (!notebook.model) {
       // Bail early if the model is not valid
       return;
     }
 
-    let slide_section: HTMLElement | null = null;
-    let slide_counter = 0;
-    const cells = container.model.cells;
+    let slide_counter = -1;
+    let subslide_counter = -1;
+
+    function new_slide(prev_slide_section: HTMLElement | null): HTMLElement {
+      slide_counter++;
+      subslide_counter = -1;
+      const new_section = document.createElement('section');
+      // first slide
+      if (!prev_slide_section) {
+        notebook.node.insertBefore(new_section, notebook.node.firstChild);
+      } else {
+        notebook.node.insertBefore(new_section, prev_slide_section.nextSibling);
+      }
+      return new_section;
+    }
+
+    function new_subslide(slide_section: HTMLElement): HTMLElement {
+      subslide_counter++;
+      const new_section = document.createElement('section');
+      new_section.id = `slide-${slide_counter}-${subslide_counter}`;
+      slide_section.appendChild(new_section);
+      return new_section;
+    }
+
+    function new_fragment(subslide_section: HTMLElement): HTMLElement {
+      const new_fragment = document.createElement('div');
+      new_fragment.classList.add('fragment');
+      subslide_section.appendChild(new_fragment);
+      return new_fragment;
+    }
+
+    let slide_section = new_slide(null);
+    let subslide_section = new_subslide(slide_section);
+    let current_fragment = subslide_section;
+
+    let content_on_slide1 = false;
+
+    const cells = notebook.model.cells;
 
     for (let i = 0; i < cells.length; i++) {
       const cell = cells.get(i);
       const slide_type = get_slide_type(cell);
+      // we already have one section inserted here on startup
+      const cell_node = notebook.node.children[slide_counter + 1];
 
-      const cell_node = container.node.children[slide_counter];
-      const prev_slide_section = slide_section;
-
-      if (slide_type === 'slide') {
-        // Start new slide
-        slide_section = document.createElement('section');
-        slide_section.appendChild(cell_node);
-        if (i === 0) {
-          container.node.insertBefore(slide_section, container.node.firstChild);
-        } else {
-          if (prev_slide_section) {
-            container.node.insertBefore(
-              slide_section,
-              prev_slide_section.nextSibling
-            );
-          }
+      if (content_on_slide1) {
+        if (slide_type === 'slide') {
+          // Start new slide
+          slide_section = new_slide(slide_section);
+          // In each subslide, we insert cells directly into the
+          // <section> until we reach a fragment, when we create a div.
+          current_fragment = subslide_section = new_subslide(slide_section);
+        } else if (slide_type === 'subslide') {
+          // Start new subslide
+          current_fragment = subslide_section = new_subslide(slide_section);
+        } else if (slide_type === 'fragment') {
+          // record the <div class='fragment'> element corresponding
+          // to each fragment cell in the 'fragment_div' attribute
+          current_fragment = new_fragment(subslide_section);
         }
-        slide_counter++;
+      } else if (slide_type !== 'notes' && slide_type !== 'skip') {
+        // Subsequent cells should be able to start new slides
+        content_on_slide1 = true;
+      }
+
+      if (slide_type === 'notes') {
+        // Notes are wrapped in an <aside> element
+        const aside = document.createElement('aside');
+        aside.classList.add('notes');
+        subslide_section.appendChild(cell_node);
       } else {
-        slide_section?.appendChild(cell_node);
+        current_fragment.appendChild(cell_node);
+      }
+
+      // Hide skipped cells
+      if (slide_type === 'skip') {
+        cell_node.classList.add('reveal-skip');
       }
     }
   }

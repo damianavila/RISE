@@ -31,6 +31,11 @@ general look and feel of the presentation) with:
      "rise": {"theme": "sky"}
     }
 
+For a listing of built-in themes to choose from, see the
+[reveal.js theme documentation][reveal_builtin_themes].
+
+[reveal_builtin_themes]: https://revealjs.com/themes/
+
 ### Choosing a transition
 
 The transition configuration defines what happens in between slides:

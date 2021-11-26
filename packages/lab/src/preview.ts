@@ -95,7 +95,7 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
         icon: RISEIcon,
         tooltip: 'Open in a new browser tab',
         onClick: () => {
-          options.commands.execute('rise-jupyterlab:open');
+          options.commands.execute('RISE:slideshow');
         }
       })
     );

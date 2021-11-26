@@ -60,6 +60,15 @@ export const plugin: JupyterFrontEndPlugin<void> = {
     palette: ICommandPalette | null
   ) => {
     const trans = (translator ?? nullTranslator).load('rise');
+
+    // Get the active cell index from query argument
+    const url = new URL(window.location.toString());
+    const activeCellIndex = parseInt(url.searchParams.get('activeCellIndex') ?? '0', 10);
+
+    // Remove active cell from argument
+    url.searchParams.delete('activeCellIndex');
+    window.history.pushState(null, '', url.toString());
+
     Promise.all([
       // Load settings of the JupyterLab extension - so the settings can be edited in JLab.
       settingRegistry?.load('rise-jupyterlab:plugin') ?? Promise.resolve(null),
@@ -105,6 +114,10 @@ export const plugin: JupyterFrontEndPlugin<void> = {
           console.log(`Convert notebook ${notebookPath} to slideshow.`);
           notebookPanel.content.fullyRendered.disconnect(setRendered, this);
           notebookPanel.model?.stateChanged.disconnect(initializeReveal, this);
+          
+          // Set the active cell index
+          notebookPanel.content.activeCellIndex = activeCellIndex;
+
           // We wait for the notebook to be loaded to get the settings from the metadata.
           Rise.loadConfiguration(settings, notebookPanel.model);
           Rise.revealMode(notebookPanel, app.commands, trans);
@@ -990,7 +1003,6 @@ namespace Rise {
         'rise-reveal/export/reveal.js/plugin/chalkboard/chalkboard.js'
       );
       (window as any).RevealChalkboard = plugin.default;
-      console.log((window as any).RevealChalkboard, plugin.default);
     }
 
     if (isRevealInitialized) {

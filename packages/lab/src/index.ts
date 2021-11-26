@@ -10,12 +10,13 @@ import {
   WidgetTracker
 } from '@jupyterlab/apputils';
 
-import { PageConfig } from '@jupyterlab/coreutils';
+import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
 import {
   INotebookModel,
   INotebookTracker,
+  Notebook,
   NotebookPanel
 } from '@jupyterlab/notebook';
 
@@ -117,9 +118,13 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
       );
     }
 
-    function getRiseUrl(path: string): string {
+    function getRiseUrl(path: string, activeCellIndex?: number): string {
       const baseUrl = PageConfig.getBaseUrl();
-      return `${baseUrl}rise/${path}`;
+      let url = `${baseUrl}rise/${path}`;
+      if (typeof activeCellIndex === 'number') {
+        url += URLExt.objectToQueryString({ activeCellIndex });
+      }
+      return url;
     }
 
     factory.widgetCreated.connect((sender, widget) => {
@@ -143,7 +148,9 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
           return;
         }
         await current.context.save();
-        window.open(getRiseUrl(current.context.path));
+        window.open(
+          getRiseUrl(current.context.path, current.content.activeCellIndex)
+        );
       },
       isEnabled
     });
@@ -160,12 +167,25 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
           context = current.context;
           await context.save();
 
-          commands.execute('docmanager:open', {
-            path: context.path,
-            factory: 'rise',
-            options: {
-              mode: 'split-right'
+          const widget: RisePreview = await commands.execute(
+            'docmanager:open',
+            {
+              path: context.path,
+              factory: 'rise',
+              options: {
+                mode: 'split-right'
+              }
             }
+          );
+
+          const updateActiveIndex = (notebook: Notebook) => {
+            widget.setActiveCellIndex(notebook.activeCellIndex, false);
+          };
+          widget.setActiveCellIndex(current.content.activeCellIndex);
+          current.content.activeCellChanged.connect(updateActiveIndex);
+
+          widget.disposed.connect(() => {
+            current.content.activeCellChanged.disconnect(updateActiveIndex);
           });
         }
       },

@@ -62,39 +62,16 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
       })
     });
 
-    window.onmessage = (event: any) => {
-      switch (event.data?.level) {
-        case 'debug':
-          console.debug(...event.data?.msg);
-          break;
-
-        case 'info':
-          console.info(...event.data?.msg);
-          break;
-
-        case 'warn':
-          console.warn(...event.data?.msg);
-          break;
-
-        case 'error':
-          console.error(...event.data?.msg);
-          break;
-
-        default:
-          console.log(event);
-          break;
-      }
-    };
-
     const { getRiseUrl, context, renderOnSave } = options;
+    this.getRiseUrl = getRiseUrl;
+    this._path = context.path;
 
-    this.content.url = getRiseUrl(context.path);
     this.content.title.icon = RISEIcon;
 
     this._renderOnSave = renderOnSave ?? false;
 
     context.pathChanged.connect(() => {
-      this.content.url = getRiseUrl(context.path);
+      this.path = context.path;
     });
 
     const reloadButton = new ToolbarButton({
@@ -167,7 +144,34 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
     return this._renderOnSave;
   }
 
+  setActiveCellIndex(index: number, reload = true): void {
+    if (reload) {
+      this.content.url = this.getRiseUrl(this.path, index);
+    } else {
+      const iframe = this.content.node.querySelector('iframe')!;
+      if (iframe.contentWindow) {
+        iframe.contentWindow.history.pushState(
+          null,
+          '',
+          this.getRiseUrl(this.path, index)
+        );
+      }
+    }
+  }
+
+  protected get path(): string {
+    return this._path;
+  }
+  protected set path(v: string) {
+    if (v !== this._path) {
+      this._path = v;
+      this.setActiveCellIndex(0);
+    }
+  }
+
   private _renderOnSave: boolean;
+  protected getRiseUrl: (path: string, index?: number) => string;
+  private _path: string;
 }
 
 /**

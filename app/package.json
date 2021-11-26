@@ -26,8 +26,6 @@
     "@jupyterlab/pdf-extension": "^3.0.0",
     "@jupyterlab/rendermime-extension": "^3.0.0",
     "@jupyterlab/shortcuts-extension": "^3.0.0",
-    "@jupyterlab/theme-dark-extension": "^3.0.0",
-    "@jupyterlab/theme-light-extension": "^3.0.0",
     "@jupyterlab/translation-extension": "^3.0.0",
     "@jupyterlab/vega5-extension": "^3.0.0",
     "@lumino/application": "^1.25.0",

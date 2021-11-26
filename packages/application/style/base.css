@@ -1,10 +1,355 @@
-@import url('~rise-reveal/css/reveal.css');
-@import url('~rise-reveal/css/theme/simple.css');
+@import url('~@jupyterlab/theme-light-extension/style/theme.css');
+@import url('~rise-reveal/export/reveal.js/css/reveal.css');
 
+/* Rise App */
 #main {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+/* Rise Reveal */
+.transition-all {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+/* do not apply this on the <body> tag */
+:not(body).rise-enabled {
+  background-color: #fff;
+}
+.rise-enabled {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  /* Reveal-specific */
+  /* Notebook-specific */
+  /* chalkboard plugin and RISE buttons */
+  /* button toolbar */
+  /* use !important to override stuff that
+    would normally be configured through
+    chalkboard options */
+}
+.rise-enabled .reveal.fade {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  opacity: 1;
+}
+.rise-enabled .reveal pre {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  font-size: 90%;
+  width: 100%;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  overflow: hidden;
+}
+.rise-enabled .reveal section img {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  border: 0px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+  transition: none;
+}
+.rise-enabled .reveal blockquote p:first-child,
+.rise-enabled .reveal blockquote p:last-child {
+  display: inherit;
+}
+.rise-enabled .reveal a {
+  color: #2980b9;
+}
+.rise-enabled .reveal a:hover {
+  color: #50a0ff;
+}
+.rise-enabled .reveal .slides {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  text-align: left;
+  font-size: 160%;
+}
+.rise-enabled .reveal .slide-number {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  right: 3.3em;
+  bottom: 3.9em;
+  /* more harmful than helpful with reveal 3.8.0
+      font-size: 100%;
+    */
+  color: #727272;
+  background-color: transparent;
+}
+.rise-enabled .reveal .controls .navigate-left,
+.rise-enabled .reveal .controls .navigate-left.enabled {
+  border-right-color: #727272;
+}
+.rise-enabled .reveal .controls .navigate-left.enabled:hover,
+.rise-enabled .reveal .controls .navigate-left.enabled.enabled:hover {
+  border-right-color: #dfdfdf;
+}
+.rise-enabled .reveal .controls .navigate-right,
+.rise-enabled .reveal .controls .navigate-right.enabled {
+  border-left-color: #727272;
+}
+.rise-enabled .reveal .controls .navigate-right.enabled:hover,
+.rise-enabled .reveal .controls .navigate-right.enabled.enabled:hover {
+  border-left-color: #dfdfdf;
+}
+.rise-enabled .reveal .controls .navigate-up,
+.rise-enabled .reveal .controls .navigate-up.enabled {
+  border-bottom-color: #727272;
+}
+.rise-enabled .reveal .controls .navigate-up.enabled:hover,
+.rise-enabled .reveal .controls .navigate-up.enabled.enabled:hover {
+  border-bottom-color: #dfdfdf;
+}
+.rise-enabled .reveal .controls .navigate-down,
+.rise-enabled .reveal .controls .navigate-down.enabled {
+  border-top-color: #727272;
+}
+.rise-enabled .reveal .controls .navigate-down.enabled:hover,
+.rise-enabled .reveal .controls .navigate-down.enabled.enabled:hover {
+  border-top-color: #dfdfdf;
+}
+.rise-enabled .reveal .progress {
+  margin-bottom: 0;
+}
+.rise-enabled .reveal .progress span {
+  background: #727272;
+}
+.rise-enabled .reveal .reveal-skip,
+.rise-enabled .reveal .reveal-notes {
+  display: none;
+}
+
+/* Rise Reveal Notebook TODO */
+.rise-enabled .jp-NotebookPanel {
+  overflow: hidden;
+}
+.rise-enabled .jp-NotebookPanel.reveal {
+  padding-top: 0px;
+}
+.rise-enabled .jp-Notebook {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  background-color: transparent;
+  box-shadow: none;
+  width: 100%;
+  height: 100% !important;
+}
+
+/* TODO did not find .widget-area in classic */
+.rise-enabled .widget-area .form-control,
+.rise-enabled .widget-area .dropdown-menu,
+.rise-enabled .widget-area .btn {
+  font-size: inherit;
+}
+.rise-enabled .widget-area .dropdown-menu {
+  margin: 0px;
+  /* cancel the settings from reveal */
+}
+
+.rise-enabled .jp-Cell li {
+  line-height: 160%;
+}
+.rise-enabled .jp-MarkdownCell,
+.rise-enabled .jp-RawCell {
+  font-size: 160%;
+}
+.rise-enabled .jp-MarkdownCell .jp-InputPrompt,
+.rise-enabled .jp-MarkdownCell .jp-OutputPrompt,
+.rise-enabled .jp-RawCell .jp-InputPrompt,
+.rise-enabled .jp-RawCell .jp-OutputPrompt {
+  display: none;
+}
+.rise-enabled .jp-MarkdownCell.jp-mod-rendered .jp-RenderedHTMLCommon {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.rise-enabled .jp-InputPrompt {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  font-size: 90%;
+}
+.rise-enabled .jp-OutputPrompt {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  margin-top: 2px;
+}
+.rise-enabled .jp-OutputArea-output {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  margin-top: 0.05em;
+}
+.rise-enabled .CodeMirror {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  font-size: 100%;
+  margin-bottom: 1ex;
+}
+
+/* Rise Reveal miscellaneous */
+.rise-enabled a.anchor-link {
+  display: none;
+}
+.rise-enabled html {
+  overflow-y: auto;
+}
+
+/* TODO */
+.rise-enabled .jp-Dialog-body kbd {
+  padding: 0.1em 0.6em;
+  border: 1px solid #ccc;
+  font-size: 11px;
+  background-color: #f7f7f7;
+  color: #333;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 0.1em;
+  text-shadow: 0 1px 0 #fff;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.rise-enabled #header {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  top: -200px;
+  opacity: 0;
+}
+
+/* TODO */
+.rise-enabled #site {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  height: 100% !important;
+}
+/* TODO */
+.rise-enabled #ipython-main-app {
+  position: static;
+}
+.rise-enabled ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.rise-enabled ::-webkit-scrollbar * {
+  background: transparent;
+}
+.rise-enabled ::-webkit-scrollbar-thumb {
+  background: #727272 !important;
+}
+.rise-enabled #notescanvas {
+  position: absolute;
+  top: 0;
+}
+.rise-enabled #help_b,
+.rise-enabled .chalkboard-button {
+  color: #727272;
+  position: fixed !important;
+  z-index: 30;
+  cursor: pointer;
+}
+
+.rise-enabled #help_b {
+  left: 0.6em;
+  bottom: 0.55em;
+}
+.rise-enabled .chalkboard-button i {
+  display: block !important;
+  bottom: 1em !important;
+  font-size: 1.8em !important;
+  color: #727272 !important;
+}
+.rise-enabled #toggle-chalkboard.chalkboard-button {
+  left: 4em !important;
+}
+.rise-enabled #toggle-notes {
+  left: 7em !important;
+}
+.rise-enabled #notescanvas {
+  display: block !important;
+}
+.rise-enabled #chalkboard {
+  display: block !important;
+}
+#header {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+  opacity: 1;
+  top: 0px;
+}
+.jp-Notebook {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+.jp-NotebookPanel {
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+.chalkboard-button i {
+  display: none;
+}
+#notescanvas {
+  display: none;
+}
+#chalkboard {
+  display: none;
+}
+
+/* fix for issue #425 */
+.rise-enabled .jp-RenderedHTMLCommon table {
+  font-size: 75%;
+}
+
+/* fix for reveal dark themes */
+body.rise-enabled.theme-black div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-black div.jp-RenderedHTMLCommon thead th,
+body.rise-enabled.theme-black div.jp-InputPrompt,
+body.rise-enabled.theme-black div.jp-RenderedText > pre,
+body.rise-enabled.theme-black div.jp-RenderedHTMLCommon,
+body.rise-enabled.theme-black div.jp-MarkdownCell.jp-mod-rendered {
+  color: white;
+}
+body.rise-enabled.theme-blood div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-blood div.jp-RenderedHTMLCommon thead th,
+body.rise-enabled.theme-blood div.jp-InputPrompt,
+body.rise-enabled.theme-blood div.jp-RenderedText > pre,
+body.rise-enabled.theme-blood div.jp-RenderedHTMLCommon,
+body.rise-enabled.theme-blood div.jp-MarkdownCell.jp-mod-rendered,
+body.rise-enabled.theme-league div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-league div.jp-RenderedHTMLCommon thead th,
+body.rise-enabled.theme-league div.jp-InputPrompt,
+body.rise-enabled.theme-league div.jp-RenderedText > pre,
+body.rise-enabled.theme-league div.jp-RenderedHTMLCommon,
+body.rise-enabled.theme-league div.jp-MarkdownCell.jp-mod-rendered,
+body.rise-enabled.theme-night div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-night div.jp-RenderedHTMLCommon thead th,
+body.rise-enabled.theme-night div.jp-InputPrompt,
+body.rise-enabled.theme-night div.jp-RenderedText > pre,
+body.rise-enabled.theme-night div.jp-RenderedHTMLCommon,
+body.rise-enabled.theme-night div.jp-MarkdownCell.jp-mod-rendered {
+  color: #eeeeee;
+}
+body.rise-enabled.theme-moon div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-moon div.jp-RenderedHTMLCommon thead th,
+body.rise-enabled.theme-moon div.jp-InputPrompt,
+body.rise-enabled.theme-moon div.jp-RenderedText > pre,
+body.rise-enabled.theme-moon div.jp-RenderedHTMLCommon,
+body.rise-enabled.theme-moon div.jp-MarkdownCell.jp-mod-rendered {
+  color: #eee8d5;
 }

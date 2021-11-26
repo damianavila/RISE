@@ -9,16 +9,113 @@
         "items": [
           { "type": "separator" },
           {
-            "command": "rise-jupyterlab:preview"
+            "command": "RISE:preview"
           },
           {
-            "command": "rise-jupyterlab:open"
+            "command": "RISE:slideshow"
           },
           { "type": "separator" }
         ]
       }
     ]
   },
+  "jupyter.lab.shortcuts": [
+    {
+      "command": "RISE:slideshow",
+      "keys": ["Alt R"],
+      "selector": ".jp-Notebook:focus"
+    },
+    {
+      "command": "RISE:toggle-slide",
+      "keys": ["Shift I"],
+      "selector": ".jp-Notebook:focus"
+    },
+    {
+      "command": "RISE:toggle-subslide",
+      "keys": ["Shift B"],
+      "selector": ".jp-Notebook:focus"
+    },
+    {
+      "command": "RISE:toggle-fragment",
+      "keys": ["Shift G"],
+      "selector": ".jp-Notebook:focus"
+    },
+    {
+      "command": "RISE:firstSlide",
+      "keys": ["Home"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:lastSlide",
+      "keys": ["End"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:toggleOverview",
+      "keys": ["W"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:toggleAllRiseButtons",
+      "keys": [","],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:fullscreenHelp",
+      "keys": ["F"],
+      "selector": ".lm-Widget.reveal .jp-Notebook:focus"
+    },
+    {
+      "command": "RISE:riseHelp",
+      "keys": ["?"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:chalkboard-clear",
+      "keys": ["minus"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:chalkboard-reset",
+      "keys": ["="],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:chalkboard-toggleChalkboard",
+      "keys": ["["],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:chalkboard-toggleNotesCanvas",
+      "keys": ["]"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:chalkboard-colorPrev",
+      "keys": ["Q"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:chalkboard-colorNext",
+      "keys": ["S"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:chalkboard-download",
+      "keys": ["\\"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:notes-open",
+      "keys": ["T"],
+      "selector": ".lm-Widget.reveal"
+    },
+    {
+      "command": "RISE:smart-exec",
+      "keys": ["Shift Enter"],
+      "selector": ".lm-Widget.reveal .jp-Notebook:focus"
+    }
+  ],
   "type": "object",
   "additionalProperties": false,
   "properties": {

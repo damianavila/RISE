@@ -46,11 +46,12 @@
     "@jupyterlab/rendermime-interfaces": "^3.0.0",
     "@jupyterlab/services": "^6.0.0",
     "@jupyterlab/settingregistry": "^3.0.0",
+    "@jupyterlab/theme-light-extension": "^3.0.0",
     "@lumino/commands": "^1.17.0",
     "@lumino/messaging": "^1.9.0",
     "@lumino/signaling": "^1.9.0",
     "@lumino/widgets": "^1.28.0",
-    "rise-reveal": "file:../rise-reveal/export/reveal.js"
+    "rise-reveal": "^390.0.1"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",

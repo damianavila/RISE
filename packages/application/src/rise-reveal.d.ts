@@ -8,7 +8,7 @@ declare module 'rise-reveal' {
 
   declare var Reveal: RevealStatic;
 
-  interface RevealStatic {
+  export interface RevealStatic {
     initialize: (config: RevealOptions) => void;
     configure: (diff: RevealOptions) => void;
 

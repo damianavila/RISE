@@ -11891,9 +11891,6 @@ rimraf@~2.4.0:
     reveal.js "~3.9.2"
     reveal.js-plugins rajgoel/reveal.js-plugins#3.9.0
 
-"rise-reveal@file:packages/rise-reveal/export/reveal.js":
-  version "3.9.2"
-
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"

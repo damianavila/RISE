@@ -40,11 +40,20 @@ namespace CommandIDs {
   /**
    * Open the current notebook in a new browser tab
    */
-  export const openRise = 'rise-jupyterlab:open';
+  export const openRise = 'RISE:slideshow';
   /**
    * Open the current notebook in a IFrame within JupyterLab
    */
-  export const risePreview = 'rise-jupyterlab:preview';
+  export const risePreview = 'RISE:preview';
+  /**
+   *
+   */
+  export const riseSmartExec = 'RISE:smart-exec';
+  export const riseToggleSlide = 'RISE:toggle-slide';
+  export const riseToggleSubSlide = 'RISE:toggle-subslide';
+  export const riseToggleFragment = 'RISE:toggle-fragment';
+  export const riseToggleNotes = 'RISE:toggle-notes';
+  export const riseToggleSkip = 'RISE:toggle-skip';
 }
 
 /**

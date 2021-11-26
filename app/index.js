@@ -94,8 +94,9 @@ async function main() {
         '@jupyter/apputils-extension:sanitizer',
         '@jupyterlab/apputils-extension:settings',
         '@jupyterlab/apputils-extension:splash',
-        '@jupyterlab/apputils-extension:sessionDialogs',
-        '@jupyterlab/apputils-extension:themes'
+        '@jupyterlab/apputils-extension:sessionDialogs'
+        // Theming removed - light theme CSS directly imported in packages/application/style/base.css
+        // '@jupyterlab/apputils-extension:themes'
       ].includes(id)
     ),
     require('@jupyterlab/codemirror-extension').default.filter(({ id }) =>
@@ -118,8 +119,7 @@ async function main() {
     ),
     require('@jupyterlab/rendermime-extension'),
     require('@jupyterlab/shortcuts-extension'),
-    require('@jupyterlab/theme-light-extension'),
-    require('@jupyterlab/theme-dark-extension'),
+    // require('@jupyterlab/theme-light-extension'),
     require('@jupyterlab/translation-extension').default.filter(({ id }) =>
       ['@jupyterlab/translation:translator'].includes(id)
     )

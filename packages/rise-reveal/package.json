@@ -1,8 +1,10 @@
 {
   "name": "rise-reveal",
+  "version": "390.0.1",
   "description": "original reveal.js patched for use within the RISE Jupyter extension",
   "license": "MIT",
   "private": true,
+  "main": "export/reveal.js/js/reveal.js",
   "keywords": [
     "reveal.js",
     "RISE",
@@ -29,12 +31,11 @@
     "url": "https://github.com/damianavila/RISE/issues"
   },
   "files": [
-    "export/reveal.js",
-    "export/reveal.js-chalkboard"
+    "export/reveal.js"
   ],
   "scripts": {
     "build": "[ ! -d \"export\" ] && npm install && for target in copy patch; do npm run $target; done || echo Patched rise-reveal exists - skipping build",
-    "copy": "mkdir -p export; cp -r node_modules/reveal.js/ ./export/reveal.js/; cp -r node_modules/reveal.js-plugins/chalkboard ./export/reveal.js-chalkboard/",
+    "copy": "mkdir -p export; cp -r node_modules/reveal.js/ ./export/reveal.js/; cp -r node_modules/reveal.js-plugins/chalkboard/ ./export/reveal.js/plugin",
     "patch": "for target in patch-reveal-css patch-notes patch-themes patch-chalkboard ; do npm run $target; done",
     "patch-reveal-css": "sed -i.upstream '11 s_^_/*_' export/reveal.js/css/reveal.css",
     "patch-notes": "bash patch-notes-plugin.sh",
@@ -46,6 +47,5 @@
   "dependencies": {
     "reveal.js": "~3.9.2",
     "reveal.js-plugins": "rajgoel/reveal.js-plugins#3.9.0"
-  },
-  "version": "390.0.1"
+  }
 }

@@ -1,5 +1,5 @@
 #!/bin/sh
-patch export/reveal.js-chalkboard/chalkboard.js <<EOF
+patch export/reveal.js/plugin/chalkboard/chalkboard.js <<EOF
 --- chalkboard.js.orig	2020-10-24 15:02:34.000000000 +0200
 +++ chalkboard.js	2020-10-24 15:02:41.000000000 +0200
 @@ -152,7 +152,7 @@

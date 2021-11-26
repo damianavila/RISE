@@ -607,7 +607,7 @@ define([
                 if ("chalkboard" in complete_config) {
                   options["chalkboard"] = complete_config["chalkboard"];
                 }
-                options.dependencies.push({ src: require.toUrl('./reveal.js-chalkboard/chalkboard.js'),
+                options.dependencies.push({ src: require.toUrl('./reveal.js/plugin/chalkboard/chalkboard.js'),
                                             async: true });
                 // xxx need to explore the option of registering jupyter actions
                 // and have jupyter handle the keyboard entirely instead of this approach

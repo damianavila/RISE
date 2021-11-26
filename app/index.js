@@ -91,6 +91,7 @@ async function main() {
     ),
     require('@jupyterlab/apputils-extension').default.filter(({ id }) =>
       [
+        '@jupyterlab/apputils-extension:palette',
         '@jupyter/apputils-extension:sanitizer',
         '@jupyterlab/apputils-extension:settings',
         '@jupyterlab/apputils-extension:splash',

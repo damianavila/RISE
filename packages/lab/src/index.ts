@@ -46,14 +46,9 @@ namespace CommandIDs {
    */
   export const risePreview = 'RISE:preview';
   /**
-   *
+   * Set the slide attribute of a cell
    */
-  export const riseSmartExec = 'RISE:smart-exec';
-  export const riseToggleSlide = 'RISE:toggle-slide';
-  export const riseToggleSubSlide = 'RISE:toggle-subslide';
-  export const riseToggleFragment = 'RISE:toggle-fragment';
-  export const riseToggleNotes = 'RISE:toggle-notes';
-  export const riseToggleSkip = 'RISE:toggle-skip';
+  export const riseSetSlideType = 'RISE:set-slide-type';
 }
 
 /**
@@ -177,6 +172,61 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
       isEnabled
     });
 
+    commands.addCommand(CommandIDs.riseSetSlideType, {
+      label: args => trans.__('Toggle slideshow %1 type', args['type']),
+      caption: args =>
+        trans.__('(Un)set active cell as a %1 cell', args['type']),
+      execute: args => {
+        const value = args['type'];
+        const current = app.shell.currentWidget;
+        if (current && notebookTracker.has(current)) {
+          const cellModel = (current as NotebookPanel).content.activeCell
+            ?.model;
+          if (cellModel) {
+            const currentValue =
+              (cellModel.metadata.get('slideshow') as
+                | ReadonlyPartialJSONObject
+                | undefined) ?? {};
+            if (value !== currentValue['slide_type']) {
+              const newValue = { ...currentValue };
+              if (value) {
+                newValue['slide_type'] = value;
+              } else {
+                delete newValue['slide_type'];
+              }
+
+              if (Object.keys(newValue).length > 0) {
+                cellModel.metadata.set('slideshow', newValue);
+              } else {
+                cellModel.metadata.delete('slideshow');
+              }
+            }
+          }
+        }
+      },
+      isToggled: args => {
+        const value = args['type'];
+        const current = app.shell.currentWidget;
+        if (current && notebookTracker.has(current)) {
+          const cellModel = (current as NotebookPanel).content.activeCell
+            ?.model;
+          if (cellModel) {
+            const currentValue =
+              (cellModel.metadata.get('slideshow') as
+                | ReadonlyPartialJSONObject
+                | undefined) ?? {};
+            return currentValue['slide_type'] === value && !!value;
+          }
+        }
+
+        return false;
+      },
+      isEnabled: args =>
+        ['slide', 'subslide', 'fragment', 'skip', 'notes'].includes(
+          (args['type'] as string) ?? ''
+        )
+    });
+
     notebookTracker.widgetAdded.connect(
       async (sender: INotebookTracker, panel: NotebookPanel) => {
         panel.toolbar.insertBefore(
@@ -189,6 +239,32 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
           })
         );
       }
+
+      /*
+       * Setup the auto-launch function, which checks metadata to see if
+       * RISE should launch automatically when the notebook is opened.
+       *
+       * this will trigger only on notebooks that have
+       * either a 'livereveal' or a 'rise' section in their metadata
+       * this is because autolaunch can be enabled in nbextensions_configurator
+       * and so can possibly have a too big impact if we are not careful
+       */
+      // TODO
+      // function autoLaunch() {
+      //   if (complete_config.autolaunch && is_slideshow(Jupyter.notebook)) {
+      //     revealMode();
+      //   }
+
+      //   // Ref: https://stackoverflow.com/a/7739035
+      //   let url = (window.location != window.parent.location)
+      //       ? document.referrer
+      //       : document.location.href;
+      //   let lastPart = url.substr(url.lastIndexOf('/') + 1);
+
+      //   if (lastPart === "notes.html") {
+      //     revealMode();
+      //   }
+      // }
     );
 
     if (palette) {

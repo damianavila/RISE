@@ -26,17 +26,20 @@
       "selector": ".jp-Notebook:focus"
     },
     {
-      "command": "RISE:toggle-slide",
+      "command": "RISE:set-slide-type",
+      "args": { "type": "slide" },
       "keys": ["Shift I"],
       "selector": ".jp-Notebook:focus"
     },
     {
-      "command": "RISE:toggle-subslide",
+      "command": "RISE:set-slide-type",
+      "args": { "type": "subslide" },
       "keys": ["Shift B"],
       "selector": ".jp-Notebook:focus"
     },
     {
-      "command": "RISE:toggle-fragment",
+      "command": "RISE:set-slide-type",
+      "args": { "type": "fragment" },
       "keys": ["Shift G"],
       "selector": ".jp-Notebook:focus"
     },
@@ -155,7 +158,7 @@
     "slideNumber": {
       "title": "Reveal Slide Number",
       "description": "A string to specify if and how to number slides; [see reveal's explanations](https://github.com/hakimel/reveal.js#slide-number).",
-      "oneOf": [{"type": "boolean"}, {"enum": ["h.v", "h/v", "c", "c/t"]}],
+      "oneOf": [{ "type": "boolean" }, { "enum": ["h.v", "h/v", "c", "c/t"] }],
       "default": false
     },
     "width": {

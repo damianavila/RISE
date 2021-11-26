@@ -3,7 +3,7 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { Dialog, showDialog } from '@jupyterlab/apputils';
+import { Dialog, ICommandPalette, showDialog } from '@jupyterlab/apputils';
 import { ICellModel } from '@jupyterlab/cells';
 import { IChangedArgs, PageConfig, PathExt } from '@jupyterlab/coreutils';
 import { IDocumentManager } from '@jupyterlab/docmanager';
@@ -20,24 +20,28 @@ import { Widget } from '@lumino/widgets';
 import type { RevealStatic } from 'rise-reveal';
 
 // TODO create own icon presenter
+// TODO Fix shortcut in slideshow mode
+// TODO add commands to the palette
 // TODO should we define our own factory?
 
 namespace CommandIDs {
-  // TODO define commands
+  export const riseSmartExec = 'RISE:smart-exec';
   export const riseFirstSlide = 'RISE:firstSlide';
   export const riseLastSlide = 'RISE:lastSlide';
   export const riseToggleOverview = 'RISE:toggleOverview';
   export const riseToggleAllButtons = 'RISE:toggleAllRiseButtons';
   export const riseFullScreen = 'RISE:fullscreenHelp';
   export const riseHelp = 'RISE:riseHelp';
-  export const riseChalkboardClear = 'RISE:chalckboard-clear';
-  export const riseChalkboardReset = 'RISE:chalckboard-reset';
-  export const riseChalkboardToggle = 'RISE:chalckboard-toggleChalkboard';
-  export const riseChalkboardToggleNotes = 'RISE:chalckboard-toggleNotesCanvas';
-  export const riseChalkboardColorPrev = 'RISE:chalckboard-colorPrev';
-  export const riseChalkboardColorNext = 'RISE:chalckboard-colorNext';
-  export const riseChalkboardDownload = 'RISE:chalckboard-download';
+  export const riseChalkboardClear = 'RISE:chalkboard-clear';
+  export const riseChalkboardReset = 'RISE:chalkboard-reset';
+  export const riseChalkboardToggle = 'RISE:chalkboard-toggleChalkboard';
+  export const riseChalkboardToggleNotes = 'RISE:chalkboard-toggleNotesCanvas';
+  export const riseChalkboardColorPrev = 'RISE:chalkboard-colorPrev';
+  export const riseChalkboardColorNext = 'RISE:chalkboard-colorNext';
+  export const riseChalkboardDownload = 'RISE:chalkboard-download';
   export const riseNotesOpen = 'RISE:notes-open';
+
+  export const riseShowConfig = 'RISE:show-configuration';
 }
 
 /**
@@ -47,12 +51,13 @@ export const plugin: JupyterFrontEndPlugin<void> = {
   id: 'rise-extension:opener',
   autoStart: true,
   requires: [IDocumentManager],
-  optional: [ISettingRegistry, ITranslator],
+  optional: [ISettingRegistry, ITranslator, ICommandPalette],
   activate: (
     app: JupyterFrontEnd,
     documentManager: IDocumentManager,
     settingRegistry: ISettingRegistry | null,
-    translator: ITranslator | null
+    translator: ITranslator | null,
+    palette: ICommandPalette | null
   ) => {
     const trans = (translator ?? nullTranslator).load('rise');
     Promise.all([
@@ -65,7 +70,27 @@ export const plugin: JupyterFrontEndPlugin<void> = {
       const notebookPath = PageConfig.getOption('notebookPath');
       const notebookPanel = documentManager.open(notebookPath) as NotebookPanel;
 
-      await Rise.loadConfiguration(settings, notebookPanel.model);
+      Rise.registerCommands(app.commands, trans);
+      if (palette) {
+        [
+          CommandIDs.riseFullScreen,
+          CommandIDs.riseHelp,
+          CommandIDs.riseNotesOpen,
+          CommandIDs.riseFirstSlide,
+          CommandIDs.riseLastSlide,
+          CommandIDs.riseShowConfig,
+          CommandIDs.riseChalkboardToggle,
+          CommandIDs.riseChalkboardClear,
+          CommandIDs.riseChalkboardReset,
+          CommandIDs.riseChalkboardColorNext,
+          CommandIDs.riseChalkboardColorPrev
+        ].forEach(command => {
+          palette.addItem({
+            command,
+            category: 'Rise'
+          });
+        });
+      }
 
       const initializeReveal = (
         _: any,
@@ -80,6 +105,8 @@ export const plugin: JupyterFrontEndPlugin<void> = {
           console.log(`Convert notebook ${notebookPath} to slideshow.`);
           notebookPanel.content.fullyRendered.disconnect(setRendered, this);
           notebookPanel.model?.stateChanged.disconnect(initializeReveal, this);
+          // We wait for the notebook to be loaded to get the settings from the metadata.
+          Rise.loadConfiguration(settings, notebookPanel.model);
           Rise.revealMode(notebookPanel, app.commands, trans);
 
           Signal.disconnectAll(this);
@@ -111,6 +138,7 @@ export const plugin: JupyterFrontEndPlugin<void> = {
 };
 
 namespace Rise {
+  /* Configuration related code */
   interface IConfig {
     // behaviour
     autolaunch: boolean;
@@ -214,11 +242,11 @@ namespace Rise {
     enable_leap_motion: false
   };
 
-  let complete_config: IConfig;
+  let complete_config: IConfig = { ...HARDWIRED_CONFIG };
 
   export function loadConfiguration(
-    settings: ISettingRegistry.ISettings | null,
-    notebookModel: INotebookModel | null
+    settings: ISettingRegistry.ISettings | null = null,
+    notebookModel: INotebookModel | null = null
   ): void {
     const applicationSettings = settings?.composite ?? {};
 
@@ -229,6 +257,108 @@ namespace Rise {
       ...((notebookModel?.metadata.get('rise') as any) ?? {})
     };
   }
+
+  /* Register commands */
+  function smartExec() {
+    // TODO
+    // is it really the selected cell that matters ?
+    // let smart_exec = Jupyter.notebook.get_selected_cell().smart_exec;
+    // if (smart_exec == 'smart_exec_slide') {
+    //   Jupyter.notebook.execute_selected_cells();
+    // } else if (smart_exec == "smart_exec_fragment") {
+    //   // let's see if the next fragment is visible or not
+    //   let cell = Jupyter.notebook.get_selected_cell();
+    //   let fragment_div = cell.smart_exec_next_fragment;
+    //   let visible = $(fragment_div).hasClass('visible');
+    //   if (visible) {
+    //     Jupyter.notebook.execute_cell_and_select_below();
+    //   } else {
+    //     Jupyter.notebook.execute_selected_cells();
+    //   }
+    // } else {
+    //   Jupyter.notebook.execute_cell_and_select_below();
+    // }
+  }
+
+  export function registerCommands(
+    commands: CommandRegistry,
+    trans: TranslationBundle
+  ): void {
+    // register main action
+    commands.addCommand(CommandIDs.riseSmartExec, {
+      caption: trans.__(
+        'execute cell, and move to the next if on the same slide'
+      ),
+      execute: smartExec
+    });
+
+    // mostly for debug / information
+    commands.addCommand(CommandIDs.riseShowConfig, {
+      label: trans.__('Dump RISE configuration'),
+      caption: trans.__(
+        'Output RISE configuration in console, for debugging mostly'
+      ),
+      execute: () => {
+        console.log('RISE configuration', complete_config);
+      }
+    });
+
+    // action for reveal.js and reveal.js plug-in bindings
+    // this a the dictionary structure as generated by nbextension_configurator
+    // with the corresponding API calls to RISE/reveal.js and/or its plug-ins
+    const reveal_actions: { [id: string]: () => void } = {};
+
+    // RISE/reveal.js API calls
+    reveal_actions[CommandIDs.riseFirstSlide] = () => Reveal.slide(0); // jump to first slide
+    reveal_actions[CommandIDs.riseLastSlide] = () =>
+      Reveal.slide(Number.MAX_VALUE); // jump to last slide
+    reveal_actions[CommandIDs.riseToggleOverview] = () =>
+      Reveal.toggleOverview(); // toggle overview
+    reveal_actions[CommandIDs.riseToggleAllButtons] = toggleAllRiseButtons; // show/hide buttons
+    reveal_actions[CommandIDs.riseFullScreen] = () => {
+      fullscreenHelp(trans);
+    }; // show fullscreen help
+    reveal_actions[CommandIDs.riseHelp] = () => {
+      displayRiseHelp(commands, trans);
+    }; // '?' show our help
+    // API calls for RevealChalkboard plug-in
+    reveal_actions[CommandIDs.riseChalkboardClear] = () =>
+      (window as any).RevealChalkboard?.clear(); // clear full size chalkboard
+    reveal_actions[CommandIDs.riseChalkboardReset] = () =>
+      (window as any).RevealChalkboard?.reset(); // reset chalkboard data on current slide
+    reveal_actions[CommandIDs.riseChalkboardToggle] = () =>
+      (window as any).RevealChalkboard?.toggleChalkboard(); // toggle full size chalkboard
+    reveal_actions[CommandIDs.riseChalkboardToggleNotes] = () =>
+      (window as any).RevealChalkboard?.toggleNotesCanvas(); // toggle notes (slide-local)
+    reveal_actions[CommandIDs.riseChalkboardColorNext] = () =>
+      (window as any).RevealChalkboard?.colorNext(); // next color
+    reveal_actions[CommandIDs.riseChalkboardColorPrev] = () =>
+      (window as any).RevealChalkboard?.colorPrev(); // previous color
+    reveal_actions[CommandIDs.riseChalkboardDownload] = () =>
+      (window as any).RevealChalkboard?.download(); //  download recorded chalkboard drawing
+    // API calls for RevealNotes plug-in
+    reveal_actions[CommandIDs.riseNotesOpen] = () => {
+      // TODO this is broken because it looks for reveal.js/plugin/notes/notes.html
+      //   A manual path can be passed to open
+      // open speaker notes window
+      (window as any).RevealNotes.open(
+        [PageConfig.getOption('fullStaticUrl'), 'notes.html'].join('/')
+      );
+    };
+    const helpStrings = getHelpDescription(trans);
+    // register all reveal.js actions
+    for (const action of Object.keys(reveal_actions)) {
+      const api_call = reveal_actions[action];
+      commands.addCommand(action, {
+        label: helpStrings[action],
+        caption: helpStrings[action],
+        execute: api_call
+      });
+      // console.log(`Registered jupyter action \"${action}\" to API call: ${api_call}`);
+    }
+  }
+
+  /* Slideshow code */
 
   let Reveal: RevealStatic;
 
@@ -653,13 +783,6 @@ namespace Rise {
     });
   }
 
-  // needed?
-  // function disconnectOutputObserver() {
-  //   if (outputObserver !== null) {
-  //     outputObserver.disconnect();
-  //   }
-  // }
-
   function addHeaderFooterOverlay() {
     const overlay = complete_config.overlay;
     const header = complete_config.header;
@@ -694,7 +817,36 @@ namespace Rise {
 
   function toggleAllRiseButtons() {
     // TODO do this with vanillaJS
-    // $('#help_b,#toggle-chalkboard,#toggle-notes').fadeToggle()
+    // $(',,').fadeToggle()
+    for (const selector of ['#help_b', '#toggle-chalkboard', '#toggle-notes']) {
+      const element = document.querySelector(selector) as HTMLElement | null;
+      if (element) {
+        element.style.visibility =
+          element.style.visibility === 'true' ? 'false' : 'true';
+      }
+    }
+  }
+
+  async function fullscreenHelp(trans: TranslationBundle): Promise<void> {
+    const node = document.createElement('div');
+    node.insertAdjacentHTML(
+      'afterbegin',
+      `<p>
+  <b>${trans.__('Entering Fullscreen mode from inside RISE is disabled.')}</b>
+  <br>
+  <b>${trans.__('Exit RISE, make you browser Fullscreen and re-enter RISE')}</b>
+  <br>
+  ${trans.__(
+    'That will help Reveal.js to perform the correct transformations at the time to interact with code cells.'
+  )}
+</p>`
+    );
+
+    await showDialog({
+      title: trans.__('Fullscreen Help'),
+      body: new Widget({ node }),
+      buttons: [Dialog.warnButton({ label: trans.__('OK') })]
+    });
   }
 
   let isRevealInitialized = false;
@@ -740,8 +892,7 @@ namespace Rise {
     // Asynchronously import reveal
     Reveal = await import('rise-reveal');
     // Make Reveal.js accessible for plugins
-    // @ts-expect-error Attribute not define on global window
-    window.Reveal = Reveal;
+    (window as any).Reveal = Reveal;
 
     // Full list of configuration options available here:
     // https://github.com/hakimel/reveal.js#configuration
@@ -798,8 +949,13 @@ namespace Rise {
       }
     };
 
-    // @ts-expect-error Import non typed package
-    await import('rise-reveal/export/reveal.js/plugin/notes/notes.js');
+    // Manually hook reveal.js notes in global namespace
+    await import(
+      // @ts-expect-error Import non typed package
+      'rise-reveal/export/reveal.js/plugin/notes/notes.js'
+    );
+    // @ts-expect-error missing type description
+    (window as any).RevealNotes = Reveal.getPlugin('notes');
 
     for (const setting of inherited) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -828,10 +984,13 @@ namespace Rise {
         // @ts-ignore
         options['chalkboard'] = complete_config['chalkboard'];
       }
-      await import(
+
+      const plugin = await import(
         // @ts-expect-error Import non typed package
         'rise-reveal/export/reveal.js/plugin/chalkboard/chalkboard.js'
       );
+      (window as any).RevealChalkboard = plugin.default;
+      console.log((window as any).RevealChalkboard, plugin.default);
     }
 
     if (isRevealInitialized) {
@@ -900,31 +1059,28 @@ namespace Rise {
     commands: CommandRegistry,
     trans: TranslationBundle
   ): Promise<void> {
+    const helpStrings = getHelpDescription(trans);
+
     /**
      * Build help list item
      *
      * @param commandID Command ID linked to a shortcut
-     * @param help Help message
      * @returns HTML string
      */
-    function helpListItem(commandID: string, help: string): string {
+    function helpListItem(commandID: string): string {
       const binding = commands.keyBindings.find(b => b.command === commandID);
       const ks = binding
         ? CommandRegistry.formatKeystroke(binding.keys.join(' '))
         : '';
-      return `<li><kbd>${ks}</kbd> : ${help}</li>`;
+      return `<li><kbd>${ks}</kbd> : ${helpStrings[commandID]}</li>`;
     }
-    const helpStrings = getHelpDescription(trans);
-    const reveal_help = helpStrings['main'];
-    const cb_help = helpStrings['chalkboard'];
-    const no_help = helpStrings['notes'];
 
     const node = document.createElement('div');
     node.insertAdjacentHTML(
       'afterbegin',
       `<p>
   <ul>
-    ${helpListItem(CommandIDs.riseHelp, reveal_help.riseHelp)}
+    ${helpListItem(CommandIDs.riseHelp)}
     <li><kbd>${CommandRegistry.formatKeystroke('Alt R')}</kbd>: ${trans.__(
         'enter/exit RISE'
       )}</li>
@@ -937,12 +1093,12 @@ namespace Rise {
     <li><kbd>${CommandRegistry.formatKeystroke(
       'Shift Enter'
     )}</kbd>: ${trans.__('eval and select next cell if visible')}</li>
-    ${helpListItem(CommandIDs.riseFirstSlide, reveal_help.firstSlide)}
-    ${helpListItem(CommandIDs.riseLastSlide, reveal_help.lastSlide)}
-    ${helpListItem(CommandIDs.riseToggleOverview, reveal_help.toggleOverview)}
-    ${helpListItem(CommandIDs.riseNotesOpen, no_help.openNotes)}
+    ${helpListItem(CommandIDs.riseFirstSlide)}
+    ${helpListItem(CommandIDs.riseLastSlide)}
+    ${helpListItem(CommandIDs.riseToggleOverview)}
+    ${helpListItem(CommandIDs.riseNotesOpen)}
     <li><kbd>${CommandRegistry.formatKeystroke(',')}</kbd>: ${
-        reveal_help.toggleAllRiseButtons
+        helpStrings[CommandIDs.riseToggleAllButtons]
       }</li>
     <li><kbd>${CommandRegistry.formatKeystroke('/')}</kbd>: ${trans.__(
         'black screen'
@@ -968,16 +1124,13 @@ namespace Rise {
     </ul>
     <li><strong>${trans.__('with chalkboard enabled')}:</strong></li>
     <ul>
-      ${helpListItem(CommandIDs.riseChalkboardToggle, cb_help.toggleChalkboard)}
-      ${helpListItem(
-        CommandIDs.riseChalkboardToggleNotes,
-        cb_help.toggleNotesCanvas
-      )}
-      ${helpListItem(CommandIDs.riseChalkboardColorNext, cb_help.colorNext)}
-      ${helpListItem(CommandIDs.riseChalkboardColorPrev, cb_help.colorPrev)}
-      ${helpListItem(CommandIDs.riseChalkboardDownload, cb_help.download)}
-      ${helpListItem(CommandIDs.riseChalkboardReset, cb_help.reset)}
-      ${helpListItem(CommandIDs.riseChalkboardClear, cb_help.clear)}
+      ${helpListItem(CommandIDs.riseChalkboardToggle)}
+      ${helpListItem(CommandIDs.riseChalkboardToggleNotes)}
+      ${helpListItem(CommandIDs.riseChalkboardColorNext)}
+      ${helpListItem(CommandIDs.riseChalkboardColorPrev)}
+      ${helpListItem(CommandIDs.riseChalkboardDownload)}
+      ${helpListItem(CommandIDs.riseChalkboardReset)}
+      ${helpListItem(CommandIDs.riseChalkboardClear)}
     </ul>
   </ul>
   ${trans.__(
@@ -1010,39 +1163,51 @@ namespace Rise {
     panel.node.insertAdjacentElement('afterend', helpButton);
   }
 
-  let reveal_helpstr: {
-    [i: string]: { [id: string]: string };
-  };
+  const reveal_helpstr: { [id: string]: string } = {};
 
   function getHelpDescription(trans: TranslationBundle): {
-    [i: string]: { [id: string]: string };
+    [id: string]: string;
   } {
-    if (!reveal_helpstr) {
-      reveal_helpstr = {
-        main: {
-          // RISE/reveal.js API calls
-          firstSlide: trans.__('jump to first slide'),
-          lastSlide: trans.__('jump to last slide'),
-          toggleOverview: trans.__('toggle overview'),
-          toggleAllRiseButtons: trans.__('show/hide buttons'),
-          fullscreenHelp: trans.__('show fullscreen help'),
-          riseHelp: trans.__('show this help dialog')
-        },
-        chalkboard: {
-          // API calls for RevealChalkboard plug-in
-          clear: trans.__('clear full size chalkboard'),
-          reset: trans.__('reset chalkboard data on current slide'),
-          toggleChalkboard: trans.__('toggle full size chalkboard'),
-          toggleNotesCanvas: trans.__('toggle notes (slide-local)'),
-          colorNext: trans.__('cycle to next pen color'),
-          colorPrev: trans.__('cycle to previous pen color'),
-          download: trans.__('download recorded chalkboard drawing')
-        },
-        notes: {
-          // API calls for RevealNotes plug-in
-          openNotes: trans.__('open speaker notes window')
-        }
-      };
+    if (Object.keys(reveal_helpstr).length === 0) {
+      // RISE/reveal.js API calls
+      reveal_helpstr[CommandIDs.riseFirstSlide] = trans.__(
+        'jump to first slide'
+      );
+      reveal_helpstr[CommandIDs.riseLastSlide] = trans.__('jump to last slide');
+      reveal_helpstr[CommandIDs.riseToggleOverview] =
+        trans.__('toggle overview');
+      reveal_helpstr[CommandIDs.riseToggleAllButtons] =
+        trans.__('show/hide buttons');
+      reveal_helpstr[CommandIDs.riseFullScreen] = trans.__(
+        'show fullscreen help'
+      );
+      reveal_helpstr[CommandIDs.riseHelp] = trans.__('show this help dialog');
+      // API calls for RevealChalkboard plug-in
+      reveal_helpstr[CommandIDs.riseChalkboardClear] = trans.__(
+        'clear full size chalkboard'
+      );
+      reveal_helpstr[CommandIDs.riseChalkboardReset] = trans.__(
+        'reset chalkboard data on current slide'
+      );
+      reveal_helpstr[CommandIDs.riseChalkboardToggle] = trans.__(
+        'toggle full size chalkboard'
+      );
+      reveal_helpstr[CommandIDs.riseChalkboardToggleNotes] = trans.__(
+        'toggle notes (slide-local)'
+      );
+      reveal_helpstr[CommandIDs.riseChalkboardColorNext] = trans.__(
+        'cycle to next pen color'
+      );
+      reveal_helpstr[CommandIDs.riseChalkboardColorPrev] = trans.__(
+        'cycle to previous pen color'
+      );
+      reveal_helpstr[CommandIDs.riseChalkboardDownload] = trans.__(
+        'download recorded chalkboard drawing'
+      );
+      // API calls for RevealNotes plug-in
+      reveal_helpstr[CommandIDs.riseNotesOpen] = trans.__(
+        'open speaker notes window'
+      );
     }
     return reveal_helpstr;
   }

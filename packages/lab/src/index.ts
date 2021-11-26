@@ -10,7 +10,8 @@ import {
   WidgetTracker
 } from '@jupyterlab/apputils';
 
-import { PageConfig, URLExt } from '@jupyterlab/coreutils';
+import { IChangedArgs, PageConfig, URLExt } from '@jupyterlab/coreutils';
+
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
 import {
@@ -19,6 +20,8 @@ import {
   Notebook,
   NotebookPanel
 } from '@jupyterlab/notebook';
+
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 import { ITranslator } from '@jupyterlab/translation';
 
@@ -59,14 +62,20 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
   id: 'rise-jupyterlab:plugin',
   autoStart: true,
   requires: [ITranslator],
-  optional: [INotebookTracker, ICommandPalette, ILayoutRestorer],
+  optional: [
+    INotebookTracker,
+    ICommandPalette,
+    ILayoutRestorer,
+    ISettingRegistry
+  ],
   provides: IRisePreviewTracker,
   activate: (
     app: JupyterFrontEnd,
     translator: ITranslator,
     notebookTracker: INotebookTracker | null,
     palette: ICommandPalette | null,
-    restorer: ILayoutRestorer | null
+    restorer: ILayoutRestorer | null,
+    settingRegistry: ISettingRegistry | null
   ): IRisePreviewTracker => {
     // Create a widget tracker for Rise Previews.
     const tracker = new WidgetTracker<RisePreview>({
@@ -79,6 +88,13 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
 
     const { commands, docRegistry, shell } = app;
     const trans = translator.load('rise');
+
+    let settings: ISettingRegistry.ISettings | null = null;
+    if (settingRegistry) {
+      settingRegistry.load(plugin.id).then(config => {
+        settings = config;
+      });
+    }
 
     const factory = new RisePreviewFactory(getRiseUrl, commands, {
       name: 'rise',
@@ -258,33 +274,34 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
             args: { toolbar: true }
           })
         );
+
+        const isNotebookModelReady = (
+          _: any,
+          change: IChangedArgs<any, any, string>
+        ) => {
+          if (change.name === 'dirty' && change.newValue === false) {
+            panel.model?.stateChanged.disconnect(isNotebookModelReady);
+
+            let autolaunch: boolean =
+              // @ts-expect-error Unknown type
+              (panel.content.model?.metadata.get('rise') ?? {})['autolaunch'] ??
+              false;
+            if (settings) {
+              // @ts-expect-error unknown type
+              autolaunch |= settings.get('autolaunch').composite;
+            }
+
+            if (autolaunch) {
+              commands.execute(CommandIDs.risePreview);
+            }
+          }
+        };
+
+        // Don't trigger auto launch in stand-alone Rise application.
+        if (app.name !== 'Rise') {
+          panel.model?.stateChanged.connect(isNotebookModelReady);
+        }
       }
-
-      /*
-       * Setup the auto-launch function, which checks metadata to see if
-       * RISE should launch automatically when the notebook is opened.
-       *
-       * this will trigger only on notebooks that have
-       * either a 'livereveal' or a 'rise' section in their metadata
-       * this is because autolaunch can be enabled in nbextensions_configurator
-       * and so can possibly have a too big impact if we are not careful
-       */
-      // TODO
-      // function autoLaunch() {
-      //   if (complete_config.autolaunch && is_slideshow(Jupyter.notebook)) {
-      //     revealMode();
-      //   }
-
-      //   // Ref: https://stackoverflow.com/a/7739035
-      //   let url = (window.location != window.parent.location)
-      //       ? document.referrer
-      //       : document.location.href;
-      //   let lastPart = url.substr(url.lastIndexOf('/') + 1);
-
-      //   if (lastPart === "notes.html") {
-      //     revealMode();
-      //   }
-      // }
     );
 
     if (palette) {

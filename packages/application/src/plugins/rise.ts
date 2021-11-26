@@ -830,7 +830,6 @@ namespace Rise {
 
   function toggleAllRiseButtons() {
     // TODO do this with vanillaJS
-    // $(',,').fadeToggle()
     for (const selector of ['#help_b', '#toggle-chalkboard', '#toggle-notes']) {
       const element = document.querySelector(selector) as HTMLElement | null;
       if (element) {

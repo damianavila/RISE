@@ -122,6 +122,60 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "autolaunch": {
+      "title": "Whether to autorun slideshow upon opening",
+      "description": "Autorun slideshow upon opening if set; active only on notebooks that have a 'livereveal' or 'rise' section in their metadata; this provision is here to avoid starting RISE on regular notebooks that are not intended for slideshow.",
+      "type": "boolean",
+      "default": false
+    },
+    "enable_chalkboard": {
+      "title": "Whether to activate chalkboard",
+      "description": "if set, turn on the chalkboard plugin to reveal.\nWhen enabled, this plugin adds two buttons next to the help button. It also reacts to the following additional keyboard commands:\n`[` to turn the whole space into an empty chalkboard;\n`]` to start adding free drawings to the current slide;\n\\ to download chalkboard drawing;\n`=` to reset chalkboard drawing on the current slide;\n`-` to clear the chalkboard.\nYou can define alternative short cuts. Note, that some keys might not work in some browsers.",
+      "type": "boolean",
+      "default": false
+    },
+    "start_slideshow_at": {
+      "title": "Where to start the slideshow",
+      "description": "A string that describes where to start the slideshow this can be either `beginning` (start on first slide) or `selected` (start on the slide that contains the currently selected cell)",
+      "enum": ["beginning", "selected"],
+      "default": "selected"
+    },
+    "auto_select": {
+      "title": "What to select when new content appears",
+      "description": "a string that specifies how to select cells when new contents is displayed during the slideshow (typically, new slide or new fragment). It can be either `none` (no automatic selection), or `code` (select first code cell in new content).",
+      "enum": ["none", "code"],
+      "default": "code"
+    },
+    "show_buttons_on_startup": {
+      "title": "",
+      "description": "",
+      "type": "boolean",
+      "default": false
+    },
+    "header": {
+      "title": "HTML Header",
+      "description": "the html text for a header that will show up on all slides. (effective only if `overlay` is not defined)",
+      "type": "string",
+      "default": ""
+    },
+    "footer": {
+      "title": "HTML Footer",
+      "description": "the html text for a footer that will show up on all slides. (effective only if `overlay` is not defined)",
+      "type": "string",
+      "default": ""
+    },
+    "backimage": {
+      "title": "Background image",
+      "description": "a (relative) filename for a background image that will show up on all slides. (effective only if `overlay` is not defined)",
+      "type": "boolean",
+      "default": false
+    },
+    "overlay": {
+      "title": "HTML Overlay",
+      "description": "some html text that will be inserted as-is on all pages. If this is provided, the 3 previous settings (header, footer and backimage) are ignored altogether.",
+      "type": "string",
+      "default": ""
+    },
     "theme": {
       "title": "Reveal Theme",
       "description": "This setting, like the ones below, is passed directly to [`reveal.js` see this doc](https://github.com/hakimel/reveal.js).\ntheme: [see a list of reveal's available native themes](https://github.com/hakimel/reveal.js#theming). Note that dark themes from reveal do not work well with RISE, at least not without additional and manual tweaks.",
@@ -202,6 +256,24 @@
       "description": "See reveal documentation",
       "type": "boolean",
       "default": true
+    },
+    "auto_select_timeout": {
+      "title": "Timeout before auto-selection",
+      "description": "timeout in milliseconds before auto-selecting; all the timeout settings are mostly intended for developers.",
+      "type": "number",
+      "default": 450
+    },
+    "restore_timeout": {
+      "title": "Timeout when restoring the focus",
+      "description": "timeout in milliseconds before restoring focus to selected cell when quitting slideshow mode; mostly intended for developers.",
+      "type": "number",
+      "default": 500
+    },
+    "async_timeout": {
+      "title": "Timeout between synchronization",
+      "description": "timeout in milliseconds before an extra call to Reveal.sync() is made to ensure proper display in some problematic conditions; like other timeout settings this is mostly targetting developers.",
+      "type": "number",
+      "default": 250
     }
   }
 }

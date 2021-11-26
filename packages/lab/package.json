@@ -47,6 +47,7 @@
     "@jupyterlab/docregistry": "^3.2.0",
     "@jupyterlab/mainmenu": "^3.2.0",
     "@jupyterlab/notebook": "^3.2.0",
+    "@jupyterlab/settingregistry": "^3.0.0",
     "@jupyterlab/translation": "^3.2.0",
     "@jupyterlab/ui-components": "^3.2.0",
     "@lumino/commands": "^1.15.0",

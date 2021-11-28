@@ -32,7 +32,7 @@
     "build:prod": "yarn run install-rise-reveal && tsc -b",
     "build:test": "tsc --build tsconfig.test.json",
     "clean": "rimraf lib tsconfig.tsbuildinfo",
-    "install-rise-reveal": "cp -r ../../node_modules/rise-reveal/export/reveal.js/plugin/chalkboard/img/ ../../node_modules/rise-reveal/export/reveal.js/plugin/notes/notes.html ../../rise/static/",
+    "install-rise-reveal": "mkdir -p ../../rise/static; cp -r ../rise-reveal/export/reveal.js/plugin/chalkboard/img/ ../rise-reveal/export/reveal.js/plugin/notes/notes.html ../../rise/static/",
     "watch": "tsc -b --watch --preserveWatchOutput"
   },
   "dependencies": {

@@ -35,7 +35,7 @@
   ],
   "scripts": {
     "build": "[ ! -d \"export\" ] && npm install && for target in copy patch; do npm run $target; done || echo Patched rise-reveal exists - skipping build",
-    "copy": "mkdir -p export; cp -r node_modules/reveal.js/ ./export/reveal.js/; cp -r node_modules/reveal.js-plugins/chalkboard/ ./export/reveal.js/plugin",
+    "copy": "mkdir -p export; cp -r node_modules/reveal.js/ ./export/reveal.js/; cp -r node_modules/reveal.js-plugins/chalkboard/ ./export/reveal.js/plugin/chalkboard/",
     "patch": "for target in patch-reveal-css patch-notes patch-themes patch-chalkboard ; do npm run $target; done",
     "patch-reveal-css": "sed -i.upstream '11 s_^_/*_' export/reveal.js/css/reveal.css",
     "patch-notes": "bash patch-notes-plugin.sh",

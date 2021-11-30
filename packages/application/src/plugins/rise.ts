@@ -62,7 +62,10 @@ export const plugin: JupyterFrontEndPlugin<void> = {
 
     // Get the active cell index from query argument
     const url = new URL(window.location.toString());
-    const activeCellIndex = parseInt(url.searchParams.get('activeCellIndex') ?? '0', 10);
+    const activeCellIndex = parseInt(
+      url.searchParams.get('activeCellIndex') ?? '0',
+      10
+    );
 
     // Remove active cell from argument
     url.searchParams.delete('activeCellIndex');
@@ -113,7 +116,7 @@ export const plugin: JupyterFrontEndPlugin<void> = {
           console.log(`Convert notebook ${notebookPath} to slideshow.`);
           notebookPanel.content.fullyRendered.disconnect(setRendered, this);
           notebookPanel.model?.stateChanged.disconnect(initializeReveal, this);
-          
+
           // Set the active cell index
           notebookPanel.content.activeCellIndex = activeCellIndex;
 
@@ -328,7 +331,7 @@ namespace Rise {
       Reveal.toggleOverview(); // toggle overview
     reveal_actions[CommandIDs.riseToggleAllButtons] = toggleAllRiseButtons; // show/hide buttons
     reveal_actions[CommandIDs.riseFullScreen] = () => {
-      fullscreenHelp(trans);
+      fullscreenHelp();
     }; // show fullscreen help
     reveal_actions[CommandIDs.riseHelp] = () => {
       displayRiseHelp(commands, trans);
@@ -838,26 +841,14 @@ namespace Rise {
     }
   }
 
-  async function fullscreenHelp(trans: TranslationBundle): Promise<void> {
-    const node = document.createElement('div');
-    node.insertAdjacentHTML(
-      'afterbegin',
-      `<p>
-  <b>${trans.__('Entering Fullscreen mode from inside RISE is disabled.')}</b>
-  <br>
-  <b>${trans.__('Exit RISE, make you browser Fullscreen and re-enter RISE')}</b>
-  <br>
-  ${trans.__(
-    'That will help Reveal.js to perform the correct transformations at the time to interact with code cells.'
-  )}
-</p>`
-    );
-
-    await showDialog({
-      title: trans.__('Fullscreen Help'),
-      body: new Widget({ node }),
-      buttons: [Dialog.warnButton({ label: trans.__('OK') })]
-    });
+  async function fullscreenHelp(): Promise<void> {
+    if (!document.fullscreenElement) {
+      await document.querySelector('div.reveal')?.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      }
+    }
   }
 
   let isRevealInitialized = false;

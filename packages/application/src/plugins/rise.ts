@@ -19,7 +19,6 @@ import { Signal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
 import type { RevealStatic } from 'rise-reveal';
 
-// TODO create own icon presenter
 // TODO Fix shortcut in slideshow mode
 // TODO add commands to the palette
 // TODO should we define our own factory?

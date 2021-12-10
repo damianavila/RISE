@@ -123,13 +123,12 @@ export const plugin: JupyterFrontEndPlugin<void> = {
 
           // We wait for the notebook to be loaded to get the settings from the metadata.
           Rise.loadConfiguration(settings, notebookPanel.model);
-          Rise.revealMode(notebookPanel, app.commands, trans)
-            .catch(reason => {
-              console.error(
-                'Fail to update the notebook with Reveal.JS.',
-                reason
-              );
-            });
+          Rise.revealMode(notebookPanel, app.commands, trans).catch(reason => {
+            console.error(
+              'Fail to update the notebook with Reveal.JS.',
+              reason
+            );
+          });
 
           Signal.disconnectAll(this);
         }
@@ -878,18 +877,21 @@ namespace Rise {
     // Asynchronously load reveal theme
     await import(`rise-reveal/export/reveal.js/css/theme/${theme}.css`);
 
-    // TODO ./rise.css and ./<notebook>.css
     /* this policy of trying ./rise.css and then <notebook>.css
      * should be redefinable in the config
      */
     // https://github.com/damianavila/RISE/issues/509
+    // Attempt to load rise.css
+    const curdir = PathExt.dirname(panel.sessionContext.path);
+    document.head.insertAdjacentHTML(
+      'beforeend',
+      `<link rel="stylesheet" href="${PageConfig.getBaseUrl()}files/${curdir}/rise.css" id="rise-custom-css" />`
+    );
     const name = PathExt.basename(panel.sessionContext.path);
     const dot_index = name.lastIndexOf('.');
     const stem = dot_index === -1 ? name : name.substr(0, dot_index);
     // associated css
-    const name_css = `${PathExt.dirname(
-      panel.sessionContext.path
-    )}/${stem}.css`;
+    const name_css = `${curdir}/${stem}.css`;
     // Attempt to load css with the same path as notebook
     document.head.insertAdjacentHTML(
       'beforeend',

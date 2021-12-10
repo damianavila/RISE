@@ -8,6 +8,7 @@ div.cell.code_cell.rendered {
     border-radius: 0px 0px 30px 0px;
 }
 
-div.input_area {
+div.input_area,
+div.jp-InputArea {
     border-radius: 0px 0px 25px 0px;
 }

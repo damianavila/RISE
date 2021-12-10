@@ -13,11 +13,13 @@ import {
 
 import { INotebookModel } from '@jupyterlab/notebook';
 
+import { ITranslator, nullTranslator } from '@jupyterlab/translation';
+
 import { refreshIcon } from '@jupyterlab/ui-components';
 
 import { CommandRegistry } from '@lumino/commands';
 
-import { Token } from '@lumino/coreutils';
+import { PromiseDelegate, Token } from '@lumino/coreutils';
 
 import { Message } from '@lumino/messaging';
 
@@ -25,7 +27,7 @@ import { Signal } from '@lumino/signaling';
 
 import { Widget } from '@lumino/widgets';
 
-import { RISEIcon } from './icons';
+import { fullScreenIcon, RISEIcon } from './icons';
 
 /**
  * A class that tracks Rise Preview widgets.
@@ -62,9 +64,16 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
       })
     });
 
-    const { getRiseUrl, context, renderOnSave } = options;
+    this._ready = new PromiseDelegate<void>();
+    // `setActiveCellIndex` needs to be called at least once.
+    // after instantiation.
+    this._ready.reject('Not loading at instantiation.');
+
+    const { getRiseUrl, context, renderOnSave, translator } = options;
     this.getRiseUrl = getRiseUrl;
     this._path = context.path;
+
+    const trans = (translator ?? nullTranslator).load('rise');
 
     this.content.title.icon = RISEIcon;
 
@@ -76,7 +85,7 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
 
     const reloadButton = new ToolbarButton({
       icon: refreshIcon,
-      tooltip: 'Reload Preview',
+      tooltip: trans.__('Reload Preview'),
       onClick: () => {
         this.reload();
       }
@@ -86,16 +95,17 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
       checked: this._renderOnSave,
       onChange: (event: Event) => {
         this._renderOnSave = (event.target as any)?.checked ?? false;
-      }
+      },
+      translator
     });
 
     this.toolbar.addItem(
-      'open',
+      'fullscreen',
       new ToolbarButton({
-        icon: RISEIcon,
-        tooltip: 'Open in a new browser tab',
+        icon: fullScreenIcon,
+        tooltip: trans.__('Open the slideshow in full screen'),
         onClick: () => {
-          options.commands.execute('RISE:slideshow');
+          options.commands.execute('RISE:fullscreen-plugin');
         }
       })
     );
@@ -114,6 +124,13 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
     this.toolbar.addItem('spacer', Toolbar.createSpacerItem());
 
     this.toolbar.addItem('reload', reloadButton);
+  }
+
+  /**
+   * Promise that resolves when the slideshow is ready
+   */
+  get ready(): Promise<void> {
+    return this._ready.promise;
   }
 
   /**
@@ -145,10 +162,22 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
   }
 
   setActiveCellIndex(index: number, reload = true): void {
+    const iframe = this.content.node.querySelector('iframe')!;
     if (reload) {
+      this._ready = new PromiseDelegate<void>();
+      const setReady = () => {
+        iframe.contentWindow!.removeEventListener('load', setReady);
+        const waitForReveal = setInterval(() => {
+          if (iframe.contentDocument!.querySelector('.reveal')) {
+            clearInterval(waitForReveal);
+            this._ready.resolve();
+          }
+        }, 500);
+      };
+
       this.content.url = this.getRiseUrl(this.path, index);
+      iframe.contentWindow!.addEventListener('load', setReady);
     } else {
-      const iframe = this.content.node.querySelector('iframe')!;
       if (iframe.contentWindow) {
         iframe.contentWindow.history.pushState(
           null,
@@ -169,8 +198,9 @@ export class RisePreview extends DocumentWidget<IFrame, INotebookModel> {
     }
   }
 
-  private _renderOnSave: boolean;
   protected getRiseUrl: (path: string, index?: number) => string;
+  private _ready: PromiseDelegate<void>;
+  private _renderOnSave: boolean;
   private _path: string;
 }
 
@@ -190,7 +220,7 @@ export namespace RisePreview {
     /**
      * The Rise URL function.
      */
-    getRiseUrl: (path: string) => string;
+    getRiseUrl: (path: string, index?: number) => string;
 
     /**
      * Whether to reload the preview on context saved.
@@ -242,6 +272,10 @@ namespace Private {
        * Callback on checked status changes
        */
       onChange?: (ev: Event) => void;
+      /**
+       * Translator
+       */
+      translator?: ITranslator;
     }
   }
 
@@ -250,10 +284,13 @@ namespace Private {
    */
   export class CheckBox extends Widget {
     constructor(options: CheckBox.IOptions = {}) {
+      const trans = (options.translator ?? nullTranslator).load('rise');
       const node = document.createElement('label');
       node.insertAdjacentHTML(
         'afterbegin',
-        '<input name="renderOnSave" type="checkbox"></input>Render on Save'
+        `<input name="renderOnSave" type="checkbox"></input>${trans.__(
+          'Render on Save'
+        )}`
       );
       super({ node });
       this.input = node.childNodes.item(0) as HTMLInputElement;

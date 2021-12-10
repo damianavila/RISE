@@ -12,7 +12,7 @@
             "command": "RISE:preview"
           },
           {
-            "command": "RISE:slideshow"
+            "command": "RISE:fullscreen-plugin"
           },
           { "type": "separator" }
         ]
@@ -21,7 +21,7 @@
   },
   "jupyter.lab.shortcuts": [
     {
-      "command": "RISE:slideshow",
+      "command": "RISE:preview",
       "keys": ["Alt R"],
       "selector": ".jp-Notebook:focus"
     },

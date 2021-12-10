@@ -7,10 +7,11 @@ import {
 import {
   CommandToolbarButton,
   ICommandPalette,
+  showDialog,
   WidgetTracker
 } from '@jupyterlab/apputils';
 
-import { IChangedArgs, PageConfig, URLExt } from '@jupyterlab/coreutils';
+import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
@@ -25,9 +26,11 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 import { ITranslator } from '@jupyterlab/translation';
 
+import { toArray } from '@lumino/algorithm';
+
 import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 
-import { RISEIcon } from './icons';
+import { fullScreenIcon, RISEIcon } from './icons';
 
 import {
   RisePreview,
@@ -45,6 +48,7 @@ namespace CommandIDs {
    * Open the current notebook in a new browser tab
    */
   export const openRise = 'RISE:slideshow';
+  export const riseFullScreen = 'RISE:fullscreen-plugin';
   /**
    * Open the current notebook in a IFrame within JupyterLab
    */
@@ -104,6 +108,7 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
 
     if (restorer) {
       restorer.restore(tracker, {
+        // Need to modify to handle auto full screen
         command: 'docmanager:open',
         args: panel => ({
           path: panel.context.path,
@@ -157,7 +162,6 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
       caption: trans.__(
         'Open the current notebook in a new browser tab as an RevealJS slideshow.'
       ),
-      icon: RISEIcon,
       execute: async () => {
         const current = notebookTracker.currentWidget;
         if (!current) {
@@ -203,9 +207,74 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
           widget.disposed.connect(() => {
             current.content.activeCellChanged.disconnect(updateActiveIndex);
           });
+
+          if (args['fullscreen'] === true) {
+            widget.ready
+              .then(() => {
+                showDialog({
+                  title: trans.__('Switch to full screen'),
+                  body: trans.__(
+                    'The slideshow is set to automatically open in full screen. Your web browser requires your confirmation to do so.'
+                  )
+                }).then(result => {
+                  if (result.button.accept) {
+                    commands.execute(CommandIDs.riseFullScreen, {
+                      id: widget.id
+                    });
+                  }
+                });
+              })
+              .catch(reason => {
+                console.log(reason);
+              });
+          }
         }
       },
       isEnabled
+    });
+
+    commands.addCommand(CommandIDs.riseFullScreen, {
+      label: trans.__('Full screen slideshow'),
+      caption: trans.__('Toggle full screen the current active slideshow'),
+      icon: fullScreenIcon,
+      execute: async args => {
+        if (args['id']) {
+          app.shell.activateById(args['id'] as string);
+        }
+        const current = args['id']
+          ? toArray(app.shell.widgets('main')).find(
+              widget => widget.id === args['id']
+            )
+          : app.shell.currentWidget;
+        if (current && tracker.has(current)) {
+          const iframe = (current as RisePreview).content.node.querySelector(
+            'iframe'
+          );
+          if (iframe) {
+            if (
+              !document.fullscreenElement &&
+              !iframe.contentDocument?.fullscreenElement
+            ) {
+              const goFullScreen = () => {
+                iframe?.contentWindow?.document
+                  .querySelector('div.reveal')
+                  ?.requestFullscreen();
+              };
+              if (iframe.contentDocument?.readyState === 'complete') {
+                goFullScreen();
+              } else {
+                iframe.contentWindow?.addEventListener('load', goFullScreen);
+              }
+            } else {
+              if (document.exitFullscreen) {
+                await document.exitFullscreen();
+              }
+            }
+          }
+        }
+      },
+      isEnabled: () =>
+        !!app.shell.currentWidget && tracker.has(app.shell.currentWidget)
     });
 
     commands.addCommand(CommandIDs.riseSetSlideType, {
@@ -275,31 +344,24 @@ const plugin: JupyterFrontEndPlugin<IRisePreviewTracker> = {
           })
         );
 
-        const isNotebookModelReady = (
-          _: any,
-          change: IChangedArgs<any, any, string>
-        ) => {
-          if (change.name === 'dirty' && change.newValue === false) {
-            panel.model?.stateChanged.disconnect(isNotebookModelReady);
-
-            let autolaunch: boolean =
-              // @ts-expect-error Unknown type
-              (panel.content.model?.metadata.get('rise') ?? {})['autolaunch'] ??
-              false;
-            if (settings) {
-              // @ts-expect-error unknown type
-              autolaunch |= settings.get('autolaunch').composite;
-            }
-
-            if (autolaunch) {
-              commands.execute(CommandIDs.risePreview);
-            }
-          }
-        };
-
         // Don't trigger auto launch in stand-alone Rise application.
         if (app.name !== 'Rise') {
-          panel.model?.stateChanged.connect(isNotebookModelReady);
+          await panel.context.ready;
+
+          let autolaunch: boolean =
+            // @ts-expect-error Unknown type
+            (panel.content.model?.metadata.get('rise') ?? {})['autolaunch'] ??
+            false;
+          if (settings) {
+            // @ts-expect-error unknown type
+            autolaunch |= settings.get('autolaunch').composite;
+          }
+
+          if (autolaunch) {
+            await commands.execute(CommandIDs.risePreview, {
+              fullscreen: true
+            });
+          }
         }
       }
     );

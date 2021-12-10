@@ -69,6 +69,7 @@ export const plugin: JupyterFrontEndPlugin<void> = {
 
     // Remove active cell from argument
     url.searchParams.delete('activeCellIndex');
+    url.searchParams.delete('fullscreen');
     window.history.pushState(null, '', url.toString());
 
     Promise.all([
@@ -122,7 +123,13 @@ export const plugin: JupyterFrontEndPlugin<void> = {
 
           // We wait for the notebook to be loaded to get the settings from the metadata.
           Rise.loadConfiguration(settings, notebookPanel.model);
-          Rise.revealMode(notebookPanel, app.commands, trans);
+          Rise.revealMode(notebookPanel, app.commands, trans)
+            .catch(reason => {
+              console.error(
+                'Fail to update the notebook with Reveal.JS.',
+                reason
+              );
+            });
 
           Signal.disconnectAll(this);
         }
@@ -886,9 +893,7 @@ namespace Rise {
     // Attempt to load css with the same path as notebook
     document.head.insertAdjacentHTML(
       'beforeend',
-      `<link rel="stylesheet" href="${PageConfig.getOption(
-        'fullStaticUrl'
-      )}/${name_css}" id="rise-notebook-css" />`
+      `<link rel="stylesheet" href="${PageConfig.getBaseUrl()}/${name_css}" id="rise-notebook-css" />`
     );
 
     // Asynchronously import reveal

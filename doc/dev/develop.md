@@ -27,6 +27,7 @@ Essentially you will need:
 
 ### Build frontend extensions
 
+    pip install -e .
     yarn install
     yarn run build
 
@@ -115,4 +116,4 @@ that needs to be transpiled before being distributed within the Python package):
   - Customization of the application for RISE is in the folder `packages/application`
     - In particular the entry point for opening the notebook with Reveal is in `packages/application/src/plugins/index.ts#opener`. And in particular the conversion of the notebook is done by `RevealUtils.startReveal`.
     - The other important file is `packages/application/src/app/index.ts`in which the main application object
-    (including the shell) is defined.
+      (including the shell) is defined.

@@ -173,6 +173,44 @@
   overflow-x: hidden;
   overflow-y: hidden;
 }
+
+.rise-enabled .jp-RenderedHTMLCommon p,
+.rise-enabled i {
+  font-size: 2.25rem;
+}
+.rise-enabled .jp-RenderedHTMLCommon h1 {
+  font-size: 4.125rem;
+  font-weight: bold;
+}
+.rise-enabled .jp-RenderedHTMLCommon h2 {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+.rise-enabled .jp-RenderedHTMLCommon h3 {
+  font-size: 2.9rem;
+  font-weight: bold;
+}
+.rise-enabled .jp-RenderedHTMLCommon h4 {
+  font-size: 2.25rem;
+  font-weight: bold;
+  font-style: italic;
+}
+.rise-enabled .jp-RenderedHTMLCommon h5 {
+  font-size: 2rem;
+  font-weight: bold;
+  font-style: italic;
+}
+.rise-enabled .jp-OutputArea pre {
+  font-size: 1.25rem;
+}
+.rise-enabled .jp-InputArea pre {
+  font-size: 1.25rem;
+}
+
+.rise-enabled .jp-InputPrompt {
+  font-size: 0.9rem;
+}
+
 .rise-enabled .jp-InputPrompt {
   transition-property: all;
   transition-duration: 0.2s;
@@ -318,7 +356,10 @@
 }
 
 /* fix for reveal dark themes */
-body.rise-enabled.theme-black div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-black
+  div.jp-RenderedHTMLCommon
+  tbody
+  tr:nth-child(even),
 body.rise-enabled.theme-black div.jp-RenderedHTMLCommon thead th,
 body.rise-enabled.theme-black div.jp-InputPrompt,
 body.rise-enabled.theme-black div.jp-RenderedText > pre,
@@ -326,19 +367,28 @@ body.rise-enabled.theme-black div.jp-RenderedHTMLCommon,
 body.rise-enabled.theme-black div.jp-MarkdownCell.jp-mod-rendered {
   color: white;
 }
-body.rise-enabled.theme-blood div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-blood
+  div.jp-RenderedHTMLCommon
+  tbody
+  tr:nth-child(even),
 body.rise-enabled.theme-blood div.jp-RenderedHTMLCommon thead th,
 body.rise-enabled.theme-blood div.jp-InputPrompt,
 body.rise-enabled.theme-blood div.jp-RenderedText > pre,
 body.rise-enabled.theme-blood div.jp-RenderedHTMLCommon,
 body.rise-enabled.theme-blood div.jp-MarkdownCell.jp-mod-rendered,
-body.rise-enabled.theme-league div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-league
+  div.jp-RenderedHTMLCommon
+  tbody
+  tr:nth-child(even),
 body.rise-enabled.theme-league div.jp-RenderedHTMLCommon thead th,
 body.rise-enabled.theme-league div.jp-InputPrompt,
 body.rise-enabled.theme-league div.jp-RenderedText > pre,
 body.rise-enabled.theme-league div.jp-RenderedHTMLCommon,
 body.rise-enabled.theme-league div.jp-MarkdownCell.jp-mod-rendered,
-body.rise-enabled.theme-night div.jp-RenderedHTMLCommon tbody tr:nth-child(even),
+body.rise-enabled.theme-night
+  div.jp-RenderedHTMLCommon
+  tbody
+  tr:nth-child(even),
 body.rise-enabled.theme-night div.jp-RenderedHTMLCommon thead th,
 body.rise-enabled.theme-night div.jp-InputPrompt,
 body.rise-enabled.theme-night div.jp-RenderedText > pre,

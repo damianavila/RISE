@@ -11,7 +11,7 @@
 
 #rise-footer {
     margin: 10px;
-    right: 10%;
+    left: 10%;
 }
 
 #rise-backimage {
@@ -23,12 +23,8 @@
     max-width: 100%;
 }
 
-/* leave some space for the header
-   here we have not set scroll=true
-   and so there is no .rise-scroll element
-   in this case it is better to style this selector
-   rather than just 'section' because there are 2 depths of sections
-*/
-section.stack.present {
-    margin-top: 50px;
+/* to regulate the amount of space left to the scrolling area */
+section.rise-scroll {
+    margin-top: 100px;  /* a bit more than should match the header size */
+    height: 85vh;       /* to leave some space below for the footer */
 }

@@ -38,7 +38,7 @@ fetch and patch the source code for `reveal.js`
 
 ### build the clasic extension
 
-among others, here we pull the code for `reveal.js` from `rise-reveal` 
+among others, here we pull the code for `reveal.js` from `rise-reveal`
 into the static folder
 
     cd $ROOT/classic

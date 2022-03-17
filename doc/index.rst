@@ -15,14 +15,14 @@ jupyter notebook into a live *reveal.js*-based presentation.
 
 Detailed Contents
 -----------------
-          
+
 .. toctree::
    :maxdepth: 3
 
    installation.rst
    usage.md
-   resources.md 
-   customize.md 
+   resources.md
+   customize.md
    exportpdf.md
    changelog.rst
    dev/index.rst

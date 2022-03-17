@@ -45,7 +45,7 @@ Changes
 
   * New setting rise.show_buttons_on_startup (#561)
   * New sources layout, in anticipation for a future jlab extension; sources are now split
-    between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js` 
+    between ``rise-reveal`` that contains a npm package that wraps the official `reveal.js`
     for our needs, and ``classic`` that contains the actual code for the RISE classic extension
     (more details at https://github.com/damianavila/RISE/issues/491)
   * Cleaner way to deal with toggleAllRiseButtons (ref: 6b08f30)

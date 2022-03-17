@@ -505,12 +505,12 @@ The actions exposed to Jupyter are also present in Jupyter's
 mainstream keyboard shortcuts editor, that you can use to (un)define
 your custom shortcuts.
 
-### Native keyboard shortcuts for reveal.js and reveal.js plug-ins 
+### Native keyboard shortcuts for reveal.js and reveal.js plug-ins
 
-Some custom keyboard shortcuts may be defined in RISE to override the default 
+Some custom keyboard shortcuts may be defined in RISE to override the default
 keyboard shortcuts of `reveal.js` and/or its plug-ins.
 
-The key bindings can be defined via the `nbextensions_configurator` or directly 
+The key bindings can be defined via the `nbextensions_configurator` or directly
 in JSON.
 
 The table below shows the avaialble key bindings:
@@ -528,7 +528,7 @@ The table below shows the avaialble key bindings:
     chalkboard  toggleNotesCanvas    ]            toggle notes (slide-local)
     chalkboard  download             \            download recorded chalkboard drawing
 
-In JSON the native reveal.js keyboard shortcuts can be defined as shown in the 
+In JSON the native reveal.js keyboard shortcuts can be defined as shown in the
 example below:
 
     {

@@ -375,9 +375,15 @@ define([
         .filter(function() {
           return $(this).height() > h;
         })
-        .css('height', 'calc(95vh)')
         .css('overflow-y', 'scroll')
-        .css('margin-top', '20px');
+        .addClass("rise-scroll")
+        // for issue #610
+        // no longer hard-wire styles here
+        // use CSS to override these
+        // using e.g. selector section.rise-scroll
+        //  .css('height', 'calc(95vh)')
+        //  .css('margin-top', '20px');
+        // these defaults are now in main.less
     }
   }
 

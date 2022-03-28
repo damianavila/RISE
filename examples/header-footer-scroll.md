@@ -1,4 +1,5 @@
 ---
+celltoolbar: Slideshow
 jupytext:
   cell_metadata_filter: all,-hidden,-heading_collapsed,-run_control,-trusted
   notebook_metadata_filter: all, -jupytext.text_representation.jupytext_version, -jupytext.text_representation.format_version,
@@ -68,3 +69,25 @@ This is a variant of the header-footer notebook, with `scroll` enabled
 * does not overlap the contents
 * that should scroll within the available space
 * between header and footer
+
++++ {"slideshow": {"slide_type": "slide"}}
+
+# variable height
+
++++ {"slideshow": {"slide_type": ""}}
+
+a small slide that becomes much higher once evaluated
+
+```{code-cell} ipython3
+---
+slideshow:
+  slide_type: ''
+---
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 20))
+X = np.linspace(0, 2*np.pi, 200)
+Y = np.tan(X)
+plt.plot(X, Y);
+```

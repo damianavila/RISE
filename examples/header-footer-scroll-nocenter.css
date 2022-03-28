@@ -1,0 +1,46 @@
+/* this is for styling the overlay
+ * when using header / footer and backimage
+ *
+ * see metadata in notebook
+ */
+
+
+#rise-header {
+	margin: auto;
+	padding: 30px 30px 5px 30px;
+	position: fixed;
+	border-bottom: 2.25pt solid #4f81bd;
+	width: 85%;
+	right: 0;
+	left: 0;	  
+}
+
+#rise-footer {
+	margin: auto;
+	position: fixed;
+	border-top: 2.25pt solid #f79646;
+	width: 85%;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}
+
+#rise-backimage {
+    opacity: 0.20;
+}
+
+/* TODO: maybe we need to port this to main.css?  */
+.reveal img {
+    max-width: 100%;
+}
+
+/* to regulate the amount of space left to the scrolling area */
+section.rise-scroll {
+    margin-top: 100px;  /* a bit more than should match the header size */
+    height: 80vh;       /* to leave some space below for the footer */
+}
+
+/* if activated, also adds header margin to slides with scrolling disabled */
+#notebook-container {
+  #margin-top: 100px;
+}

@@ -367,23 +367,19 @@ define([
    *  and the content is greater than 0.95 * slide height
    */
   function setScrollingSlide() {
-
-    let scroll = complete_config.scroll;
-    if (scroll === true) {
-      let h = $('.reveal').height() * 0.95;
+    console.log("IN setScrollingSlide")
+    if (complete_config.scroll) {
       $('section.present').find('section')
-        .filter(function() {
-          return $(this).height() > h;
-        })
-        .css('overflow-y', 'scroll')
-        .addClass("rise-scroll")
         // for issue #610
+        // always set this, which will show only when needed anyway
+        .css('overflow-y', 'scroll')
         // no longer hard-wire styles here
         // use CSS to override these
         // using e.g. selector section.rise-scroll
-        //  .css('height', 'calc(95vh)')
-        //  .css('margin-top', '20px');
+        .addClass("rise-scroll")
         // these defaults are now in main.less
+        // .css('height', 'calc(95vh)')
+        // .css('margin-top', '20px');
     }
   }
 

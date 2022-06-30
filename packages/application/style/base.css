@@ -175,6 +175,7 @@
 }
 
 .rise-enabled .jp-RenderedHTMLCommon p,
+.rise-enabled .jp-RenderedHTMLCommon li,
 .rise-enabled i {
   font-size: 2.25rem;
 }

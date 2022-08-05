@@ -511,7 +511,9 @@ namespace Rise {
         // Notes are wrapped in an <aside> element
         const aside = document.createElement('aside');
         aside.classList.add('notes');
-        subslide_section.appendChild(cell_node);
+        aside.append(cell_node);
+        subslide_section.appendChild(aside)
+      
       } else {
         current_fragment.appendChild(cell_node);
       }

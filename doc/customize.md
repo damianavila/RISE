@@ -254,6 +254,8 @@ category, RISE will pass through the following settings:
   numbers. Set to boolean `false` to turn off, [see `reveal.js`'s doc
   for more details](https://github.com/hakimel/reveal.js#slide-number)
 
+* `center` to enable or disable vertical centering of slide contents
+* 
 * as well as `history`.
 
 ### Adding custom CSS

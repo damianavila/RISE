@@ -1,2 +1,7 @@
-recommonmark
+# readthedocs seems to have an implicit pinning
+# of sphinx to 1.8 for so-called old projects
+# i.e. created before oct 2020
+sphinx==5.3
+myst-parser
+# recommonmark
 pygments>=2.4.1

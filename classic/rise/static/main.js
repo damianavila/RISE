@@ -82,7 +82,6 @@ define([
       shortcuts: {
         'slideshow' : 'alt-r',
         'relayout' : 'alt-q',
-        'relayout' : 'alt-q',
         'toggle-slide': 'shift-i',
         'toggle-subslide': 'shift-b',
         'toggle-fragment': 'shift-g',

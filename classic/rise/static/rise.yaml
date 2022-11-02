@@ -161,6 +161,10 @@ Parameters:
     pane for the RISE extension in a new tab (or window, depending on your browser config).
   input_type: hotkey
   default: shift-c
+- name: rise.shortcuts.relayout
+  description: <code>rise.shortcuts.relayout</code> shortcut to force Reveal.JS to re-evaluate the layout, which can help resolve layout issues, for example if a slide has resized and isn't correctly located in the center of the slice.
+  input_type: hotkey
+  default: alt-q
 # using reveal_shortcuts for the reveal.js and chalkboard short cuts instead of 
 # shortcuts to avoid treating these as normal jupyter shortcuts
 - name: rise.reveal_shortcuts.main.riseHelp

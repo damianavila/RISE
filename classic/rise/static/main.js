@@ -81,6 +81,8 @@ define([
       toolbar_icon: 'fa-bar-chart',
       shortcuts: {
         'slideshow' : 'alt-r',
+        'relayout' : 'alt-q',
+        'relayout' : 'alt-q',
         'toggle-slide': 'shift-i',
         'toggle-subslide': 'shift-b',
         'toggle-fragment': 'shift-g',
@@ -1238,6 +1240,14 @@ define([
       {help   : 'output RISE configuration in console, for debugging mostly',
        handler: showConfig},
       "rise-dump-config", "RISE");
+
+    actions.register({
+        help: 'force Reveal.JS to re-evaluate the layout',
+        handler: () => {
+          //Reveal.sync()
+          Reveal.layout()
+        }
+    }, "relayout", "RISE");
 
     let reveal_bindings = updateRevealBindings(reveal_default_bindings);
     // register all reveal.js actions for keyboard bindings

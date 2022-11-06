@@ -313,7 +313,7 @@ define([
       for (let j = i+1; j < cells.length; j++) {
         let next_cell = cells[j];
         let next_type = get_slide_type(next_cell);
-        if ((next_type == 'slide') || (next_type) == 'subslide') {
+        if ((next_type == 'slide') || (next_type == 'subslide')) {
           tag = 'smart_exec_slide';
           break;
         } else if (next_type == 'fragment') {

@@ -72,7 +72,7 @@ https://github.com/jupyter/notebook/issues/840#issuecomment-365176083
 
    `$(npm bin)/decktape rise http://localhost:8888/notebooks/your/notebook.ipynb?token=YourJupyterSessionToken /path/to/outputfile.pdf`
 
-   Note that the jupyter-notebook session token is needed. The token is shown to you when you start the jupter-notebook server from commandline.
+   Note that the jupyter-notebook session token is needed. The token is shown to you when you start the jupyter-notebook server from commandline.
 
 You can run into some problems using this approach:
 

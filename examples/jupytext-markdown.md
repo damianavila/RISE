@@ -45,7 +45,7 @@ if it exists, to load a notebook-specific CSS
 ## pros and cons
 <!-- #endregion -->
 
-jupytext is supercool if you use git a lot, and you don't carre about saving cell outputs  
+jupytext is supercool if you use git a lot, and you don't care about saving cell outputs  
 no need anymore to run `nbstripout` all the f... time
 
 ```python cell_style="split"

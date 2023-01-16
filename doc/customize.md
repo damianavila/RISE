@@ -6,7 +6,7 @@ Here's a list of things that can be customized. [See below for more
 details](#how-to-customize) on how to implement those settings.
 
 * presentation theme
-* transiton between slides
+* transition between slides
 * auto-launch presentation mode
 * where to start the presentation
 * automatic selection of cells
@@ -261,7 +261,7 @@ category, RISE will pass through the following settings:
 RISE looks for two css files to apply CSS changes on top of the
 slideshow view:
 
-* First, it attemps to load `rise.css`, and hence this will be
+* First, it attempts to load `rise.css`, and hence this will be
 applied to all notebooks in the current directory;
 
 * Second, it attempts to load `the_notebook_name.css` and so this will

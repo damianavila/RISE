@@ -3,6 +3,19 @@ RISE
 
 **Reveal.js - Jupyter/IPython Slideshow Extension**
 
+Disclaimer
+----------
+
+Please be aware that the extension built from this repo is not compatible with JupyterLab
+and must be used with the classic notebook.
+
+JupyterLab users are encouraged to use the RISE JupyterLab extension instead
+```bash
+pip install jupyterlab-rise
+```
+
+see also the github repo here <https://github.com/jupyterlab-contrib/rise>
+
 What is RISE?
 -------------
 As you know... we love **Jupyter** and we like **reveal.js** too.

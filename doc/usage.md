@@ -120,8 +120,12 @@ You should press the `t` key to open the speaker notes view.
 
 ### JupyterLab
 
-Please be aware that as of 5.3 RISE is unfortunately not yet
-compatible with JupyterLab and must be used with the classic notebook.
+Please be aware that the extension built from this repo is not compatible with JupyterLab
+and must be used with the classic notebook.
 
-See <https://github.com/damianavila/RISE/issues/270> for the github
-issue on this topic.
+JupyterLab users are encouraged to use the RISE JupyterLab extension instead
+```bash
+pip install jupyterlab-rise
+```
+
+see also the github repo here <https://github.com/jupyterlab-contrib/rise>

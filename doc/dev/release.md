@@ -7,6 +7,9 @@ for the classic notebook extension has moved under the `classic` subdir; at this
 `jlab` area is not ready for shipping, and so these instructions are **only about the
 classic extension**.
 
+**NOTE** be aware that the official JupyterLab RISE extensions eventually landed
+  in a separate github repo at <https://github.com/jupyterlab-contrib/rise>
+
 ### Pre-Release check
 
 **Step 0.** Clean your local repo copy at your top level (ROOT) directory:

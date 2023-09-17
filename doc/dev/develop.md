@@ -5,7 +5,9 @@
 in a nutshell, 5.7 comes with a clear separation between
 * what is inherited from `reveal.js` with our minor adaptations (the `rise-reveal` subdir),
 * the RISE extension for the classic notebook (the `classic` subdir),
-* opening the space for a future `jlab` subdir that will host the jupyterlab extension.
+* opening the space for a future `jlab/` subdir that will host the jupyterlab extension.  
+  however be aware that the official JupyterLab RISE extensions eventually landed
+  in a separate github repo at <https://github.com/jupyterlab-contrib/rise>
 
 ****
 

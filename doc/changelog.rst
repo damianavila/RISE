@@ -1,6 +1,17 @@
 Changelog
 ---------
 
+END OF LIFE
+===========
+
+* RISE only supports notebook classic, which is now obsolete
+* consequently RISE is now officially deprecated and will not be maintained anymore
+* Please use instead the new JupyterLab extension:
+  ```bash
+  pip install jupyterlab-rise
+  ```
+* github repo here https://github.com/jupyterlab-contrib/rise
+
 Versions
 ========
 
@@ -27,11 +38,17 @@ Versions
     *  5.6.1 tag compatible with `notebook` >= 6.0.0
     *  5.7.0 tag compatible with `notebook` >= 6.0.0
     *  5.7.1 tag compatible with `notebook` >= 6.0.0
+    * **NOTE** no version of RISE is compatible with `notebook` >= 7.0.0
 
 You will also find tags for "development" releases (mostly beta and rc we release before the "official" releases).
 
 Changes
 =======
+
+* 5.7.2
+
+  * never released as a stable package; mostly this extension is now deprecated
+    and we are working on a new JupyterLab extension - see above
 
 * 5.7.1
 

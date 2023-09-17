@@ -9,12 +9,11 @@ Disclaimer
 Please be aware that the extension built from this repo is not compatible with JupyterLab
 and must be used with the classic notebook.
 
-JupyterLab users are encouraged to use the RISE JupyterLab extension instead
-```bash
-pip install jupyterlab-rise
-```
+JupyterLab and Notebook 7 users are encouraged to use the RISE JupyterLab extension instead:
 
-see also the github repo here <https://github.com/jupyterlab-contrib/rise>
+:code:`pip install jupyterlab-rise`
+
+see also the github repo here https://github.com/jupyterlab-contrib/rise
 
 What is RISE?
 -------------

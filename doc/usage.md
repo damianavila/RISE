@@ -123,9 +123,7 @@ You should press the `t` key to open the speaker notes view.
 Please be aware that the extension built from this repo is not compatible with JupyterLab
 and must be used with the classic notebook.
 
-JupyterLab users are encouraged to use the RISE JupyterLab extension instead
-```bash
-pip install jupyterlab-rise
-```
+JupyterLab and Notebook 7 users are encouraged to use the RISE JupyterLab extension instead with
+`pip install jupyterlab-rise`
 
-see also the github repo here <https://github.com/jupyterlab-contrib/rise>
+see also the github repo at <https://github.com/jupyterlab-contrib/rise>

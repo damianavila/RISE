@@ -7,6 +7,13 @@ and back.
 
 ![Basic usage](https://media.giphy.com/media/3oxHQtTxAaZwMOHr9u/giphy.gif)
 
+## Disclaimer
+
+Please be aware that the extension built from this repo **is not compatible with JupyterLab
+and must be used with the classic notebook** (i.e. notebook <= 6).
+
+see <https://rise.readthedocs.io/en/latest/#disclaimer> for more details on its successor.
+
 ## Resources
 
 RISE stands for ***Reveal.js - Jupyter/IPython Slideshow Extension***:

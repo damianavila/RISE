@@ -6,8 +6,8 @@ RISE
 Disclaimer
 ----------
 
-Please be aware that the extension built from this repo is not compatible with JupyterLab
-and must be used with the classic notebook.
+Please be aware that the extension built from this repo **is not compatible with JupyterLab
+and must be used with the classic notebook** (i.e. notebook <= 6).
 
 JupyterLab and Notebook 7 users are encouraged to use the RISE JupyterLab extension instead:
 

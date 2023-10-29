@@ -8,4 +8,11 @@ classic/rise/__pycache__/
 rise-reveal/export/
 doc/_build/
 .ipynb_checkpoints/
-node_modules
+node_modules*
+vendors-node_modules_*
+packages_rise-reveal*
+@jupyterlab
+export/
+rise/nbextension/reveal.js
+rise/nbextension/reveal.js-chalkboard
+__pycache__

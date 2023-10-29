@@ -48,7 +48,7 @@ pip install RISE
 ## Development
 
 To install RISE in development mode, see the
-[Developer section](https://rise.readthedocs.io/en/stable/dev/index.html) of the RISE
+[Developer section](https://rise.readthedocs.io/en/latest/dev/index.html) of the RISE
 documentation.
 
 ## Feedback
@@ -57,4 +57,4 @@ If you have any feedback, or find any bugs, please let us know just opening an i
 
 ## Support us
 
-Please visit this page for more information: https://rise.readthedocs.io/en/stable/support.html
+Please visit this page for more information: https://rise.readthedocs.io/en/latest/support.html
